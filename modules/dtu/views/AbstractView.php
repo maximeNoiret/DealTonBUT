@@ -3,6 +3,10 @@
 namespace views;
 
 abstract class AbstractView {
+  public function header(): string {
+    return '<!DOCTYPE html><html><head></head><body>';
+  }
+
   public function body(): string {
     $body = file_get_contents($this->path());
     foreach ($this->templateValues() as $key => $value) {
@@ -11,5 +15,11 @@ abstract class AbstractView {
     return $body;
   }
 
-  function render(): string
+  public function footer(): string {
+    return '</body></html>';
+  }
+
+  function render(): string {
+    return this->header() . this->body() . this->footer();
+  }
 }
