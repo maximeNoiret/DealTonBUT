@@ -22,4 +22,8 @@ abstract class AbstractView {
   function render(): string {
     return this->header() . this->body() . this->footer();
   }
+
+  abstract function path(): string;
+
+  abstract function templateValues(): array;
 }
