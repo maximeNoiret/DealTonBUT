@@ -5,8 +5,8 @@ namespace controllers;
 use views\RegisterFormView;
 class Register implements Controller{
 
-  const string path = '/user/register';
-  const string meth = 'GET';
+  const string PATH = '/user/register';
+  const string METH = 'GET';
   
   function bonjour(): void {
     echo 'Hello World!';
@@ -17,6 +17,6 @@ class Register implements Controller{
   }
 
   static function resolve(string $path, string $meth): bool {
-    return $path === self::path && $meth === self::meth;
+    return $path === self::PATH && $meth === self::METH;
   }
 }

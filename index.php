@@ -1,6 +1,7 @@
 <?php
 
 use controllers\Register;
+use controllers\RegisterConfirm;
 
 
 include __DIR__ . '/_assets/includes/Autoloader.php';
@@ -11,7 +12,10 @@ $meth = $_SERVER['REQUEST_METHOD'];
 
 
 /** @var controllers/Controller[] $controllers */
-$controllers = [new Register()];
+$controllers = [
+  new Register(),
+  new RegisterConfirm(),
+];
 
 foreach ($controllers as $controller) {
   if ($controller::resolve($path, $meth)) {
@@ -19,6 +23,6 @@ foreach ($controllers as $controller) {
     exit();
   }
 }
-
+echo 'path: ' . $path . ' | meth: ' . $meth;
 echo '404 NOT FOUND';
 exit();

@@ -16,7 +16,7 @@ class RegisterFormView extends AbstractView {
       'USERNAME_KEY'=>self::USERNAME_VALUE,
       'EMAIL_KEY'=>self::EMAIL_VALUE,
       'PASSWORD_KEY'=>self::PASSWORD_VALUE,
-      'ACTION_KEY'=>'idk?'
+      'ACTION_KEY'=>'/user/register'
     ];
   }
 }
