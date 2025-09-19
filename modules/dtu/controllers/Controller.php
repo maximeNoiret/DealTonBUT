@@ -5,5 +5,5 @@ interface Controller {
 
   function control(): void;
 
-  static function resolve(string $path): bool;
+  static function resolve(string $path, string $meth): bool;
 }
