@@ -12,9 +12,9 @@ CREATE TABLE user_(
    hashedpwd VARCHAR(100) NOT NULL,
    balance DECIMAL(8,2) NOT NULL DEFAULT 0.00,
    role VARCHAR(15) NOT NULL DEFAULT 'student',
-   ADD CONSTRAINT CHK_USER_EMAIL
+   CONSTRAINT CHK_USER_EMAIL
     CHECK (email LIKE '%_@__%.__%'),
-   ADD CONSTRAINT CHK_USER_BAL
+   CONSTRAINT CHK_USER_BAL
     CHECK (balance >= 0)
 ) DEFAULT CHARSET=utf8;
 
@@ -26,10 +26,11 @@ CREATE TABLE offer(
    price DECIMAL(8,2) NOT NULL,
    creation_time DATETIME NOT NULL,
    deadline DATETIME NOT NULL,
-   FOREIGN KEY(owner) REFERENCES user_(email),
-   ADD CONSTRAINT CHK_OFFER_PRICE
+   FOREIGN KEY(owner) REFERENCES user_(email)
+    ON DELETE CASCADE,
+   CONSTRAINT CHK_OFFER_PRICE
     CHECK (price >= 0),
-   ADD CONSTRAINT CHK_OFFER_TIME
+   CONSTRAINT CHK_OFFER_TIME
     CHECK (creation_time < deadline)
 ) DEFAULT CHARSET=utf8;
 
@@ -45,8 +46,10 @@ CREATE TABLE tags(
    ouid INT,
    tagname VARCHAR(50),
    PRIMARY KEY(ouid, tagname),
-   FOREIGN KEY(ouid) REFERENCES offer(ouid),
-   FOREIGN KEY(tagname) REFERENCES tag(tagname)
+   FOREIGN KEY(ouid) REFERENCES offer(ouid) 
+    ON DELETE CASCADE,
+   FOREIGN KEY(tagname) REFERENCES tag(tagname) 
+    ON DELETE CASCADE
 ) DEFAULT CHARSET=utf8;
 
 CREATE TABLE points(
@@ -54,9 +57,11 @@ CREATE TABLE points(
    subject_name VARCHAR(50),
    points DECIMAL(5,2),
    PRIMARY KEY(email, subject_name),
-   FOREIGN KEY(email) REFERENCES user_(email),
-   FOREIGN KEY(subject_name) REFERENCES subject(subject_name),
-   ADD CONSTRAINT CHK_POINTS_PTS
+   FOREIGN KEY(email) REFERENCES user_(email) 
+    ON DELETE CASCADE,
+   FOREIGN KEY(subject_name) REFERENCES subject(subject_name) 
+    ON DELETE CASCADE,
+   CONSTRAINT CHK_POINTS_PTS
     CHECK (points >= 0)
 ) DEFAULT CHARSET=utf8;
 
@@ -66,9 +71,11 @@ CREATE TABLE transaction(
    amount DECIMAL(8,2) NOT NULL,
    transaction_time DATETIME NOT NULL,
    PRIMARY KEY(email, ouid),
-   FOREIGN KEY(email) REFERENCES user_(email),
-   FOREIGN KEY(ouid) REFERENCES offer(ouid),
-   ADD CONSTRAINT CHK_TRANSATION_AMOUNT
+   FOREIGN KEY(email) REFERENCES user_(email) 
+    ON DELETE CASCADE,
+   FOREIGN KEY(ouid) REFERENCES offer(ouid) 
+    ON DELETE CASCADE,
+   CONSTRAINT CHK_TRANSATION_AMOUNT
     CHECK (amount >= 0)
 ) DEFAULT CHARSET=utf8;
 
