@@ -24,7 +24,7 @@ class DataBase {
       $env['DB_USER']     = getenv('DB_USERNAME');
       $env['DB_PASSWORD'] = getenv('DB_PASSWORD');
     }
-    $dbConn = new PDO(
+    $this->$dbConn = new PDO(
       'mysql:host=' . $env['DB_HOSTNAME'] .
       ';dbname=' . $env['DB_NAME'] . ';charset=utf8mb4',
       $env['DB_USER'], $env['DB_PASSWORD'],
@@ -32,7 +32,7 @@ class DataBase {
   }
 
   public static function getInstance(): self {
-    if (self::$instance === null) {
+    if (!isset(self::$instance)) {
       self::$instance = new self();
     }
     return self::$instance;
@@ -60,7 +60,7 @@ class DataBase {
     string $email,
     string $password
   ): void {
-    if (!isset($dbConn)) {
+    if (!isset($this->$dbConn)) {
       throw new DatabaseNotInitiated();
     }
     $query = $dbConn->prepare('SELECT email FROM user_ WHERE email = :email');
