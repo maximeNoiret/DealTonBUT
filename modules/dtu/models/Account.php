@@ -2,11 +2,13 @@
 
 namespace models;
 use exceptions\AccountAlreadyExists;
+use exceptions\DatabaseNotInitiated;
 use models\DataBase;
 
 class Account {
   /**
    * @throws AccountAlreadyExists
+   * @throws DatabaseNotInitiated
    */
   function registerAccount(
     string $username,
@@ -14,8 +16,7 @@ class Account {
     string $password,
   ): void
   {
-    DataBase::openDataBase('guest', '');
-    DataBase::registerAccount(
+    DataBase::getInstance()->registerAccount(
       $username,
       $email,
       $password
