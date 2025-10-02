@@ -12,8 +12,10 @@ class MainPageView extends AbstractView
   }
 
   function templateValues(): array {
-    // TODO: Implement templateValues() method.
-    $values = [];
+   $values = [
+      'REGISTER_LINK' => '/user/register',
+      'LOGIN_LINK' => '/user/login'  
+    ];
     return $values;
   }
 }

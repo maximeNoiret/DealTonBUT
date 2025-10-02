@@ -8,7 +8,7 @@ use views\MainPageView;
 class Main implements Controller
 {
 
-  const string PATH = '';
+  const string PATH = '/';
   const string METH = 'GET';
 
   function control(): void {
