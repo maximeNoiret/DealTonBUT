@@ -4,6 +4,7 @@ namespace controllers;
 use controllers\Controller;
 use exceptions\AccountAlreadyExists;
 use models\Account;
+use views\RegisterFormView;
 
 class RegisterConfirm implements Controller {
   
@@ -20,7 +21,7 @@ class RegisterConfirm implements Controller {
         $_POST['email'],
         $_POST['password']);
     } catch (AccountAlreadyExists $e) {
-      header('Location: /user/register?error=account_already_exists');
+      echo new RegisterFormView('account_already_exists')->render();
     }
   }
 
