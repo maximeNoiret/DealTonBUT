@@ -23,6 +23,8 @@ class RegisterConfirm implements Controller {
     } catch (AccountAlreadyExists $e) {
       echo new RegisterFormView('account_already_exists')->render();
     }
+    // At this point, account has been created.
+    // TODO: either redirect to new LoginFormView() or directly login with SESSION.
   }
 
   static function resolve(string $path, string $meth): bool {
