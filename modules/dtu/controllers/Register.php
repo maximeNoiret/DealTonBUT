@@ -13,6 +13,6 @@ class Register implements Controller{
   }
 
   static function resolve(string $path, string $meth): bool {
-    return explode("?", $path)[0] === self::PATH && $meth === self::METH;
+    return $path === self::PATH && $meth === self::METH;
   }
 }
