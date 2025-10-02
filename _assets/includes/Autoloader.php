@@ -11,6 +11,12 @@ class Autoloader {
         require $file;
         return true;
       }
+      $file = '_assets' .  DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR .
+        str_replace('\\', DIRECTORY_SEPARATOR, $class).'.php';
+      if (file_exists($file)) {
+        require $file;
+        return true;
+      }
       return false;
     });
   }

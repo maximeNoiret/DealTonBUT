@@ -2,17 +2,32 @@
 
 namespace models;
 
+use exceptions\AccountAlreadyExists;
 use PDO;
 
 class DataBase {
-  const string DBHOST = 'localhost';
-  const string DBNAME = 'DealTonBUT';
-  const string DBUSER = 'guest';
-  const string DBPASS = ''; // TODO: put it in a file!!!
-  const string DSN = 'mysql:host=' . self::DBHOST .
-    ';dbname=' . self::DBNAME . ';charset=utf8mb4';
+  const string DSN = '';
+//  const string DSN = 'mysql:host=' . self::DBHOST .
+//    ';dbname=' . self::DBNAME . ';charset=utf8mb4';
 
-  static PDO $dbConn;
+  private static PDO $dbConn;
+
+  private static self $instance;
+
+  private function __construct() {
+    if (file_exists(__DIR__ . '/../../../.env')) {
+      $env = parse_ini_file(__DIR__ . '/../../../.env');
+    } else {
+      $env[''] = getenv();  // TODO: choose names for vars
+    }
+  }
+
+  public static function getInstance(): self {
+    if (self::$instance === null) {
+      self::$instance = new self();
+    }
+    return self::$instance;
+  }
 
   static function openDataBase(string $user, string $password): void {
     self::$dbConn = new PDO(self::DSN, $user, $password,
@@ -22,8 +37,11 @@ class DataBase {
   // NOTE: this is very unsafe!
   static function executeQuery(string $query): void {
     self::$dbConn->prepare($query)->execute();
-  } 
+  }
 
+  /**
+   * @throws AccountAlreadyExists
+   */
   static function registerAccount (
     string $username,
     string $email,
@@ -33,8 +51,7 @@ class DataBase {
     $query->bindValue('email', $email, PDO::PARAM_STR);
     $query->execute();
     if ($query->fetch()) {
-      throw AccountAlreadyExists;
-      exit(1);
+      throw new AccountAlreadyExists();
     }
     $hashedpwd = password_hash($password, PASSWORD_DEFAULT);
     $query = self::$dbConn->prepare(
