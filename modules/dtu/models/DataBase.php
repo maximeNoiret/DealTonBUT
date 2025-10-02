@@ -7,10 +7,6 @@ use exceptions\DatabaseNotInitiated;
 use PDO;
 
 class DataBase {
-  const string DSN = '';
-//  const string DSN = 'mysql:host=' . self::DBHOST .
-//    ';dbname=' . self::DBNAME . ';charset=utf8mb4';
-
   private PDO $dbConn;
 
   private static self $instance;
@@ -24,7 +20,7 @@ class DataBase {
       $env['DB_USER']     = getenv('DB_USERNAME');
       $env['DB_PASSWORD'] = getenv('DB_PASSWORD');
     }
-    $this->$dbConn = new PDO(
+    $this->dbConn = new PDO(
       'mysql:host=' . $env['DB_HOSTNAME'] .
       ';dbname=' . $env['DB_NAME'] . ';charset=utf8mb4',
       $env['DB_USER'], $env['DB_PASSWORD'],
@@ -40,37 +36,26 @@ class DataBase {
 
   // NOTE: this is very unsafe!
 
-  /**
-   * @throws DatabaseNotInitiated
-   */
   public function executeQuery(string $query): void {
-    if (isset($dbConn)) {
-      $dbConn->prepare($query)->execute();
-    } else {
-      throw new DatabaseNotInitiated();
-    }
+    $this->dbConn->prepare($query)->execute();
   }
 
   /**
    * @throws AccountAlreadyExists
-   * @throws DatabaseNotInitiated
    */
   public function registerAccount (
     string $username,
     string $email,
     string $password
   ): void {
-    if (!isset($this->$dbConn)) {
-      throw new DatabaseNotInitiated();
-    }
-    $query = $dbConn->prepare('SELECT email FROM user_ WHERE email = :email');
+    $query = $this->dbConn->prepare('SELECT email FROM user_ WHERE email = :email');
     $query->bindValue('email', $email);  // already uses PDO_PARAM_STR
     $query->execute();
     if ($query->fetch()) {
       throw new AccountAlreadyExists();
     }
     $hashedpwd = password_hash($password, PASSWORD_DEFAULT);
-    $query = $dbConn->prepare(
+    $query = $this->dbConn->prepare(
       'INSERT INTO user_(email, username, hashedpwd)
       VALUES (:email, :username, :hashedpwd)');
     $query->bindValue('email', $email);
