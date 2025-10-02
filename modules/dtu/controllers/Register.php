@@ -7,10 +7,6 @@ class Register implements Controller{
 
   const string PATH = '/user/register';
   const string METH = 'GET';
-  
-  function bonjour(): void {
-    echo 'Hello World!';
-  }
 
   function control(): void {
     echo new RegisterFormView()->render();

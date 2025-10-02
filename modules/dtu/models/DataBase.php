@@ -3,6 +3,7 @@
 namespace models;
 
 use exceptions\AccountAlreadyExists;
+use exceptions\DatabaseNotInitiated;
 use PDO;
 
 class DataBase {
@@ -10,7 +11,7 @@ class DataBase {
 //  const string DSN = 'mysql:host=' . self::DBHOST .
 //    ';dbname=' . self::DBNAME . ';charset=utf8mb4';
 
-  private static PDO $dbConn;
+  private PDO $dbConn;
 
   private static self $instance;
 
@@ -18,8 +19,16 @@ class DataBase {
     if (file_exists(__DIR__ . '/../../../.env')) {
       $env = parse_ini_file(__DIR__ . '/../../../.env');
     } else {
-      $env[''] = getenv();  // TODO: choose names for vars
+      $env['DB_HOSTNAME'] = getenv('DB_HOSTNAME');
+      $env['DB_NAME']     = getenv('DB_NAME');
+      $env['DB_USER']     = getenv('DB_USERNAME');
+      $env['DB_PASSWORD'] = getenv('DB_PASSWORD');
     }
+    $dbConn = new PDO(
+      'mysql:host=' . $env['DB_HOSTNAME'] .
+      ';dbname=' . $env['DB_NAME'] . ';charset=utf8mb4',
+      $env['DB_USER'], $env['DB_PASSWORD'],
+      [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
   }
 
   public static function getInstance(): self {
@@ -29,37 +38,44 @@ class DataBase {
     return self::$instance;
   }
 
-  static function openDataBase(string $user, string $password): void {
-    self::$dbConn = new PDO(self::DSN, $user, $password,
-      [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-  }
-
   // NOTE: this is very unsafe!
-  static function executeQuery(string $query): void {
-    self::$dbConn->prepare($query)->execute();
+
+  /**
+   * @throws DatabaseNotInitiated
+   */
+  public function executeQuery(string $query): void {
+    if (isset($dbConn)) {
+      $dbConn->prepare($query)->execute();
+    } else {
+      throw new DatabaseNotInitiated();
+    }
   }
 
   /**
    * @throws AccountAlreadyExists
+   * @throws DatabaseNotInitiated
    */
-  static function registerAccount (
+  public function registerAccount (
     string $username,
     string $email,
     string $password
   ): void {
-    $query = self::$dbConn->prepare('SELECT email FROM user_ WHERE email = :email');
-    $query->bindValue('email', $email, PDO::PARAM_STR);
+    if (!isset($dbConn)) {
+      throw new DatabaseNotInitiated();
+    }
+    $query = $dbConn->prepare('SELECT email FROM user_ WHERE email = :email');
+    $query->bindValue('email', $email);  // already uses PDO_PARAM_STR
     $query->execute();
     if ($query->fetch()) {
       throw new AccountAlreadyExists();
     }
     $hashedpwd = password_hash($password, PASSWORD_DEFAULT);
-    $query = self::$dbConn->prepare(
+    $query = $dbConn->prepare(
       'INSERT INTO user_(email, username, hashedpwd)
       VALUES (:email, :username, :hashedpwd)');
-    $query->bindValue('email', $email, PDO::PARAM_STR);
-    $query->bindValue('username', $username, PDO::PARAM_STR);
-    $query->bindValue('hashedpwd', $hashedpwd, PDO::PARAM_STR);
+    $query->bindValue('email', $email);
+    $query->bindValue('username', $username);
+    $query->bindValue('hashedpwd', $hashedpwd);
     $query->execute();
     echo 'TODO: remove this and instore actually logging in ig, but if you\'re reading this it worked check the database.';
   }
