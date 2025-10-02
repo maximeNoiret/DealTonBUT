@@ -14,13 +14,13 @@ class DataBase {
 
   static PDO $dbConn;
 
-  static function openDataBase(string $user, string $password) {
+  static function openDataBase(string $user, string $password): void {
     self::$dbConn = new PDO(self::DSN, $user, $password,
       [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
   }
 
   // NOTE: this is very unsafe!
-  static function executeQuery(string $query) {
+  static function executeQuery(string $query): void {
     self::$dbConn->prepare($query)->execute();
   } 
 
@@ -28,7 +28,7 @@ class DataBase {
     string $username,
     string $email,
     string $password
-  ) {
+  ): void {
     $query = self::$dbConn->prepare('SELECT email FROM user_ WHERE email = :email');
     $query->bindValue('email', $email, PDO::PARAM_STR);
     $query->execute();
