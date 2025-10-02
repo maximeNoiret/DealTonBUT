@@ -3,20 +3,32 @@
 namespace views;
 
 class RegisterFormView extends AbstractView {
-  
+
   const string USERNAME_VALUE='username';
   const string EMAIL_VALUE='email';
   const string PASSWORD_VALUE='password';
-  
+
   function path(): string {
     return __DIR__ . DIRECTORY_SEPARATOR . 'RegisterForm.html';
   }
   function templateValues(): array {
-    return [
+    $values = [
       'USERNAME_KEY'=>self::USERNAME_VALUE,
       'EMAIL_KEY'=>self::EMAIL_VALUE,
       'PASSWORD_KEY'=>self::PASSWORD_VALUE,
       'ACTION_KEY'=>'/user/register'
     ];
+    if (isset($_GET['error'])) {
+      $errorMessage = match($_GET['error']) {
+        'account_already_exists' => 'An account with this email already exists.',
+        'database_error' => 'A database error occurred. Please try again.',
+        default => 'An unknown error occurred.'
+      };
+      $values['ERROR_MESSAGE'] = $errorMessage;
+    } else {
+      $values['ERROR_MESSAGE'] = '';
+    }
+
+    return $values;
   }
 }

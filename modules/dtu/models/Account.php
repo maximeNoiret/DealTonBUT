@@ -8,7 +8,6 @@ use models\DataBase;
 class Account {
   /**
    * @throws AccountAlreadyExists
-   * @throws DatabaseNotInitiated
    */
   function registerAccount(
     string $username,

@@ -58,11 +58,11 @@ class DataBase {
     $query = $this->dbConn->prepare(
       'INSERT INTO user_(email, username, hashedpwd)
       VALUES (:email, :username, :hashedpwd)');
+    //
     $query->bindValue('email', $email);
     $query->bindValue('username', $username);
     $query->bindValue('hashedpwd', $hashedpwd);
     $query->execute();
-    echo 'TODO: remove this and instore actually logging in ig, but if you\'re reading this it worked check the database.';
   }
   
 }

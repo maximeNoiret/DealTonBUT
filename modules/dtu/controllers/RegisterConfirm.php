@@ -20,7 +20,7 @@ class RegisterConfirm implements Controller {
         $_POST['email'],
         $_POST['password']);
     } catch (AccountAlreadyExists $e) {
-      echo $e->getMessage();
+      header('Location: ' . self::PATH . '/?error=account_already_exists');
     }
   }
 
