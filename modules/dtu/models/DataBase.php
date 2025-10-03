@@ -58,6 +58,7 @@ class DataBase {
     $query = $this->dbConn->prepare(
       'INSERT INTO user_(email, username, hashedpwd)
       VALUES (:email, :username, :hashedpwd)');
+
     //
     $query->bindValue('email', $email);
     $query->bindValue('username', $username);
