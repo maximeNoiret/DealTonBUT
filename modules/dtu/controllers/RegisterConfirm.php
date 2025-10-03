@@ -10,6 +10,7 @@ class RegisterConfirm implements Controller {
   
   const string PATH = '/user/register';
   const string METH = 'POST';
+  const string STYLESHEET = DIRECTORY_SEPARATOR . '_assets' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'style.css';
 
   /**
    */
@@ -21,7 +22,7 @@ class RegisterConfirm implements Controller {
         $_POST['email'],
         $_POST['password']);
     } catch (AccountAlreadyExists $e) {
-      echo (new RegisterFormView('account_already_exists'))->render();
+      echo (new RegisterFormView('account_already_exists'))->render("Register - DealTonBUT", self::STYLESHEET);
     }
     // At this point, account has been created.
     // TODO: either redirect to new LoginFormView() or directly login with SESSION.

@@ -3,8 +3,8 @@
 namespace views;
 
 abstract class AbstractView {
-  public function header(): string {
-    return '<!DOCTYPE html><html><head></head><body>';
+  public function header(string $title, string $stylesheet): string {
+    return '<!DOCTYPE html><html><head><title>' . $title . '</title><link rel="stylesheet" href="' . $stylesheet . '"></head><body>';
   }
 
   public function body(): string {
@@ -19,8 +19,8 @@ abstract class AbstractView {
     return '</body></html>';
   }
 
-  function render(): string {
-    return $this->header() . $this->body() . $this->footer();
+  function render(string $title, string $stylesheet): string {
+    return $this->header($title, $stylesheet) . $this->body() . $this->footer();
   }
 
   abstract function path(): string;
