@@ -9,7 +9,7 @@ class Login
 
     function control(): void
     {
-        echo new \views\LoginFormView()->render();
+        echo (new \views\LoginFormView())->render();
     }
 
     static function resolve(string $path, string $meth): bool

@@ -9,7 +9,7 @@ class Register implements Controller{
   const string METH = 'GET';
 
   function control(): void {
-    echo new RegisterFormView()->render();
+    echo (new RegisterFormView())->render();
   }
 
   static function resolve(string $path, string $meth): bool {

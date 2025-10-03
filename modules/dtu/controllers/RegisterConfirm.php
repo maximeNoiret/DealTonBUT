@@ -21,7 +21,7 @@ class RegisterConfirm implements Controller {
         $_POST['email'],
         $_POST['password']);
     } catch (AccountAlreadyExists $e) {
-      echo new RegisterFormView('account_already_exists')->render();
+      echo (new RegisterFormView('account_already_exists'))->render();
     }
     // At this point, account has been created.
     // TODO: either redirect to new LoginFormView() or directly login with SESSION.

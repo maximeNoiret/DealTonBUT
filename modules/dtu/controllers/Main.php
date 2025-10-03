@@ -13,7 +13,7 @@ class Main implements Controller
 
   function control(): void {
     // TODO: check if logged in and stuff lol
-    echo new MainPageView()->render();
+    echo (new MainPageView())->render();
   }
 
   static function resolve(string $path, string $meth): bool {

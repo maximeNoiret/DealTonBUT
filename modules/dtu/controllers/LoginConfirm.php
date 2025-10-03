@@ -20,7 +20,7 @@ class LoginConfirm
             echo "Login successful!";
         } else {
             // Credentials are invalid, show the login form with an error message
-            echo new \views\LoginFormView('invalid_credentials')->render();
+            echo ((new \views\LoginFormView('invalid_credentials'))->render();
         }
     }
 
