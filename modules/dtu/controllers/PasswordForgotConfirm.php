@@ -5,15 +5,15 @@ namespace controllers;
 use controllers\Controller;
 use views\ForgotPasswordView;
 
-class PasswordForgot implements Controller
+class PasswordForgotConfirm implements Controller
 {
 
   const string PATH = '/user/forgot';
-  const string METH = 'GET';
+  const string METH = 'POST';
 
   function control(): void
   {
-    echo new ForgotPasswordView()->render();
+    echo new ForgotPasswordView('message')->render();
   }
 
   static function resolve(string $path, string $meth): bool

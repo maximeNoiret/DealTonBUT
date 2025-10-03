@@ -3,6 +3,8 @@
 use controllers\Register;
 use controllers\RegisterConfirm;
 use controllers\Main;
+use controllers\PasswordForgot;
+use controllers\PasswordForgotConfirm;
 
 
 include __DIR__ . '/_assets/includes/Autoloader.php';
@@ -16,7 +18,9 @@ $meth = $_SERVER['REQUEST_METHOD'];
 $controllers = [
   new Register(),
   new RegisterConfirm(),
-  new Main()
+  new Main(),
+  new PasswordForgot(),
+  new PasswordForgotConfirm()
 ];
 
 foreach ($controllers as $controller) {
@@ -25,6 +29,6 @@ foreach ($controllers as $controller) {
     exit();
   }
 }
-echo 'path: ' . $path . ' | meth: ' . $meth;
+echo 'path: ' . $path . ' | meth: ' . $meth . '<br>';
 echo '404 NOT FOUND';
 exit();
