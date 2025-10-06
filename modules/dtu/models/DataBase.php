@@ -66,4 +66,18 @@ class DataBase {
     $query->execute();
   }
   
+  public function accountExists(string $email): bool {
+    $query = $this->dbConn->prepare('SELECT email FROM user_ WHERE email = :email');
+    $query->bindValue('email', $email);
+    $query->execute();
+    return $query->fetch();
+  }
+
+  public function alreadyForgotPassword(string $email): bool {
+    $query = $this->dbConn->prepare(
+      'SELECT email FROM token WHERE email = :email AND deadline > CURRENT_TIMESTAMP');
+    $query->bindValue('email', $email);
+    $query->execute();
+    return $query->fetch() !== false;
+  }
 }

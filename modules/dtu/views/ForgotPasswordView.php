@@ -25,7 +25,8 @@ class ForgotPasswordView extends AbstractView
     if ($this->status !== null) {
       $statusMessage = match($this->status) {
         'message' => 'Si votre email éxiste, vous recevrez un mail.',
-        default => 'An unknown error occurred.'
+        'already_sent' => '<span class=error-text>Vous avez déjà une demande active.</span>',  // TODO: find better way, this is bad.
+        default => 'Une erreur inconnue est arrivé.'
       };
       $values['MESSAGE'] = $statusMessage;
     } else {
