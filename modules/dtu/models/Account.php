@@ -4,6 +4,7 @@ namespace models;
 use exceptions\AccountAlreadyExists;
 use exceptions\DatabaseNotInitiated;
 use models\DataBase;
+use models\Mailer;
 
 class Account {
   /**
@@ -23,14 +24,36 @@ class Account {
 
   static function forgotPassword(string $email): string {
     // check if account exists at all
-    if(!DataBase::getInstance()->accountExists($email)) {
+    $db = DataBase::getInstance();
+    if(!$db->accountExists($email)) {
       return 'message';
     }
     // check if account already requested password reset with alive ttl
-    if (DataBase::getInstance()->alreadyForgotPassword($email)) {
+    if ($db->alreadyForgotPassword($email)) {
       return 'already_sent';
     }
+    // at this point, account exists AND hasn't already requested a password reset.
 
+    // TODO:
+    // generate a random token
+    $token = bin2hex(random_bytes(32));
+    // hash the token for storing
+    $hashedToken = hash('sha256', $token);
+    // store (email, token, now+10min) into 'token' relation
+    // NOTE: 'token' relation has default deadline value set to now + 10 min.
+    $query = $db->prepare('INSERT INTO token(email, token) VALUES (:email, :hashedToken)');
+    $query.bindValue('email', $email);
+    $query.bindValue('hashedToken', $hashedToken);
+    // - [optional] encrypt (email, token) into single string
+    // - mail a GET link with "/user/validate?mail=:mail&token=:token" (or "/user/validate?token=:token" if encrypted)
+    $resetLink = 'https://' . SELF::DOMAIN_NAME .
+      '/user/validate?email=' . urlencode($email) . '&token=' . $token;
+
+    // ----------------
+    // Someone goes to /user/validate with GET method
+    // - [optional] decrypt token from url
+    // - if (email, token) in 'token' && ttl not reached: ask new password
+    // - else: display "invalid link" and quit
 
   }
 }
