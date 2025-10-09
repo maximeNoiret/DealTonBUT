@@ -22,7 +22,7 @@ $controllers = [
   new RegisterConfirm(),
   new Main(),
   new PasswordForgot(),
-  new PasswordForgotConfirm()
+  new PasswordForgotConfirm(),
   new Login(),
   new LoginConfirm()
 ];
