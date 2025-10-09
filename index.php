@@ -3,6 +3,8 @@
 use controllers\Register;
 use controllers\RegisterConfirm;
 use controllers\Main;
+use controllers\PasswordForgot;
+use controllers\PasswordForgotConfirm;
 use controllers\Login;
 use controllers\LoginConfirm;
 
@@ -19,6 +21,8 @@ $controllers = [
   new Register(),
   new RegisterConfirm(),
   new Main(),
+  new PasswordForgot(),
+  new PasswordForgotConfirm()
   new Login(),
   new LoginConfirm()
 ];
@@ -29,6 +33,6 @@ foreach ($controllers as $controller) {
     exit();
   }
 }
-echo 'path: ' . $path . ' | meth: ' . $meth;
+echo 'path: ' . $path . ' | meth: ' . $meth . '<br>';
 echo '404 NOT FOUND';
 exit();

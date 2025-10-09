@@ -35,7 +35,9 @@ class DataBase {
   }
 
   // NOTE: this is very unsafe!
-
+  /**
+   * @deprecated
+   */
   public function executeQuery(string $query): void {
     $this->dbConn->prepare($query)->execute();
   }
@@ -58,6 +60,7 @@ class DataBase {
     $query = $this->dbConn->prepare(
       'INSERT INTO user_(email, username, hashedpwd)
       VALUES (:email, :username, :hashedpwd)');
+
     //
     $query->bindValue('email', $email);
     $query->bindValue('username', $username);
@@ -65,4 +68,25 @@ class DataBase {
     $query->execute();
   }
   
+  public function accountExists(string $email): bool {
+    $query = $this->dbConn->prepare('SELECT email FROM user_ WHERE email = :email');
+    $query->bindValue('email', $email);
+    $query->execute();
+    return $query->fetch() !== null;
+  }
+
+  public function alreadyForgotPassword(string $email): bool {
+    $query = $this->dbConn->prepare(
+      'SELECT email FROM token WHERE email = :email AND deadline > CURRENT_TIMESTAMP');
+    $query->bindValue('email', $email);
+    $query->execute();
+    return $query->fetch() !== false;
+  }
+
+  public function insertToken($email, $token) {
+    $query = $this->dbConn->prepare('INSERT INTO token(email, token) VALUES (:email, :token)');
+    $query->bindValue('email', $email);
+    $query->bindValue('token', $token);
+    $query->execute();
+  }
 }
