@@ -18,6 +18,6 @@ class MarketPlaceView extends AbstractView {
     $values = [
       'USERNAME' => $_SESSION['username']
     ];
-    return values; // PS: this will be hard af to do lmao :3
+    return $values; // PS: this will be hard af to do lmao :3
   } 
 }
