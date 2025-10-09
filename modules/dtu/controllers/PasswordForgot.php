@@ -10,6 +10,7 @@ class PasswordForgot implements Controller
 
   const string PATH = '/user/forgot';
   const string METH = 'GET';
+  const string STYLESHEET = DIRECTORY_SEPARATOR . '_assets' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'style.css';
 
   function control(): void
   {
