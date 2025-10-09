@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 use controllers\Register;
 use controllers\RegisterConfirm;
 use controllers\Main;
@@ -7,6 +7,7 @@ use controllers\PasswordForgot;
 use controllers\PasswordForgotConfirm;
 use controllers\Login;
 use controllers\LoginConfirm;
+use controllers\MarketPlace;
 
 
 include __DIR__ . '/_assets/includes/Autoloader.php';
@@ -24,7 +25,8 @@ $controllers = [
   new PasswordForgot(),
   new PasswordForgotConfirm(),
   new Login(),
-  new LoginConfirm()
+  new LoginConfirm(),
+  new MarketPlace()
 ];
 
 foreach ($controllers as $controller) {

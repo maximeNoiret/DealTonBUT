@@ -6,6 +6,7 @@ use controllers\Controller;
 use exceptions\AccountAlreadyExists;
 use models\Account;
 use views\LoginFormView;
+use views\MarketPlaceView;
 
 class LoginConfirm
 {
@@ -19,15 +20,14 @@ class LoginConfirm
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
 
-        $isValid = \models\Account::validateCredentials($email, $password);
+        $isValid = Account::validateCredentials($email, $password);
 
+        // if logged in
         if ($isValid) {
-            // Credentials are valid, proceed with login
-            // For example, set session variables or redirect to a dashboard
-            echo "Login successful!";
+            header('Location: /marketplace');
+            //echo new MarketPlaceView()->render('Place de Marché - DealTonBUT', self::STYLESHEET);
         } else {
-            // Credentials are invalid, show the login form with an error message
-            echo ((new \views\LoginFormView('invalid_credentials'))->render("Login - DealTonBUT", self::STYLESHEET));
+            echo ((new LoginFormView('invalid_credentials'))->render("Login - DealTonBUT", self::STYLESHEET));
         }
     }
 
