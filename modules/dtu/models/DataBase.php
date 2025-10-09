@@ -76,17 +76,29 @@ class DataBase {
   }
 
   public function getAccount(string $email, string $password): bool|array {
-    $hashedpwd = password_hash($password, PASSWORD_DEFAULT);
     $query = $this->dbConn->prepare('
-      SELECT username, email 
+      SELECT username, email, hashedpwd 
       FROM user_
-      WHERE email = :email
-      AND hashedpwd = :hashedpwd');
+      WHERE email = :email');
     $query->bindValue('email', $email);
-    $query->bindValue('hashedpwd', $hashedpwd);
     $query->execute();
-    return $query->fetch(PDO::FETCH_ASSOC);
-  }
+    
+    $user = $query->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$user) {
+        return false;
+    }
+    
+    // Verify password against stored hash
+    if (password_verify($password, $user['hashedpwd'])) {
+        // Return user data WITHOUT the password hash
+        return [
+            'username' => $user['username'],
+            'email' => $user['email']
+        ];
+    }
+    return false;
+}
 
   public function alreadyForgotPassword(string $email): bool {
     $query = $this->dbConn->prepare(

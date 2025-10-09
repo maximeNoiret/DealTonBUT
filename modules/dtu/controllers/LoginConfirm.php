@@ -23,7 +23,7 @@ class LoginConfirm
         $isValid = Account::validateCredentials($email, $password);
 
         // if logged in
-        if ($isValid && $_SESSION['logged-in'] != null && $_SESSION['logged-in'] === true) {
+        if ($isValid) {
             header('Location: /marketplace');
             //echo new MarketPlaceView()->render('Place de Marché - DealTonBUT', self::STYLESHEET);
         } else {
