@@ -10,7 +10,7 @@ class MarketPlace implements Controller {
   private const METH = 'GET';
   
   function control(): void {
-    if ($_SESSION['logged-in'] == null || $_SESSION['logged-in'] !== true) {
+    if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
       header('Location: /user/login');
     }
   } 
