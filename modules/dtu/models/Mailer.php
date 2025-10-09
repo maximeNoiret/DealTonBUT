@@ -7,16 +7,16 @@ class Mailer {
   private $fromName;
 
 
-  public funtion __construct(string $from, string $fromName = '') {
+  public function __construct(string $from, string $fromName = '') {
     $this->from = $from;
     $this->fromName = $fromName;
   }
 
   public function send(
-    const string $to,
-    const string $subject,
-    const string $message,
-    const bool $isHtml = true): void {    
+     string $to,
+     string $subject,
+     string $message,
+     bool $isHtml = true) {    
     $headers = [];
     
     // 'From' header object
@@ -40,8 +40,8 @@ class Mailer {
     // Additional header for PHP version and deliverability
     $headers[] = "X-Mailer: PHP/" . phpversion();
 
-    // user mail() to actually send the mail.
-    return mail($to, $subject, $message, implode('\r\n', $headers));
+    // use mail() to actually send the mail.
+    return mail($to, $subject, $message, implode('\n', $headers));
   }
 
   public function sendPasswordReset($to, $resetLink) {
