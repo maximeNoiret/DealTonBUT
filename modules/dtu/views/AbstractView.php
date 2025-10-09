@@ -4,7 +4,21 @@ namespace views;
 
 abstract class AbstractView {
   public function header(string $title, string $stylesheet): string {
-    return '<!DOCTYPE html><html><head><title>' . $title . '</title><link rel="icon" href="/_assets/images/favicon.ico"><link rel="stylesheet" href="' . $stylesheet . '"></head><body>';
+    return '<!DOCTYPE html>
+    <html>
+      <head>
+        <title>' . $title . '</title>
+        <link rel="icon" href="/_assets/images/favicon.ico">
+        <link rel="stylesheet" href="' . $stylesheet . '">
+      </head>
+      <body>
+        <header>
+          <nav>
+            <a href="/">Home</a>
+            <a href="/marketplace">Place de Marché</a>
+            <!-- Add more links here -->
+          </nav>
+        </header>';
   }
 
   public function body(): string {
