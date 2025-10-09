@@ -2,7 +2,7 @@
 
 namespace views;
 
-class RegisterFormView extends AbstractView {
+class   RegisterFormView extends AbstractView {
 
   const string USERNAME_VALUE='username';
   const string EMAIL_VALUE='email';

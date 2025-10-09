@@ -5,6 +5,8 @@ use controllers\RegisterConfirm;
 use controllers\Main;
 use controllers\PasswordForgot;
 use controllers\PasswordForgotConfirm;
+use controllers\Login;
+use controllers\LoginConfirm;
 
 
 include __DIR__ . '/_assets/includes/Autoloader.php';
@@ -21,6 +23,8 @@ $controllers = [
   new Main(),
   new PasswordForgot(),
   new PasswordForgotConfirm()
+  new Login(),
+  new LoginConfirm()
 ];
 
 foreach ($controllers as $controller) {
