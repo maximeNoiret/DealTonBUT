@@ -15,7 +15,9 @@ class MarketPlaceView extends AbstractView {
   }
 
   abstract function templateValues(): array {
-    $values ['USERNAME' => $_SESSION['username']];
+    $values = [
+      'USERNAME' => $_SESSION['username']
+    ];
     return values; // PS: this will be hard af to do lmao :3
   } 
 }
