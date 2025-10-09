@@ -25,7 +25,11 @@ class RegisterConfirm implements Controller {
       echo (new RegisterFormView('account_already_exists'))->render("Register - DealTonBUT", self::STYLESHEET);
     }
     // At this point, account has been created.
-    // TODO: either redirect to new LoginFormView() or directly login with SESSION.
+    session_regenerate_id(true);
+    $_SESSION['username'] = $username;
+    $_SESSION['email'] = $email;
+    $_SESSION['logged-in'] = true;
+    header('Location: /marketplace');
   }
 
   static function resolve(string $path, string $meth): bool {

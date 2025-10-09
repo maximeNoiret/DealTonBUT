@@ -75,6 +75,19 @@ class DataBase {
     return $query->fetch() !== null;
   }
 
+  public function getAccount(string $email, string $password): bool|array {
+    $hashedpwd = password_hash($password, PASSWORD_DEFAULT);
+    $query = $this->dbConn->prepare('
+      SELECT username, email 
+      FROM user_
+      WHERE email = :email
+      AND hashedpwd = :hashedpwd');
+    $query->bindValue('email', $email);
+    $query->bindValue('hashedpwd', $hashedpwd);
+    $query->execute();
+    return $query->fetch(PDO::FETCH_ASSOC);
+  }
+
   public function alreadyForgotPassword(string $email): bool {
     $query = $this->dbConn->prepare(
       'SELECT email FROM token WHERE email = :email AND deadline > CURRENT_TIMESTAMP');

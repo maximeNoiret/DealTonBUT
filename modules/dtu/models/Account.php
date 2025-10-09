@@ -25,6 +25,20 @@ class Account {
     );
   }
 
+  static function validateCredentials(string $email, string $password): bool {
+    // CHECK IF (email, hash(password)) IN user_
+    $db = DataBase::getInstance();
+    $account = $db->getAccount($email, $password);
+    if ($account) {
+      session_regenerate_id(true);
+      $_SESSION['username'] = $account['username'];
+      $_SESSION['email'] = $account['email'];
+      $_SESSION['logged-in'] = true;
+      return true;
+    }
+    return false;
+  }
+
   static function forgotPassword(string $email): string {
     // check if account exists at all
     $db = DataBase::getInstance();
