@@ -126,4 +126,25 @@ body{
     text-decoration-style: dashed;
 }
 
+/* téléphone */
+
+@media screen and (max-width: 600px) {
+    .description-text{
+        width: 80%;
+        font-size: 18px;
+    }
+
+    .container-form{
+        width: 80%;
+        font-size: 18px;
+    }
+
+    .btn-container{
+        grid-template-columns: auto;
+    }
+
+    .logo-main{
+        width: 150px;
+    }
+}
 
