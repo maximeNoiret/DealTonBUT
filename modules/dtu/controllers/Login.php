@@ -12,7 +12,7 @@ class Login
 
   function control(): void
   {
-    if (!isset($_SESSION['logged-in'] || $_SESSION['logged-in'] !== true)) {
+    if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
       echo (new LoginFormView())->render("Login - DealTonBUT", self::STYLESHEET);
     } else {
       header('Location: /marketplace');
