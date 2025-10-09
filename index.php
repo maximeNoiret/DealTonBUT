@@ -7,6 +7,7 @@ use controllers\PasswordForgot;
 use controllers\PasswordForgotConfirm;
 use controllers\Login;
 use controllers\LoginConfirm;
+use controllers\Logout;
 use controllers\MarketPlace;
 
 
@@ -26,6 +27,7 @@ $controllers = [
   new PasswordForgotConfirm(),
   new Login(),
   new LoginConfirm(),
+  new Logout(),
   new MarketPlace()
 ];
 

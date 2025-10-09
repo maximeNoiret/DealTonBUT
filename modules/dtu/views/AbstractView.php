@@ -16,6 +16,7 @@ abstract class AbstractView {
           <nav>
             <a href="/">Home</a>
             <a href="/marketplace">Place de Marché</a>
+            <a href="/user/logout">Deconnexion</a>
             <!-- Add more links here -->
           </nav>
         </header>';
