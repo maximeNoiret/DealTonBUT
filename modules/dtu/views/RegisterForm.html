@@ -1,12 +1,16 @@
+<img class="logo-main" src="/_assets/images/logo.webp">
+
+<div class="container-form">
 <form action="{ACTION_KEY}" method="post">
-  <label for="{USERNAME_KEY}">Username:</label>
-  <input type="text" name="{USERNAME_KEY}" required><br>
-  <label for="{EMAIL_KEY}">Email:</label>
-  <input type="email" name="{EMAIL_KEY}" required><br>
-  <label for="{PASSWORD_KEY}">Password:</label>
-  <input type="password" name="{PASSWORD_KEY}" required><br>
-  <input type="submit" value="Register">
+  <label for="{USERNAME_KEY}">Nom d'utilisateur:</label><br>
+  <input type="text" name="{USERNAME_KEY}" required class="input-class"><br>
+  <label for="{EMAIL_KEY}">Email:</label><br>
+  <input type="email" name="{EMAIL_KEY}" required class="input-class"><br>
+  <label for="{PASSWORD_KEY}">Mot de passe:</label><br>
+  <input type="password" name="{PASSWORD_KEY}" required class="input-class"><br>
+  <input type="submit" value="S'inscrire" class="btn-inscription">
 </form>
+</div>
 
 
 <p class="error-text">{ERROR_MESSAGE}</p>
