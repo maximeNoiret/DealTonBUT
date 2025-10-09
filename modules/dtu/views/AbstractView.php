@@ -10,6 +10,7 @@ abstract class AbstractView {
     <title>' . $title . '</title>
     <link rel="icon" type="image/x-icon" href="/_assets/images/favicon.ico">
     <link rel="shortcut icon" type="image/x-icon" href="/_assets/images/favicon.ico">
+    <link rel="icon" type="image/png" href="/_assets/images/favicon.png">
     <link rel="stylesheet" href="' . $stylesheet . '">
   </head>
   <body>
