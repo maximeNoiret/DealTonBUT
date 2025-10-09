@@ -3,6 +3,8 @@
 use controllers\Register;
 use controllers\RegisterConfirm;
 use controllers\Main;
+use controllers\Login;
+use controllers\LoginConfirm;
 
 
 include __DIR__ . '/_assets/includes/Autoloader.php';
@@ -16,7 +18,9 @@ $meth = $_SERVER['REQUEST_METHOD'];
 $controllers = [
   new Register(),
   new RegisterConfirm(),
-  new Main()
+  new Main(),
+  new Login(),
+  new LoginConfirm()
 ];
 
 foreach ($controllers as $controller) {

@@ -1,0 +1,5 @@
+.error-text {
+    color: darkred;
+    stroke: black;
+    text-decoration-style: dashed;
+}
