@@ -8,7 +8,8 @@ abstract class AbstractView {
 <html>
   <head>
     <title>' . $title . '</title>
-    <link rel="icon" href="/_assets/images/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/_assets/images/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/_assets/images/favicon.ico">
     <link rel="stylesheet" href="' . $stylesheet . '">
   </head>
   <body>
