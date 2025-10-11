@@ -26,8 +26,8 @@ class RegisterConfirm implements Controller {
     }
     // At this point, account has been created.
     session_regenerate_id(true);
-    $_SESSION['username'] = $username;
-    $_SESSION['email'] = $email;
+    $_SESSION['username'] = $_POST['username'];
+    $_SESSION['email'] = $_POST['email'];
     $_SESSION['logged-in'] = true;
     header('Location: /marketplace');
   }
