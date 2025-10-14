@@ -10,6 +10,11 @@ class MarketPlaceView extends AbstractView {
     return __DIR__ . DIRECTORY_SEPARATOR . 'MarketPlace.html';
   }
 
+  function getOffers(): string {
+    $ret = '';
+
+  }
+
   function templateValues(): array {
 
     $values = [

@@ -114,4 +114,14 @@ class DataBase {
     $query->bindValue('token', $token);
     $query->execute();
   }
+
+  public function getOffers(): array {
+    $query = $this->dbConn->prepare(
+      'SELECT u.username as \'username\', title, description, price, deadline
+       FROM offers o
+       INNER JOIN user_ u
+       ON o.owner = u.email');
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_ASSOC);
+  }
 }
