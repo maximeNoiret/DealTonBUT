@@ -14,7 +14,7 @@ class PasswordForgot implements Controller
 
   function control(): void
   {
-    echo new ForgotPasswordView()->render("Forgot Password - DealTonBUT", self::STYLESHEET);
+    echo (new ForgotPasswordView())->render("Forgot Password - DealTonBUT", self::STYLESHEET);
   }
 
   static function resolve(string $path, string $meth): bool

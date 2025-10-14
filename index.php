@@ -1,5 +1,7 @@
 <?php
 session_start();
+
+use controllers\Account;
 use controllers\Register;
 use controllers\RegisterConfirm;
 use controllers\Main;
@@ -28,7 +30,8 @@ $controllers = [
   new Login(),
   new LoginConfirm(),
   new Logout(),
-  new MarketPlace()
+  new MarketPlace(),
+  new Account()
 ];
 
 foreach ($controllers as $controller) {

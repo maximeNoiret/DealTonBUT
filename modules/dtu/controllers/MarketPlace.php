@@ -16,7 +16,7 @@ class MarketPlace implements Controller {
     if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
       header('Location: /user/login');
     } else {
-      echo new MarketPlaceView()->render("Place de Marché - DealTonBUT", self::STYLESHEET);
+      echo (new MarketPlaceView())->render("Place de Marché - DealTonBUT", self::STYLESHEET);
     }
   } 
 
