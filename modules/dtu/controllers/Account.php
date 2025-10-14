@@ -2,6 +2,7 @@
 
 namespace controllers;
 
+use views\AccountPageView;
 use views\LoginFormView;
 
 class Account implements Controller
@@ -10,15 +11,17 @@ class Account implements Controller
 
     const string METH = 'GET';
 
-    const string STYLESHEET = DIRECTORY_SEPARATOR . '_assets' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'style.css';
+    const string STYLESHEET = DIRECTORY_SEPARATOR . '_assets' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'Account.css';
 
     function control(): void
     {
-        if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
-            echo (new LoginFormView())->render("Login - DealTonBUT", self::STYLESHEET);
-        } else {
-            header('Location: /account');
-        }
+//        if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
+//            echo (new LoginFormView())->render("Login - DealTonBUT", self::STYLESHEET);
+//        } else {
+//            header('Location: /account');
+//        }
+      // TEMPORARY (just for CSS)
+      echo (new AccountPageView())->render('Account - DealTonBUT', self::STYLESHEET);
     }
 
     static function resolve(string $path, string $meth): bool
