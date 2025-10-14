@@ -15,13 +15,6 @@ abstract class AbstractView {
   </head>
   <body>
     <header>
-      <nav>
-        <a href="/">Home</a>
-        <a href="/marketplace">Place de Marché</a>
-        <a href="/user/logout">Deconnexion</a>
-        <a href="/offre">Offres</a>
-        <!-- ajoutez les liens ici les copains -->
-      </nav>
     </header>
     <main>';
   }
@@ -40,6 +33,15 @@ abstract class AbstractView {
 
   function render(string $title, string $stylesheet): string {
     return $this->header($title, $stylesheet) . $this->body() . $this->footer();
+  }
+
+  public function navbar(): string {
+    return '
+      <a href="/">Home</a>
+      <a href="/marketplace">Place de Marché</a>
+      <a href="/user/logout">Deconnexion</a>
+      <!-- ajoutez les liens ici les copains -->
+      </nav>';
   }
 
   static function debug_to_console($data) {
