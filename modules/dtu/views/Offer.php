@@ -8,16 +8,15 @@ class Offer extends AbstractSubView {
   
   const string PATH = 'OfferTemplate.html';
 
-  function __construct(array $ownerInfo) {
-    $this->info = $ownerInfo;
+  function __construct(private readonly array $ownerInfo) {
   }
 
-  function path() {
+  function path(): string {
     return self::PATH;
   }
 
-  function templateValues() {
-    return $this->info;
+  function templateValues(): array {
+    return $this->ownerInfo;
   }
 
   
