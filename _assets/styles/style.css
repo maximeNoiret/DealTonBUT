@@ -116,6 +116,7 @@ body{
 }
 
 /*note : may be  unnecessary*/
+/*TODO : remove this*/
 .research-bar {
     width: 20%;
     padding: 12px 20px;
@@ -128,6 +129,197 @@ body{
     margin: 8px 0 30px 50px;
 }
 
+/*---------------------------------------------------------------------------*/
+/*TODO : do some code cleaning in this section*/
+/*width: 20%;*/
+/*padding: 12px 20px;*/
+/*display: inline-block;*/
+/*border: 1px solid #ccc;*/
+/*box-sizing: border-box;*/
+/*font-size: 18px;*/
+/*border-radius: 20px;*/
+/*font-family: ShareTechMono, monospace;*/
+/*margin: 8px 0 30px 50px;*/
+.search-container {
+    padding: 30px 40px;
+    position: relative;
+}
+
+.search-wrapper {
+    max-width: 300px;
+    position: relative;
+}
+
+.search-box {
+    width: 100%;
+    padding: 12px 20px 12px 45px;
+    border: 2px solid #666;
+    border-radius: 25px;
+    background: #e8e8e8;
+    font-size: 1em;
+    font-family: ShareTechMono, monospace;
+}
+
+/*.search-icon {*/
+/*    position: absolute;*/
+/*    left: 18px;*/
+/*    top: 50%;*/
+/*    transform: translateY(-50%);*/
+/*    font-size: 1.2em;*/
+/*    color: #555;*/
+/*}*/
+
+.sort-button {
+    position: absolute;
+    right: -50px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    padding: 5px 15px;
+    cursor: pointer;
+    font-family: ShareTechMono, monospace;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.sort-button:hover {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+.dropdown-menu {
+    position: absolute;
+    right: -50px;
+    top: 100%;
+    margin-top: 5px;
+    background: white;
+    border: 2px solid #666;
+    border-radius: 8px;
+    min-width: 200px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    display: none;
+    z-index: 1000;
+}
+
+.dropdown-menu.active {
+    display: block;
+}
+
+.dropdown-item {
+    padding: 12px 20px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+    font-family: ShareTechMono, monospace;
+    transition: background 0.2s;
+}
+
+.dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.dropdown-item:hover {
+    background: #f0f0f0;
+}
+/*---------------------------------------------------------------------------*/
+/*TODO : remove this*/
+ul li {
+    list-style-type: none;
+}
+
+ul li:hover .sous{
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+}
+
+ul::after{
+    content: "";
+    display: table;
+    clear: both;
+}
+
+ul li{
+    float: left;
+    width: 25%;
+    text-align: center;
+    position: relative;
+}
+
+li > a {
+    color: black;
+}
+
+.deroulant > a::after{
+    content:" ▼";
+    font-size: 12px;
+}
+
+.sous{
+    display: none;
+    position: absolute;
+    width: 100%;
+    z-index: 1000;
+}
+
+/*---------------------------------------------------------------------------*/
+/*TODO : remove this*/
+.btn-sort {
+    font-size: 18px;
+    color: black;
+    background: transparent;
+    text-align: center;
+    text-decoration: none;
+    font-family: ShareTechMono, monospace;
+    border: none;
+}
+
+/*---------------------------------------------------------------------------*/
+/*
+.menu-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.menu-button:hover {
+    background-color: #0056b3;
+}
+
+.menu {
+    display: none;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-top: 10px;
+    width: 200px;
+}
+
+.menu.show {
+    display: block;
+}
+
+.menu-item {
+    padding: 12px 20px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.menu-item:last-child {
+    border-bottom: none;
+}
+
+.menu-item:hover {
+    background-color: #f8f9fa;
+}*/
+
+/*---------------------------------------------------------------------------*/
 
 .oublier{
     text-align: center;

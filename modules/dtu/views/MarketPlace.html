@@ -1,8 +1,67 @@
 <section class="description-text">
-  <h1>Test Market Place!!</h1>
-  <p>If you can read this, you are logged in as {USERNAME}</p>
+    <h1>Test Market Place!!</h1>
+    <p>If you can read this, you are logged in as {USERNAME}</p>
 </section>
 
-<input class="research-bar" type="text" placeholder="Rechercher..." />
+<!--<input class="research-bar" type="text" placeholder="Rechercher..." />-->
+
+<div class="search-container">
+    <div class="search-wrapper">
+<!--        <span class="search-icon">🔍</span>-->
+        <input type="text" class="search-box" placeholder="Rechercher...">
+        <button class="sort-button" onclick="toggleDropdown()">
+            Trier ▼
+        </button>
+        <div class="dropdown-menu" id="sortDropdown">
+            <div class="dropdown-item">Plus récent</div>
+            <div class="dropdown-item">Moins cher</div>
+            <div class="dropdown-item">Plus cher</div>
+            <div class="dropdown-item">Alphabétique</div>
+        </div>
+    </div>
+</div>
+
+<!--<button class="menu-button" onclick="toggleMenu()">Menu</button>-->
+<!--<div class="menu" id="menu">-->
+<!--    <div class="menu-item">Home</div>-->
+<!--    <div class="menu-item">About</div>-->
+<!--    <div class="menu-item">Services</div>-->
+<!--    <div class="menu-item">Contact</div>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--    function toggleMenu() {-->
+<!--        const menu = document.getElementById('menu');-->
+<!--        menu.classList.toggle('show');-->
+<!--    }-->
+<!--</script>-->
+
+<!--NOTE : i don't know where this normaly go -->
+<script>
+    function toggleDropdown() {
+        const dropdown = document.getElementById('sortDropdown');
+        dropdown.classList.toggle('active');
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        const dropdown = document.getElementById('sortDropdown');
+        const sortButton = document.querySelector('.sort-button');
+
+        if (!sortButton.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.classList.remove('active');
+        }
+    });
+
+    // Handle dropdown item clicks
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', function() {
+            console.log('Selected:', this.textContent);
+            document.getElementById('sortDropdown').classList.remove('active');
+        });
+    });
+</script>
+
+
 
 {OFFERS}
