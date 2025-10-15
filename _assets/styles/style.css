@@ -14,6 +14,17 @@ body{
     padding: 0;
 }
 
+.nav{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background-color: #ccc;
+    opacity: 0.25;
+    
+}
+
 .logo-main{
     width: 200px;
     height: auto;

@@ -30,5 +30,9 @@ class MarketPlaceView extends AbstractView {
       'OFFERS' => $this->getOffers()
     ];
     return $values; // PS: this will be hard af to do lmao :3
-  } 
+  }
+
+  function navbarText(): string {
+    return 'Place De Marché';
+  }
 }

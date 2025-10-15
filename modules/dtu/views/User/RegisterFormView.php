@@ -38,4 +38,8 @@ class   RegisterFormView extends AbstractView {
 
     return $values;
   }
+
+  function navbarText(): string {
+    return 'Inscription';
+  }
 }

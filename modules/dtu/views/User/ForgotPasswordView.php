@@ -35,4 +35,8 @@ class ForgotPasswordView extends AbstractView
     }
     return $values;
   }
+
+  function navbarText(): string {
+    return 'Mot de passe oublié';
+  }
 }
