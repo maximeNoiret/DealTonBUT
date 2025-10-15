@@ -22,4 +22,8 @@ class MainPageView extends AbstractView
   function navbarText(): string {
     return '';
   }
+
+  public function showNavbar(): bool {
+    return false;
+  }
 }

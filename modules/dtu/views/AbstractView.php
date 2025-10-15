@@ -4,6 +4,7 @@ namespace views;
 
 abstract class AbstractView {
   public function header(string $title, string $stylesheet, string $customvalue = ''): string {
+    $navbarHtml = $this->showNavbar() ? $this->navbar($customvalue) : '';
     return '<!DOCTYPE html>
 <html>
   <head>
@@ -15,7 +16,7 @@ abstract class AbstractView {
   </head>
   <body>
     <header>
-    ' . $this->navbar($customvalue) . '
+    ' . $navbarHtml . '
     </header>
     <main>';
   }
@@ -39,11 +40,18 @@ abstract class AbstractView {
   public function navbar(string $placeholder = ''): string {
     return '
       <nav class="nav">
-        <p>' . $placeholder . '</p>
-        <a href="/">Home</a>
-        <a href="/marketplace">Place de Marché</a>
-        <a href="/user/logout">Deconnexion</a>
-        <!-- ajoutez les liens ici les copains -->
+        <div class="nav-left">
+          <p class="placeholder">' . $placeholder . '</p>
+        </div>
+        <div class="nav-center">
+          <a class="nav-link" href="/">Home</a>
+          <a class="nav-link" href="/marketplace">Place de Marché</a>
+          <a class="nav-link" href="/user/logout">Deconnexion</a>
+          <!-- ajoutez les liens ici les copains -->
+        </div>
+        <div class="nav-right">
+          <img class="logo-nav" src="/_assets/images/navbarLogo.webp" alt="Logo">
+        </div>
       </nav>';
   }
 
@@ -60,4 +68,8 @@ abstract class AbstractView {
   abstract function templateValues(): array;
 
   abstract function navbarText(): string;
+
+  public function showNavbar(): bool {
+    return true;
+  }
 }
