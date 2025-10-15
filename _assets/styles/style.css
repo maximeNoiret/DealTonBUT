@@ -115,6 +115,19 @@ body{
     margin-right: auto;
 }
 
+/*note : may be  unnecessary*/
+.research-bar {
+    width: 20%;
+    padding: 12px 20px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-size: 18px;
+    border-radius: 20px;
+    font-family: ShareTechMono, monospace;
+    margin: 8px 0 30px 50px;
+}
+
 
 .oublier{
     text-align: center;
