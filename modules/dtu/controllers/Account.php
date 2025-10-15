@@ -18,7 +18,7 @@ class Account implements Controller
         if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
             echo (new LoginFormView())->render("Login - DealTonBUT", self::STYLESHEET);
         } else {
-            echo (new AccountPageView()->render("Account - DealTonBUT", self::STYLESHEET));
+            echo (new AccountPageView())->render("Account - DealTonBUT", self::STYLESHEET);
         }
       // TEMPORARY (just for CSS)
       //echo (new AccountPageView())->render('Account - DealTonBUT', self::STYLESHEET);
