@@ -14,12 +14,11 @@ class MarketPlaceView extends AbstractView {
   function getOffers(): string {
     $offers = DataBase::getInstance()->getOffers();
     if ($offers) {
-      $ret = '<section class="offers-grid">' . "\n";
+      $ret = '<section class="offer-grid">' . "\n";
       foreach ($offers as $offer) {
-        $ret = $ret . new Offer($offer)->render('article', 'offer');
+        $ret = $ret . (new Offer($offer))->render('article', 'offer-card');
       }
-      $ret = $ret . '</section>';
-      return $ret;
+      return $ret . '</section>';
     }
     return '<h1 class="description-text">There are no offers!</h1>';
   }

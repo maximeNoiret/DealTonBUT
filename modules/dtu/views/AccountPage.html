@@ -3,13 +3,13 @@
         <div class="user-profile">
             <img class="user-pp" src="/_assets/images/account_pp.webp" alt="Profile Picture">
             <div class="user-name">
-                <p class="account-bigger-text"><strong>Pseudo</strong></p>
-                <p>Nom Prenom</p>
+                <p class="account-bigger-text"><strong>{USERNAME}</strong></p>
+                <p>{NAME}</p>
             </div>
         </div>
         <div class="user-component">
-            <p class="account-bigger-text"><strong>0.00 DTC</strong></p>
-            <p>E-mail</p>
+            <p class="account-bigger-text"><strong>{USERBALANCE} DTC</strong></p>
+            <p>{EMAIL}</p>
         </div>
     </div>
 
@@ -17,117 +17,13 @@
         <!-- Colonne "Mes offres" -->
         <section class="user-offer-section">
             <h2 class="section-title">Mes offres</h2>
-            <div class="offer-grid">
-                <!-- Exemples de cartes d'offres -->
-                <article class="offer-card">
-                    <div class="offer-header">
-                        <img class="offer-avatar" src="/_assets/images/account_pp.webp" alt="Avatar">
-                        <span class="offer-author">PSEUDO_OFFREUR</span>
-                    </div>
-                    <h3 class="offer-title">TITRE_OFFRE</h3>
-                    <div class="offer-tags">
-                        <span class="tag">#TAG</span>
-                        <span class="tag">#TAG</span>
-                        <span class="tag">#TAG</span>
-                    </div>
-                    <p class="offer-description">DESCRIPTION_OFFRE Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore</p>
-                    <div class="offer-footer">
-                        <span class="offer-date">Date limite: XX/XX/XXXX</span>
-                        <span class="offer-price">0.00<br>pts</span>
-                    </div>
-                </article>
-
-                <article class="offer-card">
-                    <div class="offer-header">
-                        <img class="offer-avatar" src="/_assets/images/account_pp.webp" alt="Avatar">
-                        <span class="offer-author">PSEUDO_OFFREUR</span>
-                    </div>
-                    <h3 class="offer-title">TITRE_OFFRE</h3>
-                    <div class="offer-tags">
-                        <span class="tag">#TAG</span>
-                        <span class="tag">#TAG</span>
-                        <span class="tag">#TAG</span>
-                    </div>
-                    <p class="offer-description">DESCRIPTION_OFFRE Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore</p>
-                    <div class="offer-footer">
-                        <span class="offer-date">Date limite: XX/XX/XXXX</span>
-                        <span class="offer-price">0.00<br>pts</span>
-                    </div>
-                </article>
-            </div>
+            {USEROFFERS}
         </section>
 
         <!-- Colonne "Offres achetées" -->
         <section class="user-bought-offer-section">
             <h2 class="section-title">Offre acheté</h2>
-            <div class="offer-grid">
-                <!-- Exemples de cartes d'offres achetées -->
-                <article class="offer-card">
-                    <div class="offer-header">
-                        <img class="offer-avatar" src="/_assets/images/account_pp.webp" alt="Avatar">
-                        <span class="offer-author">PSEUDO_OFFREUR</span>
-                    </div>
-                    <h3 class="offer-title">TITRE_OFFRE</h3>
-                    <div class="offer-footer-compact">
-                        <span class="offer-price">0.00<br>pts</span>
-                    </div>
-                </article>
-
-                <article class="offer-card">
-                    <div class="offer-header">
-                        <img class="offer-avatar" src="/_assets/images/account_pp.webp" alt="Avatar">
-                        <span class="offer-author">PSEUDO_OFFREUR</span>
-                    </div>
-                    <h3 class="offer-title">TITRE_OFFRE</h3>
-                    <div class="offer-footer-compact">
-                        <span class="offer-price">0.00<br>pts</span>
-                    </div>
-                </article>
-
-                <article class="offer-card">
-                    <div class="offer-header">
-                        <img class="offer-avatar" src="/_assets/images/account_pp.webp" alt="Avatar">
-                        <span class="offer-author">PSEUDO_OFFREUR</span>
-                    </div>
-                    <h3 class="offer-title">TITRE_OFFRE</h3>
-                    <div class="offer-footer-compact">
-                        <span class="offer-price">0.00<br>pts</span>
-                    </div>
-                </article>
-
-                <article class="offer-card">
-                    <div class="offer-header">
-                        <img class="offer-avatar" src="/_assets/images/account_pp.webp" alt="Avatar">
-                        <span class="offer-author">PSEUDO_OFFREUR</span>
-                    </div>
-                    <h3 class="offer-title">TITRE_OFFRE</h3>
-                    <div class="offer-footer-compact">
-                        <span class="offer-price">0.00<br>pts</span>
-                    </div>
-                </article>
-
-                <article class="offer-card">
-                    <div class="offer-header">
-                        <img class="offer-avatar" src="/_assets/images/account_pp.webp" alt="Avatar">
-                        <span class="offer-author">PSEUDO_OFFREUR</span>
-                    </div>
-                    <h3 class="offer-title">TITRE_OFFRE</h3>
-                    <div class="offer-footer-compact">
-                        <span class="offer-price">0.00<br>pts</span>
-                    </div>
-                </article>
-
-                <article class="offer-card">
-                    <div class="offer-header">
-                        <img class="offer-avatar" src="/_assets/images/account_pp.webp" alt="Avatar">
-                        <span class="offer-author">PSEUDO_OFFREUR</span>
-                    </div>
-                    <h3 class="offer-title">TITRE_OFFRE</h3>
-                    <div class="offer-footer-compact">
-                        <span class="offer-price">0.00<br>pts</span>
-                    </div>
-                </article>
-            </div>
+            {USERBOUGHTOFFERS}
         </section>
     </div>
 </section>

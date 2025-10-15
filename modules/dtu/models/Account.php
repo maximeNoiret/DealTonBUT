@@ -33,6 +33,7 @@ class Account {
       session_regenerate_id(true);
       $_SESSION['username'] = $account['username'];
       $_SESSION['email'] = $account['email'];
+      $_SESSION['balance'] = $account['balance'];
       $_SESSION['logged-in'] = true;
       return true;
     }

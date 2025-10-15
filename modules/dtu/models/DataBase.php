@@ -77,7 +77,7 @@ class DataBase {
 
   public function getAccount(string $email, string $password): bool|array {
     $query = $this->dbConn->prepare('
-      SELECT username, email, hashedpwd 
+      SELECT *
       FROM user_
       WHERE email = :email');
     $query->bindValue('email', $email);
@@ -94,7 +94,9 @@ class DataBase {
         // Return user data WITHOUT the password hash
         return [
             'username' => $user['username'],
-            'email' => $user['email']
+            'email' => $user['email'],
+            'balance' => $user['balance']
+
         ];
     }
     return false;
@@ -121,6 +123,32 @@ class DataBase {
        FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email');
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_ASSOC);
+  }
+
+  public function getUserOffers($email): array {
+    $query = $this->dbConn->prepare(
+      'SELECT u.username as \'username\', title, description, price, deadline
+       FROM offer o
+       INNER JOIN user_ u
+       ON o.owner = u.email
+       WHERE u.email = :email');
+    $query->bindValue('email', $email);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_ASSOC);
+  }
+
+  public function getBoughtOffers($email): array {
+    $query = $this->dbConn->prepare(
+      'SELECT u.username as \'username\', o.title, o.description, o.price, o.deadline
+        FROM transaction t
+        INNER JOIN offer o
+        ON t.ouid = o.ouid
+        JOIN user_ u
+        ON o.owner = u.email
+        WHERE t.email = :email');
+    $query->bindValue('email', $email);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_ASSOC);
   }
