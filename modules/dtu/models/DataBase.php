@@ -118,7 +118,7 @@ class DataBase {
   public function getOffers(): array {
     $query = $this->dbConn->prepare(
       'SELECT u.username as \'username\', title, description, price, deadline
-       FROM offers o
+       FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email');
     $query->execute();

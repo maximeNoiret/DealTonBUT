@@ -9,12 +9,13 @@ abstract class AbstractSubView extends AbstractView {
     return '<' . $sectionType . ' class="' . $sectionClass . '">' . "\n";
   }
 
-  public function footer(string $sectionType): string {
-    return '</' . $sectionType . '>';
+  public function footer(): string {
+    return '</' . $this->sectionType . '>';
   }
 
   function render(string $sectionType, string $sectionClass): string {
-    return $this->header($sectionType, $sectionClass) . $this->body() . $this->footer($sectionType);
+    $this->sectionType = $sectionType;
+    return $this->header($sectionType, $sectionClass) . $this->body() . $this->footer();
   }
 
   abstract function path(): string;

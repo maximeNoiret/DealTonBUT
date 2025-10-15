@@ -3,6 +3,7 @@
 namespace views;
 
 use views\AbstractView;
+use models\DataBase;  // WARN: maybe find a way to not access a model in a view?
 
 class MarketPlaceView extends AbstractView {
   
@@ -11,15 +12,23 @@ class MarketPlaceView extends AbstractView {
   }
 
   function getOffers(): string {
-    $ret = '';
-
+    $offers = DataBase::getInstance()->getOffers();
+    if ($offers) {
+      $ret = '<section class="offers-grid">' . "\n";
+      foreach ($offers as $offer) {
+        $ret = $ret . new Offer($offer)->render('article', 'offer');
+      }
+      $ret = $ret . '</section>';
+      return $ret;
+    }
+    return '<h1 class="description-text">There are no offers!</h1>';
   }
 
   function templateValues(): array {
 
     $values = [
       'USERNAME' => $_SESSION['username'],
-      'OFFERS' => (new OffersGrid()->render('section', 'offers-grid'))
+      'OFFERS' => $this->getOffers()
     ];
     return $values; // PS: this will be hard af to do lmao :3
   } 

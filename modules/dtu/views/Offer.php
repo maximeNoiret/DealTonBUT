@@ -6,9 +6,9 @@ use views\AbstractSubView;
 
 class Offer extends AbstractSubView {
   
-  const string PATH = 'OfferTemplate.html';
+  const string PATH = __DIR__ . DIRECTORY_SEPARATOR . 'OfferTemplate.html';
 
-  function __construct(private readonly array $ownerInfo) {
+  function __construct(private readonly array $offerInfo) {
   }
 
   function path(): string {
@@ -16,7 +16,7 @@ class Offer extends AbstractSubView {
   }
 
   function templateValues(): array {
-    return $this->ownerInfo;
+    return $this->offerInfo;
   }
 
   
