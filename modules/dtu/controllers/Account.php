@@ -15,13 +15,13 @@ class Account implements Controller
 
     function control(): void
     {
-//        if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
-//            echo (new LoginFormView())->render("Login - DealTonBUT", self::STYLESHEET);
-//        } else {
-//            header('Location: /account');
-//        }
+        if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
+            echo (new LoginFormView())->render("Login - DealTonBUT", self::STYLESHEET);
+        } else {
+            header('Location: /account');
+        }
       // TEMPORARY (just for CSS)
-      echo (new AccountPageView())->render('Account - DealTonBUT', self::STYLESHEET);
+      //echo (new AccountPageView())->render('Account - DealTonBUT', self::STYLESHEET);
     }
 
     static function resolve(string $path, string $meth): bool
