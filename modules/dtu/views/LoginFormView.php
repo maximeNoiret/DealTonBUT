@@ -34,4 +34,8 @@ class  LoginFormView extends AbstractView {
         return $values;
     }
 
+    function navbarText(): string {
+        return 'Connexion';
+    }
+
 }

@@ -3,7 +3,7 @@
 namespace views;
 
 abstract class AbstractView {
-  public function header(string $title, string $stylesheet): string {
+  public function header(string $title, string $stylesheet, string $customvalue = ''): string {
     return '<!DOCTYPE html>
 <html>
   <head>
@@ -15,6 +15,7 @@ abstract class AbstractView {
   </head>
   <body>
     <header>
+    ' . $this->navbar($customvalue) . '
     </header>
     <main>';
   }
@@ -32,15 +33,17 @@ abstract class AbstractView {
   }
 
   function render(string $title, string $stylesheet): string {
-    return $this->header($title, $stylesheet) . $this->body() . $this->footer();
+    return $this->header($title, $stylesheet, $this->navbarText()) . $this->body() . $this->footer();
   }
 
-  public function navbar(): string {
+  public function navbar(string $placeholder = ''): string {
     return '
-      <a href="/">Home</a>
-      <a href="/marketplace">Place de Marché</a>
-      <a href="/user/logout">Deconnexion</a>
-      <!-- ajoutez les liens ici les copains -->
+      <nav class="nav">
+        <p>' . $placeholder . '</p>
+        <a href="/">Home</a>
+        <a href="/marketplace">Place de Marché</a>
+        <a href="/user/logout">Deconnexion</a>
+        <!-- ajoutez les liens ici les copains -->
       </nav>';
   }
 
@@ -55,4 +58,6 @@ abstract class AbstractView {
   abstract function path(): string;
 
   abstract function templateValues(): array;
+
+  abstract function navbarText(): string;
 }

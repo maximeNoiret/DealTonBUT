@@ -19,5 +19,9 @@ class MarketPlaceView extends AbstractView {
       'USERNAME' => $_SESSION['username']
     ];
     return $values; // PS: this will be hard af to do lmao :3
-  } 
+  }
+
+  function navbarText(): string {
+    return 'Place De Marché';
+  }
 }

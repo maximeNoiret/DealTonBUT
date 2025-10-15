@@ -18,4 +18,8 @@ class MainPageView extends AbstractView
     ];
     return $values;
   }
+
+  function navbarText(): string {
+    return '';
+  }
 }
