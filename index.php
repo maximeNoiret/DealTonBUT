@@ -1,5 +1,8 @@
 <?php
 session_start();
+
+use controllers\Offre;
+use controllers\OffreConfirm;
 use controllers\Register;
 use controllers\RegisterConfirm;
 use controllers\Main;
@@ -28,7 +31,8 @@ $controllers = [
   new Login(),
   new LoginConfirm(),
   new Logout(),
-  new MarketPlace()
+  new MarketPlace(),
+  new Offre()
 ];
 
 foreach ($controllers as $controller) {

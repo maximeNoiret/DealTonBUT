@@ -1,0 +1,136 @@
+@font-face {
+    font-family: ShareTechMono;
+    src: url(/_assets/fonts/Share_Tech_Mono/ShareTechMono-Regular.ttf);
+}
+
+body {
+    background-image: url("/_assets/images/background.webp");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+    font-family: ShareTechMono, monospace;
+    margin: 0;
+    padding: 0;
+}
+
+.container-form {
+    background: #D9D9D9;
+    width: 90%;
+    height: auto;
+    padding: 25px;
+    border-radius: 25px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 20px;
+}
+
+.container-un {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.input-class-un {
+    padding: 15px 20px;
+    border: none;
+    box-sizing: border-box;
+    font-size: 16px;
+    border-radius: 20px;
+    font-family: ShareTechMono, monospace;
+    background: white;
+}
+
+.input-class-price {
+    padding: 15px 20px;
+    border: none;
+    box-sizing: border-box;
+    font-size: 16px;
+    border-radius: 20px;
+    font-family: ShareTechMono, monospace;
+    background: white;
+
+}
+
+label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.input-class {
+    width: 100%;
+    padding: 15px 20px;
+    border: none;
+    box-sizing: border-box;
+    font-size: 16px;
+    border-radius: 20px;
+    font-family: ShareTechMono, monospace;
+    background: white;
+    margin-bottom: 20px;
+}
+
+.input-class-tag {
+    width: 40%;
+    padding: 15px 20px;
+    border: none;
+    box-sizing: border-box;
+    font-size: 16px;
+    border-radius: 20px;
+    font-family: ShareTechMono, monospace;
+    background: white;
+    margin-bottom: 20px;
+}
+
+textarea.input-class {
+    resize: vertical;
+    min-height: 150px;
+    margin-bottom: 20px;
+}
+
+.btn-inscription {
+    padding: 15px 40px;
+    background: #333;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: ShareTechMono, monospace;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    float: right;
+}
+
+.btn-inscription:hover {
+    background: #555;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+    .container-un {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-inscription {
+        float: none;
+        width: 100%;
+    }
+}
