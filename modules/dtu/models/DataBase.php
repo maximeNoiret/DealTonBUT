@@ -152,4 +152,10 @@ class DataBase {
     $query->execute();
     return $query->fetchAll(PDO::FETCH_ASSOC);
   }
+
+  public function deleteUser(string $email): void {
+    $query = $this->dbConn->prepare('DELETE FROM user_ WHERE email = :email');
+    $query->bindValue('email', $email);
+    $query->execute();
+  }
 }

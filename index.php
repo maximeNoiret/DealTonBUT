@@ -2,6 +2,8 @@
 session_start();
 
 use controllers\Account;
+use controllers\DeleteAccount;
+use controllers\Settings;
 use controllers\Register;
 use controllers\RegisterConfirm;
 use controllers\Main;
@@ -31,7 +33,8 @@ $controllers = [
   new LoginConfirm(),
   new Logout(),
   new MarketPlace(),
-  new Account()
+  new Account(),
+  new Settings()
 ];
 
 foreach ($controllers as $controller) {
@@ -40,6 +43,13 @@ foreach ($controllers as $controller) {
     exit();
   }
 }
+
+// Ajoutez cette ligne avec les autres résolutions de contrôleurs
+if (DeleteAccount::resolve($path, $meth)) {
+  (new DeleteAccount())->control();
+  exit;
+}
+
 echo 'path: ' . $path . ' | meth: ' . $meth . '<br>';
 echo '404 NOT FOUND';
 exit();
