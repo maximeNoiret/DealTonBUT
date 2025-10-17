@@ -159,7 +159,7 @@ body{
     border-radius: 5px;
 }
 
-.dropdown-menu {
+.sort-menu {
     position: absolute;
     right: -50px;
     top: 100%;
@@ -173,11 +173,11 @@ body{
     z-index: 1000;
 }
 
-.dropdown-menu.active {
+.sort-menu.active {
     display: block;
 }
 
-.dropdown-item {
+.sort-option {
     padding: 12px 20px;
     cursor: pointer;
     border-bottom: 1px solid #ddd;
@@ -185,11 +185,11 @@ body{
     transition: background 0.2s;
 }
 
-.dropdown-item:last-child {
+.sort-option:last-child {
     border-bottom: none;
 }
 
-.dropdown-item:hover {
+.sort-option:hover {
     background: #f0f0f0;
 }
 /*---------------------------------------------------------------------------*/

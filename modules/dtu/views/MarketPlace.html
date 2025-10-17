@@ -12,19 +12,23 @@
         <button class="sort-button" onclick="toggleDropdown()">
             Trier ▼
         </button>
-        <div class="dropdown-menu" id="sortDropdown">
-            <div class="dropdown-item">Plus récent</div>
-            <div class="dropdown-item">Moins cher</div>
-            <div class="dropdown-item">Plus cher</div>
-            <div class="dropdown-item">Alphabétique</div>
+        <div class="sort-menu" id="sortDropdown">
+            <div class="sort-option">Plus récent</div>
+            <div class="sort-option">Moins cher</div>
+            <div class="sort-option">Plus cher</div>
+            <div class="sort-option">Alphabétique</div>
         </div>
     </div>
 </div>
 <!--TODO: do some code cleaning and move <script> in a JS file-->
 <script>
     function toggleDropdown() {
-        const dropdown = document.getElementById('sortDropdown');
-        dropdown.classList.toggle('active');
+        // // take the elements
+        // var dropdown = document.getElementById('sortDropdown');
+        // // activate the dropdown menu
+        // dropdown.classList.toggle('active');
+        document.getElementById('sortDropdown').classList.toggle('active');
+
     }
 
     // Close dropdown when clicking outside
@@ -35,14 +39,6 @@
         if (!sortButton.contains(e.target) && !dropdown.contains(e.target)) {
             dropdown.classList.remove('active');
         }
-    });
-
-    // Handle dropdown item clicks
-    document.querySelectorAll('.dropdown-item').forEach(item => {
-        item.addEventListener('click', function() {
-            console.log('Selected:', this.textContent);
-            document.getElementById('sortDropdown').classList.remove('active');
-        });
     });
 </script>
 
