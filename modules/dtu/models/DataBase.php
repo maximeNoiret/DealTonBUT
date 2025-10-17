@@ -77,7 +77,7 @@ class DataBase {
 
   public function getAccount(string $email, string $password): bool|array {
     $query = $this->dbConn->prepare('
-      SELECT *
+      SELECT username, email, hashedpwd 
       FROM user_
       WHERE email = :email');
     $query->bindValue('email', $email);
@@ -94,9 +94,7 @@ class DataBase {
         // Return user data WITHOUT the password hash
         return [
             'username' => $user['username'],
-            'email' => $user['email'],
-            'balance' => $user['balance']
-
+            'email' => $user['email']
         ];
     }
     return false;
@@ -158,4 +156,39 @@ class DataBase {
     $query->bindValue('email', $email);
     $query->execute();
   }
+
+  //offre
+
+    private function getNextOffreId(): int {
+      $query = $this->dbConn->prepare('SELECT MAX(ouid) as max_id FROM offer');
+      $query->execute();
+      $result = $query->fetch(PDO::FETCH_ASSOC);
+      return ($result['max_id'] ?? 0) + 1;
+    }
+
+    public function insertOffre(
+        string $userEmail,
+        string $title,
+        float $price,
+        string $description,
+        string $deadline
+    ): void {
+        // Générer un ID unique pour l'offre
+        $ouid = $this->getNextOffreId();
+
+        // Insérer l'offre
+        $query = $this->dbConn->prepare('
+        INSERT INTO offer(ouid, owner, title, description, price, creation_time, deadline)
+        VALUES (:ouid, :owner, :title, :description, :price, :creation_time, :deadline)
+    ');
+
+        $query->bindValue('ouid', $ouid, PDO::PARAM_INT);
+        $query->bindValue('owner', $userEmail);
+        $query->bindValue('title', $title);
+        $query->bindValue('description', $description);
+        $query->bindValue('price', $price);
+        $query->bindValue('creation_time', date('Y-m-d H:i:s'));
+        $query->bindValue('deadline', $deadline . ' 23:59:59');
+        $query->execute();
+    }
 }
