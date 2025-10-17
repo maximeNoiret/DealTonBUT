@@ -2,7 +2,8 @@
 
 namespace controllers;
 
-use views\User\RegisterFormView;
+use views\User\RegisterForm\RegisterFormView;
+//use views\User\RegisterFormView;
 class Register implements Controller{
 
   const string PATH = '/user/register';

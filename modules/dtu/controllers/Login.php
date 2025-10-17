@@ -2,7 +2,8 @@
 
 namespace controllers;
 
-use views\User\LoginFormView;
+use views\User\LoginForm\LoginFormView;
+//use views\User\LoginFormView;
 class Login
 {
   const string PATH = '/user/login';

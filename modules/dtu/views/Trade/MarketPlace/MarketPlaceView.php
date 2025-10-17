@@ -1,6 +1,6 @@
 <?php
 
-namespace views;
+namespace views\Trade\MarketPlace;
 
 use views\AbstractView;
 use models\DataBase;  // WARN: maybe find a way to not access a model in a view?

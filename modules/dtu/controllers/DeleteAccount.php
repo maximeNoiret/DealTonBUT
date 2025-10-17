@@ -2,7 +2,8 @@
 
 namespace controllers;
 
-use views\SettingsPageView;
+use views\User\SettingsPage\SettingsPageView;
+//use views\SettingsPageView;
 
 class DeleteAccount
 {

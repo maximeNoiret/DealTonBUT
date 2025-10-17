@@ -4,7 +4,8 @@ namespace controllers;
 use controllers\Controller;
 use exceptions\AccountAlreadyExists;
 use models\Account;
-use views\User\RegisterFormView;
+use views\User\RegisterForm\RegisterFormView;
+//use views\User\RegisterFormView;
 
 class RegisterConfirm implements Controller {
   

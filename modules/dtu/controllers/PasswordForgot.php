@@ -3,7 +3,8 @@
 namespace controllers;
 
 use controllers\Controller;
-use views\User\ForgotPasswordView;
+use views\User\ForgotPassword\ForgotPasswordView;
+//use views\User\ForgotPasswordView;
 
 class PasswordForgot implements Controller
 {
