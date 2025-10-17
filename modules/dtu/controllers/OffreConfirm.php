@@ -2,6 +2,7 @@
 
 namespace controllers;
 
+use models\DataBase;
 use views\OffreView;
 
 class OffreConfirm
@@ -10,6 +11,7 @@ class OffreConfirm
     const string METH = 'POST';
 
     const string STYLESHEET = DIRECTORY_SEPARATOR . '_assets' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'style.css';
+
 
     function control(): void
     {
@@ -29,7 +31,18 @@ class OffreConfirm
             header('Location: /offre?error=invalid_price');
             exit();
         }
+
+        DataBase::getInstance()->insertOffre(
+            $_SESSION['user_email'],
+            $title,
+            (float)$price,
+            $description,
+            $end_date
+        );
     }
+
+
+
 
     static function resolve(string $path, string $meth): bool
     {

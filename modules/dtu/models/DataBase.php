@@ -118,7 +118,7 @@ class DataBase {
   //offre
 
     private function getNextOffreId(): int {
-      $query = $this->dbConn->prepare('SELECT id FROM token ORDER BY id DESC LIMIT 1');
+      $query = $this->dbConn->prepare('SELECT MAX(ouid) as max_id FROM offer');
       $query->execute();
       $result = $query->fetch(PDO::FETCH_ASSOC);
       return ($result['max_id'] ?? 0) + 1;
@@ -129,7 +129,6 @@ class DataBase {
         string $title,
         float $price,
         string $description,
-        string $tag,
         string $deadline
     ): void {
         // Générer un ID unique pour l'offre
@@ -149,46 +148,5 @@ class DataBase {
         $query->bindValue('creation_time', date('Y-m-d H:i:s'));
         $query->bindValue('deadline', $deadline . ' 23:59:59');
         $query->execute();
-
-        // Insérer le tag si fourni
-        if (!empty($tag)) {
-            // Vérifier si le tag existe, sinon le créer
-            $tagQuery = $this->dbConn->prepare('SELECT tagname FROM tag WHERE tagname = :tagname');
-            $tagQuery->bindValue('tagname', $tag);
-            $tagQuery->execute();
-
-            if (!$tagQuery->fetch()) {
-                $insertTag = $this->dbConn->prepare('INSERT INTO tag(tagname) VALUES (:tagname)');
-                $insertTag->bindValue('tagname', $tag);
-                $insertTag->execute();
-            }
-
-            // Associer le tag à l'offre
-            $linkTag = $this->dbConn->prepare('INSERT INTO tags(ouid, tagname) VALUES (:ouid, :tagname)');
-            $linkTag->bindValue('ouid', $ouid, PDO::PARAM_INT);
-            $linkTag->bindValue('tagname', $tag);
-            $linkTag->execute();
-        }
-    }
-
-    public function getAllOffres(): array {
-        $query = $this->dbConn->prepare('
-        SELECT 
-            o.ouid,
-            o.owner,
-            o.title,
-            o.description,
-            o.price,
-            o.creation_time,
-            o.deadline,
-            GROUP_CONCAT(t.tagname SEPARATOR ",") as tags
-        FROM offer o
-        LEFT JOIN tags t ON o.ouid = t.ouid
-        WHERE o.deadline > NOW()
-        GROUP BY o.ouid
-        ORDER BY o.creation_time DESC
-    ');
-        $query->execute();
-        return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 }
