@@ -2,8 +2,8 @@
 
 namespace controllers;
 
-use views\AccountPageView;
-use views\LoginFormView;
+use views\User\AccountPageView;
+use views\User\LoginFormView;
 
 class Account implements Controller
 {
