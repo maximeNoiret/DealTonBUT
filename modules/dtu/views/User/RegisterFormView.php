@@ -1,6 +1,8 @@
 <?php
 
-namespace views;
+namespace views\User;
+
+use views\AbstractView;
 
 class   RegisterFormView extends AbstractView {
 

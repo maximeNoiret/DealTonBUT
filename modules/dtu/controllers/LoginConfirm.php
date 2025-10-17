@@ -5,7 +5,7 @@ namespace controllers;
 use controllers\Controller;
 use exceptions\AccountAlreadyExists;
 use models\Account;
-use views\LoginFormView;
+use views\User\LoginFormView;
 use views\MarketPlaceView;
 
 class LoginConfirm
