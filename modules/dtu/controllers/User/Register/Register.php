@@ -1,6 +1,6 @@
 <?php
 
-namespace controllers;
+namespace controllers\User\Register;
 
 use views\User\RegisterForm\RegisterFormView;
 //use views\User\RegisterFormView;

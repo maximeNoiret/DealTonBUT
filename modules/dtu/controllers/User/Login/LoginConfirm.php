@@ -1,6 +1,6 @@
 <?php
 
-namespace controllers;
+namespace controllers\User\Login;
 
 use controllers\Controller;
 use exceptions\AccountAlreadyExists;

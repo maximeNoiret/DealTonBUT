@@ -1,6 +1,6 @@
 <?php
 
-namespace controllers;
+namespace controllers\User\Register;
 use controllers\Controller;
 use exceptions\AccountAlreadyExists;
 use models\Account;

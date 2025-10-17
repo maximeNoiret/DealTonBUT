@@ -1,6 +1,6 @@
 <?php
 
-namespace controllers;
+namespace controllers\User\AccountPage;
 
 use views\User\AccountPage\AccountPageView;
 use views\User\LoginForm\LoginFormView;

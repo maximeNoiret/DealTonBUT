@@ -1,6 +1,6 @@
 <?php
 
-namespace controllers;
+namespace controllers\User\Login;
 
 use views\User\LoginForm\LoginFormView;
 //use views\User\LoginFormView;

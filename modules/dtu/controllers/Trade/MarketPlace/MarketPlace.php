@@ -1,6 +1,6 @@
 <?php
 
-namespace controllers;
+namespace controllers\Trade\MarketPlace;
 
 use controllers\Controller;
 use views\Trade\MarketPlace\MarketPlaceView;
