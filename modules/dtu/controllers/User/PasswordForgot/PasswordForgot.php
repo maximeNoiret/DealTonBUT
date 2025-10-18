@@ -2,7 +2,7 @@
 
 namespace controllers\User\PasswordForgot;
 
-use controllers\Controller;
+use core\controllers\Controller;
 use views\User\ForgotPassword\ForgotPasswordView;
 //use views\User\ForgotPasswordView;
 

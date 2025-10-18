@@ -1,7 +1,7 @@
 <?php
 
 namespace controllers\User\Register;
-use controllers\Controller;
+use core\controllers\Controller;
 use exceptions\AccountAlreadyExists;
 use models\Account;
 use views\User\RegisterForm\RegisterFormView;

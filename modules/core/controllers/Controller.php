@@ -1,6 +1,6 @@
 <?php
 
-namespace controllers;
+namespace core\controllers;
 interface Controller {
 
   function control(): void;

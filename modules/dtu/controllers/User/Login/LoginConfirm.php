@@ -2,7 +2,7 @@
 
 namespace controllers\User\Login;
 
-use controllers\Controller;
+use core\controllers\Controller;
 use exceptions\AccountAlreadyExists;
 use models\Account;
 /* note these are the old use : */

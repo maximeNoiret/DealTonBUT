@@ -1,18 +1,18 @@
 <?php
 session_start();
 /* Old version, before factorisation of the project */
-/*use controllers\Account;                  v
-use controllers\DeleteAccount;              v
-use controllers\Settings;                   v
-use controllers\Register;                   v
-use controllers\RegisterConfirm;            v
-use controllers\Main;                       v
-use controllers\PasswordForgot;             v
-use controllers\PasswordForgotConfirm;      v
-use controllers\Login;                      v
-use controllers\LoginConfirm;               v
-use controllers\Logout;                     v
-use controllers\MarketPlace;                v*/
+/*use controllers\Account;
+use controllers\DeleteAccount;
+use controllers\Settings;
+use controllers\Register;
+use controllers\RegisterConfirm;
+use controllers\Main;
+use controllers\PasswordForgot;
+use controllers\PasswordForgotConfirm;
+use controllers\Login;
+use controllers\LoginConfirm;
+use controllers\Logout;
+use controllers\MarketPlace;*/
 use controllers\User\AccountPage\Account;
 use controllers\User\AccountPage\DeleteAccount;
 use controllers\User\Settings\Settings;
