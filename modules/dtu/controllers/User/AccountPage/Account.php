@@ -2,6 +2,7 @@
 
 namespace controllers\User\AccountPage;
 
+use controllers\Controller;
 use views\User\AccountPage\AccountPageView;
 use views\User\LoginForm\LoginFormView;
 

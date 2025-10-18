@@ -1,6 +1,6 @@
 <?php
 
-namespace controllers;
+namespace controllers\User\Settings;
 
 use views\User\SettingsPage\SettingsPageView;
 //use views\SettingsPageView;

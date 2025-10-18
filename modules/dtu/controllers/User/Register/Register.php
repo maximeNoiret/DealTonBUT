@@ -2,6 +2,7 @@
 
 namespace controllers\User\Register;
 
+use controllers\Controller;
 use views\User\RegisterForm\RegisterFormView;
 //use views\User\RegisterFormView;
 class Register implements Controller{
