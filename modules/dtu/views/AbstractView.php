@@ -30,7 +30,20 @@ abstract class AbstractView {
   }
 
   public function footer(): string {
-    return '</main></body></html>';
+    return '</main>
+      <script>
+        function openSidebar() {
+          document.getElementById("sidebar").classList.add("active");
+          document.getElementById("sidebar-overlay").classList.add("active");
+        }
+        
+        function closeSidebar() {
+          document.getElementById("sidebar").classList.remove("active");
+          document.getElementById("sidebar-overlay").classList.remove("active");
+        }
+      </script>
+    </body>
+    </html>';
   }
 
   function render(string $title, string $stylesheet): string {
@@ -41,18 +54,33 @@ abstract class AbstractView {
     return '
       <nav class="nav">
         <div class="nav-left">
-          <p class="placeholder">' . $placeholder . '</p>
+          <img class="overlay-nav" src="/_assets/images/overlayNavbar.webp" alt="Menu" onclick="openSidebar()">
         </div>
         <div class="nav-center">
-          <a class="nav-link" href="/">Home</a>
-          <a class="nav-link" href="/marketplace">Place de Marché</a>
-          <a class="nav-link" href="/user/logout">Deconnexion</a>
-          <!-- ajoutez les liens ici les copains -->
+          <h1 class="page-title">' . $placeholder . '</h1>
         </div>
         <div class="nav-right">
           <img class="logo-nav" src="/_assets/images/navbarLogo.webp" alt="Logo">
         </div>
-      </nav>';
+      </nav>
+      
+      <!-- Pour la Sidebar -->
+      <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <button class="close-btn" id="close-btn" onclick="closeSidebar()">
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+        <div class="sidebar-content">
+          <a class="sidebar-link" href="/">Échanger Points</a>
+          <a class="sidebar-link" href="/marketplace">Place de marché</a>
+          <a class="sidebar-link" href="/user/logout">Ajouter une offre</a>
+        </div>
+      </div>
+      
+      <!-- Overlay -->
+      <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>';
   }
 
   static function debug_to_console($data) {
