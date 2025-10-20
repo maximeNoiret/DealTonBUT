@@ -12,6 +12,7 @@ class MarketPlace implements Controller {
   private const METH = 'GET';
   private const STYLESHEET = DIRECTORY_SEPARATOR . '_assets' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'style.css';
 
+
   function control(): void {
     if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
       header('Location: /user/login');
