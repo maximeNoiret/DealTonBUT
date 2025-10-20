@@ -50,7 +50,6 @@ $controllers = [
   new Account(),
   new Settings(),
   new MarketPlace(),
-  new Offre(),
   new DeleteAccount()
 ];
 
