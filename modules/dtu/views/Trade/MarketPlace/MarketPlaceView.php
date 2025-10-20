@@ -3,6 +3,7 @@
 namespace views\Trade\MarketPlace;
 
 use core\views\AbstractView;
+use views\Trade\Offer\Offer;
 use models\DataBase;
 
 class MarketPlaceView extends AbstractView {

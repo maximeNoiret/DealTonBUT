@@ -2,7 +2,7 @@
 
 namespace controllers\Trade\AddOffer;
 
-use views\AddOfferView;
+use views\Trade\AddOffer\AddOfferView;
 
 class AddOffer{
 

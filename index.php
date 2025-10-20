@@ -28,6 +28,8 @@ use controllers\User\Login\Login;
 use controllers\User\Login\LoginConfirm;
 use controllers\User\Login\Logout;
 use controllers\Trade\MarketPlace\MarketPlace;
+use controllers\Trade\AddOffer\AddOffer;
+use controllers\Trade\AddOffer\AddOfferConfirm;
 
 include __DIR__ . '/_assets/includes/Autoloader.php';
 
@@ -50,7 +52,9 @@ $controllers = [
   new Account(),
   new Settings(),
   new MarketPlace(),
-  new DeleteAccount()
+  new DeleteAccount(),
+
+  new AddOffer()
 ];
 
 foreach ($controllers as $controller) {
