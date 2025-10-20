@@ -77,7 +77,7 @@ class DataBase {
 
   public function getAccount(string $email, string $password): bool|array {
     $query = $this->dbConn->prepare('
-      SELECT username, email, hashedpwd 
+      SELECT username, email, hashedpwd, balance 
       FROM user_
       WHERE email = :email');
     $query->bindValue('email', $email);
@@ -94,7 +94,8 @@ class DataBase {
         // Return user data WITHOUT the password hash
         return [
             'username' => $user['username'],
-            'email' => $user['email']
+            'email' => $user['email'],
+            'balance' => $user['balance']
         ];
     }
     return false;

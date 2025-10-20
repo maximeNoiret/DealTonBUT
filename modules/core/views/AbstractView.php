@@ -77,6 +77,16 @@ abstract class AbstractView {
           <a class="sidebar-link" href="/marketplace">Place de marché</a>
           <a class="sidebar-link" href="/user/logout">Ajouter une offre</a>
         </div>
+        <div class="sidebar-footer">
+          <div class="sidebar-user-card">
+            <div class="sidebar-user-info">
+              <div class="sidebar-user-name">' . strtoupper($_SESSION['username']) . '</div>
+              <div class="sidebar-user-points">' . number_format($_SESSION['balance'] ?? 0, 2, '.') . ' pts</div>
+            </div>
+            <a href="/user/profile" class="sidebar-settings-icon">⚙</a>
+          </div>
+          <a class="sidebar-disconnect-btn" href="/user/logout">SE DECONNECTER</a>
+        </div>
       </div>
       
       <!-- Overlay -->
