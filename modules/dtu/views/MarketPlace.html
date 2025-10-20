@@ -3,4 +3,43 @@
   <p>If you can read this, you are logged in as {USERNAME}</p>
 </section>
 
+<!--<input class="research-bar" type="text" placeholder="Rechercher..." />-->
+
+<div class="search-container">
+    <div class="search-wrapper">
+<!--        <span class="search-icon">🔍</span>-->
+        <input type="text" class="search-box" placeholder="Rechercher...">
+        <button class="sort-button" onclick="toggleDropdown()">
+            Trier ▼
+        </button>
+        <div class="sort-menu" id="sortDropdown">
+            <div class="sort-option">Plus récent</div>
+            <div class="sort-option">Moins cher</div>
+            <div class="sort-option">Plus cher</div>
+            <div class="sort-option">Alphabétique</div>
+        </div>
+    </div>
+</div>
+<!--TODO: do some code cleaning and move <script> in a JS file-->
+<script>
+    function toggleDropdown() {
+        // // take the elements
+        // var dropdown = document.getElementById('sortDropdown');
+        // // activate the dropdown menu
+        // dropdown.classList.toggle('active');
+        document.getElementById('sortDropdown').classList.toggle('active');
+
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        const dropdown = document.getElementById('sortDropdown');
+        const sortButton = document.querySelector('.sort-button');
+
+        if (!sortButton.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.classList.remove('active');
+        }
+    });
+</script>
+
 {OFFERS}

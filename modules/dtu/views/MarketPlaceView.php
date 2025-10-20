@@ -3,9 +3,12 @@
 namespace views;
 
 use views\AbstractView;
-use models\DataBase;  // WARN: maybe find a way to not access a model in a view?
 
 class MarketPlaceView extends AbstractView {
+  
+   
+   
+  
   
   function path(): string {
     return __DIR__ . DIRECTORY_SEPARATOR . 'MarketPlace.html';
@@ -24,7 +27,6 @@ class MarketPlaceView extends AbstractView {
   }
 
   function templateValues(): array {
-
     $values = [
       'USERNAME' => $_SESSION['username'],
       'OFFERS' => $this->getOffers()
