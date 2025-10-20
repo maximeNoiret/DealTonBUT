@@ -61,4 +61,8 @@ class AccountPageView extends AbstractView
       ];
       return $values;
   }
+
+  function navbarText(): string {
+    return 'Mon compte';
+  }
 }
