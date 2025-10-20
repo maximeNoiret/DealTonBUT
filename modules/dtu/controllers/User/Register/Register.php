@@ -1,8 +1,10 @@
 <?php
 
-namespace controllers;
+namespace controllers\User\Register;
 
-use views\User\RegisterFormView;
+use core\controllers\Controller;
+use views\User\RegisterForm\RegisterFormView;
+//use views\User\RegisterFormView;
 class Register implements Controller{
 
   const string PATH = '/user/register';

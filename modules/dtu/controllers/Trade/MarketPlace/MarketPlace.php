@@ -1,9 +1,10 @@
 <?php
 
-namespace controllers;
+namespace controllers\Trade\MarketPlace;
 
 use controllers\Controller;
-use views\MarketPlaceView;
+use views\Trade\MarketPlace\MarketPlaceView;
+//use views\MarketPlaceView;
 
 class MarketPlace implements Controller {
   

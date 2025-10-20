@@ -1,9 +1,10 @@
 <?php
 
-namespace controllers;
+namespace controllers\User\PasswordForgot;
 
-use controllers\Controller;
-use views\User\ForgotPasswordView;
+use core\controllers\Controller;
+use views\User\ForgotPassword\ForgotPasswordView;
+//use views\User\ForgotPasswordView;
 use models\Account;
 
 class PasswordForgotConfirm implements Controller {

@@ -1,6 +1,6 @@
 <?php
 
-namespace views;
+namespace views\Trade\MarketPlace;
 
 use views\AbstractView;
 

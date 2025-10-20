@@ -1,6 +1,6 @@
 <?php
 
-namespace views;
+namespace views\User\SettingsPage;
 
 use models\DataBase;
 use views\AbstractView;

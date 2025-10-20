@@ -1,8 +1,9 @@
 <?php
 
-namespace controllers;
+namespace controllers\User\AccountPage;
 
-use views\SettingsPageView;
+use views\User\SettingsPage\SettingsPageView;
+//use views\SettingsPageView;
 
 class DeleteAccount
 {

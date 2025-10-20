@@ -2,7 +2,7 @@
 
 namespace controllers;
 
-use controllers\Controller;
+use core\controllers\Controller;
 use views\MainPageView;
 
 class Main implements Controller

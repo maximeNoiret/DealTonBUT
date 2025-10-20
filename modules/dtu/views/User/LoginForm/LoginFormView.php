@@ -1,6 +1,6 @@
 <?php
 
-namespace views\User;
+namespace views\User\LoginForm;
 
 use views\AbstractView;
 
