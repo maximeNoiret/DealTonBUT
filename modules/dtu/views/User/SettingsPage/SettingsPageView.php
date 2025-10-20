@@ -3,7 +3,7 @@
 namespace views\User\SettingsPage;
 
 use models\DataBase;
-use views\AbstractView;
+use core\views\AbstractView;
 
 class SettingsPageView extends AbstractView
 {
@@ -30,5 +30,10 @@ class SettingsPageView extends AbstractView
       self::$instance = new self();
     }
     return self::$instance;
+  }
+
+  function navbarText(): string
+  {
+    return 'Settings';
   }
 }

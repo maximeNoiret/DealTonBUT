@@ -1,6 +1,6 @@
 <?php
 
-namespace views;
+namespace core\views;
 
 abstract class AbstractView {
   public function header(string $title, string $stylesheet, string $customvalue = ''): string {
@@ -50,7 +50,7 @@ abstract class AbstractView {
     return $this->header($title, $stylesheet, $this->navbarText()) . $this->body() . $this->footer();
   }
 
-  public function navbar(string $placeholder = ''): string {
+  function navbar(string $placeholder = ''): string {
     return '
       <nav class="nav">
         <div class="nav-left">

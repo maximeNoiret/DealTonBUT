@@ -5,8 +5,8 @@ session_start();
 use controllers\DeleteAccount;
 use controllers\Settings;
 
-use controllers\Offre;
-use controllers\OffreConfirm;
+use controllers\AddOffer;
+use controllers\AddOfferConfirm;
 use controllers\Register;
 use controllers\RegisterConfirm;
 use controllers\Main;

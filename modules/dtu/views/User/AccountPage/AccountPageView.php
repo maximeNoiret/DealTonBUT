@@ -2,7 +2,7 @@
 
 namespace views\User\AccountPage;
 
-use views\AbstractView;
+use core\views\AbstractView;
 use models\DataBase;
 use views\Offer;
 

@@ -1,14 +1,16 @@
 <?php
 
-namespace views;
+namespace views\Trade\AddOffer;
 
-class OffreView extends AbstractView{
+use core\views\AbstractView;
+
+class AddOfferView extends AbstractView{
     public function __construct(private string $offresHtml)
     {
     }
 
     function path(): string {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'Offre.html';
+        return __DIR__ . DIRECTORY_SEPARATOR . 'AddOffer.html';
     }
 
     function templateValues(): array {
@@ -22,4 +24,9 @@ class OffreView extends AbstractView{
             'TAG_KEY' => 'tag'
         ];
     }
+
+  function navbarText(): string
+  {
+    return '';
+  }
 }

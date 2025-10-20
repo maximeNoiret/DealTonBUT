@@ -1,10 +1,10 @@
 <?php
 
-namespace controllers;
+namespace controllers\Trade\AddOffer;
 
-use views\OffreView;
+use views\AddOfferView;
 
-class Offre{
+class AddOffer{
 
     const string PATH = '/offre';
     const string METH = 'GET';
@@ -13,7 +13,7 @@ class Offre{
 
     function control(): void
     {
-        echo (new OffreView(''))->render("Offre - DealTonBUT", self::STYLESHEET);
+        echo (new AddOfferView(''))->render("AddOffer - DealTonBUT", self::STYLESHEET);
     }
 
     static function resolve(string $path, string $meth): bool

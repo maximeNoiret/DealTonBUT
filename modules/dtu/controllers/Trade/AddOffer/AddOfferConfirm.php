@@ -1,11 +1,11 @@
 <?php
 
-namespace controllers;
+namespace controllers\Trade\AddOffer;
 
 use models\DataBase;
-use views\OffreView;
+use views\AddOfferView;
 
-class OffreConfirm
+class AddOfferConfirm
 {
     const string PATH = '/offre/confirm';
     const string METH = 'POST';

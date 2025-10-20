@@ -2,14 +2,10 @@
 
 namespace views\Trade\MarketPlace;
 
-use views\AbstractView;
+use core\views\AbstractView;
+use models\DataBase;
 
 class MarketPlaceView extends AbstractView {
-  
-   
-   
-  
-  
   function path(): string {
     return __DIR__ . DIRECTORY_SEPARATOR . 'MarketPlace.html';
   }

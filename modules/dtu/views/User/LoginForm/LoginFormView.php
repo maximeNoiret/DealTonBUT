@@ -2,7 +2,7 @@
 
 namespace views\User\LoginForm;
 
-use views\AbstractView;
+use core\views\AbstractView;
 
 class  LoginFormView extends AbstractView {
     const string EMAIL_KEY='email';

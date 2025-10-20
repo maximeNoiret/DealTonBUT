@@ -2,7 +2,7 @@
 
 namespace views;
 
-use views\AbstractView;
+use core\views\AbstractView;
 
 class MainPageView extends AbstractView
 {
