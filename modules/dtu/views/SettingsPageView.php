@@ -31,4 +31,8 @@ class SettingsPageView extends AbstractView
     }
     return self::$instance;
   }
+
+  function navbarText(): string {
+    return 'Paramètres';
+  }
 }

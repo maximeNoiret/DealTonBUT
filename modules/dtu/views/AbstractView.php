@@ -78,12 +78,12 @@ abstract class AbstractView {
           <a class="sidebar-link" href="/user/logout">Ajouter une offre</a>
         </div>
         <div class="sidebar-footer">
-          <div class="sidebar-user-card">
+          <div class="sidebar-user-card" onclick=\'window.location.href="/user/account"\' style="cursor:pointer;">
             <div class="sidebar-user-info">
-              <div class="sidebar-user-name">' . strtoupper($_SESSION['username']) . '</div>
-              <div class="sidebar-user-points">' . number_format($_SESSION['balance'] ?? 0, 2, '.') . ' pts</div>
+              <div class="sidebar-user-name">' . strtoupper($_SESSION['username'] ?? 'NOM DE COMPTE') . '</div>
+              <div class="sidebar-user-points">' . number_format($_SESSION['balance'] ?? 0, 2, '.', '') . ' pts</div>
             </div>
-            <a href="/user/profile" class="sidebar-settings-icon">⚙</a>
+            <a href="/user/settings" class="sidebar-settings-icon">⚙</a>
           </div>
           <a class="sidebar-disconnect-btn" href="/user/logout">SE DECONNECTER</a>
         </div>

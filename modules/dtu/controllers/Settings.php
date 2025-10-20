@@ -22,4 +22,6 @@ class Settings
   static function resolve(string $path, string $meth): bool {
     return $path === self::PATH && $meth === self::METH;
   }
+
+  
 }
