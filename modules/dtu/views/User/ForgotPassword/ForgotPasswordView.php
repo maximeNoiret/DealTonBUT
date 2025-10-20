@@ -2,7 +2,7 @@
 
 namespace views\User\ForgotPassword;
 
-use views\AbstractView;
+use core\views\AbstractView;
 
 class ForgotPasswordView extends AbstractView
 {

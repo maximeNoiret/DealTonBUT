@@ -2,7 +2,7 @@
 
 namespace views\User\RegisterForm;
 
-use views\AbstractView;
+use core\views\AbstractView;
 
 class   RegisterFormView extends AbstractView {
 

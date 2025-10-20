@@ -1,6 +1,6 @@
 <?php
 
-namespace views;
+namespace core\views;
 
 abstract class AbstractView {
   public function header(string $title, string $stylesheet): string {

@@ -2,11 +2,10 @@
 
 namespace views\Trade\MarketPlace;
 
-use views\AbstractView;
+use core\views\AbstractView;
 use models\DataBase;  // WARN: maybe find a way to not access a model in a view?
 
 class MarketPlaceView extends AbstractView {
-  
   function path(): string {
     return __DIR__ . DIRECTORY_SEPARATOR . 'MarketPlace.html';
   }

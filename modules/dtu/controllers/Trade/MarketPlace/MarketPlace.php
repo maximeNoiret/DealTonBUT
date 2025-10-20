@@ -2,7 +2,7 @@
 
 namespace controllers\Trade\MarketPlace;
 
-use controllers\Controller;
+use core\controllers\Controller;
 use views\Trade\MarketPlace\MarketPlaceView;
 //use views\MarketPlaceView;
 

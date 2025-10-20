@@ -1,8 +1,8 @@
 <?php
 
-namespace views;
+namespace core\views;
 
-use views\AbstractView;
+use core\views\AbstractView;
 
 abstract class AbstractSubView extends AbstractView {
   public function header(string $sectionType, string $sectionClass): string {

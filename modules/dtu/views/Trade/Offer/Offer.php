@@ -1,8 +1,8 @@
 <?php
 
-namespace views;
+namespace views\Trade\Offer;
 
-use views\AbstractSubView;
+use core\views\AbstractSubView;
 
 class Offer extends AbstractSubView {
   
