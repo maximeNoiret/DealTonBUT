@@ -9,7 +9,10 @@ class Offre{
     const string PATH = '/offre';
     const string METH = 'GET';
 
-    const string STYLESHEET = DIRECTORY_SEPARATOR . '_assets' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'offre.css';
+    const array STYLESHEET = [
+        DIRECTORY_SEPARATOR . '_asset' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'offre.css',
+        DIRECTORY_SEPARATOR . '_asset' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'styles.css'
+    ];
 
     function control(): void
     {

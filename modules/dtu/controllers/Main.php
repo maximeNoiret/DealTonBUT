@@ -11,8 +11,10 @@ class Main implements Controller
   const string PATH = '/';
   const string METH = 'GET';
 
-  const string STYLESHEET = DIRECTORY_SEPARATOR . '_assets' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'style.css';
-
+    const array STYLESHEET = [
+        DIRECTORY_SEPARATOR . '_asset' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'loginSingnin.css',
+        DIRECTORY_SEPARATOR . '_asset' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'styles.css'
+    ];
   function control(): void {
     // TODO: check if logged in and stuff lol
     echo (new MainPageView())->render('DealTonBUT', self::STYLESHEET);

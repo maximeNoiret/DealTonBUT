@@ -8,8 +8,10 @@ class Register implements Controller{
   const string PATH = '/user/register';
   const string METH = 'GET';
 
-  const string STYLESHEET = DIRECTORY_SEPARATOR . '_assets' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'style.css';
-
+    const array STYLESHEET = [
+        DIRECTORY_SEPARATOR . '_asset' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'loginSingin.css',
+        DIRECTORY_SEPARATOR . '_asset' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'styles.css'
+    ];
   function control(): void {
     echo (new RegisterFormView())->render("Register - DealTonBUT", self::STYLESHEET);
   }

@@ -159,13 +159,6 @@ class DataBase {
 
   //offre
 
-    private function getNextOffreId(): int {
-      $query = $this->dbConn->prepare('SELECT MAX(ouid) as max_id FROM offer');
-      $query->execute();
-      $result = $query->fetch(PDO::FETCH_ASSOC);
-      return ($result['max_id'] ?? 0) + 1;
-    }
-
     public function insertOffre(
         string $userEmail,
         string $title,
@@ -173,16 +166,12 @@ class DataBase {
         string $description,
         string $deadline
     ): void {
-        // Générer un ID unique pour l'offre
-        $ouid = $this->getNextOffreId();
-
         // Insérer l'offre
         $query = $this->dbConn->prepare('
         INSERT INTO offer(ouid, owner, title, description, price, creation_time, deadline)
         VALUES (:ouid, :owner, :title, :description, :price, :creation_time, :deadline)
     ');
 
-        $query->bindValue('ouid', $ouid, PDO::PARAM_INT);
         $query->bindValue('owner', $userEmail);
         $query->bindValue('title', $title);
         $query->bindValue('description', $description);

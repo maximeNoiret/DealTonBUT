@@ -3,8 +3,13 @@
 namespace views;
 
 abstract class AbstractView {
-  public function header(string $title, string $stylesheet, string $customvalue = ''): string {
+  public function header(string $title, array $stylesheets, string $customvalue = ''): string {
     $navbarHtml = $this->showNavbar() ? $this->navbar($customvalue) : '';
+
+      $stylesheetsHtml = '';
+      foreach ($stylesheets as $stylesheet) {
+          $stylesheetsHtml .= '<link rel="stylesheet" href="' . $stylesheet . '">' . "\n";
+      }
     return '<!DOCTYPE html>
 <html>
   <head>
@@ -12,7 +17,9 @@ abstract class AbstractView {
     <link rel="icon" type="image/x-icon" href="/_assets/images/favicon.ico">
     <link rel="shortcut icon" type="image/x-icon" href="/_assets/images/favicon.ico">
     <link rel="icon" type="image/png" href="/_assets/images/favicon.png">
-    <link rel="stylesheet" href="' . $stylesheet . '">
+    ' . $stylesheetsHtml . '
+   
+   <?php
   </head>
   <body>
     <header>
