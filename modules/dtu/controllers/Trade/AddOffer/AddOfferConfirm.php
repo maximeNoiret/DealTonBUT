@@ -15,12 +15,16 @@ class AddOfferConfirm
 
     function control(): void
     {
+      echo "Vous avez accédé à AddOfferConfirm";
         // Récupérer les données du formulaire
         $title = $_POST['title'] ?? '';
         $price = $_POST['price'] ?? '';
         $end_date = $_POST['end_date'] ?? '';
         $description = $_POST['description'] ?? '';
         $tag = $_POST['tag'] ?? '';
+
+        echo "Données reçues : ";
+        echo "Title: $title, Price: $price, End Date: $end_date, Description: $description, Tag: $tag";
 
         // vérification de l'offre
         if (empty($title) || empty($price) || empty($end_date) || empty($description)) {
