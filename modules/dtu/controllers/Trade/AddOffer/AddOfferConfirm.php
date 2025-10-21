@@ -39,6 +39,8 @@ class AddOfferConfirm
             $description,
             $end_date
         );
+
+        header('Location: /marketplace');
     }
 
 
