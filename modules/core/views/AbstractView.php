@@ -3,8 +3,14 @@
 namespace core\views;
 
 abstract class AbstractView {
-  public function header(string $title, string $stylesheet, string $customvalue = ''): string {
+  public function header(string $title, array $stylesheets, string $customvalue = ''): string {
     $navbarHtml = $this->showNavbar() ? $this->navbar($customvalue) : '';
+
+      $stylesheetsHtml = '';
+      foreach ($stylesheets as $stylesheet) {
+          $stylesheetsHtml .= '<link rel="stylesheet" href="' . $stylesheet . '">' . "\n";
+
+      }
     return '<!DOCTYPE html>
 <html>
   <head>
@@ -12,7 +18,7 @@ abstract class AbstractView {
     <link rel="icon" type="image/x-icon" href="/_assets/images/favicon.ico">
     <link rel="shortcut icon" type="image/x-icon" href="/_assets/images/favicon.ico">
     <link rel="icon" type="image/png" href="/_assets/images/favicon.png">
-    <link rel="stylesheet" href="' . $stylesheet . '">
+    ' . $stylesheetsHtml . '
   </head>
   <body>
     <header>
@@ -46,7 +52,7 @@ abstract class AbstractView {
     </html>';
   }
 
-  function render(string $title, string $stylesheet): string {
+  function render(string $title, array $stylesheet): string {
     return $this->header($title, $stylesheet, $this->navbarText()) . $this->body() . $this->footer();
   }
 
@@ -62,7 +68,7 @@ abstract class AbstractView {
         <div class="nav-right">
           <img class="logo-nav" src="/_assets/images/navbarLogo.webp" alt="Logo">
         </div>
-      </nav>
+      </nav>    
       
       <!-- Pour la Sidebar -->
       <div class="sidebar" id="sidebar">

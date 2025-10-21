@@ -9,8 +9,11 @@ class Login
   const string PATH = '/user/login';
   const string METH = 'GET';
 
-  const string STYLESHEET = DIRECTORY_SEPARATOR . '_assets' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'style.css';
-
+    const array STYLESHEET = [
+        '/_assets/styles/loginSingnin.css',
+        '/_assets/styles/style.css',
+        '/_assets/styles/navbar.css'
+        ];
   function control(): void
   {
     if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {

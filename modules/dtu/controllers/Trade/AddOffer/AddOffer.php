@@ -9,7 +9,11 @@ class AddOffer{
     const string PATH = '/offre';
     const string METH = 'GET';
 
-    const string STYLESHEET = DIRECTORY_SEPARATOR . '_assets' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'offre.css';
+    const array STYLESHEET = [
+        '/_assets/styles/offre.css',
+        '/_assets/styles/style.css',
+        '/_assets/styles/navbar.css'
+    ];
 
     function control(): void
     {

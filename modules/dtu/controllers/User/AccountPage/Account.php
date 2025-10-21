@@ -12,7 +12,11 @@ class Account implements Controller
 
     const string METH = 'GET';
 
-    const string STYLESHEET = DIRECTORY_SEPARATOR . '_assets' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'Account.css';
+    const array STYLESHEET = [
+        '/_assets/styles/Account.css',
+        '/_assets/styles/style.css',
+        '/_assets/styles/navbar.css'
+    ];
 
     function control(): void
     {
