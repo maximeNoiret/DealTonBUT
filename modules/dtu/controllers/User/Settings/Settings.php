@@ -2,17 +2,19 @@
 
 namespace controllers\User\Settings;
 
+use core\controllers\Controller;
 use views\User\SettingsPage\SettingsPageView;
 //use views\SettingsPageView;
 
-class Settings
+class Settings implements Controller
 {
   const string PATH = '/user/settings';
   const string METH = 'GET';
 
     const array STYLESHEET = [
       '/_assets/styles/settings.css',
-      '/_assets/styles/style.css'
+      '/_assets/styles/style.css',
+      '/_assets/styles/navbar.css'
     ];
   function control(): void {
     if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {

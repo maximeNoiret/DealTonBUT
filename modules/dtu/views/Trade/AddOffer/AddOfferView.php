@@ -27,6 +27,6 @@ class AddOfferView extends AbstractView{
 
   function navbarText(): string
   {
-    return '';
+    return 'Creer une offre';
   }
 }
