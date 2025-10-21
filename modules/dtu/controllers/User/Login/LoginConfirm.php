@@ -16,7 +16,9 @@ class LoginConfirm
     const string PATH = '/user/login';
     const string METH = 'POST';
 
-    const string STYLESHEET = DIRECTORY_SEPARATOR . '_assets' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'style.css';
+    const array STYLESHEET = [
+      DIRECTORY_SEPARATOR . '_assets' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'style.css'
+    ];
 
     function control(): void
     {
