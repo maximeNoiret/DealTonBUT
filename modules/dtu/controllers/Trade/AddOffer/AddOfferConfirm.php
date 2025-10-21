@@ -24,7 +24,7 @@ class AddOfferConfirm
         $tag = $_POST['tag'] ?? '';
 
         echo "Données reçues : ";
-        echo "Title: $title, Price: $price, End Date: $end_date, Description: $description, Tag: $tag";
+        echo "Title: $title, Price: $price, End Date: $end_date, Description: $description, Tag: $tag \n";
 
         // vérification de l'offre
         if (empty($title) || empty($price) || empty($end_date) || empty($description)) {
@@ -43,8 +43,8 @@ class AddOfferConfirm
             $description,
             $end_date
         );
+        echo "Offre insérée dans la base de données.\n";
 
-        header('Location: /marketplace');
     }
 
 
