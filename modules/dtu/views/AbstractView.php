@@ -9,6 +9,7 @@ abstract class AbstractView {
       $stylesheetsHtml = '';
       foreach ($stylesheets as $stylesheet) {
           $stylesheetsHtml .= '<link rel="stylesheet" href="' . $stylesheet . '">' . "\n";
+
       }
     return '<!DOCTYPE html>
 <html>
@@ -18,8 +19,6 @@ abstract class AbstractView {
     <link rel="shortcut icon" type="image/x-icon" href="/_assets/images/favicon.ico">
     <link rel="icon" type="image/png" href="/_assets/images/favicon.png">
     ' . $stylesheetsHtml . '
-   
-   <?php
   </head>
   <body>
     <header>
@@ -69,7 +68,7 @@ abstract class AbstractView {
         <div class="nav-right">
           <img class="logo-nav" src="/_assets/images/navbarLogo.webp" alt="Logo">
         </div>
-      </nav>
+      </nav>    
       
       <!-- Pour la Sidebar -->
       <div class="sidebar" id="sidebar">

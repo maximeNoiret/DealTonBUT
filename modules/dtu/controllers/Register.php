@@ -10,7 +10,8 @@ class Register implements Controller{
 
     const array STYLESHEET = [
         '/_assets/styles/loginSingnin.css',
-        '/_assets/styles/style.css'
+        '/_assets/styles/style.css',
+        '/_assets/styles/navbar.css'
         ];
   function control(): void {
     echo (new RegisterFormView())->render("Register - DealTonBUT", self::STYLESHEET);

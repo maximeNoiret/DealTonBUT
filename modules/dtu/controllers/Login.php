@@ -10,7 +10,9 @@ class Login
 
     const array STYLESHEET = [
         '/_assets/styles/loginSingnin.css',
-        '/_assets/styles/style.css'  ];
+        '/_assets/styles/style.css',
+        '/_assets/styles/navbar.css'
+        ];
   function control(): void
   {
     if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {

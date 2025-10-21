@@ -11,7 +11,8 @@ class Offre{
 
     const array STYLESHEET = [
         '/_assets/styles/offre.css',
-        '/_assets/styles/style.css'
+        '/_assets/styles/style.css',
+        '/_assets/styles/navbar.css'
     ];
 
     function control(): void
