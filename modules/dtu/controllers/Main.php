@@ -12,12 +12,12 @@ class Main implements Controller
   const string METH = 'GET';
 
     const array STYLESHEET = [
-        DIRECTORY_SEPARATOR . '_asset' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'loginSingnin.css',
-        DIRECTORY_SEPARATOR . '_asset' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'styles.css'
+        '/_assets/styles/loginSingnin.css',
+        '/_assets/styles/style.css'
     ];
   function control(): void {
-    // TODO: check if logged in and stuff lol
     echo (new MainPageView())->render('DealTonBUT', self::STYLESHEET);
+
   }
 
   static function resolve(string $path, string $meth): bool {

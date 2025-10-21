@@ -53,7 +53,7 @@ abstract class AbstractView {
     </html>';
   }
 
-  function render(string $title, string $stylesheet): string {
+  function render(string $title, array $stylesheet): string {
     return $this->header($title, $stylesheet, $this->navbarText()) . $this->body() . $this->footer();
   }
 

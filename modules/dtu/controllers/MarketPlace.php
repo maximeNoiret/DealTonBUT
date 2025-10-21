@@ -11,8 +11,8 @@ class MarketPlace implements Controller {
   private const METH = 'GET';
 
     const array STYLESHEET = [
-        DIRECTORY_SEPARATOR . '_asset' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'MarketPlace.css',
-        DIRECTORY_SEPARATOR . '_asset' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'styles.css'
+        '/_assets/styles/MarketPlace.css',
+        '/_assets/styles/style.css'
     ];
   
   function control(): void {
@@ -21,10 +21,8 @@ class MarketPlace implements Controller {
     } else {
       echo (new MarketPlaceView())->render("Place de Marché - DealTonBUT", static::STYLESHEET);
     }
-  } 
-      echo (new MarketPlaceView())->render("Place de Marché - DealTonBUT", static::STYLESHEET);
-  } 
   }
+
 
   public static function resolve(string $path, string $meth): bool {
     return $path === static::PATH && $meth === static::METH;

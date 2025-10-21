@@ -9,9 +9,9 @@ class Register implements Controller{
   const string METH = 'GET';
 
     const array STYLESHEET = [
-        DIRECTORY_SEPARATOR . '_asset' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'loginSingin.css',
-        DIRECTORY_SEPARATOR . '_asset' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'styles.css'
-    ];
+        '/_assets/styles/loginSingnin.css',
+        '/_assets/styles/style.css'
+        ];
   function control(): void {
     echo (new RegisterFormView())->render("Register - DealTonBUT", self::STYLESHEET);
   }
