@@ -11,8 +11,8 @@ class Settings
   const string METH = 'GET';
 
     const array STYLESHEET = [
-        DIRECTORY_SEPARATOR . '_asset' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'settings.css',
-        DIRECTORY_SEPARATOR . '_asset' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'style.css'
+      '/_assets/styles/settings.css',
+      '/_assets/styles/style.css'
     ];
   function control(): void {
     if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
