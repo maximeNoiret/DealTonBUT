@@ -53,8 +53,8 @@ $controllers = [
   new Settings(),
   new MarketPlace(),
   new DeleteAccount(),
-
-  new AddOffer()
+  new AddOffer(),
+  new AddOfferConfirm()
 ];
 
 foreach ($controllers as $controller) {
