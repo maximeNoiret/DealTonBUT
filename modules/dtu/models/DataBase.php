@@ -168,10 +168,12 @@ class DataBase {
         string $deadline
     ): void {
         // Insérer l'offre
+      echo "Preparing to insert offer into database...\n";
         $query = $this->dbConn->prepare('
         INSERT INTO offer(owner, title, description, price, creation_time, deadline)
         VALUES (:owner, :title, :description, :price, :creation_time, :deadline)
     ');
+        echo "Binding values...\n";
 
         $query->bindValue('owner', $userEmail);
         $query->bindValue('title', $title);
@@ -179,6 +181,8 @@ class DataBase {
         $query->bindValue('price', $price);
         $query->bindValue('creation_time', date('Y-m-d H:i:s'));
         $query->bindValue('deadline', $deadline . ' 23:59:59');
+
+        echo "Executing query...\n";
         $query->execute();
     }
 }

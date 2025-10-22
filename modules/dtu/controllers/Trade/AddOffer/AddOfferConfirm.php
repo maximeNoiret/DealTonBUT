@@ -15,7 +15,7 @@ class AddOfferConfirm
 
     function control(): void
     {
-      echo "Vous avez accédé à AddOfferConfirm";
+      echo "Vous avez accédé à AddOfferConfirm\n";
         // Récupérer les données du formulaire
         $title = $_POST['title'] ?? '';
         $price = $_POST['price'] ?? '';
@@ -23,7 +23,7 @@ class AddOfferConfirm
         $description = $_POST['description'] ?? '';
         $tag = $_POST['tag'] ?? '';
 
-        echo "Données reçues : ";
+        echo "Données reçues : \n";
         echo "Title: $title, Price: $price, End Date: $end_date, Description: $description, Tag: $tag \n";
 
         // vérification de l'offre
