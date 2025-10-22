@@ -169,8 +169,8 @@ class DataBase {
     ): void {
         // Insérer l'offre
         $query = $this->dbConn->prepare('
-        INSERT INTO offer(ouid, owner, title, description, price, creation_time, deadline)
-        VALUES (:ouid, :owner, :title, :description, :price, :creation_time, :deadline)
+        INSERT INTO offer(owner, title, description, price, creation_time, deadline)
+        VALUES (:owner, :title, :description, :price, :creation_time, :deadline)
     ');
 
         $query->bindValue('owner', $userEmail);
