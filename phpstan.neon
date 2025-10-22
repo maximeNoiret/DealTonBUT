@@ -1,0 +1,3 @@
+parameters:
+	bootstrapFiles:
+		- _assets/includes/Autoloader.php
