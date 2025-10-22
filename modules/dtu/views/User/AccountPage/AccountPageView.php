@@ -17,11 +17,12 @@ class AccountPageView extends AbstractView
     }
 
   function getUserOffers(): string {
-    $offers = DataBase::getInstance()->getUserOffers($_SESSION['email']);
+    $email = $_SESSION['email'] ?? '';
+    $offers = DataBase::getInstance()->getUserOffers($email);
     if ($offers) {
       $ret = '<section class="offer-grid">' . "\n";
       foreach ($offers as $offer) {
-        $ret = $ret . (new Offer($offer))->render('article', 'offer-card');
+        $ret = $ret . (new Offer((array)$offer))->render('article', 'offer-card');
       }
       return $ret . '</section>';
     }
@@ -30,11 +31,12 @@ class AccountPageView extends AbstractView
 
   private function getUserBoughtOffers(): string
   {
-    $offers = DataBase::getInstance()->getBoughtOffers($_SESSION['email']);
+    $email = $_SESSION['email'] ?? '';
+    $offers = DataBase::getInstance()->getBoughtOffers($email);
     if ($offers) {
       $ret = '<section class="offer-grid">' . "\n";
       foreach ($offers as $offer) {
-        $ret = $ret . (new Offer($offer))->render('article', 'offer-card');
+        $ret = $ret . (new Offer((array)$offer))->render('article', 'offer-card');
       }
       return $ret . '</section>';
     }
@@ -43,23 +45,32 @@ class AccountPageView extends AbstractView
 
   function getName(): string
   {
-    $email = $_SESSION['email'];
-    $name = explode('@', $email)[0];
+    // Récupère l'email uniquement s'il s'agit bien d'une chaîne
+    $email = '';
+    if (isset($_SESSION['email']) && is_string($_SESSION['email'])) {
+      $email = $_SESSION['email'];
+    }
+    // Extrait la partie locale avant le @
+    $parts = explode('@', $email);
+    $name = $parts[0];
+    // Remplace les points par des espaces et capitalise
     $name = str_replace('.', ' ', $name);
     return ucwords($name);
   }
 
+  /**
+   * @return array<string,mixed>
+   */
   function templateValues(): array
   {
-      $values = [
-          'USERNAME' => $_SESSION['username'],
-          'EMAIL' => $_SESSION['email'],
-          'USEROFFERS' => $this->getUserOffers(),
-          'USERBALANCE' => $_SESSION['balance'],
-          'USERBOUGHTOFFERS' => $this->getUserBoughtOffers(),
-          'NAME' => $this->getName()
-      ];
-      return $values;
+    return [
+        'USERNAME' => $_SESSION['username'] ?? '',
+        'EMAIL' => $_SESSION['email'] ?? '',
+        'USEROFFERS' => $this->getUserOffers(),
+        'USERBALANCE' => $_SESSION['balance'] ?? 0,
+        'USERBOUGHTOFFERS' => $this->getUserBoughtOffers(),
+        'NAME' => $this->getName()
+    ];
   }
 
   function navbarText(): string {
