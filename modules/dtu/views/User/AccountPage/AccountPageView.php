@@ -4,7 +4,7 @@ namespace views\User\AccountPage;
 
 use core\views\AbstractView;
 use models\DataBase;
-use views\Offer;
+use views\Trade\Offer\Offer;
 
 // WARN: maybe find a way to not access a model in a view?
 
