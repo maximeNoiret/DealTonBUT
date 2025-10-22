@@ -82,7 +82,28 @@ abstract class AbstractView {
     return $this->header($title, $stylesheet, $this->navbarText()) . $this->body() . $this->footer();
   }
 
+
+  //
+//  function usernameTest(string $username): string
+//  {
+//    if (!isset($username)){
+//      return 'NOM DE COMPTE';
+//    }
+//    return $username;
+//  }
+//  function balanceTest(float $balance): float{
+//    if (!isset($balance)){
+//      return 0.00;
+//    }
+//    return $balance;
+//  }
+
+
   function navbar(string $placeholder = ''): string {
+    $username = $_SESSION['username'] ?? 'NOM DE COMPTE';
+    settype($username, 'string');
+    $balance = $_SESSION['balance'] ?? 0.00;
+    settype($balance, 'float');
     return '
       <nav class="nav">
         <div class="nav-left">
@@ -112,8 +133,8 @@ abstract class AbstractView {
         <div class="sidebar-footer">
           <div class="sidebar-user-card" onclick=\'window.location.href="/user/account"\' style="cursor:pointer;">
             <div class="sidebar-user-info">
-              <div class="sidebar-user-name">' . strtoupper($_SESSION['username'] ?? 'NOM DE COMPTE') . '</div>
-              <div class="sidebar-user-points">' . number_format($_SESSION['balance'] ?? 0, 2, '.', '') . ' pts</div>
+              <div class="sidebar-user-name">' . strtoupper($username) . '</div>
+              <div class="sidebar-user-points">' . number_format($balance, 2, '.', '') . ' pts</div>
             </div>
             <a href="/user/settings" class="sidebar-settings-icon">⚙</a>
           </div>
@@ -124,6 +145,13 @@ abstract class AbstractView {
       <!-- Overlay -->
       <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>';
   }
+
+  /* clipboard :
+  strtoupper(usernameTest($_SESSION['username']))
+  strtoupper($_SESSION['username'] ?? 'NOM DE COMPTE')
+  number_format($_SESSION['balance'] ?? 0, 2, '.', '')
+  number_format($this->balanceTest($_SESSION['balance']), 2, '.', '')
+  */
 
   /**
    * @description Print the debug objects
