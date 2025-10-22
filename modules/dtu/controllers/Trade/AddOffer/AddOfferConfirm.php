@@ -25,12 +25,11 @@ class AddOfferConfirm
         // vérification de l'offre
         if (empty($title) || empty($price) || empty($end_date) || empty($description)) {
             echo "Veuillez remplir tous les champs";
-            header('Location: /offre?error=missing_fields');
+            header('Location: /offre');
             exit();
         }
         if (!is_numeric($price) || $price <= 0 || $price > 999999) {
-            echo "Prix invalide";
-            header('Location: /offre?error=invalid_price');
+            header('Location: /offre');
             exit();
         }
         DataBase::getInstance()->insertOffre(
