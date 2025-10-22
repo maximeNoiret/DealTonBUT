@@ -17,6 +17,9 @@ class AccountPageView extends AbstractView
     }
 
   function getUserOffers(): string {
+    /**
+     * @var string $email
+     */
     $email = $_SESSION['email'] ?? '';
     $offers = DataBase::getInstance()->getUserOffers($email);
     if ($offers) {
@@ -31,6 +34,9 @@ class AccountPageView extends AbstractView
 
   private function getUserBoughtOffers(): string
   {
+    /**
+     * @var string $email
+     */
     $email = $_SESSION['email'] ?? '';
     $offers = DataBase::getInstance()->getBoughtOffers($email);
     if ($offers) {
