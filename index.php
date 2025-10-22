@@ -67,3 +67,6 @@ foreach ($controllers as $controller) {
 echo 'path: ' . $path . ' | meth: ' . $meth . '<br>';
 echo '404 NOT FOUND';
 exit();
+
+// code externe par clé sans mdp
+// how to use google smtp on server (dev account?)
