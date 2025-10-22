@@ -41,7 +41,7 @@ class AddOfferConfirm
         echo "Validation des données réussie.\n";
         echo "Insertion de l'offre dans la base de données...\n";
         DataBase::getInstance()->insertOffre(
-            $_SESSION['user_email'],
+            $_SESSION['email'],
             $title,
             (float)$price,
             $description,
