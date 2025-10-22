@@ -40,7 +40,7 @@ abstract class AbstractSubView extends AbstractView {
   abstract function path(): string;
 
   /**
-   * @description construct the html of the sub view ( ex : an offer )
+   * @description abstract method, of the purpose to replace the palcehoder of an html template by theier true value
    * @return array<string, string>
    **/
   abstract function templateValues(): array;

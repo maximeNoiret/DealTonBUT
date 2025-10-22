@@ -2,6 +2,8 @@
 
 namespace core\views;
 
+use Couchbase\ViewException;
+
 abstract class AbstractView {
   /**
    * @description construct a header for the pages
@@ -34,8 +36,17 @@ abstract class AbstractView {
     <main>';
   }
 
+  /**
+   * @description construct the html of the <body> section of a page
+   * @return string
+   *
+   * @throws ViewException
+   */
   public function body(): string {
     $body = file_get_contents($this->path());
+    if (!$body) {
+      throw new ViewException('Unable to load <body>');
+    }
     foreach ($this->templateValues() as $key => $value) {
       $body = str_replace('{' . $key . '}', $value, $body);
     }
@@ -59,6 +70,14 @@ abstract class AbstractView {
     </html>';
   }
 
+  /**
+   * @description construct the html of the pages ( ex : the login page )
+   * @param string $title
+   * @param array<string, string> $stylesheet
+   * @return string
+   *
+   * @throws ViewException
+   */
   function render(string $title, array $stylesheet): string {
     return $this->header($title, $stylesheet, $this->navbarText()) . $this->body() . $this->footer();
   }
@@ -106,16 +125,23 @@ abstract class AbstractView {
       <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>';
   }
 
+  /**
+   * @description Print the debug objects
+   * @param string|array<string> $data
+   * @return void
+   **/
   static function debug_to_console($data) {
     $output = $data;
     if (is_array($output))
       $output = implode(',', $output);
-
     echo "<script>console.log('Debug Objects: " . $output . "' );</script>";
   }
-
   abstract function path(): string;
 
+  /**
+   * @description abstract method, of the purpose to contain the value that will replace the template in the html file
+   * @return array<string, string>
+   **/
   abstract function templateValues(): array;
 
   abstract function navbarText(): string;
