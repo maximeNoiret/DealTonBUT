@@ -3,6 +3,13 @@
 namespace core\views;
 
 abstract class AbstractView {
+  /**
+   * @description construct a header for the pages
+   * @param string $title
+   * @param array<string, string> $stylesheets
+   * @param string $customvalue
+   * @return string
+   **/
   public function header(string $title, array $stylesheets, string $customvalue = ''): string {
     $navbarHtml = $this->showNavbar() ? $this->navbar($customvalue) : '';
 
