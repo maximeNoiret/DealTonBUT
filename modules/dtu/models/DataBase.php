@@ -11,6 +11,9 @@ class DataBase {
 
   private static self $instance;
 
+  /**
+   * @throws DatabaseNotInitiated
+   */
   private function __construct() {
     if (file_exists(__DIR__ . '/../../../.env')) {
       $env = parse_ini_file(__DIR__ . '/../../../.env');
@@ -19,6 +22,16 @@ class DataBase {
       $env['DB_NAME']     = getenv('DB_NAME');
       $env['DB_USER']     = getenv('DB_USERNAME');
       $env['DB_PASSWORD'] = getenv('DB_PASSWORD');
+    }
+    /**
+     * @var array<string, string> $env
+     */
+    // if any of the env variables aren't set, throw
+    if (!isset($env['DB_HOSTNAME']) || 
+      !isset($env['DB_NAME']) ||
+      !isset($env['DB_USER']) ||
+      !isset($env['DB_PASSWORD'])) {
+      throw new DatabaseNotInitiated();
     }
     $this->dbConn = new PDO(
       'mysql:host=' . $env['DB_HOSTNAME'] .
@@ -75,6 +88,9 @@ class DataBase {
     return $query->fetch() !== null;
   }
 
+  /**
+   * @return bool|array<string, string>
+   */
   public function getAccount(string $email, string $password): bool|array {
     $query = $this->dbConn->prepare('
       SELECT username, email, hashedpwd, balance 
@@ -83,6 +99,9 @@ class DataBase {
     $query->bindValue('email', $email);
     $query->execute();
     
+    /**
+     * @var array<string, string> $user
+     */
     $user = $query->fetch(PDO::FETCH_ASSOC);
     
     if (!$user) {
@@ -109,13 +128,16 @@ class DataBase {
     return $query->fetch() !== false;
   }
 
-  public function insertToken($email, $token) {
+  public function insertToken(string $email, string $token): void {
     $query = $this->dbConn->prepare('INSERT INTO token(email, token) VALUES (:email, :token)');
     $query->bindValue('email', $email);
     $query->bindValue('token', $token);
     $query->execute();
   }
 
+/**
+   * @return array<mixed>
+   */
   public function getOffers(): array {
     $query = $this->dbConn->prepare(
       'SELECT u.username as \'username\', title, description, price, deadline
@@ -126,7 +148,10 @@ class DataBase {
     return $query->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  public function getUserOffers($email): array {
+  /**
+   * @return array<mixed>
+   */
+  public function getUserOffers(string $email): array {
     $query = $this->dbConn->prepare(
       'SELECT u.username as \'username\', title, description, price, deadline
        FROM offer o
@@ -138,7 +163,10 @@ class DataBase {
     return $query->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  public function getBoughtOffers($email): array {
+  /**
+   * @return array<mixed>
+   */
+  public function getBoughtOffers(string $email): array {
     $query = $this->dbConn->prepare(
       'SELECT u.username as \'username\', o.title, o.description, o.price, o.deadline
         FROM transaction t
