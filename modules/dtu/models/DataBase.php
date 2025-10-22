@@ -126,7 +126,10 @@ class DataBase {
     return $query->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  public function getUserOffers($email): array {
+  /**
+   * @return array
+   */
+  public function getUserOffers(string $email): array {
     $query = $this->dbConn->prepare(
       'SELECT u.username as \'username\', title, description, price, deadline
        FROM offer o
@@ -138,7 +141,7 @@ class DataBase {
     return $query->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  public function getBoughtOffers($email): array {
+  public function getBoughtOffers(string $email): array {
     $query = $this->dbConn->prepare(
       'SELECT u.username as \'username\', o.title, o.description, o.price, o.deadline
         FROM transaction t
