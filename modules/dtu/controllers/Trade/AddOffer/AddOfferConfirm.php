@@ -28,7 +28,7 @@ class AddOfferConfirm
             header('Location: /offre?error=missing_fields');
             exit();
         }
-        if (!is_numeric($price) || $price <= 0) {
+        if (!is_numeric($price) || $price <= 0 || $price > 999999) {
             echo "Prix invalide";
             header('Location: /offre?error=invalid_price');
             exit();
