@@ -15,16 +15,12 @@ class AddOfferConfirm
 
     function control(): void
     {
-      echo "Vous avez accédé à AddOfferConfirm\n";
         // Récupérer les données du formulaire
         $title = $_POST['title'] ?? '';
         $price = $_POST['price'] ?? '';
         $end_date = $_POST['end_date'] ?? '';
         $description = $_POST['description'] ?? '';
         $tag = $_POST['tag'] ?? '';
-
-        echo "Données reçues : \n";
-        echo "Title: $title, Price: $price, End Date: $end_date, Description: $description, Tag: $tag \n";
 
         // vérification de l'offre
         if (empty($title) || empty($price) || empty($end_date) || empty($description)) {
@@ -37,9 +33,6 @@ class AddOfferConfirm
             header('Location: /offre?error=invalid_price');
             exit();
         }
-
-        echo "Validation des données réussie.\n";
-        echo "Insertion de l'offre dans la base de données...\n";
         DataBase::getInstance()->insertOffre(
             $_SESSION['email'],
             $title,
@@ -47,7 +40,7 @@ class AddOfferConfirm
             $description,
             $end_date
         );
-        echo "Offre insérée dans la base de données.\n";
+        header('Location: /marketplace');
 
     }
 

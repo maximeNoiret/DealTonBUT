@@ -14,7 +14,8 @@ class MarketPlace implements Controller {
     const array STYLESHEET = [
         '/_assets/styles/MarketPlace.css',
         '/_assets/styles/style.css',
-        '/_assets/styles/navbar.css'
+        '/_assets/styles/navbar.css',
+        '/_assets/styles/offer.css'
     ];
   
   function control(): void {

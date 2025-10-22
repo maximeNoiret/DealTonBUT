@@ -10,7 +10,7 @@ class AddOffer{
     const string METH = 'GET';
 
     const array STYLESHEET = [
-        '/_assets/styles/offre.css',
+        '/_assets/styles/addOffer.css',
         '/_assets/styles/style.css',
         '/_assets/styles/navbar.css'
     ];
