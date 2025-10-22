@@ -66,7 +66,9 @@ abstract class AbstractView {
           <h1 class="page-title">' . $placeholder . '</h1>
         </div>
         <div class="nav-right">
-          <img class="logo-nav" src="/_assets/images/navbarLogo.webp" alt="Logo">
+          <a href="/">
+            <img class="logo-nav" src="/_assets/images/navbarLogo.webp" alt="Logo">
+          </a>
         </div>
       </nav>    
       
@@ -81,7 +83,7 @@ abstract class AbstractView {
         <div class="sidebar-content">
           <a class="sidebar-link" href="/">Échanger Points</a>
           <a class="sidebar-link" href="/marketplace">Place de marché</a>
-          <a class="sidebar-link" href="/user/logout">Ajouter une offre</a>
+          <a class="sidebar-link" href="/offre">Ajouter une offre</a>
         </div>
         <div class="sidebar-footer">
           <div class="sidebar-user-card" onclick=\'window.location.href="/user/account"\' style="cursor:pointer;">
