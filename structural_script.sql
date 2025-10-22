@@ -28,7 +28,7 @@ CREATE TABLE token(
 ) DEFAULT CHARSET=utf8;
 
 CREATE TABLE offer(
-   ouid INT PRIMARY KEY,
+   ouid INT PRIMARY KEY AUTO_INCREMENT,
    owner VARCHAR(70) NOT NULL,
    title VARCHAR(50) NOT NULL,
    description TEXT,
