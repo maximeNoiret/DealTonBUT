@@ -16,6 +16,9 @@ class PasswordForgotConfirm implements Controller {
   ];
 
   function control(): void {
+    /**
+     * @var array<string, string> $_POST
+     */
     echo (new ForgotPasswordView(Account::forgotPassword($_POST['email'])))->render('Forgot Password - DealTonBUT', self::STYLESHEET);
   }
 

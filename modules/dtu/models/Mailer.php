@@ -3,8 +3,8 @@
 namespace models;
 
 class Mailer {
-  private $from;
-  private $fromName;
+  private string $from;
+  private string $fromName;
 
 
   public function __construct(string $from, string $fromName = '') {
@@ -16,7 +16,7 @@ class Mailer {
      string $to,
      string $subject,
      string $message,
-     bool $isHtml = true) {    
+     bool $isHtml = true): bool {    
     $headers = [];
     
     // 'From' header object
@@ -44,7 +44,7 @@ class Mailer {
     return mail($to, $subject, $message, implode('\n', $headers));
   }
 
-  public function sendPasswordReset($to, $resetLink) {
+  public function sendPasswordReset(string $to, string $resetLink): bool {
     $subject = "Password Reset Request";
         
     $message = "

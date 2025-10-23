@@ -15,6 +15,7 @@ class AddOfferConfirm
 
     function control(): void
     {
+      echo "Vous avez accédé à AddOfferConfirm\n";
         // Récupérer les données du formulaire
         $title = $_POST['title'] ?? '';
         $price = $_POST['price'] ?? '';
@@ -32,6 +33,15 @@ class AddOfferConfirm
             header('Location: /offre');
             exit();
         }
+
+
+        $title = is_string($title) ? $title : '';
+        $description = is_string($description) ? $description : '';
+        $end_date = is_string($end_date) ? $end_date : '';
+
+        /**
+         * @var array<string, string> $_SESSION
+         */
         DataBase::getInstance()->insertOffre(
             $_SESSION['email'],
             $title,

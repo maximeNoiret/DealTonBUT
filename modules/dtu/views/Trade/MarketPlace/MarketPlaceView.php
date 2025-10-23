@@ -16,6 +16,9 @@ class MarketPlaceView extends AbstractView {
     if ($offers) {
       $ret = '<section class="offer-grid">' . "\n";
       foreach ($offers as $offer) {
+        /**
+         * @var array<string, string> $offer
+         */
         $ret = $ret . (new Offer($offer))->render('article', 'offer-card');
       }
       return $ret . '</section>';
