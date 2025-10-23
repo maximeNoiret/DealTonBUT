@@ -23,9 +23,6 @@ class AddOfferConfirm
         $description = $_POST['description'] ?? '';
         $tag = $_POST['tag'] ?? '';
 
-        echo "Données reçues : \n";
-        echo "Title: $title, Price: $price, End Date: $end_date, Description: $description, Tag: $tag \n";
-
         // vérification de l'offre
         if (empty($title) || empty($price) || empty($end_date) || empty($description)) {
             echo "Veuillez remplir tous les champs";
@@ -38,8 +35,14 @@ class AddOfferConfirm
             exit();
         }
 
-        echo "Validation des données réussie.\n";
-        echo "Insertion de l'offre dans la base de données...\n";
+
+        $title = is_string($title) ? $title : '';
+        $description = is_string($description) ? $description : '';
+        $end_date = is_string($end_date) ? $end_date : '';
+
+        /**
+         * @var array<string, string> $_SESSION
+         */
         DataBase::getInstance()->insertOffre(
             $_SESSION['email'],
             $title,
