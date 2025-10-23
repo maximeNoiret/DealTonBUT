@@ -25,7 +25,10 @@ class AccountPageView extends AbstractView
     if ($offers) {
       $ret = '<section class="offer-grid">' . "\n";
       foreach ($offers as $offer) {
-        $ret = $ret . (new Offer((array)$offer))->render('article', 'offer-card');
+          /**
+           * @var array<string, string> $offer
+           */
+        $ret = $ret . (new Offer($offer))->render('article', 'offer-card');
       }
       return $ret . '</section>';
     }
@@ -42,7 +45,10 @@ class AccountPageView extends AbstractView
     if ($offers) {
       $ret = '<section class="offer-grid">' . "\n";
       foreach ($offers as $offer) {
-        $ret = $ret . (new Offer((array)$offer))->render('article', 'offer-card');
+          /**
+           * @var array<string, string> $offer
+           */
+        $ret = $ret . (new Offer($offer))->render('article', 'offer-card');
       }
       return $ret . '</section>';
     }

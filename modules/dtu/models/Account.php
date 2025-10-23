@@ -30,14 +30,14 @@ class Account {
     // CHECK IF (email, hash(password)) IN user_
     $db = DataBase::getInstance();
     $account = $db->getAccount($email, $password);
-    if ($account) {
-      session_regenerate_id(true);
-      $_SESSION['username'] = $account['username'];
-      $_SESSION['email'] = $account['email'];
-      $_SESSION['balance'] = $account['balance'];
-      $_SESSION['logged-in'] = true;
-      return true;
-    }
+      if (is_array($account) && !empty($account)) {
+          session_regenerate_id(true);
+          $_SESSION['username'] = $account['username'] ?? '';
+          $_SESSION['email'] = $account['email'] ?? '';
+          $_SESSION['balance'] = $account['balance'] ?? 0;
+          $_SESSION['logged-in'] = true;
+          return true;
+      }
     return false;
   }
 
