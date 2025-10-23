@@ -23,9 +23,6 @@ class AddOfferConfirm
         $description = $_POST['description'] ?? '';
         $tag = $_POST['tag'] ?? '';
 
-        echo "Données reçues : \n";
-        echo "Title: $title, Price: $price, End Date: $end_date, Description: $description, Tag: $tag \n";
-
         // vérification de l'offre
         if (empty($title) || empty($price) || empty($end_date) || empty($description)) {
             echo "Veuillez remplir tous les champs";
