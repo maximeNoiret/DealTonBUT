@@ -8,9 +8,11 @@ use views\User\ForgotPassword\ForgotPasswordView;
 
 class PasswordForgot implements Controller
 {
-
   const string PATH = '/user/forgot';
   const string METH = 'GET';
+  /**
+   * @var array<string> STYLESHEET
+   */
     const array STYLESHEET = [
         '/_assets/styles/loginSingnin.css',
         '/_assets/styles/style.css'
