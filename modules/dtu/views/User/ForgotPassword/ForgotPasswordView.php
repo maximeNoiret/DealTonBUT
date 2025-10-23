@@ -19,7 +19,6 @@ class ForgotPasswordView extends AbstractView
 
   function templateValues(): array
   {
-    AbstractView::debug_to_console($this->status);
     $values = [
       'EMAIL_KEY' => self::EMAIL_VALUE,
     ];     // TODO: add values if needed
