@@ -2,7 +2,16 @@
 
 namespace core\views;
 
+use Couchbase\ViewException;
+
 abstract class AbstractView {
+  /**
+   * @description construct a header for the pages
+   * @param string $title
+   * @param array<string, string> $stylesheets
+   * @param string $customvalue
+   * @return string
+   **/
   public function header(string $title, array $stylesheets, string $customvalue = ''): string {
     $navbarHtml = $this->showNavbar() ? $this->navbar($customvalue) : '';
 
@@ -27,8 +36,17 @@ abstract class AbstractView {
     <main>';
   }
 
+  /**
+   * @description construct the html of the <body> section of a page
+   * @return string
+   *
+   * @throws ViewException
+   */
   public function body(): string {
     $body = file_get_contents($this->path());
+    if (!$body) {
+      throw new ViewException('Unable to load <body>');
+    }
     foreach ($this->templateValues() as $key => $value) {
       $body = str_replace('{' . $key . '}', $value, $body);
     }
@@ -52,11 +70,40 @@ abstract class AbstractView {
     </html>';
   }
 
+  /**
+   * @description construct the html of the pages ( ex : the login page )
+   * @param string $title
+   * @param array<string, string> $stylesheet
+   * @return string
+   *
+   * @throws ViewException
+   */
   function render(string $title, array $stylesheet): string {
     return $this->header($title, $stylesheet, $this->navbarText()) . $this->body() . $this->footer();
   }
 
+
+  //
+//  function usernameTest(string $username): string
+//  {
+//    if (!isset($username)){
+//      return 'NOM DE COMPTE';
+//    }
+//    return $username;
+//  }
+//  function balanceTest(float $balance): float{
+//    if (!isset($balance)){
+//      return 0.00;
+//    }
+//    return $balance;
+//  }
+
+
   function navbar(string $placeholder = ''): string {
+    $username = $_SESSION['username'] ?? 'NOM DE COMPTE';
+    settype($username, 'string');
+    $balance = $_SESSION['balance'] ?? 0.00;
+    settype($balance, 'float');
     return '
       <nav class="nav">
         <div class="nav-left">
@@ -88,8 +135,8 @@ abstract class AbstractView {
         <div class="sidebar-footer">
           <div class="sidebar-user-card" onclick=\'window.location.href="/user/account"\' style="cursor:pointer;">
             <div class="sidebar-user-info">
-              <div class="sidebar-user-name">' . strtoupper($_SESSION['username'] ?? 'NOM DE COMPTE') . '</div>
-              <div class="sidebar-user-points">' . number_format($_SESSION['balance'] ?? 0, 2, '.', '') . ' pts</div>
+              <div class="sidebar-user-name">' . strtoupper($username) . '</div>
+              <div class="sidebar-user-points">' . number_format($balance, 2, '.', '') . ' pts</div>
             </div>
             <a href="/user/settings" class="sidebar-settings-icon">⚙</a>
           </div>
@@ -101,16 +148,30 @@ abstract class AbstractView {
       <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>';
   }
 
+  /* clipboard :
+  strtoupper(usernameTest($_SESSION['username']))
+  strtoupper($_SESSION['username'] ?? 'NOM DE COMPTE')
+  number_format($_SESSION['balance'] ?? 0, 2, '.', '')
+  number_format($this->balanceTest($_SESSION['balance']), 2, '.', '')
+  */
+
+  /**
+   * @description Print the debug objects
+   * @param string|array<string> $data
+   * @return void
+   **/
   static function debug_to_console($data) {
     $output = $data;
     if (is_array($output))
       $output = implode(',', $output);
-
     echo "<script>console.log('Debug Objects: " . $output . "' );</script>";
   }
-
   abstract function path(): string;
 
+  /**
+   * @description abstract method, of the purpose to contain the value that will replace the template in the html file
+   * @return array<string, string>
+   **/
   abstract function templateValues(): array;
 
   abstract function navbarText(): string;
