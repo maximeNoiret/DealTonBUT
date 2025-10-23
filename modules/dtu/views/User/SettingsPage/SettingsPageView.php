@@ -13,14 +13,21 @@ class SettingsPageView extends AbstractView
     return __DIR__ . DIRECTORY_SEPARATOR . 'SettingsPage.html';
   }
 
-  function templateValues(): array
+  /**
+   * @return array<string,mixed>
+   */
+  public function templateValues(): array
   {
     return [];
   }
 
   function deleteAccount(): void
   {
-    DataBase::getInstance()->deleteUser($_SESSION['email']);
+    $email = '';
+    if (isset($_SESSION['email']) && is_string($_SESSION['email'])) {
+      $email = $_SESSION['email'];
+    }
+    DataBase::getInstance()->deleteUser($email);
     session_destroy();
     header('Location: /user/login');
   }

@@ -17,7 +17,9 @@ class LoginConfirm
     const string METH = 'POST';
 
     const array STYLESHEET = [
-      DIRECTORY_SEPARATOR . '_assets' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'style.css'
+      '/_assets/styles/loginSingnin.css',
+      '/_assets/styles/style.css',
+      '/_assets/styles/navbar.css'
     ];
 
     function control(): void
@@ -30,7 +32,6 @@ class LoginConfirm
         // if logged in
         if ($isValid) {
             header('Location: /marketplace');
-            //echo new MarketPlaceView()->render('Place de Marché - DealTonBUT', self::STYLESHEET);
         } else {
             echo ((new LoginFormView('invalid_credentials'))->render("Login - DealTonBUT", self::STYLESHEET));
         }

@@ -15,7 +15,8 @@ class Account implements Controller
     const array STYLESHEET = [
         '/_assets/styles/Account.css',
         '/_assets/styles/style.css',
-        '/_assets/styles/navbar.css'
+        '/_assets/styles/navbar.css',
+        '/_assets/styles/offer.css'
     ];
 
     function control(): void

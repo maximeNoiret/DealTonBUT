@@ -25,10 +25,9 @@ class MarketPlaceView extends AbstractView {
 
   function templateValues(): array {
     $values = [
-      'USERNAME' => $_SESSION['username'],
       'OFFERS' => $this->getOffers()
     ];
-    return $values; // PS: this will be hard af to do lmao :3
+    return $values;
   }
 
   function navbarText(): string {
