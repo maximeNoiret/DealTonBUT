@@ -1,8 +1,6 @@
 <?php
 
 namespace views\User\SettingsPage;
-
-use models\DataBase;
 use core\views\AbstractView;
 
 class SettingsPageView extends AbstractView
@@ -19,17 +17,6 @@ class SettingsPageView extends AbstractView
   public function templateValues(): array
   {
     return [];
-  }
-
-  function deleteAccount(): void
-  {
-    $email = '';
-    if (isset($_SESSION['email']) && is_string($_SESSION['email'])) {
-      $email = $_SESSION['email'];
-    }
-    DataBase::getInstance()->deleteUser($email);
-    session_destroy();
-    header('Location: /user/login');
   }
 
   public static function getInstance(): self {
