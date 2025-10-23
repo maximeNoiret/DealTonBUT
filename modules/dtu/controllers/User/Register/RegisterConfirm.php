@@ -20,6 +20,11 @@ class RegisterConfirm implements Controller {
   function control(): void {
     $account = new Account();
     try {
+
+        /**
+         * @var array<string, string> $_POST
+         */
+
       $account->registerAccount(
         $_POST['username'],
         $_POST['email'],
