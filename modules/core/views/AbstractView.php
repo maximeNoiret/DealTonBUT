@@ -82,23 +82,6 @@ abstract class AbstractView {
     return $this->header($title, $stylesheet, $this->navbarText()) . $this->body() . $this->footer();
   }
 
-
-  //
-//  function usernameTest(string $username): string
-//  {
-//    if (!isset($username)){
-//      return 'NOM DE COMPTE';
-//    }
-//    return $username;
-//  }
-//  function balanceTest(float $balance): float{
-//    if (!isset($balance)){
-//      return 0.00;
-//    }
-//    return $balance;
-//  }
-
-
   function navbar(string $placeholder = ''): string {
     $username = $_SESSION['username'] ?? 'NOM DE COMPTE';
     settype($username, 'string');
