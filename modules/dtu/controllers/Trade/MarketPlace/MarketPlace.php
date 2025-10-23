@@ -8,8 +8,8 @@ use views\Trade\MarketPlace\MarketPlaceView;
 
 class MarketPlace implements Controller {
   
-  private const PATH = '/marketplace';
-  private const METH = 'GET';
+  public const PATH = '/marketplace';
+  public const METH = 'GET';
 
     const array STYLESHEET = [
         '/_assets/styles/MarketPlace.css',
