@@ -2,6 +2,7 @@
 
 namespace controllers\User\AccountPage;
 
+use models\DataBase;
 use views\User\SettingsPage\SettingsPageView;
 //use views\SettingsPageView;
 
