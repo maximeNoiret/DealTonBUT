@@ -181,4 +181,42 @@ class DataBase {
         $query->bindValue('deadline', $deadline . ' 23:59:59');
         $query->execute();
     }
+
+// Ajout de points pour un utilisateur
+    public function setPoints(string $email, float $points): void {
+        $query = $this->dbConn->prepare('UPDATE user_ SET points = :points WHERE email = :email');
+        $query->bindValue('email', $email);
+        $query->bindValue('points', $points);
+        $query->execute();
+    }
+// Transfer de points entre deux matieres du même utilisateur
+    public function transferPoints(string $email, float $points, string $from_subject, string $to_subject): void {
+        try {
+            $this->dbConn->beginTransaction();
+            
+            $query1 = $this->dbConn->prepare(
+              'UPDATE points SET points = points - :points WHERE email = :email AND subject_name = :subject_name'
+            );
+            // Enlevage de points
+            $query1->bindValue('email', $email);
+            $query1->bindValue('points', $points);
+            $query1->bindValue('subject_name', $from_subject);
+            $query1->execute();
+            
+            $query2 = $this->dbConn->prepare(
+              'UPDATE points SET points = points + :points WHERE email = :email AND subject_name = :subject_name'
+            );
+
+            // Ajout de points
+            $query2->bindValue('email', $email);
+            $query2->bindValue('points', $points);
+            $query2->bindValue('subject_name', $to_subject);
+            $query2->execute();
+            
+            $this->dbConn->commit();
+        } catch (\Exception $e) {
+            $this->dbConn->rollBack();
+            throw $e;
+        }
+    }
 }
