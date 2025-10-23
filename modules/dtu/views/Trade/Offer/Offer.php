@@ -8,6 +8,9 @@ class Offer extends AbstractSubView {
   
   const string PATH = __DIR__ . DIRECTORY_SEPARATOR . 'OfferTemplate.html';
 
+  /**
+   * @param array<string, string> $offerInfo
+   */
   function __construct(private readonly array $offerInfo) {
   }
 
@@ -15,6 +18,9 @@ class Offer extends AbstractSubView {
     return self::PATH;
   }
 
+  /**
+   * @return array<string, string>
+   */
   function templateValues(): array {
     return $this->offerInfo;
   }
