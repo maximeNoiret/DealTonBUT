@@ -10,7 +10,10 @@ class MarketPlace implements Controller {
   
   public const PATH = '/marketplace';
   public const METH = 'GET';
-
+  /**
+   * @description Store all the different stylesheet used
+   * @var array<string> STYLESHEET
+   */
     const array STYLESHEET = [
         '/_assets/styles/MarketPlace.css',
         '/_assets/styles/style.css',

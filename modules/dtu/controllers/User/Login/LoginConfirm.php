@@ -24,7 +24,13 @@ class LoginConfirm
 
     function control(): void
     {
+        /**
+        * @var string $email
+        */
         $email = $_POST['email'] ?? '';
+        /**
+        * @var string $password
+        */
         $password = $_POST['password'] ?? '';
 
         $isValid = Account::validateCredentials($email, $password);

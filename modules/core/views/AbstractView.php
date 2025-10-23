@@ -8,7 +8,7 @@ abstract class AbstractView {
   /**
    * @description construct a header for the pages
    * @param string $title
-   * @param array<string, string> $stylesheets
+   * @param array<string> $stylesheets
    * @param string $customvalue
    * @return string
    **/
@@ -73,7 +73,7 @@ abstract class AbstractView {
   /**
    * @description construct the html of the pages ( ex : the login page )
    * @param string $title
-   * @param array<string, string> $stylesheet
+   * @param array<string> $stylesheet
    * @return string
    *
    * @throws ViewException
@@ -81,23 +81,6 @@ abstract class AbstractView {
   function render(string $title, array $stylesheet): string {
     return $this->header($title, $stylesheet, $this->navbarText()) . $this->body() . $this->footer();
   }
-
-
-  //
-//  function usernameTest(string $username): string
-//  {
-//    if (!isset($username)){
-//      return 'NOM DE COMPTE';
-//    }
-//    return $username;
-//  }
-//  function balanceTest(float $balance): float{
-//    if (!isset($balance)){
-//      return 0.00;
-//    }
-//    return $balance;
-//  }
-
 
   function navbar(string $placeholder = ''): string {
     $username = $_SESSION['username'] ?? 'NOM DE COMPTE';
