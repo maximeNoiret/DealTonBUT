@@ -210,12 +210,38 @@ class DataBase {
         $query->execute();
     }
 
-// Ajout de points pour un utilisateur
-    public function setPoints(string $email, float $points): void {
-        $query = $this->dbConn->prepare('UPDATE user_ SET points = :points WHERE email = :email');
+//Ajout de matiére pour un utilisateur
+
+    public function setSubject(string $email, string $subject_name, float $points): void {
+        $query = $this->dbConn->prepare('INSERT INTO points(email, subject_name, points) VALUES (:email, :subject_name, :points)');
         $query->bindValue('email', $email);
+        $query->bindValue('subject_name', $subject_name);
         $query->bindValue('points', $points);
         $query->execute();
+    }
+
+    public function getSubject(string $email): array {
+        $query = $this->dbConn->prepare('SELECT subject_name FROM points WHERE email = :email');
+        $query->bindValue('email', $email);
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+// Ajout de points pour un utilisateur
+    public function setPoints(string $email, float $points, string $subject_name): void {
+        $query = $this->dbConn->prepare('UPDATE points SET points = :points WHERE email = :email AND subject_name = :subject_name');
+        $query->bindValue('email', $email);
+        $query->bindValue('points', $points);
+        $query->bindValue('subject_name', $subject_name);
+        $query->execute();
+    }
+
+    public function getPoints(string $email, string $subject_name): float {
+        $query = $this->dbConn->prepare('SELECT points FROM points WHERE email = :email AND subject_name = :subject_name');
+        $query->bindValue('email', $email);
+        $query->bindValue('subject_name', $subject_name);
+        $query->execute();
+        return $query->fetchColumn();
     }
 // Transfer de points entre deux matieres du même utilisateur
     public function transferPoints(string $email, float $points, string $from_subject, string $to_subject): void {
