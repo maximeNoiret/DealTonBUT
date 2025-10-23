@@ -8,7 +8,7 @@ abstract class AbstractView {
   /**
    * @description construct a header for the pages
    * @param string $title
-   * @param array<string, string> $stylesheets
+   * @param array<string> $stylesheets
    * @param string $customvalue
    * @return string
    **/
@@ -73,7 +73,7 @@ abstract class AbstractView {
   /**
    * @description construct the html of the pages ( ex : the login page )
    * @param string $title
-   * @param array<string, string> $stylesheet
+   * @param array<string> $stylesheet
    * @return string
    *
    * @throws ViewException
