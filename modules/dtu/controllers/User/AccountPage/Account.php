@@ -26,8 +26,6 @@ class Account implements Controller
         } else {
             echo (new AccountPageView())->render("Account - DealTonBUT", self::STYLESHEET);
         }
-      // TEMPORARY (just for CSS)
-      //echo (new AccountPageView())->render('Account - DealTonBUT', self::STYLESHEET);
     }
 
     static function resolve(string $path, string $meth): bool

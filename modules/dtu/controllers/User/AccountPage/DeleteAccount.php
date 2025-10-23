@@ -16,7 +16,13 @@ class DeleteAccount
       exit;
     }
 
-    SettingsPageView::getInstance()->deleteAccount();
+    $email = '';
+    if (isset($_SESSION['email']) && is_string($_SESSION['email'])) {
+      $email = $_SESSION['email'];
+    }
+    DataBase::getInstance()->deleteUser($email);
+    session_destroy();
+    header('Location: /user/login');
   }
 
   static function resolve(string $path, string $meth): bool {
