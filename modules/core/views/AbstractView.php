@@ -48,6 +48,9 @@ abstract class AbstractView {
     if (!$body) {
       throw new ViewException('Unable to load <body>');
     }
+    /**
+     * @var string $value
+     */
     foreach ($this->templateValues() as $key => $value) {
       $body = str_replace('{' . $key . '}', $value, $body);
     }
@@ -149,7 +152,7 @@ abstract class AbstractView {
 
   /**
    * @description Abstract methode tha replace keys value by their real value in the associated .html file
-   * @return array<string,mixed>
+   * @return array<mixed>
    */
   abstract function templateValues(): array;
 
