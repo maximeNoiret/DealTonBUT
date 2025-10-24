@@ -10,14 +10,26 @@ class   RegisterFormView extends AbstractView {
   const string EMAIL_VALUE='email';
   const string PASSWORD_VALUE='password';
 
+  /**
+   * @description Constructor of the class LoginFormViews
+   * @param string|null $error
+   */
   public function __construct(private ?string $error = null )
   {
   }
 
-
+  /**
+   * @description Method that give the path tp the corresponding .html
+   * @return string
+   */
   function path(): string {
     return __DIR__ . DIRECTORY_SEPARATOR . 'RegisterForm.html';
   }
+
+  /**
+   * @description Replace keys value by their real value in the associated .html file
+   * @return string[]
+   */
   function templateValues(): array {
     $values = [
       'USERNAME_KEY'=>self::USERNAME_VALUE,
@@ -39,6 +51,10 @@ class   RegisterFormView extends AbstractView {
     return $values;
   }
 
+  /**
+   * @description Contain the title of the page, that will be shown on the navbar
+   * @return string
+   */
   function navbarText(): string {
     return 'Inscription';
   }
