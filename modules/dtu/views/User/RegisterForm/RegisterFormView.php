@@ -5,9 +5,17 @@ namespace views\User\RegisterForm;
 use core\views\AbstractView;
 
 class   RegisterFormView extends AbstractView {
-
+  /**
+   * @var string : Value for a html attribute "for="
+   */
   const string USERNAME_VALUE='username';
+  /**
+   * @var string : Value for a html attribute "for="
+   */
   const string EMAIL_VALUE='email';
+  /**
+   * @var string : Value for a html attribute "for="
+   */
   const string PASSWORD_VALUE='password';
 
   /**
