@@ -3,6 +3,7 @@
 namespace views\User\RegisterForm;
 
 use core\views\AbstractView;
+use mysql_xdevapi\SqlStatementResult;
 
 class   RegisterFormView extends AbstractView {
   /**
@@ -35,8 +36,8 @@ class   RegisterFormView extends AbstractView {
   }
 
   /**
-   * @description Replace keys value by their real value in the associated .html file
-   * @return string[]
+   * @description Define value for each keys in the associated .html file
+   * @return array<string> : The array that contain the real value that are associated by a key
    */
   function templateValues(): array {
     $values = [

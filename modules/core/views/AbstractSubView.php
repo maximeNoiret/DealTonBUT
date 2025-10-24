@@ -51,8 +51,8 @@ abstract class AbstractSubView extends AbstractView {
   abstract function path(): string;
 
   /**
-   * @description Abstract methode tha replace keys value by their real value in the associated .html file
-   * @return array<string,mixed>
+   * @description Abstract methode that define value for each keys in the associated .html file
+   * @return array<string,mixed> : The array that contain the real value that are associated by a key
    */
   abstract function templateValues(): array;
 }

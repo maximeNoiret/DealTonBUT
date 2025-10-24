@@ -151,8 +151,8 @@ abstract class AbstractView {
   abstract function path(): string;
 
   /**
-   * @description Abstract methode tha replace keys value by their real value in the associated .html file
-   * @return array<mixed>
+   * @description Abstract methode that define value for each keys in the associated .html file
+   * @return array<mixed> : The array that contain the real value that are associated by a key
    */
   abstract function templateValues(): array;
 

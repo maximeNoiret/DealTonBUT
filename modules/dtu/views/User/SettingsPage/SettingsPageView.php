@@ -15,8 +15,8 @@ class SettingsPageView extends AbstractView
   }
 
   /**
-   * @description Replace keys value by their real value in the associated .html file
-   * @return array<string,mixed>
+   * @description Define value for each keys in the associated .html file
+   * @return array<string,mixed> : The array that contain the real value that are associated by a key
    */
   public function templateValues(): array
   {
