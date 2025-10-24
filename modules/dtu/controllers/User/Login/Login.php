@@ -14,6 +14,11 @@ class Login
         '/_assets/styles/style.css',
         '/_assets/styles/navbar.css'
         ];
+
+  /**
+   * @return void
+   * @description Control the login page view rendering based on user login status.
+   */
   function control(): void
   {
     if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
@@ -23,6 +28,12 @@ class Login
     }
   }
 
+  /**
+   * @description Resolve the path and method to access the Login page
+   * @param string $path
+   * @param string $meth
+   * @return bool
+   */
   static function resolve(string $path, string $meth): bool
   {
     return $path === self::PATH && $meth === self::METH;

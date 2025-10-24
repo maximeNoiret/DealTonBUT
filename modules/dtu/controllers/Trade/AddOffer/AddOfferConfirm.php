@@ -12,7 +12,10 @@ class AddOfferConfirm
 
     const string STYLESHEET = DIRECTORY_SEPARATOR . '_assets' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'style.css';
 
-
+  /**
+   * @description Control if the Offer gived in AddOffer.php is valid and insert it in the DataBase
+   * @return void
+   */
     function control(): void
     {
       echo "Vous avez accédé à AddOfferConfirm\n";
@@ -55,7 +58,12 @@ class AddOfferConfirm
 
 
 
-
+    /**
+     * @description Resolve the path and method to access the Add Offer Confirm page
+     * @param string $path
+     * @param string $meth
+     * @return bool
+     */
     static function resolve(string $path, string $meth): bool
     {
         return $path === self::PATH && $meth === self::METH;

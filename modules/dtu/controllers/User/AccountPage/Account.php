@@ -19,6 +19,10 @@ class Account implements Controller
         '/_assets/styles/offer.css'
     ];
 
+    /**
+     * Control the account page view rendering based on user login status.
+     * @return void
+     */
     function control(): void
     {
         if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
@@ -28,6 +32,12 @@ class Account implements Controller
         }
     }
 
+    /**
+     * @description Resolve the path and method to access the Account page
+     * @param string $path
+     * @param string $meth
+     * @return bool
+     */
     static function resolve(string $path, string $meth): bool
     {
         return $path === self::PATH && $meth === self::METH;

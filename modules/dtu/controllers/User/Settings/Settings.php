@@ -17,6 +17,11 @@ class Settings implements Controller
       '/_assets/styles/style.css',
       '/_assets/styles/navbar.css'
     ];
+
+  /**
+   * @return void
+   * @description Control the settings page view rendering.
+   */
   function control(): void {
     if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
       header('Location: /user/login');
@@ -25,17 +30,12 @@ class Settings implements Controller
     }
   }
 
-  function deleteAccount(): void
-  {
-    $email = '';
-    if (isset($_SESSION['email']) && is_string($_SESSION['email'])) {
-      $email = $_SESSION['email'];
-    }
-    DataBase::getInstance()->deleteUser($email);
-    session_destroy();
-    header('Location: /user/login');
-  }
-
+  /**
+   * @description Resolve the path and method to access the Settings page
+   * @param string $path
+   * @param string $meth
+   * @return bool
+   */
   static function resolve(string $path, string $meth): bool {
     return $path === self::PATH && $meth === self::METH;
   }

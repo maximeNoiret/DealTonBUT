@@ -22,6 +22,10 @@ class LoginConfirm
       '/_assets/styles/navbar.css'
     ];
 
+  /**
+   * @return void
+   * @description Control the login confirmation process.
+   */
     function control(): void
     {
         /**
@@ -43,6 +47,12 @@ class LoginConfirm
         }
     }
 
+    /**
+     * @description Resolve the path and method to access the Login confirmation
+     * @param string $path
+     * @param string $meth
+     * @return bool
+     */
     static function resolve(string $path, string $meth): bool
     {
         return $path === self::PATH && $meth === self::METH;

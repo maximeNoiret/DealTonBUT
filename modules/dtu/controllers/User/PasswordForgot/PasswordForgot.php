@@ -18,11 +18,21 @@ class PasswordForgot implements Controller
         '/_assets/styles/style.css'
     ];
 
+    /**
+   * @return void
+   * @description Control the forgot password page view rendering.
+   */
   function control(): void
   {
     echo (new ForgotPasswordView())->render("Forgot Password - DealTonBUT", self::STYLESHEET);
   }
 
+  /**
+   * @description Resolve the path and method to access the Forgot Password page
+   * @param string $path
+   * @param string $meth
+   * @return bool
+   */
   static function resolve(string $path, string $meth): bool
   {
     return $path === self::PATH && $meth === self::METH;

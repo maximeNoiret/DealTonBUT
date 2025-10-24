@@ -15,10 +15,21 @@ class Register implements Controller{
         '/_assets/styles/style.css',
         '/_assets/styles/navbar.css'
         ];
+
+  /**
+   * @return void
+   * @description Control the register page view rendering.
+   */
   function control(): void {
     echo (new RegisterFormView())->render("Register - DealTonBUT", self::STYLESHEET);
   }
 
+  /**
+   * @description Resolve the path and method to access the Register page
+   * @param string $path
+   * @param string $meth
+   * @return bool
+   */
   static function resolve(string $path, string $meth): bool {
     return $path === self::PATH && $meth === self::METH;
   }

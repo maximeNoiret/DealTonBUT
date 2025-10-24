@@ -16,6 +16,8 @@ class RegisterConfirm implements Controller {
   ];
 
   /**
+   * @return void
+   * @description Control the register confirmation process.
    */
   function control(): void {
     $account = new Account();
@@ -40,6 +42,12 @@ class RegisterConfirm implements Controller {
     header('Location: /marketplace');
   }
 
+  /**
+   * @description Resolve the path and method to access the Register confirmation
+   * @param string $path
+   * @param string $meth
+   * @return bool
+   */
   static function resolve(string $path, string $meth): bool {
     return $path === self::PATH && $meth === self::METH;
   }

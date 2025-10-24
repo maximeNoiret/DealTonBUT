@@ -8,8 +8,9 @@ use views\Trade\MarketPlace\MarketPlaceView;
 
 class MarketPlace implements Controller {
   
-  public const PATH = '/marketplace';
-  public const METH = 'GET';
+  public const string PATH = '/marketplace';
+  public const
+  string METH = 'GET';
   /**
    * @description Store all the different stylesheet used
    * @var array<string> STYLESHEET
@@ -20,7 +21,10 @@ class MarketPlace implements Controller {
         '/_assets/styles/navbar.css',
         '/_assets/styles/offer.css'
     ];
-  
+  /**
+   * @description Control the access to the MarketPlace page
+   * @return void
+   */
   function control(): void {
     if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
       header('Location: /user/login');
@@ -28,6 +32,13 @@ class MarketPlace implements Controller {
       echo (new MarketPlaceView())->render("Place de Marché - DealTonBUT", static::STYLESHEET);
     }
   }
+
+  /**
+   * @description Resolve the path and method to access the MarketPlace page
+   * @param string $path
+   * @param string $meth
+   * @return bool
+   */
   public static function resolve(string $path, string $meth): bool {
     return $path === static::PATH && $meth === static::METH;
   }
