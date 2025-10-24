@@ -367,6 +367,11 @@ class DataBase {
         }
     }
 
+  /**
+   * @description Updates the SESSION balance of the user.
+   * @param string $email The email address of the user.
+   * @return void
+   */
   public function updateBalance(string $email): void {
     $balance = $this->getBalance($email);
     if ($balance) {
