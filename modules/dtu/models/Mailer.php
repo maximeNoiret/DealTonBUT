@@ -7,11 +7,24 @@ class Mailer {
   private string $fromName;
 
 
+  /**
+   * @description Constructs a Mailer object with specified sender details.
+   * @param string $from The email address from which the email will be sent.
+   * @param string $fromName Optional name to display as the sender.
+   */
   public function __construct(string $from, string $fromName = '') {
     $this->from = $from;
     $this->fromName = $fromName;
   }
 
+  /**
+   * @description Sends an email with the specified parameters.
+   * @param string $to The recipient's email address.
+   * @param string $subject The subject of the email.
+   * @param string $message The body of the email.
+   * @param bool $isHtml Indicates whether the email content is HTML or plain text. Default is true (HTML).
+   * @return bool Returns true if the email was sent successfully, false otherwise.
+   */
   public function send(
      string $to,
      string $subject,
@@ -43,6 +56,13 @@ class Mailer {
     // use mail() to actually send the mail.
     return mail($to, $subject, $message, implode('\n', $headers));
   }
+
+    /**
+     * @description Sends a password reset email to the specified recipient.
+     * @param string $to The recipient's email address.
+     * @param string $resetLink The password reset link to be included in the email.
+     * @return bool Returns true if the email was sent successfully, false otherwise.
+     */
 
   public function sendPasswordReset(string $to, string $resetLink): bool {
     $subject = "Password Reset Request";
