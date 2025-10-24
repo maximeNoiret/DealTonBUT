@@ -124,7 +124,7 @@ abstract class AbstractView {
           </button>
         </div>
         <div class="sidebar-content">
-          <a class="sidebar-link" href="/">Échanger Points</a>
+          <a class="sidebar-link" href="/trade/points">Échanger Points</a>
           <a class="sidebar-link" href="/marketplace">Place de marché</a>
           <a class="sidebar-link" href="/offre">Ajouter une offre</a>
         </div>

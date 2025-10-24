@@ -30,6 +30,7 @@ use controllers\User\Login\Logout;
 use controllers\Trade\MarketPlace\MarketPlace;
 use controllers\Trade\AddOffer\AddOffer;
 use controllers\Trade\AddOffer\AddOfferConfirm;
+use controllers\Trade\TradeSubjectPoint\TradeSubjectPoint;
 
 use models\DataBase;
 
@@ -56,7 +57,8 @@ $controllers = [
   new MarketPlace(),
   new DeleteAccount(),
   new AddOffer(),
-  new AddOfferConfirm()
+  new AddOfferConfirm(),
+  new TradeSubjectPoint()
 ];
 
 foreach ($controllers as $controller) {

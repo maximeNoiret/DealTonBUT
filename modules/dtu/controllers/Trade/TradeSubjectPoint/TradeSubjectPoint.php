@@ -8,7 +8,7 @@ use views\Trade\TradeSubjectPoint\TradeSubjectPoint as TradeSubjectPointView;
 class TradeSubjectPoint implements Controller {
   
   public const PATH = '/trade/points';
-  public const METH = 'GET|POST';
+  public const METH = 'GET';
 
   const array STYLESHEET = [
     '/_assets/styles/style.css',
