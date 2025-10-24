@@ -6,10 +6,10 @@ use Couchbase\ViewException;
 
 abstract class AbstractView {
   /**
-   * @description construct a header for the pages
-   * @param string $title
-   * @param array<string> $stylesheets
-   * @param string $customvalue
+   * @description Build a .html header for the pages
+   * @param string $title : Title of the page
+   * @param array<string> $stylesheets : Array representing all the .css file used for the page
+   * @param string $customvalue : Name of the page in the navbar
    * @return string
    **/
   public function header(string $title, array $stylesheets, string $customvalue = ''): string {
@@ -37,7 +37,8 @@ abstract class AbstractView {
   }
 
   /**
-   * @description construct the html of the <body> section of a page
+   * @description Build the html of the <body> section of a page, by taking the html in the corresponding .html file,
+   * and use the method templateValue() on the keys values
    * @return string
    *
    * @throws ViewException
@@ -47,12 +48,19 @@ abstract class AbstractView {
     if (!$body) {
       throw new ViewException('Unable to load <body>');
     }
+    /**
+     * @var string $value
+     */
     foreach ($this->templateValues() as $key => $value) {
       $body = str_replace('{' . $key . '}', $value, $body);
     }
     return $body;
   }
 
+  /**
+   * @description Build the footer of the pages and return the small javascript used for the navbar
+   * @return string
+   */
   public function footer(): string {
     return '</main>
       <script>
@@ -71,9 +79,9 @@ abstract class AbstractView {
   }
 
   /**
-   * @description construct the html of the pages ( ex : the login page )
-   * @param string $title
-   * @param array<string> $stylesheet
+   * @description Construct the html of the pages ( ex : the login page ), by using the methods header(),body() and footer()
+   * @param string $title : Title of the page
+   * @param array<string> $stylesheet : Array representing all the .css file used for the page
    * @return string
    *
    * @throws ViewException
@@ -82,6 +90,11 @@ abstract class AbstractView {
     return $this->header($title, $stylesheet, $this->navbarText()) . $this->body() . $this->footer();
   }
 
+  /**
+   * @description Build the .html of the navbar
+   * @param string $placeholder : Name of the page in the navbar
+   * @return string
+   */
   function navbar(string $placeholder = ''): string {
     $username = $_SESSION['username'] ?? 'NOM DE COMPTE';
     settype($username, 'string');
@@ -131,34 +144,28 @@ abstract class AbstractView {
       <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>';
   }
 
-  /* clipboard :
-  strtoupper(usernameTest($_SESSION['username']))
-  strtoupper($_SESSION['username'] ?? 'NOM DE COMPTE')
-  number_format($_SESSION['balance'] ?? 0, 2, '.', '')
-  number_format($this->balanceTest($_SESSION['balance']), 2, '.', '')
-  */
-
   /**
-   * @description Print the debug objects
-   * @param string|array<string> $data
-   * @return void
-   **/
-  static function debug_to_console($data) {
-    $output = $data;
-    if (is_array($output))
-      $output = implode(',', $output);
-    echo "<script>console.log('Debug Objects: " . $output . "' );</script>";
-  }
+   * @description Abstract method that contain the path to the corresponding .html
+   * @return string
+   */
   abstract function path(): string;
 
   /**
-   * @description abstract method, of the purpose to contain the value that will replace the template in the html file
-   * @return array<string, string>
-   **/
+   * @description Abstract methode that define value for each keys in the associated .html file
+   * @return array<mixed> : The array that contain the real value that are associated by a key
+   */
   abstract function templateValues(): array;
 
+  /**
+   * @description Abstract method that contain the title of the page, that will be shown on the navbar
+   * @return string
+   */
   abstract function navbarText(): string;
 
+  /**
+   * @description Toggle that show the navbar
+   * @return bool
+   */
   public function showNavbar(): bool {
     return true;
   }

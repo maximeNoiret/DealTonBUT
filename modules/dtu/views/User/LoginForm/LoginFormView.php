@@ -5,17 +5,35 @@ namespace views\User\LoginForm;
 use core\views\AbstractView;
 
 class  LoginFormView extends AbstractView {
+  /**
+   * @var string : Value for a html attribute "for="
+   */
     const string EMAIL_KEY='email';
+  /**
+   * @var string : Value for a html attribute "for="
+   */
     const string PASSWORD_VALUE='password';
 
+  /**
+   * @description Constructor of the class LoginFormViews
+   * @param string|null $error
+   */
     public function __construct(private ?string $error = null )
     {
     }
 
+  /**
+   * @description Method that give the path tp the corresponding .html
+   * @return string
+   */
     function path(): string {
         return __DIR__ . DIRECTORY_SEPARATOR . 'LoginForm.html';
     }
 
+  /**
+   * @description Replace keys value by their real value in the associated .html file
+   * @return array<string,mixed> : The array that contain the real value that are associated by a key
+   */
     function templateValues(): array {
         $values = [
             'EMAIL_KEY'=>self::EMAIL_KEY,
@@ -36,6 +54,10 @@ class  LoginFormView extends AbstractView {
         return $values;
     }
 
+  /**
+   * @description Contain the title of the page, that will be shown on the navbar
+   * @return string
+   */
     function navbarText(): string {
         return 'Connexion';
     }
