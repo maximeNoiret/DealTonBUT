@@ -11,14 +11,22 @@ use views\Trade\Offer\Offer;
 class AccountPageView extends AbstractView
 {
 
+  /**
+   * @description Method that give the path tp the corresponding .html
+   * @return string
+   */
     function path(): string
     {
         return __DIR__ . DIRECTORY_SEPARATOR . 'AccountPage.html';
     }
 
+  /**
+   * @description Show the offer made by the user
+   * @return string
+   */
   function getUserOffers(): string {
     /**
-     * @var string $email
+     * @var string $email : The email of the user
      */
     $email = $_SESSION['email'] ?? '';
     $offers = DataBase::getInstance()->getUserOffers($email);
@@ -35,10 +43,14 @@ class AccountPageView extends AbstractView
     return '<h1 class="description-text">There are no offers!</h1>';
   }
 
+  /**
+   * @description Show the offer brought by the user
+   * @return string
+   */
   private function getUserBoughtOffers(): string
   {
     /**
-     * @var string $email
+     * @var string $email : The email of the user
      */
     $email = $_SESSION['email'] ?? '';
     $offers = DataBase::getInstance()->getBoughtOffers($email);
@@ -55,6 +67,10 @@ class AccountPageView extends AbstractView
     return '<h1 class="description-text">There are no offers!</h1>';
   }
 
+  /**
+   * @description Show the name of the user, by using their university email
+   * @return string
+   */
   function getName(): string
   {
     // Récupère l'email uniquement s'il s'agit bien d'une chaîne
@@ -71,7 +87,8 @@ class AccountPageView extends AbstractView
   }
 
   /**
-   * @return array<string,mixed>
+   * @description Replace keys value by their real value in the associated .html file
+   * @return array<string,mixed> : The array that contain the real value that are associated by a key
    */
   function templateValues(): array
   {
@@ -85,6 +102,10 @@ class AccountPageView extends AbstractView
     ];
   }
 
+  /**
+   * @description Contain the title of the page, that will be shown on the navbar
+   * @return string
+   */
   function navbarText(): string {
     return 'Mon compte';
   }

@@ -160,7 +160,7 @@ abstract class AbstractView {
   abstract function navbarText(): string;
 
   /**
-   * @description
+   * @description Toggle that show the navbar
    * @return bool
    */
   public function showNavbar(): bool {
