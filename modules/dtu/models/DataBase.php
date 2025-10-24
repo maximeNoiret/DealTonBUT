@@ -118,7 +118,15 @@ class DataBase {
         ];
     }
     return false;
-}
+  }
+
+  public function getBalance(string $email): int|string|false|null {
+    $query = $this->dbConn->prepare('
+      SELECT balance FROM user_ WHERE email = :email');
+    $query->bindValue('email', $email);
+    $query->execute();
+    return $query->fetchColumn();
+  }
 
   public function alreadyForgotPassword(string $email): bool {
     $query = $this->dbConn->prepare(
@@ -273,4 +281,14 @@ class DataBase {
             throw $e;
         }
     }
+
+  public function updateBalance(string $email): void {
+    $balance = $this->getBalance($email);
+    if ($balance) {
+      $_SESSION['balance'] = $balance;
+    }
+  } 
 }
+
+
+

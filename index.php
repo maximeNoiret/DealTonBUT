@@ -31,6 +31,8 @@ use controllers\Trade\MarketPlace\MarketPlace;
 use controllers\Trade\AddOffer\AddOffer;
 use controllers\Trade\AddOffer\AddOfferConfirm;
 
+use models\DataBase;
+
 include __DIR__ . '/_assets/includes/Autoloader.php';
 
 
@@ -59,6 +61,9 @@ $controllers = [
 
 foreach ($controllers as $controller) {
   if ($controller::resolve($path, $meth)) {
+    if (isset($_SESSION['email']) && $_SESSION['logged-in'] === true) {
+      DataBase::getInstance()->updateBalance($_SESSION['email']);
+    }
     $controller->control();
     exit();
   }
