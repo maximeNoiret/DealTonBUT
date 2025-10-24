@@ -12,6 +12,8 @@ class DataBase {
   private static self $instance;
 
   /**
+   * @description Private constructor to initialize the database connection.
+   * @return void
    * @throws DatabaseNotInitiated
    */
   private function __construct() {
@@ -23,6 +25,7 @@ class DataBase {
       $env['DB_USER']     = getenv('DB_USERNAME');
       $env['DB_PASSWORD'] = getenv('DB_PASSWORD');
     }
+
     /**
      * @var array<string, string> $env
      */
@@ -40,6 +43,11 @@ class DataBase {
       [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
   }
 
+  /**
+   * @description Retrieves the singleton instance of the DataBase class.
+   * @return DataBase The singleton instance.
+   */
+
   public static function getInstance(): self {
     if (!isset(self::$instance)) {
       self::$instance = new self();
@@ -49,6 +57,9 @@ class DataBase {
 
   // NOTE: this is very unsafe!
   /**
+   * @description Executes a raw SQL query.
+   * @param string $query The SQL query to execute.
+   * @return void
    * @deprecated
    */
   public function executeQuery(string $query): void {
@@ -56,6 +67,11 @@ class DataBase {
   }
 
   /**
+   * @description Registers a new account in the database.
+   * @param string $username The desired username for the new account.
+   * @param string $email The email address associated with the new account.
+   * @param string $password The password for the new account.
+   * @return void
    * @throws AccountAlreadyExists
    */
   public function registerAccount (
@@ -80,7 +96,12 @@ class DataBase {
     $query->bindValue('hashedpwd', $hashedpwd);
     $query->execute();
   }
-  
+
+  /**
+   * @description Checks if an account with the given email exists.
+   * @param string $email The email address to check.
+   * @return bool True if the account exists, false otherwise.
+   */
   public function accountExists(string $email): bool {
     $query = $this->dbConn->prepare('SELECT email FROM user_ WHERE email = :email');
     $query->bindValue('email', $email);
@@ -89,6 +110,9 @@ class DataBase {
   }
 
   /**
+   * @description Retrieves account information for the given email and password.
+   * @param string $email The email address of the account.
+   * @param string $password The password of the account.
    * @return bool|array<string, string>
    */
   public function getAccount(string $email, string $password): bool|array {
@@ -128,6 +152,12 @@ class DataBase {
     return $query->fetchColumn();
   }
 
+    /**
+     * @description Checks if a password reset has already been requested for the given email.
+     * @param string $email The email address to check.
+     * @return bool True if a password reset has already been requested, false otherwise.
+     */
+
   public function alreadyForgotPassword(string $email): bool {
     $query = $this->dbConn->prepare(
       'SELECT email FROM token WHERE email = :email AND deadline > CURRENT_TIMESTAMP');
@@ -136,6 +166,12 @@ class DataBase {
     return $query->fetch() !== false;
   }
 
+    /**
+     * @description Inserts a password reset token for the given email.
+     * @param string $email The email address associated with the token.
+     * @param string $token The password reset token.
+     * @return void
+     */
   public function insertToken(string $email, string $token): void {
     $query = $this->dbConn->prepare('INSERT INTO token(email, token) VALUES (:email, :token)');
     $query->bindValue('email', $email);
@@ -143,8 +179,9 @@ class DataBase {
     $query->execute();
   }
 
-/**
-   * @return array<mixed>
+    /**
+    * @description Retrieves all offers from the database.
+    * @return array<mixed>
    */
   public function getOffers(): array {
     $query = $this->dbConn->prepare(
@@ -157,6 +194,8 @@ class DataBase {
   }
 
   /**
+   * @description Retrieves all offers made by a specific user.
+   * @param string $email The email address of the user.
    * @return array<mixed>
    */
   public function getUserOffers(string $email): array {
@@ -172,6 +211,8 @@ class DataBase {
   }
 
   /**
+   * @description Retrieves all offers bought by a specific user.
+   * @param string $email The email address of the user.
    * @return array<mixed>
    */
   public function getBoughtOffers(string $email): array {
@@ -188,14 +229,26 @@ class DataBase {
     return $query->fetchAll(PDO::FETCH_ASSOC);
   }
 
+    /**
+     * @description Deletes a user from the database.
+     * @param string $email The email address of the user to delete.
+     * @return void
+     */
   public function deleteUser(string $email): void {
     $query = $this->dbConn->prepare('DELETE FROM user_ WHERE email = :email');
     $query->bindValue('email', $email);
     $query->execute();
   }
 
-  //offre
-
+    /**
+     * @description Inserts a new offer into the database.
+     * @param string $userEmail The email address of the offer owner.
+     * @param string $title The title of the offer.
+     * @param float $price The price of the offer.
+     * @param string $description The description of the offer.
+     * @param string $deadline The deadline for the offer in 'YYYY-MM-DD' format.
+     * @return void
+     */
     public function insertOffre(
         string $userEmail,
         string $title,
@@ -218,8 +271,13 @@ class DataBase {
         $query->execute();
     }
 
-//Ajout de matiére pour un utilisateur
-
+/**
+     * @description Adds a subject for a user with initial points.
+     * @param string $email The email address of the user.
+     * @param string $subject_name The name of the subject.
+     * @param float $points The initial points for the subject.
+     * @return void
+     */
     public function setSubject(string $email, string $subject_name, float $points): void {
         $query = $this->dbConn->prepare('INSERT INTO points(email, subject_name, points) VALUES (:email, :subject_name, :points)');
         $query->bindValue('email', $email);
@@ -228,6 +286,12 @@ class DataBase {
         $query->execute();
     }
 
+    /**
+     * @description Retrieves all subjects for a user.
+     * @param string $email The email address of the user.
+     * @return array<mixed>
+     */
+
     public function getSubject(string $email): array {
         $query = $this->dbConn->prepare('SELECT subject_name FROM points WHERE email = :email');
         $query->bindValue('email', $email);
@@ -235,7 +299,14 @@ class DataBase {
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
-// Ajout de points pour un utilisateur
+
+    /**
+     * @description Updates the points for a specific subject of a user.
+     * @param string $email The email address of the user.
+     * @param float $points The new points value.
+     * @param string $subject_name The name of the subject.
+     * @return void
+     */
     public function setPoints(string $email, float $points, string $subject_name): void {
         $query = $this->dbConn->prepare('UPDATE points SET points = :points WHERE email = :email AND subject_name = :subject_name');
         $query->bindValue('email', $email);
@@ -244,6 +315,12 @@ class DataBase {
         $query->execute();
     }
 
+    /**
+     * @description Retrieves the points for a specific subject of a user.
+     * @param string $email The email address of the user.
+     * @param string $subject_name The name of the subject.
+     * @return float The points for the specified subject.
+     */
     public function getPoints(string $email, string $subject_name): float {
         $query = $this->dbConn->prepare('SELECT points FROM points WHERE email = :email AND subject_name = :subject_name');
         $query->bindValue('email', $email);
@@ -251,7 +328,15 @@ class DataBase {
         $query->execute();
         return $query->fetchColumn();
     }
-// Transfer de points entre deux matieres du même utilisateur
+
+    /**
+     * @description Transfers points between two subjects for a user.
+     * @param string $email The email address of the user.
+     * @param float $points The number of points to transfer.
+     * @param string $from_subject The subject from which points are deducted.
+     * @param string $to_subject The subject to which points are added.
+     * @return void
+     */
     public function transferPoints(string $email, float $points, string $from_subject, string $to_subject): void {
         try {
             $this->dbConn->beginTransaction();

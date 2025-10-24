@@ -10,8 +10,12 @@ use Random\RandomException;
 class Account {
   private const string DOMAIN_NAME = 'dealtonbut.app';
 
-
   /**
+   * @description Registers a new account in the database.
+   * @param string $username The desired username for the new account.
+   * @param string $email The email address associated with the new account.
+   * @param string $password The password for the new account.
+   * @return void
    * @throws AccountAlreadyExists
    */
   function registerAccount(
@@ -25,6 +29,14 @@ class Account {
       $password
     );
   }
+
+/**
+   * @description Validates user credentials against the database.
+   * @param string $email The email address of the user.
+   * @param string $password The password provided by the user.
+   * @return bool Returns true if the credentials are valid, false otherwise.
+   * @throws DatabaseNotInitiated
+   */
 
   static function validateCredentials(string $email, string $password): bool {
     // CHECK IF (email, hash(password)) IN user_
@@ -42,6 +54,9 @@ class Account {
   }
 
     /**
+     * @description Initiates the password reset process for a user.
+     * @param string $email The email address of the user requesting a password reset.
+     * @return string Status message indicating the result of the operation.
      * @throws RandomException
      */
     static function forgotPassword(string $email): string {
