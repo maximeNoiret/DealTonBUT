@@ -37,24 +37,37 @@ class MarketPlace implements Controller {
    * @return string
    */
   public static function getOffers(): string {
-    $sort = $_GET['sort'] ?? '';
+    $sort = $_GET['sort'];
+    $query =
+      'SELECT u.username as \'username\', title, description, price, deadline
+       FROM offer o
+       INNER JOIN user_ u
+       ON o.owner = u.email ';
+    //  for searching a string in the title of the offers
+    if (isset($_GET['search-string']) && !empty($_GET['search-string'])) {
+      $query .= 'WHERE title LIKE \'%' . $_GET['search-string'] . '%\'';
+    }
     switch ($sort) {
       case 'price-asc':
-        $offers = DataBase::getInstance()->getOffers('price', 'ASC');
+        $query .= " ORDER BY price ASC";
+//        $offers = DataBase::getInstance()->getOffers('price', 'ASC');
         break;
       case 'price-desc':
-        $offers = DataBase::getInstance()->getOffers('price', 'DESC');
+        $query .= " ORDER BY price DESC";
+//        $offers = DataBase::getInstance()->getOffers('price', 'DESC');
         break;
       case 'date':
-        $offers = DataBase::getInstance()->getOffers('creation_time', 'DESC');
+        $query .= " ORDER BY creation_time DESC";
+//        $offers = DataBase::getInstance()->getOffers('creation_time', 'DESC');
         break;
       case 'alphabetic':
-        $offers = DataBase::getInstance()->getOffers('title', 'ASC');
+        $query .= " ORDER BY title ASC";
+//        $offers = DataBase::getInstance()->getOffers('title', 'ASC');
         break;
       default:
-        $offers = DataBase::getInstance()->getOffers('', '');
         break;
     }
+    $offers = DataBase::getInstance()->executeQuery($query);
     if ($offers) {
       $ret = '<section class="offer-grid">' . "\n";
       foreach ($offers as $offer) {

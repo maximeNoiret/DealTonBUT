@@ -60,10 +60,11 @@ class DataBase {
    * @description Executes a raw SQL query.
    * @param string $query The SQL query to execute.
    * @return void
-   * @deprecated
    */
-  public function executeQuery(string $query): void {
-    $this->dbConn->prepare($query)->execute();
+  public function executeQuery(string $queryString): array {
+    $query = $this->dbConn->prepare($queryString);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_ASSOC);
   }
 
   /**
@@ -182,6 +183,7 @@ class DataBase {
     /**
     * @description Retrieves all offers from the database.
     * @return array<mixed>
+     * @deprecated
    */
   public function getOffers(string $orderBy, string $suffixe): array {
     if (!isset($orderBy) || $orderBy == '') {
@@ -192,7 +194,18 @@ class DataBase {
        ON o.owner = u.email');
       $query->execute();
       return $query->fetchAll(PDO::FETCH_ASSOC);
-    } else {
+    }
+    if ($orderBy == 'search-string' && $suffixe == '') {
+      $query = $this->dbConn->prepare(
+        "SELECT u.username as 'username', title, description, price, deadline
+       FROM offer o
+       INNER JOIN user_ u
+       ON o.owner = u.email
+       WHERE title LIKE CONCAT('%',$orderBy,'%')");
+      $query->execute();
+      return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+    else {
       $query = $this->dbConn->prepare(
         'SELECT u.username as \'username\', title, description, price, deadline
        FROM offer o
