@@ -4,7 +4,7 @@ namespace models;
 use exceptions\AccountAlreadyExists;
 use exceptions\DatabaseNotInitiated;
 use models\DataBase;
-use models\Mailer;
+use core\models\Mailer;
 use Random\RandomException;
 
 class Account {
@@ -81,10 +81,9 @@ class Account {
         $db->insertToken($email, $token);
         // - [optional] encrypt (email, token) into single string
         // mail a GET link with "/user/validate?mail=:mail&token=:token" (or "/user/validate?token=:token" if encrypted)
-        $mailer = new Mailer('noreply@' . self::DOMAIN_NAME, 'DealTonBUT');  // TODO: change domain to correct one
         $resetLink = 'https://' . self::DOMAIN_NAME .
           '/user/validate?email=' . urlencode($email) . '&token=' . $token;
-        if (!$mailer->sendPasswordReset($email, $resetLink)) {
+        if (!Mailer::sendMail('no-reply', $email, 'test', 'Forgot Password', 'You forgot your password.', false)) {
           return 'message';
         };
         return 'reached_end';
