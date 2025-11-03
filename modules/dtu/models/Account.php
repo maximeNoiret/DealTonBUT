@@ -83,7 +83,7 @@ class Account {
         // mail a GET link with "/user/validate?mail=:mail&token=:token" (or "/user/validate?token=:token" if encrypted)
         $resetLink = 'https://' . self::DOMAIN_NAME .
           '/user/validate?email=' . urlencode($email) . '&token=' . $token;
-        if (!Mailer::sendMail('no-reply', $email, 'test', 'Forgot Password', 'You forgot your password.', false)) {
+        if (!Mailer::sendForgotPassword($email, $resetLink)) {
           return 'message';
         };
         return 'reached_end';

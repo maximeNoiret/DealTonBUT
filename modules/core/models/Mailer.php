@@ -53,4 +53,16 @@ class Mailer {
             exit;
         }
     }
+
+    /**
+     * @param $email : Email of the user to send reset link.
+     * @param $link  : Reset link.
+     */
+    public static function sendForgotPassword(string $email, string $link): bool {
+        $body = '<h1>Forgot Password</h1>
+<p>You have forgotten your password. Please click <a href="' . $link . '">HERE</a> to reset your password.</p>';
+        $name = 'REPLACE ME WITH FUNCTION CALL';
+
+        return self::sendMail('no-reply', $email, $name, 'Forgot Password', $body, true);
+    }
 }
