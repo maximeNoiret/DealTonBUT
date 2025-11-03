@@ -25,6 +25,6 @@ class PasswordResetView extends AbstractView {
 
   function navbarText(): string
   {
-    return 'Reset Password';
+    return 'Réinitialisation du mot de passe';
   }
 }
