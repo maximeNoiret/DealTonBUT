@@ -3,6 +3,7 @@
         "phpstan/phpstan": "^2.1"
     },
   "require": {
-    "ext-pdo": "*"
+    "ext-pdo": "*",
+        "phpmailer/phpmailer": "^7.0"
   }
 }
