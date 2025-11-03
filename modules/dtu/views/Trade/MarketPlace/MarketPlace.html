@@ -1,16 +1,16 @@
 <!--<input class="research-bar" type="text" placeholder="Rechercher..." />-->
-<div class="search-container">
-    <div class="search-wrapper">
+<a class="search-container">
+    <a class="search-wrapper">
 <!--        <span class="search-icon">🔍</span>-->
         <input type="text" class="search-box" placeholder="Rechercher...">
         <button class="sort-button" onclick="toggleDropdown()">
             Trier ▼
         </button>
         <div class="sort-menu" id="sortDropdown">
-            <div class="sort-option">Plus récent</div>
-            <div class="sort-option">Moins cher</div>
-            <div class="sort-option">Plus cher</div>
-            <div class="sort-option">Alphabétique</div>
+            <a href="/marketplace?sort=date" class="sort-option">Plus récent</a>
+            <a href="/marketplace?sort=price-asc" class="sort-option">Moins cher</a>
+            <a href="/marketplace?sort=price-desc" class="sort-option">Plus cher</a>
+            <a href="/marketplace?sort=alphabetic" class="sort-option">Alphabétique</a>
         </div>
     </div>
 </div>

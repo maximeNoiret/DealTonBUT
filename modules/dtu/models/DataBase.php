@@ -183,14 +183,27 @@ class DataBase {
     * @description Retrieves all offers from the database.
     * @return array<mixed>
    */
-  public function getOffers(): array {
-    $query = $this->dbConn->prepare(
-      'SELECT u.username as \'username\', title, description, price, deadline
+  public function getOffers(string $orderBy, string $suffixe): array {
+    if (empty($orderBy)) {
+      $query = $this->dbConn->prepare(
+        'SELECT u.username as \'username\', title, description, price, deadline
        FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email');
-    $query->execute();
-    return $query->fetchAll(PDO::FETCH_ASSOC);
+      $query->execute();
+      return $query->fetchAll(PDO::FETCH_ASSOC);
+    } else {
+      $query = $this->dbConn->prepare(
+        'SELECT u.username as \'username\', title, description, price, deadline
+       FROM offer o
+       INNER JOIN user_ u
+       ON o.owner = u.email
+       ORDER BY :orderBy :suffixe');
+      $query->bindValue('orderBy', $orderBy);
+      $query->bindValue('suffixe', $suffixe);
+      $query->execute();
+      return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
   }
 
   /**
