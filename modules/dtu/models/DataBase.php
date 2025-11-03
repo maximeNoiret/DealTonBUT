@@ -184,7 +184,7 @@ class DataBase {
     * @return array<mixed>
    */
   public function getOffers(string $orderBy, string $suffixe): array {
-    if (empty($orderBy)) {
+    if (!isset($orderBy) || $orderBy == '') {
       $query = $this->dbConn->prepare(
         'SELECT u.username as \'username\', title, description, price, deadline
        FROM offer o
@@ -198,9 +198,7 @@ class DataBase {
        FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email
-       ORDER BY :orderBy :suffixe');
-      $query->bindValue('orderBy', $orderBy);
-      $query->bindValue('suffixe', $suffixe);
+       ORDER BY ' . $orderBy . ' ' . $suffixe);
       $query->execute();
       return $query->fetchAll(PDO::FETCH_ASSOC);
     }

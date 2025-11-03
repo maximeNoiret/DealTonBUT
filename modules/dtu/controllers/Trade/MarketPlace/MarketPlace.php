@@ -68,6 +68,6 @@ class MarketPlace implements Controller {
     return '<h1 class="description-text">There are no offers!</h1>';
   }
   public static function resolve(string $path, string $meth): bool {
-    return $path === static::PATH && $meth === static::METH;
+    return strtok($path, '?') === static::PATH && $meth === static::METH;
   }
 }
