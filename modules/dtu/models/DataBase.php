@@ -106,7 +106,7 @@ class DataBase {
     $query = $this->dbConn->prepare('SELECT email FROM user_ WHERE email = :email');
     $query->bindValue('email', $email);
     $query->execute();
-    return $query->fetch() !== null;
+    return $query->fetch() !== false;
   }
 
   /**

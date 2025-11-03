@@ -26,7 +26,7 @@ class Mailer {
 
         try {
             //Server settings
-            $mail->SMTPDebug = SMTP::DEBUG_SERVER;  // debug verbose output
+            //$mail->SMTPDebug = SMTP::DEBUG_SERVER;  // debug verbose output
             $mail->isSMTP();
             $mail->Host       = 'live.smtp.mailtrap.io';
             $mail->SMTPAuth   = true;

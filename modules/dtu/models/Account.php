@@ -63,7 +63,7 @@ class Account {
     // check if account exists at all
         $db = DataBase::getInstance();
         if(!$db->accountExists($email)) {
-          return 'already_exists';
+          return 'message';
         }
         // check if account already requested password reset with alive ttl
         if ($db->alreadyForgotPassword($email)) {
@@ -86,7 +86,7 @@ class Account {
         if (!Mailer::sendForgotPassword($email, $resetLink)) {
           return 'message';
         };
-        return 'reached_end';
+        return 'message';
     // ----------------
     // Someone goes to /user/validate with GET method
     // - [optional] decrypt token from url
