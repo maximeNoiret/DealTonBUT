@@ -13,7 +13,7 @@ class SeeOffer
 
   const array STYLESHEET = [
     '/_assets/styles/offer.css',
-    '/_assets/styles/SeeOffer.css',
+    '/_assets/styles/seeOffer.css',
     '/_assets/styles/style.css',
     '/_assets/styles/navbar.css'
   ];
@@ -21,6 +21,10 @@ class SeeOffer
   static array $offer;
 
   public function __construct() {
+      if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+          self::$offer = [];
+          return;
+      }
     self::$offer = DataBase::getInstance()->getOffer($_GET['id']);
   }
 
@@ -46,6 +50,6 @@ class SeeOffer
 
   static function resolve(string $path, string $meth): bool
   {
-    return $path === self::PATH && $meth === self::METH;
+    return strtok($path, '?') === static::PATH && $meth === static::METH;
   }
 }

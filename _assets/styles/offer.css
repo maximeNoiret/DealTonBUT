@@ -19,6 +19,12 @@
     min-height: 200px;
 }
 
+.offer-card:hover {
+    box-shadow: 0.25rem 0.25rem 0.5rem rgba(0,0,0,0.3);
+    transform: translateY(-0.1rem);
+    transition: all 0.2s ease-in-out;
+}
+
 /* Header de la carte (avatar + pseudo) */
 .offer-header {
     display: flex;
@@ -102,4 +108,9 @@
     align-items: center;
     margin-top: auto;
     padding-top: 0.6rem;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
 }

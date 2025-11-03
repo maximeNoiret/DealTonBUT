@@ -27,3 +27,7 @@
 .button-buy:hover {
     background-color: #45a049;
 }
+
+#seen-offer-card {
+    margin-top: 5%;
+}

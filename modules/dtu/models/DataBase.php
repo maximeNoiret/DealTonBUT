@@ -185,7 +185,7 @@ class DataBase {
    */
   public function getOffers(): array {
     $query = $this->dbConn->prepare(
-      'SELECT ouid, u.username as \'username\', title, description, price, deadline
+      'SELECT ouid, owner, u.username as \'username\', title, description, price, deadline
        FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email');
@@ -195,7 +195,7 @@ class DataBase {
 
   public function getOffer(int $ouid): array|false {
     $query = $this->dbConn->prepare(
-      'SELECT u.username as \'username\', title, description, price, deadline
+      'SELECT owner, u.username as \'username\', title, description, price, deadline
        FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email
@@ -218,7 +218,7 @@ class DataBase {
    */
   public function getUserOffers(string $email): array {
     $query = $this->dbConn->prepare(
-      'SELECT u.username as \'username\', title, description, price, deadline
+      'SELECT o.ouid, owner, u.username as \'username\', title, description, price, deadline
        FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email
@@ -235,7 +235,7 @@ class DataBase {
    */
   public function getBoughtOffers(string $email): array {
     $query = $this->dbConn->prepare(
-      'SELECT u.username as \'username\', o.title, o.description, o.price, o.deadline
+      'SELECT o.ouid, owner, u.username as \'username\', o.title, o.description, o.price, o.deadline
         FROM transaction t
         INNER JOIN offer o
         ON t.ouid = o.ouid
