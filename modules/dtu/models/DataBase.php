@@ -193,6 +193,24 @@ class DataBase {
     return $query->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  public function getOffer(int $ouid): array|false {
+    $query = $this->dbConn->prepare(
+      'SELECT u.username as \'username\', title, description, price, deadline
+       FROM offer o
+       INNER JOIN user_ u
+       ON o.owner = u.email
+       WHERE o.ouid = :ouid');
+    $query->bindValue('ouid', $ouid);
+    $query->execute();
+    return $query->fetch(PDO::FETCH_ASSOC);
+  }
+
+  public function deleteOffer(int $ouid): void {
+    $query = $this->dbConn->prepare('DELETE FROM offer WHERE ouid = :ouid');
+    $query->bindValue('ouid', $ouid);
+    $query->execute();
+  }
+
   /**
    * @description Retrieves all offers made by a specific user.
    * @param string $email The email address of the user.

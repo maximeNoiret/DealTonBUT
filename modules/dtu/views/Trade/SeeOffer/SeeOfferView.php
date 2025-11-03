@@ -2,23 +2,25 @@
 
 namespace dtu\views\Trade\SeeOffer;
 
-class SeeOfferView
+use core\views\AbstractView;
+use models\DataBase;
+
+class SeeOfferView extends AbstractView
 {
 
-    function path(): string {
-        return self::PATH;
-    }
+  const string PATH = __DIR__ . DIRECTORY_SEPARATOR . 'SeeOffer.html';
 
-    /**
-     * @return array<string, string>
-     */
-    function templateValues(): array {
-        return $this->offerInfo;
-    }
+  function path(): string {
+    return __DIR__ . DIRECTORY_SEPARATOR . 'SeeOffer.html';
+  }
 
+  function templateValues(): array {
+    return [
+    ];
+  }
 
-    function navbarText(): string
-    {
-        return '';
-    }
+  function navbarText(): string
+  {
+    return 'Offre';
+  }
 }
