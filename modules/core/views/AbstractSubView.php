@@ -37,6 +37,11 @@ abstract class AbstractSubView extends AbstractView {
     return $this->header($sectionType, $sectionClass) . $this->body() . $this->footer();
   }
 
+  function renderWithLink(string $sectionType, string|array $sectionClass, string $link): string {
+    $this->sectionType = $sectionType;
+    return '<a href="' . $link . '">' . $this->header($sectionType, $sectionClass) . $this->body() . $this->footer() . '</a>';
+  }
+
   abstract function path(): string;
 
   /**

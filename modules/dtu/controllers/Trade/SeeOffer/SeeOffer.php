@@ -12,7 +12,8 @@ class SeeOffer
   const string METH = 'GET';
 
   const array STYLESHEET = [
-    '/_assets/styles/addOffer.css',
+    '/_assets/styles/offer.css',
+    '/_assets/styles/SeeOffer.css',
     '/_assets/styles/style.css',
     '/_assets/styles/navbar.css'
   ];
@@ -27,12 +28,11 @@ class SeeOffer
     return isset($_SESSION['email']) && $_SESSION['email'] === self::$offer['owner'];
   }
 
-  public function ButtonOffer()
-  {
+  public function buttonOffer(): string{
     if ($this->isOwnerOfOffer()) {
-      return '<a class="button-delete" href="/offre/delete?id=' . self::$offer['id'] . '">Delete</a>';
+      return '<a class="button-delete" href="/offre/delete?id=' . $_GET['id'] . '">Delete</a>';
     } else {
-      return '<a class="button-buy" href="/offre/buy?id=' . self::$offer['id'] . '">Buy</a>';
+      return '<a class="button-buy" href="/offre/buy?id=' . $_GET['id'] . '">Buy</a>';
     }
   }
   function control(): void
