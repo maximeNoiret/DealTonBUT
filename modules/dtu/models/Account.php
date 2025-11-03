@@ -2,7 +2,6 @@
 
 namespace models;
 use exceptions\AccountAlreadyExists;
-use exceptions\DatabaseNotInitiated;
 use models\DataBase;
 use core\models\Mailer;
 use Random\RandomException;
@@ -35,8 +34,7 @@ class Account {
    * @param string $email The email address of the user.
    * @param string $password The password provided by the user.
    * @return bool Returns true if the credentials are valid, false otherwise.
-   * @throws DatabaseNotInitiated
-   */
+ */
 
   static function validateCredentials(string $email, string $password): bool {
     // CHECK IF (email, hash(password)) IN user_
@@ -87,11 +85,6 @@ class Account {
           return 'message';
         };
         return 'message';
-    // ----------------
-    // Someone goes to /user/validate with GET method
-    // - [optional] decrypt token from url
-    // - if (email, token) in 'token' && ttl not reached: ask new password
-    // - else: display "invalid link" and quit
 
   }
 }

@@ -18,6 +18,8 @@ use controllers\Logout;
 use controllers\MarketPlace;*/
 use controllers\User\AccountPage\Account;
 use controllers\User\AccountPage\DeleteAccount;
+use controllers\User\PasswordForgot\PasswordReset;
+use controllers\User\PasswordForgot\PasswordResetConfirm;
 use controllers\User\Settings\Settings;
 use controllers\User\Register\Register;
 use controllers\User\Register\RegisterConfirm;
@@ -58,7 +60,9 @@ $controllers = [
   new DeleteAccount(),
   new AddOffer(),
   new AddOfferConfirm(),
-  new TradeSubjectPoint()
+  new TradeSubjectPoint(),
+  new PasswordReset(),
+  new PasswordResetConfirm()
 ];
 
 foreach ($controllers as $controller) {

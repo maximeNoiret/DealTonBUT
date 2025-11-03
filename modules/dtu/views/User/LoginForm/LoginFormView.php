@@ -44,6 +44,8 @@ class  LoginFormView extends AbstractView {
             $errorMessage = match($this->error) {
                 'invalid_credentials' => 'Invalid email or password.',
                 'database_error' => 'A database error occurred. Please try again.',
+                'reset_link_expired' => 'The password reset link has expired.',
+                'password_changed' => 'Your password has been changed successfully. Please log in with your new password.',
                 default => 'An unknown error occurred.'
             };
             $values['ERROR_MESSAGE'] = $errorMessage;

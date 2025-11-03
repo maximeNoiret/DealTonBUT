@@ -166,6 +166,39 @@ class DataBase {
     return $query->fetch() !== false;
   }
 
+  public function updatePassword(string $email, string $hashedPassword): bool
+  {
+    $query = $this->dbConn->prepare(
+      'UPDATE user_ SET hashedpwd = :hashedpwd WHERE email = :email');
+    $query->bindValue('hashedpwd', $hashedPassword);
+    $query->bindValue('email', $email);
+    return $query->execute();
+  }
+
+  /**
+   * @param string $email The email address associated with the token.
+   * @param string $token The password reset token.
+   * @return bool True if the token is valid for the given email, false otherwise.
+   */
+  public function checkToken(string $email, string $token): bool {
+    $query = $this->dbConn->prepare(
+      'SELECT email FROM token WHERE email = :email AND token = :token AND deadline > CURRENT_TIMESTAMP');
+    $query->bindValue('email', $email);
+    $query->bindValue('token', $token);
+    $query->execute();
+    $returnValue = $query->fetch() !== false;
+
+    if ($returnValue) {
+      // delete the token after use
+      $query = $this->dbConn->prepare(
+        'DELETE FROM token WHERE email = :email');
+      $query->bindValue('email', $email);
+      $query->execute();
+    }
+
+    return $returnValue;
+  }
+
     /**
      * @description Inserts a password reset token for the given email.
      * @param string $email The email address associated with the token.
@@ -377,7 +410,7 @@ class DataBase {
     if ($balance) {
       $_SESSION['balance'] = $balance;
     }
-  } 
+  }
 }
 
 
