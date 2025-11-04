@@ -180,10 +180,12 @@ class DataBase {
     $query->execute();
   }
 
-    /**
-    * @description Retrieves all offers from the database.
-    * @return array<mixed>
-     * @deprecated
+  /**
+   * @description Return the offers in function of the args given ( the args are MySQL operator), see MarketPlace->getOffers() for the used method
+   * @param string $orderBy Type of the sort (eg : COST ( order by the cost of the offer ))
+   * @param string $suffixe Supplementary information for the sort (eg : ASC ( Ascending order ))
+   * @return array
+   * @deprecated
    */
   public function getOffers(string $orderBy, string $suffixe): array {
     if (!isset($orderBy) || $orderBy == '') {

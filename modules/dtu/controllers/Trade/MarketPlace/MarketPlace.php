@@ -33,8 +33,8 @@ class MarketPlace implements Controller {
   }
 
   /**
-   * @description Show all offers from the database
-   * @return string
+   * @description Show The offers in function of the sort parameter, show all offers by default
+   * @return string The HTML that contain the info of the offers
    */
   public static function getOffers(): string {
     $sort = $_GET['sort'];
