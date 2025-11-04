@@ -15,8 +15,14 @@ class PasswordResetConfirm implements Controller
   const string METH = 'POST';
 
   function control(): void {
+    /**
+     * @var array<string, string> $_POST
+     */
     $hashedPassword = password_hash($_POST['new_password'] ?? '', PASSWORD_BCRYPT);
 
+    /**
+     * @var array<string, string> $_SESSION
+     */
     if (DataBase::getInstance()->updatePassword($_SESSION['reset_email'] ?? '', $hashedPassword)) {
       echo (new LoginFormView('password_changed')->render('Login - DealTonBUT', Login::STYLESHEET));
     } else {
