@@ -201,9 +201,9 @@ class DataBase {
   /**
    * @description Retrieves a specific offer by its unique identifier.
    * @param int $ouid The unique identifier of the offer.
-   * @return array<string, string>|false The offer details or false if not found.
+   * @return array<string, mixed> The offer details or false if not found.
    */
-  public function getOffer(int $ouid): array|false {
+  public function getOffer(int $ouid): array {
     $query = $this->dbConn->prepare(
       'SELECT owner, u.username as \'username\', title, description, price, deadline
        FROM offer o

@@ -15,18 +15,26 @@ class SeeOfferView extends AbstractView
   }
 
   function templateValues(): array {
+    /**
+     * @var array<string, string> $offer
+     */
+    $offer = SeeOffer::$offer;
     return [
-      'username' => SeeOffer::$offer['username'],
-      'title' => SeeOffer::$offer['title'],
-      'description' => SeeOffer::$offer['description'],
-      'price' => SeeOffer::$offer['price'],
-      'deadline' => SeeOffer::$offer['deadline'],
+      'username' => $offer['username'],
+      'title' => $offer['title'],
+      'description' => $offer['description'],
+      'price' => $offer['price'],
+      'deadline' => $offer['deadline'],
       'button-offer' => (new SeeOffer())->buttonOffer()
     ];
   }
 
   function navbarText(): string
   {
-    return 'Offre - ' . SeeOffer::$offer['title'];
+    /**
+     * @var string $title
+     */
+    $title = SeeOffer::$offer['title'] ?? 'Offre';
+    return 'Offre - ' . $title;
   }
 }

@@ -18,18 +18,26 @@ class SeeOffer
     '/_assets/styles/navbar.css'
   ];
 
+  /**
+   * @var array<string, mixed> Détails de l'offre récupérés de la base de données.
+   */
   static array $offer;
+  static int $id;
 
   /**
    * Constructeur de la classe SeeOffer.
    * Récupère les détails de l'offre à partir de la base de données en utilisant l'ID fourni dans les paramètres GET.
    */
   public function __construct() {
-      if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-          self::$offer = [];
-          return;
-      }
-    self::$offer = DataBase::getInstance()->getOffer($_GET['id']);
+    if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+      /**
+       * @var array<string, int> $_GET
+       */
+      self::$id = $_GET['id'];
+      self::$offer = DataBase::getInstance()->getOffer(self::$id);
+      return;
+    }
+    self::$offer = [];
   }
 
   /**
@@ -44,9 +52,9 @@ class SeeOffer
    */
   public function buttonOffer(): string{
     if ($this->isOwnerOfOffer()) {
-      return '<a class="button-delete" href="/offre/delete?id=' . $_GET['id'] . '">Delete</a>';
+      return '<a class="button-delete" href="/offre/delete?id=' . self::$id . '">Delete</a>';
     } else {
-      return '<a class="button-buy" href="/offre/buy?id=' . $_GET['id'] . '">Buy</a>';
+      return '<a class="button-buy" href="/offre/buy?id=' . self::$id . '">Buy</a>';
     }
   }
   function control(): void

@@ -28,7 +28,8 @@ class DeleteOffer
             exit;
         }
 
-        $offer = DataBase::getInstance()->getOffer($_GET['id']);
+        $id = (int)$_GET['id'];
+        $offer = DataBase::getInstance()->getOffer($id);
 
         if (!$offer) {
             header('Location: /marketplace');
@@ -40,7 +41,7 @@ class DeleteOffer
             exit;
         }
 
-        DataBase::getInstance()->deleteOffer($_GET['id']);
+        DataBase::getInstance()->deleteOffer($id);
         header('Location: /marketplace');
     }
 
