@@ -2,9 +2,8 @@
 
 namespace views\Trade\MarketPlace;
 
+use controllers\Trade\MarketPlace\MarketPlace;
 use core\views\AbstractView;
-use views\Trade\Offer\Offer;
-use models\DataBase;
 
 class MarketPlaceView extends AbstractView {
   /**
@@ -16,31 +15,12 @@ class MarketPlaceView extends AbstractView {
   }
 
   /**
-   * @description Show all offers from the database
-   * @return string
-   */
-  function getOffers(): string {
-    $offers = DataBase::getInstance()->getOffers();
-    if ($offers) {
-      $ret = '<section class="offer-grid">' . "\n";
-      foreach ($offers as $offer) {
-        /**
-         * @var array<string, string> $offer
-         */
-        $ret = $ret . (new Offer($offer))->render('article', 'offer-card');
-      }
-      return $ret . '</section>';
-    }
-    return '<h1 class="description-text">There are no offers!</h1>';
-  }
-
-  /**
    * @description define value for each keys in the associated .html file
    * @return string[]
    */
   function templateValues(): array {
     $values = [
-      'OFFERS' => $this->getOffers()
+      'OFFERS' => MarketPlace::getOffers()
     ];
     return $values;
   }

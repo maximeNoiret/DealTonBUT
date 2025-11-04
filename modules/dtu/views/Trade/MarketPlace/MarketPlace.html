@@ -1,16 +1,18 @@
 <!--<input class="research-bar" type="text" placeholder="Rechercher..." />-->
 <div class="search-container">
     <div class="search-wrapper">
-<!--        <span class="search-icon">🔍</span>-->
-        <input type="text" class="search-box" placeholder="Rechercher...">
+        <form class="search-wrapper" action="/marketplace" method="GET">
+            <!--        <span class="search-icon">🔍</span>&ndash;&gt;-->
+            <input type="text" name='search-string' class="search-box" placeholder="Rechercher...">
+        </form>
         <button class="sort-button" onclick="toggleDropdown()">
             Trier ▼
         </button>
         <div class="sort-menu" id="sortDropdown">
-            <div class="sort-option">Plus récent</div>
-            <div class="sort-option">Moins cher</div>
-            <div class="sort-option">Plus cher</div>
-            <div class="sort-option">Alphabétique</div>
+            <div class="sort-option"><a href="/marketplace?sort=date">Plus récent</a></div>
+            <div class="sort-option"> <a href="/marketplace?sort=price-asc">Moins cher</a> </div>
+            <div class="sort-option"><a href="/marketplace?sort=price-desc">Plus cher</a> </div>
+            <div class="sort-option" ><a href="/marketplace?sort=alphabetic" >Alphabétique</a> </div>
         </div>
     </div>
 </div>
