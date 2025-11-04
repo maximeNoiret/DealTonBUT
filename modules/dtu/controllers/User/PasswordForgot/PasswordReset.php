@@ -17,6 +17,9 @@ class PasswordReset implements Controller
   function control(): void {
     // Someone goes to /user/validate with GET method
     // - if (email, token) in 'token' && ttl not reached: ask new password
+    /**
+     * @var array<string, string> $_GET
+     */
     if (DataBase::getInstance()->checkToken($_GET['email'] ?? '', $_GET['token'] ?? '')) {
       $_SESSION['reset_email'] = $_GET['email'];
       echo (new PasswordResetView()->render('Reset Password - DealTonBUT', Login::STYLESHEET));
