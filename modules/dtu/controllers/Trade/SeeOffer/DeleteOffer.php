@@ -9,6 +9,13 @@ class DeleteOffer
     const string PATH = '/offre/delete';
     const string METH = 'GET';
 
+    /**
+     * Controle si l'utilisateur est connecté et propriétaire de l'offre avant de la supprimer.
+     * Redirige vers la page de connexion si l'utilisateur n'est pas connecté.
+     * Redirige vers la page du marketplace si l'offre n'existe pas ou si l'utilisateur n'est pas le propriétaire.
+     * Supprime l'offre et redirige vers la page du marketplace si toutes les conditions sont remplies.
+     */
+
     function control(): void
     {
         if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
