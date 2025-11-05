@@ -4,5 +4,13 @@
     },
   "require": {
     "ext-pdo": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "controllers\\": "modules/dtu/controllers/",
+      "views\\": "modules/dtu/views/",
+      "models\\": "modules/dtu/models/",
+      "dtu\\": "modules/dtu/"
+    }
   }
 }
