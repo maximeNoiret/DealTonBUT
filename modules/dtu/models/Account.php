@@ -35,7 +35,7 @@ class Account {
     $hashedToken = hash('sha256', $token);
     $db->insertToken($email, $token);
     $verifyLink = 'https://' . self::DOMAIN_NAME .
-      '/user/register/verify?username=' . urlencode($username) . '&email=' . urlencode($email) . '&token=' . $token;
+      '/user/register/verify?token=' . $token;
     if (!Mailer::sendVerificationEmail($email, $verifyLink)) {
       return 'mailer_error';
     };

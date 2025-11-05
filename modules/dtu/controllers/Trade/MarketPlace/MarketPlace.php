@@ -37,7 +37,7 @@ class MarketPlace implements Controller {
    * @return string The HTML that contain the info of the offers
    */
   public static function getOffers(): string {
-    $sort = $_GET['sort'];
+    $sort = $_GET['sort'] ?? null;
     $query =
       'SELECT u.username as \'username\', title, description, price, deadline
        FROM offer o

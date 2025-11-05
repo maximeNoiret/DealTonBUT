@@ -58,8 +58,8 @@ class DataBase {
   // NOTE: this is very unsafe!
   /**
    * @description Executes a raw SQL query.
-   * @param string $query The SQL query to execute.
-   * @return void
+   * @param string $queryString The SQL query to execute.
+   * @return array<mixed> The result set as an associative array.
    */
   public function executeQuery(string $queryString): array {
     $query = $this->dbConn->prepare($queryString);
@@ -71,9 +71,7 @@ class DataBase {
    * @description Registers a new account in the database.
    * @param string $username The desired username for the new account.
    * @param string $email The email address associated with the new account.
-   * @param string $password The password for the new account.
    * @return void
-   * @throws AccountAlreadyExists
    */
   public function registerAccount (
     string $username,
@@ -92,7 +90,7 @@ class DataBase {
   /**
    * @param string $email User whose role to set
    * @param string $role Role to set
-   * @return void
+   * @return bool True on success, false on failure
    */
   public function setRole(string $email, string $role): bool {
     $query = $this->dbConn->prepare(
@@ -226,7 +224,7 @@ class DataBase {
    * @description Return the offers in function of the args given ( the args are MySQL operator), see MarketPlace->getOffers() for the used method
    * @param string $orderBy Type of the sort (eg : COST ( order by the cost of the offer ))
    * @param string $suffixe Supplementary information for the sort (eg : ASC ( Ascending order ))
-   * @return array
+   * @return array<mixed> The list of offers
    * @deprecated
    */
   public function getOffers(string $orderBy, string $suffixe): array {
@@ -483,8 +481,20 @@ class DataBase {
     $query = $this->dbConn->prepare('SELECT role FROM user_ WHERE email = :email');
     $query->bindValue('email', $email);
     $query->execute();
+    /**
+     * @var array<string, string>|false $result
+     */
     $result = $query->fetch(PDO::FETCH_ASSOC);
     return $result && $result['role'] != 'not-verified';
+  }
+
+  public function getEmailFromToken(string $token): string
+  {
+    $query = $this->dbConn->prepare(
+      'SELECT email FROM token WHERE token = :token');
+    $query->bindValue('token', $token);
+    $query->execute();
+    return (string) $query->fetchColumn();
   }
 }
 
