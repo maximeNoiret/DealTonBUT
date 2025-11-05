@@ -76,19 +76,30 @@ class DataBase {
    */
   public function registerAccount (
     string $username,
-    string $email,
-    string $password
+    string $email
   ): void {
-    $hashedpwd = password_hash($password, PASSWORD_DEFAULT);
+    //$hashedpwd = password_hash($password, PASSWORD_DEFAULT);
     $query = $this->dbConn->prepare(
-      'INSERT INTO user_(email, username, hashedpwd)
-      VALUES (:email, :username, :hashedpwd)');
+      'INSERT INTO user_(email, username)
+      VALUES (:email, :username)');
 
     //
     $query->bindValue('email', $email);
     $query->bindValue('username', $username);
-    $query->bindValue('hashedpwd', $hashedpwd);
     $query->execute();
+  }
+
+  /**
+   * @param string $email User whose role to set
+   * @param string $role Role to set
+   * @return void
+   */
+  public function setRole(string $email, string $role): bool {
+    $query = $this->dbConn->prepare(
+      'UPDATE user_ SET role = :role WHERE email = :email');
+    $query->bindValue('email', $email);
+    $query->bindValue('role', $role);
+    return $query->execute();
   }
 
   /**
