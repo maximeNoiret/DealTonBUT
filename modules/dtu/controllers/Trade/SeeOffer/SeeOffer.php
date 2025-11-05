@@ -19,14 +19,14 @@ class SeeOffer
   ];
 
   /**
-   * @var array<string, mixed> Détails de l'offre récupérés de la base de données.
+   * @var array<string, mixed> Offer details retrieved from the database.
    */
   static array $offer;
   static int $id;
 
   /**
-   * Constructeur de la classe SeeOffer.
-   * Récupère les détails de l'offre à partir de la base de données en utilisant l'ID fourni dans les paramètres GET.
+   * SeeOffer class constructor.
+   * Retrieves offer details from the database using the ID provided in GET parameters.
    */
   public function __construct() {
     if (isset($_GET['id']) && is_numeric($_GET['id'])) {
@@ -41,14 +41,14 @@ class SeeOffer
   }
 
   /**
-   * @return bool Retourne true si l'utilisateur connecté est le propriétaire de l'offre, sinon false.
+   * @return bool Returns true if the logged-in user is the offer owner, otherwise false.
    */
   public function isOwnerOfOffer(): bool {
     return isset($_SESSION['email']) && $_SESSION['email'] === self::$offer['owner'];
   }
 
   /**
-   * @return string Retourne le code HTML du bouton approprié en fonction de la propriété de l'offre.
+   * @return string Returns the appropriate HTML button code based on offer ownership.
    */
   public function buttonOffer(): string{
     if ($this->isOwnerOfOffer()) {
