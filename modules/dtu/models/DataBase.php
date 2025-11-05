@@ -447,7 +447,8 @@ class DataBase {
         $query->bindValue('email', $email);
         $query->bindValue('subject_name', $subject_name);
         $query->execute();
-        return $query->fetchColumn();
+        $results = (float)$query->fetchColumn();
+        return $results;
     }
 
     /**

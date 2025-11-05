@@ -21,7 +21,8 @@ class BuyOffer
             exit;
         }
 
-        $offer = DataBase::getInstance()->getOffer($_GET['id']);
+        $ouid = (int) $_GET['id'];
+        $offer = DataBase::getInstance()->getOffer($ouid);
 
         if (!$offer) {
             header('Location: /marketplace');
@@ -33,7 +34,12 @@ class BuyOffer
             exit;
         }
 
-        DataBase::getInstance()->buyOffer($_SESSION['email'],$_GET['id']);
+        if (!isset($_SESSION['email']) || !is_string($_SESSION['email'])) {
+            header('Location: /marketplace');
+            exit;
+        }
+        $email = trim($_SESSION['email']);
+        DataBase::getInstance()->buyOffer($email, $ouid);
         header('Location: /marketplace');
     }
 

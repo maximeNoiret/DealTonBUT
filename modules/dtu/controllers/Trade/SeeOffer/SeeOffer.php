@@ -18,7 +18,8 @@ class SeeOffer
     '/_assets/styles/navbar.css'
   ];
 
-  static array $offer;
+    /** @var array<string, mixed> */
+    static array $offer;
 
   /**
    * Constructeur de la classe SeeOffer.
@@ -29,7 +30,8 @@ class SeeOffer
           self::$offer = [];
           return;
       }
-    self::$offer = DataBase::getInstance()->getOffer($_GET['id']);
+      $ouid = (int) $_GET['id'];
+      self::$offer = DataBase::getInstance()->getOffer($ouid) ?: [];
   }
 
   /**
@@ -42,16 +44,21 @@ class SeeOffer
   /**
    * @return string Retourne le code HTML du bouton approprié en fonction de la propriété de l'offre.
    */
-  public function buttonOffer(): string{
-    if ($this->isOwnerOfOffer() && !DataBase::getInstance()->offersInTransaction($_GET['id'])) {
-      return '<a class="button-delete" href="/offre/delete?id=' . $_GET['id'] . '">Delete</a>';
+public function buttonOffer(): string {
+    $ouid = isset($_GET['id']) && is_numeric($_GET['id']) ? (int) $_GET['id'] : 0;
+    if ($ouid <= 0) {
+        return '';
     }
-    else if(!DataBase::getInstance()->offersInTransaction($_GET['id']))
-    {
-      return '<a class="button-buy" href="/offre/buy?id=' . $_GET['id'] . '">Buy</a>';
+
+    if ($this->isOwnerOfOffer() && !DataBase::getInstance()->offersInTransaction($ouid)) {
+        return '<a class="button-delete" href="/offre/delete?id=' . $ouid . '">Delete</a>';
+    } elseif (!DataBase::getInstance()->offersInTransaction($ouid)) {
+        return '<a class="button-buy" href="/offre/buy?id=' . $ouid . '">Buy</a>';
     }
+
     return '';
-  }
+}
+
   function control(): void
   {
     if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
