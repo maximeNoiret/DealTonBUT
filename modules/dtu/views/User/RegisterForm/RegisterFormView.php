@@ -14,10 +14,6 @@ class   RegisterFormView extends AbstractView {
    * @var string : Value for a html attribute "for="
    */
   const string EMAIL_VALUE='email';
-  /**
-   * @var string : Value for a html attribute "for="
-   */
-  const string PASSWORD_VALUE='password';
 
   /**
    * @description Constructor of the class LoginFormViews
@@ -43,14 +39,17 @@ class   RegisterFormView extends AbstractView {
     $values = [
       'USERNAME_KEY'=>self::USERNAME_VALUE,
       'EMAIL_KEY'=>self::EMAIL_VALUE,
-      'PASSWORD_KEY'=>self::PASSWORD_VALUE,
       'ACTION_KEY'=>'/user/register'
     ];
     if ($this->error !== null) {
       $errorMessage = match($this->error) {
-        'account_already_exists' => 'An account with this email already exists.',
-        'database_error' => 'A database error occurred. Please try again.',
-        default => 'An unknown error occurred.'
+        'account_already_exists' => '<span class="error-text">Cette addresse est déjà utilisé.</span>',
+        'database_error' => '<span class="error-text">Une erreur de base de données s\'est produite.</span>',
+        'mailer_error' => '<span class="error-text">Une erreur de l\'envoi de l\'email s\'est produite.</span>',
+        'verification_mail_sent' => 'Un email de vérification a été envoyé à votre adresse.',
+        'verification_link_expired' => '<span class="error-text">Le lien de vérification a expiré. Veuillez vous inscrire à nouveau.</span>',
+        'already_sent' => '<span class="error-text">Un email de vérification a déjà été envoyé récemment. Veuillez vérifier votre boîte de réception.</span>',
+        default => '<span class="error-text">Une erreur inconnue s\'est produite.</span><br>' . $this->error
       };
       $values['ERROR_MESSAGE'] = $errorMessage;
     } else {

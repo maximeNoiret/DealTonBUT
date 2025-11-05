@@ -3,6 +3,7 @@
 namespace controllers\User\PasswordForgot;
 
 use core\controllers\Controller;
+use Random\RandomException;
 use views\User\ForgotPassword\ForgotPasswordView;
 //use views\User\ForgotPasswordView;
 use models\Account;
@@ -17,11 +18,15 @@ class PasswordForgotConfirm implements Controller {
     DIRECTORY_SEPARATOR . '_assets' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'loginSingnin.css'
   ];
 
+  /**
+   * @throws RandomException
+   */
   function control(): void {
     /**
      * @var array<string, string> $_POST
      */
-    echo (new ForgotPasswordView(Account::forgotPassword($_POST['email'])))->render('Forgot Password - DealTonBUT', self::STYLESHEET);
+    echo new ForgotPasswordView(Account::forgotPassword($_POST['email']))
+      ->render('Forgot Password - DealTonBUT', self::STYLESHEET);
   }
 
   static function resolve(string $path, string $meth): bool {

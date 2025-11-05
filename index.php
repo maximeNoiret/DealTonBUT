@@ -1,21 +1,7 @@
 <?php
 session_start();
-/* Old version, before factorisation of the project */
-/*use controllers\Account;
-use controllers\DeleteAccount;
-use controllers\Settings;
-
-use controllers\AddOffer;
-use controllers\AddOfferConfirm;
-use controllers\Register;
-use controllers\RegisterConfirm;
-use controllers\Main;
-use controllers\PasswordForgot;
-use controllers\PasswordForgotConfirm;
-use controllers\Login;
-use controllers\LoginConfirm;
-use controllers\Logout;
-use controllers\MarketPlace;*/
+error_reporting(E_ALL);
+ini_set('display_errors',"On");
 
 use controllers\Main;
 use controllers\Trade\AddOffer\AddOffer;
@@ -33,6 +19,9 @@ use controllers\User\PasswordForgot\PasswordForgot;
 use controllers\User\PasswordForgot\PasswordForgotConfirm;
 use controllers\User\PasswordForgot\PasswordReset;
 use controllers\User\PasswordForgot\PasswordResetConfirm;
+use controllers\User\Register\RegisterVerify;
+use controllers\User\Register\RegisterVerifyConfirm;
+use controllers\User\Settings\Settings;
 use controllers\User\Register\Register;
 use controllers\User\Register\RegisterConfirm;
 use controllers\User\Settings\Settings;
@@ -49,6 +38,8 @@ $meth = $_SERVER['REQUEST_METHOD'];
 $controllers = [
   new Register(),
   new RegisterConfirm(),
+  new RegisterVerify(),
+  new RegisterVerifyConfirm(),
   new Main(),
   new PasswordForgot(),
   new PasswordForgotConfirm(),

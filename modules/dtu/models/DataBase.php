@@ -77,25 +77,29 @@ class DataBase {
    */
   public function registerAccount (
     string $username,
-    string $email,
-    string $password
+    string $email
   ): void {
-    $query = $this->dbConn->prepare('SELECT email FROM user_ WHERE email = :email');
-    $query->bindValue('email', $email);  // already uses PDO_PARAM_STR
-    $query->execute();
-    if ($query->fetch()) {
-      throw new AccountAlreadyExists();
-    }
-    $hashedpwd = password_hash($password, PASSWORD_DEFAULT);
+    //$hashedpwd = password_hash($password, PASSWORD_DEFAULT);
     $query = $this->dbConn->prepare(
-      'INSERT INTO user_(email, username, hashedpwd)
-      VALUES (:email, :username, :hashedpwd)');
+      'REPLACE INTO user_(email, username)
+      VALUES (:email, :username)');
 
-    //
     $query->bindValue('email', $email);
     $query->bindValue('username', $username);
-    $query->bindValue('hashedpwd', $hashedpwd);
     $query->execute();
+  }
+
+  /**
+   * @param string $email User whose role to set
+   * @param string $role Role to set
+   * @return void
+   */
+  public function setRole(string $email, string $role): bool {
+    $query = $this->dbConn->prepare(
+      'UPDATE user_ SET role = :role WHERE email = :email');
+    $query->bindValue('email', $email);
+    $query->bindValue('role', $role);
+    return $query->execute();
   }
 
   /**
@@ -469,6 +473,18 @@ class DataBase {
     if ($balance) {
       $_SESSION['balance'] = $balance;
     }
+  }
+
+  /**
+   * @param string $email The email address of the user.
+   * @return bool True if the account is verified, false otherwise.
+   */
+  public function isAccountVerified(string $email): bool {
+    $query = $this->dbConn->prepare('SELECT role FROM user_ WHERE email = :email');
+    $query->bindValue('email', $email);
+    $query->execute();
+    $result = $query->fetch(PDO::FETCH_ASSOC);
+    return $result && $result['role'] != 'not-verified';
   }
 }
 
