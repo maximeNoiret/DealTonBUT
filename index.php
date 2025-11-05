@@ -61,7 +61,7 @@ $controllers = [
 
 foreach ($controllers as $controller) {
   if ($controller::resolve($path, $meth)) {
-    if (isset($_SESSION['email']) && $_SESSION['logged-in'] === true) {
+    if (isset($_SESSION['email']) && isset($_SESSION['logged-in']) && $_SESSION['logged-in'] === true) {
       DataBase::getInstance()->updateBalance($_SESSION['email']);
     }
     $controller->control();
