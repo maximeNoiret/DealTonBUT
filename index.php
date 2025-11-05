@@ -3,8 +3,20 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors',"On");
 
+use controllers\Main;
+use controllers\Trade\AddOffer\AddOffer;
+use controllers\Trade\AddOffer\AddOfferConfirm;
+use controllers\Trade\DeleteOffer\DeleteOffer;
+use controllers\Trade\MarketPlace\MarketPlace;
+use controllers\Trade\SeeOffer\SeeOffer;
+use controllers\Trade\TradeSubjectPoint\TradeSubjectPoint;
 use controllers\User\AccountPage\Account;
 use controllers\User\AccountPage\DeleteAccount;
+use controllers\User\Login\Login;
+use controllers\User\Login\LoginConfirm;
+use controllers\User\Login\Logout;
+use controllers\User\PasswordForgot\PasswordForgot;
+use controllers\User\PasswordForgot\PasswordForgotConfirm;
 use controllers\User\PasswordForgot\PasswordReset;
 use controllers\User\PasswordForgot\PasswordResetConfirm;
 use controllers\User\Register\RegisterVerify;
@@ -12,17 +24,7 @@ use controllers\User\Register\RegisterVerifyConfirm;
 use controllers\User\Settings\Settings;
 use controllers\User\Register\Register;
 use controllers\User\Register\RegisterConfirm;
-use controllers\Main;
-use controllers\User\PasswordForgot\PasswordForgot;
-use controllers\User\PasswordForgot\PasswordForgotConfirm;
-use controllers\User\Login\Login;
-use controllers\User\Login\LoginConfirm;
-use controllers\User\Login\Logout;
-use controllers\Trade\MarketPlace\MarketPlace;
-use controllers\Trade\AddOffer\AddOffer;
-use controllers\Trade\AddOffer\AddOfferConfirm;
-use controllers\Trade\TradeSubjectPoint\TradeSubjectPoint;
-
+use controllers\User\Settings\Settings;
 use models\DataBase;
 
 include __DIR__ . '/_assets/includes/Autoloader.php';
@@ -51,6 +53,8 @@ $controllers = [
   new DeleteAccount(),
   new AddOffer(),
   new AddOfferConfirm(),
+  new SeeOffer(),
+  new DeleteOffer(),
   new TradeSubjectPoint(),
   new PasswordReset(),
   new PasswordResetConfirm()
