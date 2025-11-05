@@ -13,20 +13,32 @@ class Account {
    * @description Registers a new account in the database.
    * @param string $username The desired username for the new account.
    * @param string $email The email address associated with the new account.
-   * @param string $password The password for the new account.
-   * @return void
-   * @throws AccountAlreadyExists
+   * @return string Status message indicating the result of the operation.
+   * @throws AccountAlreadyExists|RandomException
    */
-  function registerAccount(
+  static function registerAccount(
     string $username,
     string $email,
-    string $password,
-  ): void {
-    DataBase::getInstance()->registerAccount(
-      $username,
-      $email,
-      $password
-    );
+  ): string {
+    $db = DataBase::getInstance();
+    if ($db->accountExists($email)) {
+      throw new AccountAlreadyExists();
+    }
+    $db = DataBase::getInstance();
+    // check if account already tried creating an account with alive ttl
+    if ($db->alreadyForgotPassword($email)) {
+      return 'already_sent';
+    }
+
+    $token = bin2hex(random_bytes(16));
+    $hashedToken = hash('sha256', $token);
+    $db->insertToken($email, $token);
+    $verifyLink = 'https://' . self::DOMAIN_NAME .
+      '/user/register/validate?username=' . urlencode($username) . '&email=' . urlencode($email) . '&token=' . $token;
+    if (!Mailer::sendVerificationEmail($email, $verifyLink)) {
+      return 'mailer_error';
+    };
+    return 'verification_mail_sent';
   }
 
 /**
@@ -58,33 +70,25 @@ class Account {
      * @throws RandomException
      */
     static function forgotPassword(string $email): string {
-    // check if account exists at all
-        $db = DataBase::getInstance();
-        if(!$db->accountExists($email)) {
-          return 'message';
-        }
-        // check if account already requested password reset with alive ttl
-        if ($db->alreadyForgotPassword($email)) {
-          return 'already_sent';
-        }
-        // at this point, account exists AND hasn't already requested a password reset.
-
-        // TODO:
-        // generate a random token
-        $token = bin2hex(random_bytes(16));
-        // hash the token for storing
-        $hashedToken = hash('sha256', $token);
-        // store (email, token, now+10min) into 'token' relation
-        // NOTE: 'token' relation has default deadline value set to now + 10 min.
-        $db->insertToken($email, $token);
-        // - [optional] encrypt (email, token) into single string
-        // mail a GET link with "/user/validate?mail=:mail&token=:token" (or "/user/validate?token=:token" if encrypted)
-        $resetLink = 'https://' . self::DOMAIN_NAME .
-          '/user/validate?email=' . urlencode($email) . '&token=' . $token;
-        if (!Mailer::sendForgotPassword($email, $resetLink)) {
-          return 'message';
-        };
+      // check if account exists at all
+      $db = DataBase::getInstance();
+      if (!$db->accountExists($email)) {
         return 'message';
+      }
+      // check if account already requested password reset with alive ttl
+      if ($db->alreadyForgotPassword($email)) {
+        return 'already_sent';
+      }
 
-  }
+      $token = bin2hex(random_bytes(16));
+      $hashedToken = hash('sha256', $token);
+      $db->insertToken($email, $token);  // TODO: update db
+      $resetLink = 'https://' . self::DOMAIN_NAME .
+        '/user/validate?email=' . urlencode($email) . '&token=' . $token;
+      if (!Mailer::sendForgotPassword($email, $resetLink)) {
+        return 'message';
+      };
+      return 'message';
+
+    }
 }

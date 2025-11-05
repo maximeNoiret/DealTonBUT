@@ -2,7 +2,7 @@
 
 namespace exceptions;
 
-class AccountAlreadyExists extends \Exception
+class AccountDoesntExist extends \Exception
 {
 
 }

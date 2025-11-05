@@ -2,8 +2,6 @@
 
 namespace core\views;
 
-use Couchbase\ViewException;
-
 abstract class AbstractView {
   /**
    * @description Build a .html header for the pages
@@ -40,14 +38,12 @@ abstract class AbstractView {
    * @description Build the html of the <body> section of a page, by taking the html in the corresponding .html file,
    * and use the method templateValue() on the keys values
    * @return string
-   *
-   * @throws ViewException
    */
   public function body(): string {
     $body = file_get_contents($this->path());
-    if (!$body) {
-      throw new ViewException('Unable to load <body>');
-    }
+//    if (!$body) {
+//      throw new ViewException('Unable to load <body>');
+//    }
     /**
      * @var string $value
      */
@@ -84,7 +80,6 @@ abstract class AbstractView {
    * @param array<string> $stylesheet : Array representing all the .css file used for the page
    * @return string
    *
-   * @throws ViewException
    */
   function render(string $title, array $stylesheet): string {
     return $this->header($title, $stylesheet, $this->navbarText()) . $this->body() . $this->footer();

@@ -1,25 +1,21 @@
 <?php
 
-namespace views\User\RegisterForm;
+namespace dtu\views\User\RegisterForm;
 
 use core\views\AbstractView;
-use mysql_xdevapi\SqlStatementResult;
 
-class   RegisterFormView extends AbstractView {
+class RegisterFormPasswordView extends AbstractView {
   /**
    * @var string : Value for a html attribute "for="
    */
-  const string USERNAME_VALUE='username';
-  /**
-   * @var string : Value for a html attribute "for="
-   */
-  const string EMAIL_VALUE='email';
+  const string PASSWORD_VALUE='password';
 
   /**
    * @description Constructor of the class LoginFormViews
+   * @param string|null $email
    * @param string|null $error
    */
-  public function __construct(private ?string $error = null )
+  public function __construct(private ?string $email = null, private ?string $error = null )
   {
   }
 
@@ -28,7 +24,7 @@ class   RegisterFormView extends AbstractView {
    * @return string
    */
   function path(): string {
-    return __DIR__ . DIRECTORY_SEPARATOR . 'RegisterForm.html';
+    return __DIR__ . DIRECTORY_SEPARATOR . 'RegisterFormPassword.html';
   }
 
   /**
@@ -37,17 +33,13 @@ class   RegisterFormView extends AbstractView {
    */
   function templateValues(): array {
     $values = [
-      'USERNAME_KEY'=>self::USERNAME_VALUE,
-      'EMAIL_KEY'=>self::EMAIL_VALUE,
-      'ACTION_KEY'=>'/user/register'
+      'EMAIL'=>$this->email,
+      'PASSWORD_KEY'=>self::PASSWORD_VALUE,
+      'ACTION_KEY'=>'/user/register/verify'
     ];
     if ($this->error !== null) {
       $errorMessage = match($this->error) {
-        'account_already_exists' => '<span class="error-text">Cette addresse est déjà utilisé.</span>',
         'database_error' => '<span class="error-text">Une erreur de base de données s\'est produite.</span>',
-        'mailer_error' => '<span class="error-text">Une erreur de l\'envoi de l\'email s\'est produite.</span>',
-        'verification_mail_sent' => 'Un email de vérification a été envoyé à votre adresse.',
-        'verification_link_expired' => '<span class="error-text">Le lien de vérification a expiré. Veuillez vous inscrire à nouveau.</span>',
         default => '<span class="error-text">Une erreur inconnue s\'est produite.</span>'
       };
       $values['ERROR_MESSAGE'] = $errorMessage;

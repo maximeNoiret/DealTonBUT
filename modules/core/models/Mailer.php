@@ -77,6 +77,7 @@ class Mailer {
   /**
    * @param $email : Email of the user to send reset link.
    * @param $link : Reset link.
+   * @return bool : Returns true if mail sent successfully, false otherwise.
    */
   public static function sendForgotPassword(string $email, string $link): bool {
     $body = '<h1>DealTonBUT - Mot de passe oublié</h1>
@@ -102,7 +103,12 @@ class Mailer {
       true);
   }
 
-  public static function sendMailVerification(string $email, string $link): bool {
+  /**
+   * @param $email : Email of the user to send verification link.
+   * @param $link : Verification link.
+   * @return bool : Returns true if mail sent successfully, false otherwise.
+   */
+  public static function sendVerificationEmail(string $email, string $link): bool {
     $body = '<h1>DealTonBUT - Vérification de l\'adresse e-mail</h1>
 <p>Vous recevez ce mail suite à votre inscription sur DealTonBUT.</p>
 <p>Veuillez cliquer <a href="' . $link . '">ICI</a> afin de vérifier votre adresse e-mail.</p><br>

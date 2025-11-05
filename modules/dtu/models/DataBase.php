@@ -79,12 +79,6 @@ class DataBase {
     string $email,
     string $password
   ): void {
-    $query = $this->dbConn->prepare('SELECT email FROM user_ WHERE email = :email');
-    $query->bindValue('email', $email);  // already uses PDO_PARAM_STR
-    $query->execute();
-    if ($query->fetch()) {
-      throw new AccountAlreadyExists();
-    }
     $hashedpwd = password_hash($password, PASSWORD_DEFAULT);
     $query = $this->dbConn->prepare(
       'INSERT INTO user_(email, username, hashedpwd)

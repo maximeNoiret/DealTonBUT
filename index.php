@@ -1,5 +1,8 @@
 <?php
 session_start();
+error_reporting(E_ALL);
+ini_set('display_errors',"On");
+
 /* Old version, before factorisation of the project */
 /*use controllers\Account;
 use controllers\DeleteAccount;
@@ -20,6 +23,8 @@ use controllers\User\AccountPage\Account;
 use controllers\User\AccountPage\DeleteAccount;
 use controllers\User\PasswordForgot\PasswordReset;
 use controllers\User\PasswordForgot\PasswordResetConfirm;
+use controllers\User\Register\RegisterVerify;
+use controllers\User\Register\RegisterVerifyConfirm;
 use controllers\User\Settings\Settings;
 use controllers\User\Register\Register;
 use controllers\User\Register\RegisterConfirm;
@@ -47,6 +52,8 @@ $meth = $_SERVER['REQUEST_METHOD'];
 $controllers = [
   new Register(),
   new RegisterConfirm(),
+  new RegisterVerify(),
+  new RegisterVerifyConfirm(),
   new Main(),
   new PasswordForgot(),
   new PasswordForgotConfirm(),

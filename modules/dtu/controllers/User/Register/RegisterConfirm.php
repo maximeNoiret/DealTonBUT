@@ -4,6 +4,7 @@ namespace controllers\User\Register;
 use core\controllers\Controller;
 use exceptions\AccountAlreadyExists;
 use models\Account;
+use Random\RandomException;
 use views\User\RegisterForm\RegisterFormView;
 //use views\User\RegisterFormView;
 
@@ -11,33 +12,22 @@ class RegisterConfirm implements Controller {
   
   const string PATH = '/user/register';
   const string METH = 'POST';
-  const array STYLESHEET = [
-    DIRECTORY_SEPARATOR . '_assets' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'style.css'
-  ];
+  const array STYLESHEET = Register::STYLESHEET;
 
   /**
+   * @throws AccountAlreadyExists
+   * @throws RandomException
    */
   function control(): void {
-    $account = new Account();
-    try {
 
-        /**
-         * @var array<string, string> $_POST
-         */
 
-      $account->registerAccount(
-        $_POST['username'],
-        $_POST['email'],
-        $_POST['password']);
-    } catch (AccountAlreadyExists $e) {
-      echo (new RegisterFormView('account_already_exists'))->render("Register - DealTonBUT", self::STYLESHEET);
-    }
-    // At this point, account has been created.
-    session_regenerate_id(true);
-    $_SESSION['username'] = $_POST['username'];
-    $_SESSION['email'] = $_POST['email'];
-    $_SESSION['logged-in'] = true;
-    header('Location: /marketplace');
+  try {
+    echo new RegisterFormView(Account::registerAccount($_POST['username'], $_POST['email']))
+      ->render("Register - DealTonBUT", self::STYLESHEET);
+  } catch (AccountAlreadyExists $e) {
+    echo new RegisterFormView('account_already_exists')->render("Register - DealTonBUT", self::STYLESHEET);
+  }
+
   }
 
   static function resolve(string $path, string $meth): bool {

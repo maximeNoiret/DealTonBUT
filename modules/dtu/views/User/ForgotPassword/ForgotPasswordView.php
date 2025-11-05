@@ -21,11 +21,11 @@ class ForgotPasswordView extends AbstractView
   {
     $values = [
       'EMAIL_KEY' => self::EMAIL_VALUE,
-    ];     // TODO: add values if needed
+    ];
     if ($this->status !== null) {
       $statusMessage = match($this->status) {
         'message' => 'Si votre email éxiste, vous recevrez un mail.',
-        'already_sent' => '<span class=error-text>Vous avez déjà une demande active.</span>',  // TODO: find better way, this is bad.
+        'already_sent' => '<span class=error-text>Vous avez déjà une demande active.</span>',
         default => $this->status
       };
       $values['MESSAGE'] = $statusMessage;
