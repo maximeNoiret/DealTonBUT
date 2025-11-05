@@ -74,7 +74,7 @@ class MarketPlace implements Controller {
         /**
          * @var array<string, string> $offer
          */
-        $ret = $ret . (new Offer($offer))->render('article', 'offer-card');
+        $ret = $ret . (new Offer($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
       }
       return $ret . '</section>';
     }
