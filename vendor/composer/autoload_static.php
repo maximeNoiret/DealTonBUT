@@ -11,6 +11,22 @@ class ComposerStaticInit6b4aab63cc4f1d90afb5d1add1029330
     );
 
     public static $prefixLengthsPsr4 = array (
+        'v' => 
+        array (
+            'views\\' => 6,
+        ),
+        'm' => 
+        array (
+            'models\\' => 7,
+        ),
+        'd' => 
+        array (
+            'dtu\\' => 4,
+        ),
+        'c' => 
+        array (
+            'controllers\\' => 12,
+        ),
         'P' => 
         array (
             'PHPMailer\\PHPMailer\\' => 20,
@@ -18,6 +34,22 @@ class ComposerStaticInit6b4aab63cc4f1d90afb5d1add1029330
     );
 
     public static $prefixDirsPsr4 = array (
+        'views\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/modules/dtu/views',
+        ),
+        'models\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/modules/dtu/models',
+        ),
+        'dtu\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/modules/dtu',
+        ),
+        'controllers\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/modules/dtu/controllers',
+        ),
         'PHPMailer\\PHPMailer\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',

@@ -6,5 +6,9 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'views\\' => array($baseDir . '/modules/dtu/views'),
+    'models\\' => array($baseDir . '/modules/dtu/models'),
+    'dtu\\' => array($baseDir . '/modules/dtu'),
+    'controllers\\' => array($baseDir . '/modules/dtu/controllers'),
     'PHPMailer\\PHPMailer\\' => array($vendorDir . '/phpmailer/phpmailer/src'),
 );
