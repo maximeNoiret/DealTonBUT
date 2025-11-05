@@ -1,6 +1,6 @@
 <?php
 
-namespace controllers\Trade\SeeOffer;
+namespace controllers\Trade\DeleteOffer;
 
 use models\DataBase;
 
