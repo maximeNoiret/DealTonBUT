@@ -60,10 +60,11 @@ class DataBase {
    * @description Executes a raw SQL query.
    * @param string $query The SQL query to execute.
    * @return void
-   * @deprecated
    */
-  public function executeQuery(string $query): void {
-    $this->dbConn->prepare($query)->execute();
+  public function executeQuery(string $queryString): array {
+    $query = $this->dbConn->prepare($queryString);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_ASSOC);
   }
 
   /**
@@ -106,7 +107,7 @@ class DataBase {
     $query = $this->dbConn->prepare('SELECT email FROM user_ WHERE email = :email');
     $query->bindValue('email', $email);
     $query->execute();
-    return $query->fetch() !== null;
+    return $query->fetch() !== false;
   }
 
   /**
@@ -171,6 +172,39 @@ class DataBase {
     return $query->fetch() !== false;
   }
 
+  public function updatePassword(string $email, string $hashedPassword): bool
+  {
+    $query = $this->dbConn->prepare(
+      'UPDATE user_ SET hashedpwd = :hashedpwd WHERE email = :email');
+    $query->bindValue('hashedpwd', $hashedPassword);
+    $query->bindValue('email', $email);
+    return $query->execute();
+  }
+
+  /**
+   * @param string $email The email address associated with the token.
+   * @param string $token The password reset token.
+   * @return bool True if the token is valid for the given email, false otherwise.
+   */
+  public function checkToken(string $email, string $token): bool {
+    $query = $this->dbConn->prepare(
+      'SELECT email FROM token WHERE email = :email AND token = :token AND deadline > CURRENT_TIMESTAMP');
+    $query->bindValue('email', $email);
+    $query->bindValue('token', $token);
+    $query->execute();
+    $returnValue = $query->fetch() !== false;
+
+    if ($returnValue) {
+      // delete the token after use
+      $query = $this->dbConn->prepare(
+        'DELETE FROM token WHERE email = :email');
+      $query->bindValue('email', $email);
+      $query->execute();
+    }
+
+    return $returnValue;
+  }
+
     /**
      * @description Inserts a password reset token for the given email.
      * @param string $email The email address associated with the token.
@@ -184,18 +218,43 @@ class DataBase {
     $query->execute();
   }
 
-    /**
-    * @description Retrieves all offers from the database.
-    * @return array<mixed>
+  /**
+   * @description Return the offers in function of the args given ( the args are MySQL operator), see MarketPlace->getOffers() for the used method
+   * @param string $orderBy Type of the sort (eg : COST ( order by the cost of the offer ))
+   * @param string $suffixe Supplementary information for the sort (eg : ASC ( Ascending order ))
+   * @return array
+   * @deprecated
    */
-  public function getOffers(): array {
-    $query = $this->dbConn->prepare(
-      'SELECT ouid, owner, u.username as \'username\', title, description, price, deadline
+  public function getOffers(string $orderBy, string $suffixe): array {
+    if (!isset($orderBy) || $orderBy == '') {
+      $query = $this->dbConn->prepare(
+        'SELECT u.username as \'username\', title, description, price, deadline
        FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email');
-    $query->execute();
-    return $query->fetchAll(PDO::FETCH_ASSOC);
+      $query->execute();
+      return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+    if ($orderBy == 'search-string' && $suffixe == '') {
+      $query = $this->dbConn->prepare(
+        "SELECT u.username as 'username', title, description, price, deadline
+       FROM offer o
+       INNER JOIN user_ u
+       ON o.owner = u.email
+       WHERE title LIKE CONCAT('%',$orderBy,'%')");
+      $query->execute();
+      return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+    else {
+      $query = $this->dbConn->prepare(
+        'SELECT u.username as \'username\', title, description, price, deadline
+       FROM offer o
+       INNER JOIN user_ u
+       ON o.owner = u.email
+       ORDER BY ' . $orderBy . ' ' . $suffixe);
+      $query->execute();
+      return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
   }
 
   /**
@@ -400,12 +459,17 @@ class DataBase {
         }
     }
 
+  /**
+   * @description Updates the SESSION balance of the user.
+   * @param string $email The email address of the user.
+   * @return void
+   */
   public function updateBalance(string $email): void {
     $balance = $this->getBalance($email);
     if ($balance) {
       $_SESSION['balance'] = $balance;
     }
-  } 
+  }
 }
 
 

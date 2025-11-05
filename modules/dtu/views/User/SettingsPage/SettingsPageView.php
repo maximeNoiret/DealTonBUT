@@ -5,27 +5,28 @@ use core\views\AbstractView;
 
 class SettingsPageView extends AbstractView
 {
-  private static self $instance;
+  /**
+   * @description Method that give the path tp the corresponding .html
+   * @return string
+   */
   function path(): string
   {
     return __DIR__ . DIRECTORY_SEPARATOR . 'SettingsPage.html';
   }
 
   /**
-   * @return array<string,mixed>
+   * @description Define value for each keys in the associated .html file
+   * @return array<string,mixed> : The array that contain the real value that are associated by a key
    */
   public function templateValues(): array
   {
     return [];
   }
 
-  public static function getInstance(): self {
-    if (!isset(self::$instance)) {
-      self::$instance = new self();
-    }
-    return self::$instance;
-  }
-
+  /**
+   * @description Contain the title of the page, that will be shown on the navbar
+   * @return string
+   */
   function navbarText(): string
   {
     return 'Settings';

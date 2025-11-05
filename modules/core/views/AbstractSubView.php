@@ -6,13 +6,16 @@ use core\views\AbstractView;
 
 abstract class AbstractSubView extends AbstractView {
   //create the property "$sectionType", because dynamical property declaration is deprecated
+  /**
+   * @var string : Type of the section (<article>, <div>...)
+   */
   private string $sectionType;
 
   /**
-   * @description construct a header for the subsection
-   * @param string $sectionType
-   * @param string | array<string, string> $sectionClass
-   * @param string $customvalue
+   * @description Construct a header for the subsection
+   * @param string $sectionType : Type of the section (<article>, <div>...)
+   * @param string | array<string, string> $sectionClass : .css class
+   * @param string $customvalue : Name of the page in the navbar (not used)
    * @return string
    **/
   public function header(string $sectionType, string|array $sectionClass, string $customvalue = ''): string {
@@ -22,14 +25,18 @@ abstract class AbstractSubView extends AbstractView {
     return '<' . $sectionType . ' class="' . $classString . '">' . "\n";
   }
 
+  /**
+   * @description Build the footer for the subsection
+   * @return string
+   */
   public function footer(): string {
     return '</' . $this->sectionType . '>';
   }
 
   /**
-   * @description construct the html of the sub view ( ex : an offer )
-   * @param string $sectionType
-   * @param string | array<string, string> $sectionClass
+   * @description Construct the html of the sub view ( ex : an offer )
+   * @param string $sectionType : Type of the section (<article>, <div>...)
+   * @param string | array<string, string> $sectionClass : .css class
    * @return string
    **/
   function render(string $sectionType, string|array $sectionClass): string {
@@ -42,32 +49,15 @@ abstract class AbstractSubView extends AbstractView {
     return '<a href="' . $link . '">' . $this->header($sectionType, $sectionClass) . $this->body() . $this->footer() . '</a>';
   }
 
+  /**
+   * @description Abstract method that contain the path to the corresponding .html
+   * @return string
+   */
   abstract function path(): string;
 
   /**
-   * @description abstract method, of the purpose to replace the palcehoder of an html template by theier true value
-   * @return array<string, string>
-   **/
+   * @description Abstract methode that define value for each keys in the associated .html file
+   * @return array<string,mixed> : The array that contain the real value that are associated by a key
+   */
   abstract function templateValues(): array;
 }
-
-
-/* Old version of this class */
-//abstract class AbstractSubView extends AbstractView {
-//  public function header(string $sectionType, string $sectionClass): string {
-//    return '<' . $sectionType . ' class="' . $sectionClass . '">' . "\n";
-//  }
-//
-//  public function footer(): string {
-//    return '</' . $this->sectionType . '>';
-//  }
-//
-//  function render(string $sectionType, string $sectionClass): string {
-//    $this->sectionType = $sectionType;
-//    return $this->header($sectionType, $sectionClass) . $this->body() . $this->footer();
-//  }
-//
-//  abstract function path(): string;
-//
-//  abstract function templateValues(): array;
-//}

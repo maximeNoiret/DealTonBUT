@@ -12,7 +12,9 @@ class PasswordForgotConfirm implements Controller {
   const string PATH = '/user/forgot';
   const string METH = 'POST';
   const array STYLESHEET = [
-    DIRECTORY_SEPARATOR . '_assets' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'style.css'
+    DIRECTORY_SEPARATOR . '_assets' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'style.css',
+    DIRECTORY_SEPARATOR . '_assets' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'navbar.css',
+    DIRECTORY_SEPARATOR . '_assets' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'loginSingnin.css'
   ];
 
   function control(): void {

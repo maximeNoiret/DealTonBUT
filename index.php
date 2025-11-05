@@ -21,6 +21,8 @@ use controllers\Trade\SeeOffer\DeleteOffer;
 use controllers\Trade\SeeOffer\SeeOffer;
 use controllers\User\AccountPage\Account;
 use controllers\User\AccountPage\DeleteAccount;
+use controllers\User\PasswordForgot\PasswordReset;
+use controllers\User\PasswordForgot\PasswordResetConfirm;
 use controllers\User\Settings\Settings;
 use controllers\User\Register\Register;
 use controllers\User\Register\RegisterConfirm;
@@ -33,6 +35,7 @@ use controllers\User\Login\Logout;
 use controllers\Trade\MarketPlace\MarketPlace;
 use controllers\Trade\AddOffer\AddOffer;
 use controllers\Trade\AddOffer\AddOfferConfirm;
+use controllers\Trade\TradeSubjectPoint\TradeSubjectPoint;
 
 use models\DataBase;
 
@@ -61,7 +64,10 @@ $controllers = [
   new AddOffer(),
   new AddOfferConfirm(),
   new SeeOffer(),
-  new DeleteOffer()
+  new DeleteOffer(),
+  new TradeSubjectPoint(),
+  new PasswordReset(),
+  new PasswordResetConfirm()
 ];
 
 foreach ($controllers as $controller) {
