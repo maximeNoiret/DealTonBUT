@@ -24,7 +24,6 @@ use controllers\User\Register\RegisterVerifyConfirm;
 use controllers\User\Settings\Settings;
 use controllers\User\Register\Register;
 use controllers\User\Register\RegisterConfirm;
-use controllers\User\Settings\Settings;
 use models\DataBase;
 
 include __DIR__ . '/_assets/includes/Autoloader.php';
