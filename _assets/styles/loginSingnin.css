@@ -110,43 +110,46 @@
 @media screen and (max-width:  480px) {
     .description-text{
         width: 80%;
-        height: auto;
-        font-size: 50px;
-    }
+        font-size: 16px;
 
+    }
     .btn-container{
         grid-template-columns: auto;
-        gap: 40px;
-
+        gap: 20px;
     }
 
     .btn-login, .btn-register{
-        padding: 40px 250px;
-        font-size: 50px;
+        padding: 20px 80px;
+        font-size: 18px;
     }
 
     .container-form{
-        width: 80%;
+        width: 90%;
+        padding: 20px;
+        font-size: 16px;
+
+    }
+
+    .container-form{
+        width: 70%;
         height: auto;
         padding: 40px;
-        font-size: 50px;
+        font-size: 20px;
 
     }
 
     .input-class{
-        font-size: 40px;
-        line-height: 40px;
-        margin-bottom: 80px;
+        font-size: 20px;
+        line-height: 10px;
+        margin-bottom: 40px;
     }
 
     .btn-inscription {
-        padding: 20px 60px;
-        font-size: 50px;
-        width: 60%;
+        font-size: 18px;
     }
 
     .oublier{
-        font-size: 50px;
+        font-size: 20px;
 
     }
 }
