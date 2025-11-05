@@ -29,7 +29,7 @@ class RegisterFormPasswordView extends AbstractView {
 
   /**
    * @description Define value for each keys in the associated .html file
-   * @return array<string> : The array that contain the real value that are associated by a key
+   * @return array<string, string|null> : The array that contain the real value that are associated by a key
    */
   function templateValues(): array {
     $values = [

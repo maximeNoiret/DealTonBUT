@@ -21,6 +21,9 @@ class RegisterConfirm implements Controller {
 
 
   try {
+    /**
+     * @var array<string, string> $_POST
+     */
     echo new RegisterFormView(Account::registerAccount($_POST['username'], $_POST['email']))
       ->render("Register - DealTonBUT", self::STYLESHEET);
   } catch (AccountAlreadyExists $e) {

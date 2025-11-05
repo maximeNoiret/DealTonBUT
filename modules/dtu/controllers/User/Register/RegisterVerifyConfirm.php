@@ -16,6 +16,11 @@ class RegisterVerifyConfirm implements Controller
     $db = DataBase::getInstance();
     $tempAccount = ['username' => $_SESSION['username'], 'email' => $_SESSION['email']];
     session_regenerate_id(true);
+    /**
+     * @var array<string, string> $_POST
+     * @var array<string, string> $_SESSION
+     * @var array<string, string> $tempAccount
+     */
     $db->setRole($tempAccount['email'], 'student');  // TODO: separate teachers and students from email format
     $hashedPassword = password_hash($_POST['password'] ?? '', PASSWORD_BCRYPT);
     $db->updatePassword($tempAccount['email'], $hashedPassword);
