@@ -3,22 +3,6 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors',"On");
 
-/* Old version, before factorisation of the project */
-/*use controllers\Account;
-use controllers\DeleteAccount;
-use controllers\Settings;
-
-use controllers\AddOffer;
-use controllers\AddOfferConfirm;
-use controllers\Register;
-use controllers\RegisterConfirm;
-use controllers\Main;
-use controllers\PasswordForgot;
-use controllers\PasswordForgotConfirm;
-use controllers\Login;
-use controllers\LoginConfirm;
-use controllers\Logout;
-use controllers\MarketPlace;*/
 use controllers\User\AccountPage\Account;
 use controllers\User\AccountPage\DeleteAccount;
 use controllers\User\PasswordForgot\PasswordReset;

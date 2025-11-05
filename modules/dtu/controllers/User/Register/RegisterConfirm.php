@@ -15,7 +15,6 @@ class RegisterConfirm implements Controller {
   const array STYLESHEET = Register::STYLESHEET;
 
   /**
-   * @throws AccountAlreadyExists
    * @throws RandomException
    */
   function control(): void {

@@ -80,10 +80,9 @@ class DataBase {
   ): void {
     //$hashedpwd = password_hash($password, PASSWORD_DEFAULT);
     $query = $this->dbConn->prepare(
-      'INSERT INTO user_(email, username)
+      'REPLACE INTO user_(email, username)
       VALUES (:email, :username)');
 
-    //
     $query->bindValue('email', $email);
     $query->bindValue('username', $username);
     $query->execute();
@@ -415,6 +414,18 @@ class DataBase {
     if ($balance) {
       $_SESSION['balance'] = $balance;
     }
+  }
+
+  /**
+   * @param string $email The email address of the user.
+   * @return bool True if the account is verified, false otherwise.
+   */
+  public function isAccountVerified(string $email): bool {
+    $query = $this->dbConn->prepare('SELECT role FROM user_ WHERE email = :email');
+    $query->bindValue('email', $email);
+    $query->execute();
+    $result = $query->fetch(PDO::FETCH_ASSOC);
+    return $result && $result['role'] != 'not-verified';
   }
 }
 

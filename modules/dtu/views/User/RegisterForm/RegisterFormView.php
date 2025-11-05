@@ -48,7 +48,8 @@ class   RegisterFormView extends AbstractView {
         'mailer_error' => '<span class="error-text">Une erreur de l\'envoi de l\'email s\'est produite.</span>',
         'verification_mail_sent' => 'Un email de vérification a été envoyé à votre adresse.',
         'verification_link_expired' => '<span class="error-text">Le lien de vérification a expiré. Veuillez vous inscrire à nouveau.</span>',
-        default => '<span class="error-text">Une erreur inconnue s\'est produite.</span>'
+        'already_sent' => '<span class="error-text">Un email de vérification a déjà été envoyé récemment. Veuillez vérifier votre boîte de réception.</span>',
+        default => '<span class="error-text">Une erreur inconnue s\'est produite.</span><br>' . $this->error
       };
       $values['ERROR_MESSAGE'] = $errorMessage;
     } else {

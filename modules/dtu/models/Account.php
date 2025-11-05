@@ -21,20 +21,21 @@ class Account {
     string $email,
   ): string {
     $db = DataBase::getInstance();
-    if ($db->accountExists($email)) {
+    if ($db->accountExists($email) && $db->isAccountVerified($email)) {
       throw new AccountAlreadyExists();
     }
-    $db = DataBase::getInstance();
     // check if account already tried creating an account with alive ttl
     if ($db->alreadyForgotPassword($email)) {
       return 'already_sent';
     }
 
+    $db->registerAccount($username, $email);
+
     $token = bin2hex(random_bytes(16));
     $hashedToken = hash('sha256', $token);
     $db->insertToken($email, $token);
     $verifyLink = 'https://' . self::DOMAIN_NAME .
-      '/user/register/validate?username=' . urlencode($username) . '&email=' . urlencode($email) . '&token=' . $token;
+      '/user/register/verify?username=' . urlencode($username) . '&email=' . urlencode($email) . '&token=' . $token;
     if (!Mailer::sendVerificationEmail($email, $verifyLink)) {
       return 'mailer_error';
     };
