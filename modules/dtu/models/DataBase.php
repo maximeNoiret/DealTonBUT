@@ -223,7 +223,7 @@ class DataBase {
    * @deprecated
    */
   public function getOffers(string $orderBy, string $suffixe): array {
-    if (!isset($orderBy) || $orderBy == '') {
+    if ($orderBy == '') {
       $query = $this->dbConn->prepare(
         'SELECT u.username as \'username\', title, description, price, deadline
        FROM offer o
