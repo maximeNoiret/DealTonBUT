@@ -64,4 +64,11 @@ class  LoginFormView extends AbstractView {
         return 'Connexion';
     }
 
+  /**
+   * @description Toggle that show the navbar
+   * @return bool
+   */
+  public function showNavbar(): bool {
+    return false;
+  }
 }
