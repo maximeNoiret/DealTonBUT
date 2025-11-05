@@ -26,7 +26,7 @@
     justify-content: center;
     align-items: center;
     gap: 20px;
-    grid-template-columns: auto auto;
+    grid-template-columns: 1fr 1fr; /* ← Plus propre que auto auto */
     max-width: 600px;
     margin: 20px auto;
 }
@@ -122,23 +122,22 @@
     .btn-register, .btn-login {
         padding: 20px 35px;
         font-size: 18px;
-        width: auto;
         min-width: 150px;
     }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 768px) { /* rendre le CSS adaptatif */
 
     .logo-main {
-        width: 150px;
-        margin-top: 15px;
-        margin-bottom: 15px;
+        width: clamp(120px, 30vw, 200px);
+        margin : 15px 0;
     }
 
     .description-text {
         width: 90%;
-        font-size: 16px;
-        padding: 20px;
+        max-width: 600px;
+        font-size: clamp(16px, 2vw, 16px);
+        padding: 1.25rem;
     }
 
     .description-text h1 {
@@ -147,22 +146,22 @@
     }
 
     .container-form {
-        width: 85%;
-        font-size: 16px;
-        padding: 20px;
+        width: 90%;
+        max-width: 400px;
+        font-size: clamp(16px, 2vw, 16px);
+        padding: 1.25rem;
     }
 
     .btn-container {
         grid-template-columns: 1fr;
         gap: 15px;
         padding: 0 20px;
-        justify-content: center;
         max-width: 100%;
     }
 
     .btn-register, .btn-login {
         padding: 18px 30px;
-        font-size: 18px;
+        font-size: 17px;
         width: 100%;
         min-width: unset;
     }

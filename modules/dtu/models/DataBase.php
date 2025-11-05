@@ -47,7 +47,6 @@ class DataBase {
    * @description Retrieves the singleton instance of the DataBase class.
    * @return DataBase The singleton instance.
    */
-
   public static function getInstance(): self {
     if (!isset(self::$instance)) {
       self::$instance = new self();
@@ -55,11 +54,10 @@ class DataBase {
     return self::$instance;
   }
 
-  // NOTE: this is very unsafe!
   /**
    * @description Executes a raw SQL query.
-   * @param string $query The SQL query to execute.
-   * @return void
+   * @param string $queryString The SQL query to execute.
+   * @return array<mixed>
    */
   public function executeQuery(string $queryString): array {
     $query = $this->dbConn->prepare($queryString);
@@ -107,7 +105,7 @@ class DataBase {
     $query = $this->dbConn->prepare('SELECT email FROM user_ WHERE email = :email');
     $query->bindValue('email', $email);
     $query->execute();
-    return $query->fetch() !== null;
+    return $query->fetch() !== false;
   }
 
   /**
@@ -145,6 +143,11 @@ class DataBase {
     return false;
   }
 
+  /**
+   * @description Retrieves the balance for the given email.
+   * @param string $email The email address of the account.
+   * @return int|string|false|null The balance amount, or false/null if not found.
+   */
   public function getBalance(string $email): int|string|false|null {
     $query = $this->dbConn->prepare('
       SELECT balance FROM user_ WHERE email = :email');
@@ -158,13 +161,45 @@ class DataBase {
      * @param string $email The email address to check.
      * @return bool True if a password reset has already been requested, false otherwise.
      */
-
   public function alreadyForgotPassword(string $email): bool {
     $query = $this->dbConn->prepare(
       'SELECT email FROM token WHERE email = :email AND deadline > CURRENT_TIMESTAMP');
     $query->bindValue('email', $email);
     $query->execute();
     return $query->fetch() !== false;
+  }
+
+  public function updatePassword(string $email, string $hashedPassword): bool
+  {
+    $query = $this->dbConn->prepare(
+      'UPDATE user_ SET hashedpwd = :hashedpwd WHERE email = :email');
+    $query->bindValue('hashedpwd', $hashedPassword);
+    $query->bindValue('email', $email);
+    return $query->execute();
+  }
+
+  /**
+   * @param string $email The email address associated with the token.
+   * @param string $token The password reset token.
+   * @return bool True if the token is valid for the given email, false otherwise.
+   */
+  public function checkToken(string $email, string $token): bool {
+    $query = $this->dbConn->prepare(
+      'SELECT email FROM token WHERE email = :email AND token = :token AND deadline > CURRENT_TIMESTAMP');
+    $query->bindValue('email', $email);
+    $query->bindValue('token', $token);
+    $query->execute();
+    $returnValue = $query->fetch() !== false;
+
+    if ($returnValue) {
+      // delete the token after use
+      $query = $this->dbConn->prepare(
+        'DELETE FROM token WHERE email = :email');
+      $query->bindValue('email', $email);
+      $query->execute();
+    }
+
+    return $returnValue;
   }
 
     /**
@@ -184,11 +219,11 @@ class DataBase {
    * @description Return the offers in function of the args given ( the args are MySQL operator), see MarketPlace->getOffers() for the used method
    * @param string $orderBy Type of the sort (eg : COST ( order by the cost of the offer ))
    * @param string $suffixe Supplementary information for the sort (eg : ASC ( Ascending order ))
-   * @return array
+   * @return array<mixed>
    * @deprecated
    */
   public function getOffers(string $orderBy, string $suffixe): array {
-    if (!isset($orderBy) || $orderBy == '') {
+    if ($orderBy == '') {
       $query = $this->dbConn->prepare(
         'SELECT u.username as \'username\', title, description, price, deadline
        FROM offer o
@@ -219,6 +254,35 @@ class DataBase {
     }
   }
 
+  //TODO : correct this phpstan error ( level 10 )
+  /**
+   * @description Retrieves a specific offer by its unique identifier.
+   * @param int $ouid The unique identifier of the offer.
+   * @return array<mixed> The offer details or false if not found.
+   */
+  public function getOffer(int $ouid): array {
+    $query = $this->dbConn->prepare(
+      'SELECT owner, u.username as \'username\', title, description, price, deadline
+       FROM offer o
+       INNER JOIN user_ u
+       ON o.owner = u.email
+       WHERE o.ouid = :ouid');
+    $query->bindValue('ouid', $ouid);
+    $query->execute();
+    return $query->fetch(PDO::FETCH_ASSOC);
+  }
+
+  /**
+   * @description Deletes an offer from the database.
+   * @param int $ouid The unique identifier of the offer to delete.
+   * @return void
+   */
+  public function deleteOffer(int $ouid): void {
+    $query = $this->dbConn->prepare('DELETE FROM offer WHERE ouid = :ouid');
+    $query->bindValue('ouid', $ouid);
+    $query->execute();
+  }
+
   /**
    * @description Retrieves all offers made by a specific user.
    * @param string $email The email address of the user.
@@ -226,7 +290,7 @@ class DataBase {
    */
   public function getUserOffers(string $email): array {
     $query = $this->dbConn->prepare(
-      'SELECT u.username as \'username\', title, description, price, deadline
+      'SELECT o.ouid, owner, u.username as \'username\', title, description, price, deadline
        FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email
@@ -243,7 +307,7 @@ class DataBase {
    */
   public function getBoughtOffers(string $email): array {
     $query = $this->dbConn->prepare(
-      'SELECT u.username as \'username\', o.title, o.description, o.price, o.deadline
+      'SELECT o.ouid, owner, u.username as \'username\', o.title, o.description, o.price, o.deadline
         FROM transaction t
         INNER JOIN offer o
         ON t.ouid = o.ouid
@@ -317,14 +381,12 @@ class DataBase {
      * @param string $email The email address of the user.
      * @return array<mixed>
      */
-
     public function getSubject(string $email): array {
         $query = $this->dbConn->prepare('SELECT subject_name FROM points WHERE email = :email');
         $query->bindValue('email', $email);
         $query->execute();
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
-
 
     /**
      * @description Updates the points for a specific subject of a user.
@@ -352,7 +414,7 @@ class DataBase {
         $query->bindValue('email', $email);
         $query->bindValue('subject_name', $subject_name);
         $query->execute();
-        return $query->fetchColumn();
+        return (float) $query->fetchColumn();
     }
 
     /**
@@ -403,7 +465,7 @@ class DataBase {
     if ($balance) {
       $_SESSION['balance'] = $balance;
     }
-  } 
+  }
 }
 
 

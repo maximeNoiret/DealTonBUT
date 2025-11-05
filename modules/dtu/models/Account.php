@@ -2,9 +2,8 @@
 
 namespace models;
 use exceptions\AccountAlreadyExists;
-use exceptions\DatabaseNotInitiated;
 use models\DataBase;
-use models\Mailer;
+use core\models\Mailer;
 use Random\RandomException;
 
 class Account {
@@ -35,8 +34,7 @@ class Account {
    * @param string $email The email address of the user.
    * @param string $password The password provided by the user.
    * @return bool Returns true if the credentials are valid, false otherwise.
-   * @throws DatabaseNotInitiated
-   */
+ */
 
   static function validateCredentials(string $email, string $password): bool {
     // CHECK IF (email, hash(password)) IN user_
@@ -63,7 +61,7 @@ class Account {
     // check if account exists at all
         $db = DataBase::getInstance();
         if(!$db->accountExists($email)) {
-          return 'already_exists';
+          return 'message';
         }
         // check if account already requested password reset with alive ttl
         if ($db->alreadyForgotPassword($email)) {
@@ -81,18 +79,12 @@ class Account {
         $db->insertToken($email, $token);
         // - [optional] encrypt (email, token) into single string
         // mail a GET link with "/user/validate?mail=:mail&token=:token" (or "/user/validate?token=:token" if encrypted)
-        $mailer = new Mailer('noreply@' . self::DOMAIN_NAME, 'DealTonBUT');  // TODO: change domain to correct one
         $resetLink = 'https://' . self::DOMAIN_NAME .
           '/user/validate?email=' . urlencode($email) . '&token=' . $token;
-        if (!$mailer->sendPasswordReset($email, $resetLink)) {
+        if (!Mailer::sendForgotPassword($email, $resetLink)) {
           return 'message';
         };
-        return 'reached_end';
-    // ----------------
-    // Someone goes to /user/validate with GET method
-    // - [optional] decrypt token from url
-    // - if (email, token) in 'token' && ttl not reached: ask new password
-    // - else: display "invalid link" and quit
+        return 'message';
 
   }
 }

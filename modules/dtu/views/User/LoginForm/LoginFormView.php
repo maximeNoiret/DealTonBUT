@@ -42,9 +42,11 @@ class  LoginFormView extends AbstractView {
         ];
         if ($this->error !== null) {
             $errorMessage = match($this->error) {
-                'invalid_credentials' => 'Invalid email or password.',
-                'database_error' => 'A database error occurred. Please try again.',
-                default => 'An unknown error occurred.'
+                'invalid_credentials' => '<span class="error-text">Email ou mot de passe incorrect.</span>',
+                'database_error' => '<span class="error-text">Une erreur de base de données est survenue. Veuillez réessayer plus tard.</span>',
+                'reset_link_expired' => '<span class="error-text">Ce lien de réinitialisation a expiré ou est invalide.</span>',
+                'password_changed' => 'Votre mot de passe à été modifié. Veuillez vous connecter avec le nouveau.',
+                default => 'Une erreur inconnue est survenue.'
             };
             $values['ERROR_MESSAGE'] = $errorMessage;
         } else {
@@ -62,4 +64,11 @@ class  LoginFormView extends AbstractView {
         return 'Connexion';
     }
 
+  /**
+   * @description Toggle that show the navbar
+   * @return bool
+   */
+  public function showNavbar(): bool {
+    return false;
+  }
 }
