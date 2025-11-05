@@ -14,6 +14,21 @@ class MarketPlaceView extends AbstractView {
     return __DIR__ . DIRECTORY_SEPARATOR . 'MarketPlace.html';
   }
 
+  function getOffers(): string {
+    $offers = DataBase::getInstance()->getOffers();
+    if ($offers) {
+      $ret = '<section class="offer-grid">' . "\n";
+      foreach ($offers as $offer) {
+        /**
+         * @var array<string, string> $offer
+         */
+        $ret = $ret . (new Offer($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
+      }
+      return $ret . '</section>';
+    }
+    return '<h1 class="description-text">There are no offers!</h1>';
+  }
+
   /**
    * @description define value for each keys in the associated .html file
    * @return string[]

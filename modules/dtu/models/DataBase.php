@@ -145,6 +145,11 @@ class DataBase {
     return false;
   }
 
+  /**
+   * @description Retrieves the balance for the given email.
+   * @param string $email The email address of the account.
+   * @return int|string|false|null The balance amount, or false/null if not found.
+   */
   public function getBalance(string $email): int|string|false|null {
     $query = $this->dbConn->prepare('
       SELECT balance FROM user_ WHERE email = :email');
@@ -253,13 +258,41 @@ class DataBase {
   }
 
   /**
+   * @description Retrieves a specific offer by its unique identifier.
+   * @param int $ouid The unique identifier of the offer.
+   * @return array<string, mixed> The offer details or false if not found.
+   */
+  public function getOffer(int $ouid): array {
+    $query = $this->dbConn->prepare(
+      'SELECT owner, u.username as \'username\', title, description, price, deadline
+       FROM offer o
+       INNER JOIN user_ u
+       ON o.owner = u.email
+       WHERE o.ouid = :ouid');
+    $query->bindValue('ouid', $ouid);
+    $query->execute();
+    return $query->fetch(PDO::FETCH_ASSOC);
+  }
+
+  /**
+   * @description Deletes an offer from the database.
+   * @param int $ouid The unique identifier of the offer to delete.
+   * @return void
+   */
+  public function deleteOffer(int $ouid): void {
+    $query = $this->dbConn->prepare('DELETE FROM offer WHERE ouid = :ouid');
+    $query->bindValue('ouid', $ouid);
+    $query->execute();
+  }
+
+  /**
    * @description Retrieves all offers made by a specific user.
    * @param string $email The email address of the user.
    * @return array<mixed>
    */
   public function getUserOffers(string $email): array {
     $query = $this->dbConn->prepare(
-      'SELECT u.username as \'username\', title, description, price, deadline
+      'SELECT o.ouid, owner, u.username as \'username\', title, description, price, deadline
        FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email
@@ -276,7 +309,7 @@ class DataBase {
    */
   public function getBoughtOffers(string $email): array {
     $query = $this->dbConn->prepare(
-      'SELECT u.username as \'username\', o.title, o.description, o.price, o.deadline
+      'SELECT o.ouid, owner, u.username as \'username\', o.title, o.description, o.price, o.deadline
         FROM transaction t
         INNER JOIN offer o
         ON t.ouid = o.ouid

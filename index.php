@@ -16,6 +16,9 @@ use controllers\Login;
 use controllers\LoginConfirm;
 use controllers\Logout;
 use controllers\MarketPlace;*/
+
+use controllers\Trade\SeeOffer\DeleteOffer;
+use controllers\Trade\SeeOffer\SeeOffer;
 use controllers\User\AccountPage\Account;
 use controllers\User\AccountPage\DeleteAccount;
 use controllers\User\PasswordForgot\PasswordReset;
@@ -60,6 +63,8 @@ $controllers = [
   new DeleteAccount(),
   new AddOffer(),
   new AddOfferConfirm(),
+  new SeeOffer(),
+  new DeleteOffer(),
   new TradeSubjectPoint(),
   new PasswordReset(),
   new PasswordResetConfirm()
