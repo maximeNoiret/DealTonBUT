@@ -17,6 +17,8 @@ use controllers\LoginConfirm;
 use controllers\Logout;
 use controllers\MarketPlace;*/
 
+
+use controllers\Trade\BuyOffer\BuyOffer;
 use controllers\Trade\SeeOffer\DeleteOffer;
 use controllers\Trade\SeeOffer\SeeOffer;
 use controllers\User\AccountPage\Account;
@@ -61,7 +63,8 @@ $controllers = [
   new AddOffer(),
   new AddOfferConfirm(),
   new SeeOffer(),
-  new DeleteOffer()
+  new DeleteOffer(),
+  new BuyOffer()
 ];
 
 foreach ($controllers as $controller) {

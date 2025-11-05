@@ -43,11 +43,14 @@ class SeeOffer
    * @return string Retourne le code HTML du bouton approprié en fonction de la propriété de l'offre.
    */
   public function buttonOffer(): string{
-    if ($this->isOwnerOfOffer()) {
+    if ($this->isOwnerOfOffer() && !DataBase::getInstance()->offersInTransaction($_GET['id'])) {
       return '<a class="button-delete" href="/offre/delete?id=' . $_GET['id'] . '">Delete</a>';
-    } else {
+    }
+    else if(!DataBase::getInstance()->offersInTransaction($_GET['id']))
+    {
       return '<a class="button-buy" href="/offre/buy?id=' . $_GET['id'] . '">Buy</a>';
     }
+    return '';
   }
   function control(): void
   {

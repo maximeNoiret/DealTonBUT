@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUndefinedConstantInspection */
 
 namespace models;
 
@@ -193,9 +193,28 @@ class DataBase {
       'SELECT ouid, owner, u.username as \'username\', title, description, price, deadline
        FROM offer o
        INNER JOIN user_ u
-       ON o.owner = u.email');
+       ON o.owner = u.email
+       WHERE ouid NOT IN (
+           SELECT ouid
+           FROM transaction)
+           ');
     $query->execute();
     return $query->fetchAll(PDO::FETCH_ASSOC);
+  }
+
+  public function offersInTransaction(int $ouid): bool {
+    $query = $this->dbConn->prepare('
+    SELECT ouid
+    FROM offer
+    WHERE ouid = :ouid
+    AND ouid IN (
+        SELECT ouid
+        FROM transaction)
+        ');
+    $query->bindValue('ouid', $ouid);
+    $query->execute();
+    $offers = $query->fetchAll(PDO::FETCH_ASSOC);
+    return !empty($offers);
   }
 
   /**
@@ -261,6 +280,75 @@ class DataBase {
     $query->execute();
     return $query->fetchAll(PDO::FETCH_ASSOC);
   }
+
+  public function buyOffer(string $email, int $ouid): bool {
+      try {
+      $this->dbConn->beginTransaction();
+      $offerQuery = $this->dbConn->prepare('
+        SELECT owner, price, deadline 
+        FROM offer 
+        WHERE ouid = :ouid
+      ');
+      $offerQuery->bindValue('ouid', $ouid);
+      $offerQuery->execute();
+      $offer = $offerQuery->fetch(PDO::FETCH_ASSOC);
+
+      //Si l'offre n'existe pas
+      if (!$offer) {
+          $this->dbConn->rollBack();
+          return false;
+      }
+      // Si l'utilisateur essaye d'acheter ça propre offre
+      if ($offer['owner'] == $email) {
+          $this->dbConn->rollBack();
+          return false;
+      }
+      //Si la date max a été dépasser
+      if (strtotime($offer['deadline']) < time()) {
+          $this->dbConn->rollBack();
+          return false;
+      }
+      // Si l'utilisateur n'as pas assez de sous
+      $queryForBalance = $this->getBalance($email);
+      if ($queryForBalance === false || $queryForBalance < $offer['price']) {
+          $this->dbConn->rollBack();
+          return false;
+      }
+      $queryRemoveMoney = $this->dbConn->prepare('
+      UPDATE user_
+      SET balance = balance - :price
+      WHERE email = :email');
+      $queryRemoveMoney->bindValue('price', $offer['price']);
+      $queryRemoveMoney->bindValue('email', $email);
+      $queryRemoveMoney->execute();
+
+      $queryAddMoney = $this->dbConn->prepare('
+        UPDATE user_ 
+        SET balance = balance + :price 
+        WHERE email = :email
+      ');
+      $queryAddMoney->bindValue('price', $offer['price']);
+      $queryAddMoney->bindValue('email', $offer['owner']);
+      $queryAddMoney->execute();
+
+      $transactionQuery = $this->dbConn->prepare('
+        INSERT INTO transaction(email, ouid, amount, transaction_time) 
+        VALUES (:email, :ouid, :amount, :transaction_time)
+      ');
+      $transactionQuery->bindValue('email', $email);
+      $transactionQuery->bindValue('ouid', $ouid);
+      $transactionQuery->bindValue('amount', $offer['price']);
+      $transactionQuery->bindValue('transaction_time', date('Y-m-d H:i:s'));
+      $transactionQuery->execute();
+
+      $this->dbConn->commit();
+      return true;
+  } catch (\execption $e) {
+          $this->dbConn->rollBack();
+          return false;
+      }
+}
+
 
     /**
      * @description Deletes a user from the database.
