@@ -13,3 +13,10 @@ body {
     margin: 0;
     padding: 0;
 }
+
+#forbiddenImage {
+    width: 400px;
+    height: auto;
+    display: block;
+    margin: 20px auto;
+}

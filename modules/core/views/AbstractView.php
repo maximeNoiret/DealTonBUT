@@ -15,7 +15,7 @@ abstract class AbstractView {
 
       $stylesheetsHtml = '';
       foreach ($stylesheets as $stylesheet) {
-          $stylesheetsHtml .= '<link rel="stylesheet" href="' . $stylesheet . '">' . "\n";
+          $stylesheetsHtml .= '<link rel="stylesheet" type="text/css" href="' . $stylesheet . '">' . "\n";
 
       }
     return '<!DOCTYPE html>
