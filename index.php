@@ -3,6 +3,7 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors',"On");
 
+use controllers\Forbidden\Env;
 use controllers\Main;
 use controllers\Trade\AddOffer\AddOffer;
 use controllers\Trade\AddOffer\AddOfferConfirm;
@@ -24,6 +25,7 @@ use controllers\User\Register\RegisterVerifyConfirm;
 use controllers\User\Settings\Settings;
 use controllers\User\Register\Register;
 use controllers\User\Register\RegisterConfirm;
+use dtu\views\Forbidden;
 use models\DataBase;
 
 include __DIR__ . '/_assets/includes/Autoloader.php';
@@ -31,6 +33,17 @@ include __DIR__ . '/_assets/includes/Autoloader.php';
 
 $path = $_SERVER['REQUEST_URI'];
 $meth = $_SERVER['REQUEST_METHOD'];
+
+if (preg_match('/^\/(\.env|\.git|\.htaccess|composer\.(json|lock)|\.php)/', $path)) {
+  http_response_code(403);
+  echo new Forbidden()->render('Forbidden - DealTonBUT', Main::STYLESHEET);
+  exit();
+}
+
+$file = __DIR__ . $path;
+if (is_file($file)) {
+  return false; // Let PHP's built-in server handle it with correct MIME type
+}
 
 
 /** @var $controllers /Controller[] $controllers */
@@ -56,7 +69,10 @@ $controllers = [
   new DeleteOffer(),
   new TradeSubjectPoint(),
   new PasswordReset(),
-  new PasswordResetConfirm()
+  new PasswordResetConfirm(),
+
+  // Forbidden
+  new Env()
 ];
 
 foreach ($controllers as $controller) {
@@ -68,7 +84,7 @@ foreach ($controllers as $controller) {
     exit();
   }
 }
-
+http_response_code(404);
 echo 'path: ' . $path . ' | meth: ' . $meth . '<br>';
 echo '404 NOT FOUND';
 exit();
