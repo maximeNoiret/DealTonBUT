@@ -1,97 +1,43 @@
 <?php
-/*
-namespace Tests\Controllers\Trade\SeeOffer;
 
-use controllers\Trade\SeeOffer\SeeOffer;
 use PHPUnit\Framework\TestCase;
+use views\Trade\MarketPlace\MarketPlaceView;
+use controllers\Trade\MarketPlace\MarketPlace;
 
-class SeeOfferTest extends TestCase
-{
-  protected function setUp(): void
-  {
-    $_SESSION = [];
-    $_GET = [];
+class MarketPlaceViewTest extends TestCase {
+
+  public function returnsCorrectPath() {
+    $view = new MarketPlaceView();
+    $expectedPath = __DIR__ . DIRECTORY_SEPARATOR . 'MarketPlace.html';
+    $this->assertEquals($expectedPath, $view->path());
   }
 
-  public function testIsOwnerOfOfferReturnsTrueIfUserIsOwner(): void
-  {
-    $_SESSION['email'] = 'owner@example.com';
-    SeeOffer::$offer = ['owner' => 'owner@example.com', 'title' => 'Test Offer'];
+  public function returnsTemplateValuesWithOffers() {
+    $mockOffers = ['offer1', 'offer2'];
+    $this->mockStaticMethod(MarketPlace::class, 'getOffers', $mockOffers);
 
-    $seeOffer = $this->createPartialMock(SeeOffer::class, []);
-    $this->assertTrue($seeOffer->isOwnerOfOffer());
+    $view = new MarketPlaceView();
+    $values = $view->templateValues();
+
+    $this->assertArrayHasKey('OFFERS', $values);
+    $this->assertEquals($mockOffers, $values['OFFERS']);
   }
 
-  public function testIsOwnerOfOfferReturnsFalseIfUserIsNotOwner(): void
-  {
-    $_SESSION['email'] = 'user@example.com';
-    SeeOffer::$offer = ['owner' => 'owner@example.com', 'title' => 'Test Offer'];
-
-    $seeOffer = $this->createPartialMock(SeeOffer::class, []);
-    $this->assertFalse($seeOffer->isOwnerOfOffer());
+  public function returnsCorrectNavbarText() {
+    $view = new MarketPlaceView();
+    $this->assertEquals('Place De Marché', $view->navbarText());
   }
 
-  public function testIsOwnerOfOfferReturnsFalseIfEmailNotInSession(): void
-  {
-    unset($_SESSION['email']);
-    SeeOffer::$offer = ['owner' => 'owner@example.com', 'title' => 'Test Offer'];
-
-    $seeOffer = $this->createPartialMock(SeeOffer::class, []);
-    $this->assertFalse($seeOffer->isOwnerOfOffer());
-  }
-
-  public function testButtonOfferReturnsDeleteButtonForOwner(): void
-  {
-    $_SESSION['email'] = 'owner@example.com';
-    SeeOffer::$offer = ['owner' => 'owner@example.com', 'title' => 'Test Offer'];
-    SeeOffer::$id = 1;
-
-    $seeOffer = $this->createPartialMock(SeeOffer::class, []);
-    $this->assertStringContainsString('<a class="button-delete" href="/offre/delete?id=1">Delete</a>', $seeOffer->buttonOffer());
-  }
-
-  public function testButtonOfferReturnsBuyButtonForNonOwner(): void
-  {
-    $_SESSION['email'] = 'user@example.com';
-    SeeOffer::$offer = ['owner' => 'owner@example.com', 'title' => 'Test Offer'];
-    SeeOffer::$id = 1;
-
-    $seeOffer = $this->createPartialMock(SeeOffer::class, []);
-    $this->assertStringContainsString('<a class="button-buy" href="/offre/buy?id=1">Buy</a>', $seeOffer->buttonOffer());
-  }
-
-  public function testControlRedirectsToLoginIfUserNotLoggedIn(): void
-  {
-    $_SESSION['logged-in'] = false;
-
-    $seeOffer = $this->getMockBuilder(SeeOffer::class)
+  private function mockStaticMethod($class, $method, $returnValue) {
+    $mock = $this->getMockBuilder($class)
       ->disableOriginalConstructor()
-      ->onlyMethods(['control'])
+      ->onlyMethods([$method])
       ->getMock();
 
-    $seeOffer->expects($this->once())
-      ->method('control');
+    $mock->expects($this->once())
+      ->method($method)
+      ->willReturn($returnValue);
 
-    $seeOffer->control();
+    return $mock;
   }
-
-  public function testResolveReturnsTrueForMatchingPathAndMethod(): void
-  {
-    $this->assertTrue(SeeOffer::resolve('/offre/voir', 'GET'));
-  }
-
-  public function testResolveReturnsFalseForNonMatchingPath(): void
-  {
-    $this->assertFalse(SeeOffer::resolve('/offre/other', 'GET'));
-  }
-
-  public function testResolveReturnsFalseForNonMatchingMethod(): void
-  {
-    $this->assertFalse(SeeOffer::resolve('/offre/voir', 'POST'));
-  }
-
-  public function testResolveReturnsTrueIgnoresQueryParameters(): void
-  {
-    $this->assertTrue(SeeOffer::resolve('/offre/voir?id=123', 'GET'));
-  }
-}*/
+}
