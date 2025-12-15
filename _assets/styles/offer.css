@@ -103,3 +103,14 @@
     margin-top: auto;
     padding-top: 0.6rem;
 }
+
+@media screen and (max-width: 480px) {
+    .offer-description {
+        font-size: 15px;
+    }
+
+    .offer-date{
+        font-size: 15px;
+    }
+
+}
