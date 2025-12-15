@@ -110,7 +110,13 @@
     padding-top: 0.6rem;
 }
 
-a {
-    text-decoration: none;
-    color: inherit;
+@media screen and (max-width: 480px) {
+    .offer-description {
+        font-size: 15px;
+    }
+
+    .offer-date{
+        font-size: 15px;
+    }
+
 }

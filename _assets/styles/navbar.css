@@ -192,6 +192,16 @@
     color: #000000;
     line-height: 1.2;
 }
+.sidebar-user-card:hover, sidebar-user-name :hover, .sidebar-user-points :hover{
+    background-color: rgba(64, 64, 64, 0.8);
+    transform: translateX(5px);
+}
+
+.sidebar-user-card:hover .sidebar-user-name,
+.sidebar-user-card:hover .sidebar-user-points{
+    color: #ffffff;
+    transform: translateX(5px);
+}
 
 .sidebar-settings-icon {
     flex-shrink: 0;
@@ -224,7 +234,9 @@
 }
 
 .sidebar-disconnect-btn:hover {
-    background-color: rgba(180, 180, 180, 0.95);
+    background-color: rgba(64, 64, 64, 0.8);
+    color: white;
+    transform: translateX(5px);
 }
 
 @media screen and (max-width: 768px) {
@@ -275,7 +287,7 @@
     }
 
     .sidebar-link {
-        font-size: 14px;
+        font-size: 20px;
         padding: 10px 12px;
     }
 }
