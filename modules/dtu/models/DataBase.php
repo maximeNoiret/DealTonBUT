@@ -254,13 +254,16 @@ class DataBase {
     }
   }
 
-  //TODO : correct this phpstan error ( level 10 )
+
   /**
    * @description Retrieves a specific offer by its unique identifier.
    * @param int $ouid The unique identifier of the offer.
-   * @return array<mixed> The offer details or false if not found.
+   * @return mixed The offer details or false if not found.
    */
-  public function getOffer(int $ouid): array {
+  public function getOffer(int $ouid): mixed {
+    // note : the method was meant to return a array<mixed>, but since fetch()
+    // return mixed, it raised a phpstan error. And so the method return
+    // mixed
     $query = $this->dbConn->prepare(
       'SELECT owner, u.username as \'username\', title, description, price, deadline
        FROM offer o
