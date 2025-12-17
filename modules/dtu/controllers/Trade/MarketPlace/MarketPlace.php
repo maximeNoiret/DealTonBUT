@@ -39,7 +39,7 @@ class MarketPlace implements Controller {
   public static function getOffers(): string {
     $sort = $_GET['sort'] ?? null;
     $query =
-      'SELECT u.username as \'username\', title, description, price, deadline
+      'SELECT ouid ,u.username as \'username\', title, description, price, deadline
        FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email ';
