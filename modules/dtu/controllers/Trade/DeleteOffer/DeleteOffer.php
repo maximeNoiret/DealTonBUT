@@ -1,20 +1,19 @@
 <?php
 
-namespace controllers\Trade\SeeOffer;
+namespace controllers\Trade\DeleteOffer;
 
 use models\DataBase;
 
+/**
+ * Checks if the user is logged in and is the offer owner before deleting it.
+ * Redirects to the login page if the user is not logged in.
+ * Redirects to the marketplace page if the offer does not exist or if the user is not the owner.
+ * Deletes the offer and redirects to the marketplace page if all conditions are met.
+ */
 class DeleteOffer
 {
     const string PATH = '/offre/delete';
     const string METH = 'GET';
-
-    /**
-     * Controle si l'utilisateur est connecté et propriétaire de l'offre avant de la supprimer.
-     * Redirige vers la page de connexion si l'utilisateur n'est pas connecté.
-     * Redirige vers la page du marketplace si l'offre n'existe pas ou si l'utilisateur n'est pas le propriétaire.
-     * Supprime l'offre et redirige vers la page du marketplace si toutes les conditions sont remplies.
-     */
 
     function control(): void
     {

@@ -57,7 +57,7 @@ class DataBase {
   /**
    * @description Executes a raw SQL query.
    * @param string $queryString The SQL query to execute.
-   * @return array<mixed>
+   * @return array<mixed> The result set as an associative array.
    */
   public function executeQuery(string $queryString): array {
     $query = $this->dbConn->prepare($queryString);
@@ -69,31 +69,33 @@ class DataBase {
    * @description Registers a new account in the database.
    * @param string $username The desired username for the new account.
    * @param string $email The email address associated with the new account.
-   * @param string $password The password for the new account.
    * @return void
-   * @throws AccountAlreadyExists
    */
   public function registerAccount (
     string $username,
-    string $email,
-    string $password
+    string $email
   ): void {
-    $query = $this->dbConn->prepare('SELECT email FROM user_ WHERE email = :email');
-    $query->bindValue('email', $email);  // already uses PDO_PARAM_STR
-    $query->execute();
-    if ($query->fetch()) {
-      throw new AccountAlreadyExists();
-    }
-    $hashedpwd = password_hash($password, PASSWORD_DEFAULT);
+    //$hashedpwd = password_hash($password, PASSWORD_DEFAULT);
     $query = $this->dbConn->prepare(
-      'INSERT INTO user_(email, username, hashedpwd)
-      VALUES (:email, :username, :hashedpwd)');
+      'REPLACE INTO user_(email, username)
+      VALUES (:email, :username)');
 
-    //
     $query->bindValue('email', $email);
     $query->bindValue('username', $username);
-    $query->bindValue('hashedpwd', $hashedpwd);
     $query->execute();
+  }
+
+  /**
+   * @param string $email User whose role to set
+   * @param string $role Role to set
+   * @return bool True on success, false on failure
+   */
+  public function setRole(string $email, string $role): bool {
+    $query = $this->dbConn->prepare(
+      'UPDATE user_ SET role = :role WHERE email = :email');
+    $query->bindValue('email', $email);
+    $query->bindValue('role', $role);
+    return $query->execute();
   }
 
   /**
@@ -219,7 +221,7 @@ class DataBase {
    * @description Return the offers in function of the args given ( the args are MySQL operator), see MarketPlace->getOffers() for the used method
    * @param string $orderBy Type of the sort (eg : COST ( order by the cost of the offer ))
    * @param string $suffixe Supplementary information for the sort (eg : ASC ( Ascending order ))
-   * @return array<mixed>
+   * @return array<mixed> The list of offers
    * @deprecated
    */
   public function getOffers(string $orderBy, string $suffixe): array {
@@ -468,6 +470,30 @@ class DataBase {
     if ($balance) {
       $_SESSION['balance'] = $balance;
     }
+  }
+
+  /**
+   * @param string $email The email address of the user.
+   * @return bool True if the account is verified, false otherwise.
+   */
+  public function isAccountVerified(string $email): bool {
+    $query = $this->dbConn->prepare('SELECT role FROM user_ WHERE email = :email');
+    $query->bindValue('email', $email);
+    $query->execute();
+    /**
+     * @var array<string, string>|false $result
+     */
+    $result = $query->fetch(PDO::FETCH_ASSOC);
+    return $result && $result['role'] != 'not-verified';
+  }
+
+  public function getEmailFromToken(string $token): string
+  {
+    $query = $this->dbConn->prepare(
+      'SELECT email FROM token WHERE token = :token');
+    $query->bindValue('token', $token);
+    $query->execute();
+    return (string) $query->fetchColumn();
   }
 }
 

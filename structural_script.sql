@@ -10,9 +10,9 @@ DROP TABLE IF EXISTS user_;
 CREATE TABLE user_(
    email VARCHAR(70) PRIMARY KEY,
    username VARCHAR(50) NOT NULL,
-   hashedpwd VARCHAR(100) NOT NULL,
+   hashedpwd VARCHAR(100) NOT NULL DEFAULT 'not-verified',
    balance DECIMAL(8,2) NOT NULL DEFAULT 0.00,
-   role VARCHAR(15) NOT NULL DEFAULT 'student',
+   role VARCHAR(15) NOT NULL DEFAULT 'not-verified',
    CONSTRAINT CHK_USER_EMAIL
     CHECK (email LIKE '%_@__%.__%'),
    CONSTRAINT CHK_USER_BAL

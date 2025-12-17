@@ -2,11 +2,12 @@
     background: #D9D9D9;
     display: flex;
     flex-direction: column;
-    width: min(90%, 1400px); /* Adaptatif avec une largeur max */
+    width: min(90%, 1400px);
     margin: 2vh auto;
     border-radius: 1.5rem;
     box-sizing: border-box;
 }
+
 
 .user-data {
     display: flex;
@@ -20,7 +21,6 @@
 
 .user-profile {
     display: flex;
-    flex-direction: row;
     gap: clamp(1rem, 2vw, 2rem);
     align-items: center;
 }
@@ -32,100 +32,82 @@
     object-fit: cover;
 }
 
-.user-name {
+.user-name,
+.user-component {
     display: flex;
     flex-direction: column;
     gap: 0.3rem;
 }
 
-.user-name p {
+.user-name p,
+.user-component p {
     margin: 0;
 }
 
 .user-component {
     text-align: right;
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
 }
 
-.user-component p {
-    margin: 0;
-}
 
-.account-bigger-text {
-    font-size: clamp(1.2rem, 2vw, 1.5rem);
-    margin: 0;
-}
-
-/* Conteneur principal des offres - 2 colonnes */
-.account-offer {
+.tittle-offer-section {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    width: 100%;
-    min-height: 50vh;
+    border-bottom: 0.4rem solid #8C8C8C;
 }
 
-/* Section "Mes offres" */
+.section-title-offer,
+.section-title-bought {
+    text-align: center;
+    padding: 1.5rem;
+    margin: 0;
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+}
+
+.section-title-offer {
+    border-right: 0.4rem solid #8C8C8C;
+}
+
+
+.offer-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 400px;
+    justify-items: center; /* centrage sans changer la taille */
+}
+
+
+
 .user-offer-section {
     border-right: 0.4rem solid #8C8C8C;
-    padding: clamp(1rem, 2vw, 2rem);
-    display: flex;
-    flex-direction: column;
+    padding: 2rem 3rem 2rem 2rem; /* + d’espace côté centre */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    align-content: start;
+    justify-items: center;
 }
 
-/* Section "Offres achetées" */
 .user-bought-offer-section {
-    padding: clamp(1rem, 2vw, 2rem);
-    display: flex;
-    flex-direction: column;
+    padding: 2rem 2rem 2rem 3rem; /* + d’espace côté centre */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    align-content: start;
+    justify-items: center;
 }
 
-/* Titre des sections */
-.section-title {
-    text-align: center;
-    font-size: clamp(1.5rem, 3vw, 2rem);
-    font-weight: bold;
-    margin: 0 calc(-1 * clamp(1rem, 2vw, 2rem)) 1rem;
-    padding-bottom: 1rem;
-    border-bottom: 0.3rem solid #8C8C8C;
+.offer-card {
+    width: 100%;
 }
 
-/* Cartes d'offres achetées plus compactes */
-.user-bought-offer-section .offer-card {
-    min-height: 120px;
-    padding: clamp(0.6rem, 1.2vw, 0.9rem);
-    gap: 0.4rem;
-}
 
-.user-bought-offer-section .offer-title {
-    font-size: clamp(0.9rem, 1.3vw, 1.1rem);
-    margin: 0.2rem 0;
-}
-
-.user-bought-offer-section .offer-header {
-    margin-bottom: 0.2rem;
-}
-
-.user-bought-offer-section .offer-footer-compact {
-    padding-top: 0.4rem;
-}
-
-/* Media queries pour petits écrans */
 @media screen and (max-width: 1024px) {
-    .account-offer {
-        grid-template-columns: 1fr;
-    }
-
-    .user-offer-section {
-        border-right: none;
-        border-bottom: 0.4rem solid #8C8C8C;
-    }
-
-    .offer-grid {
-        grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+    .user-offer-section,
+    .user-bought-offer-section {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     }
 }
+
 
 @media screen and (max-width: 768px) {
     .user-data {
@@ -136,26 +118,74 @@
 
     .user-component {
         text-align: left;
-        align-self: flex-start;
-    }
-
-    .offer-grid {
-        grid-template-columns: 1fr;
     }
 
     .account-main {
         width: 95%;
         margin: 1vh auto;
     }
+
+    .tittle-offer-section {
+        border-bottom: none;
+    }
+
+    .section-title-offer,
+    .section-title-bought {
+        cursor: pointer;
+        padding: 1rem;
+        background: #BFBFBF;
+        border-bottom: 0.4rem solid #8C8C8C;
+        user-select: none;
+    }
+
+    .section-title-offer {
+        border-right: 0.2rem solid #8C8C8C;
+    }
+
+    .section-title-bought {
+        border-left: 0.2rem solid #8C8C8C;
+    }
+
+    .section-title-offer.active,
+    .section-title-bought.active {
+        background: #D9D9D9;
+        font-weight: bold;
+    }
+
+    .offer-section {
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
+
+    .user-offer-section,
+    .user-bought-offer-section {
+        border-right: none;
+        padding: 1.5rem;
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
+
+    /* ✅ limitation UNIQUEMENT sur mobile */
+    .offer-card {
+        max-width: 320px;
+        margin: 0 auto;
+    }
 }
+
 
 @media screen and (max-width: 480px) {
     .user-profile {
-        flex-direction: column;
-        align-items: flex-start;
+        font-size: 14px;
     }
 
-    .section-title {
-        font-size: 1.3rem;
+    .user-offer-section,
+    .user-bought-offer-section {
+        padding: 1rem;
+    }
+
+    .section-title-offer,
+    .section-title-bought {
+        font-size: 1rem;
+        padding: 0.8rem;
     }
 }
