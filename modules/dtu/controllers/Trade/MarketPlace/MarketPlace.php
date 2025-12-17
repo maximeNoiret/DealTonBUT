@@ -44,6 +44,9 @@ class MarketPlace implements Controller {
        INNER JOIN user_ u
        ON o.owner = u.email ';
     //  for searching a string in the title of the offers
+    /**
+     * @var array<string> $_GET['search-string']
+     */
     if (isset($_GET['search-string']) && !empty($_GET['search-string'])) {
       $query .= 'WHERE title LIKE \'%' . $_GET['search-string'] . '%\'';
     }

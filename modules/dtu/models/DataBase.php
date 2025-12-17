@@ -47,7 +47,6 @@ class DataBase {
    * @description Retrieves the singleton instance of the DataBase class.
    * @return DataBase The singleton instance.
    */
-
   public static function getInstance(): self {
     if (!isset(self::$instance)) {
       self::$instance = new self();
@@ -55,7 +54,6 @@ class DataBase {
     return self::$instance;
   }
 
-  // NOTE: this is very unsafe!
   /**
    * @description Executes a raw SQL query.
    * @param string $queryString The SQL query to execute.
@@ -165,7 +163,6 @@ class DataBase {
      * @param string $email The email address to check.
      * @return bool True if a password reset has already been requested, false otherwise.
      */
-
   public function alreadyForgotPassword(string $email): bool {
     $query = $this->dbConn->prepare(
       'SELECT email FROM token WHERE email = :email AND deadline > CURRENT_TIMESTAMP');
@@ -228,7 +225,7 @@ class DataBase {
    * @deprecated
    */
   public function getOffers(string $orderBy, string $suffixe): array {
-    if (!isset($orderBy) || $orderBy == '') {
+    if ($orderBy == '') {
       $query = $this->dbConn->prepare(
         'SELECT u.username as \'username\', title, description, price, deadline
        FROM offer o
@@ -259,12 +256,16 @@ class DataBase {
     }
   }
 
+
   /**
    * @description Retrieves a specific offer by its unique identifier.
    * @param int $ouid The unique identifier of the offer.
-   * @return array<string, mixed> The offer details or false if not found.
+   * @return mixed The offer details or false if not found.
    */
-  public function getOffer(int $ouid): array {
+  public function getOffer(int $ouid): mixed {
+    // note : the method was meant to return a array<mixed>, but since fetch()
+    // return mixed, it raised a phpstan error. And so the method return
+    // mixed
     $query = $this->dbConn->prepare(
       'SELECT owner, u.username as \'username\', title, description, price, deadline
        FROM offer o
@@ -385,14 +386,12 @@ class DataBase {
      * @param string $email The email address of the user.
      * @return array<mixed>
      */
-
     public function getSubject(string $email): array {
         $query = $this->dbConn->prepare('SELECT subject_name FROM points WHERE email = :email');
         $query->bindValue('email', $email);
         $query->execute();
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
-
 
     /**
      * @description Updates the points for a specific subject of a user.
@@ -420,7 +419,7 @@ class DataBase {
         $query->bindValue('email', $email);
         $query->bindValue('subject_name', $subject_name);
         $query->execute();
-        return $query->fetchColumn();
+        return (float) $query->fetchColumn();
     }
 
     /**

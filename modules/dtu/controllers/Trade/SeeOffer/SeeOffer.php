@@ -34,6 +34,9 @@ class SeeOffer
        * @var array<string, int> $_GET
        */
       self::$id = $_GET['id'];
+      /**
+       * @var $offers array<mixed>
+       */
       self::$offer = DataBase::getInstance()->getOffer(self::$id);
       return;
     }
