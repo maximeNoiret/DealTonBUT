@@ -7,11 +7,12 @@ use views\Legal\TermsOfUse\TermsOfUseView;
 class TermsOfUse
 {
     const string PATH = '/termsofuse';
-    const string METH = 'POST';
+    const string METH = 'GET';
 
     const array STYLESHEET = [
         '/_assets/styles/style.css',
-        '/_assets/styles/navbar.css'
+        '/_assets/styles/navbar.css',
+        '/_assets/styles/loginSingnin.css'
     ];
 
     function control(): void

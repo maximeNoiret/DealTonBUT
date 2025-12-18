@@ -8,9 +8,8 @@ class TermsOfUseView extends AbstractView
 {
     /**
      * @description Constructor of the class
-     * @param string $offresHtml :
      */
-    public function __construct(private string $offresHtml)
+    public function __construct()
     {
     }
 
