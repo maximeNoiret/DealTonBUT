@@ -70,6 +70,10 @@ $controllers = [
   new TradeSubjectPoint(),
   new PasswordReset(),
   new PasswordResetConfirm(),
+    new ConfidentialityView(),
+    new Confidentiality(),
+    new TermsOfUseView(),
+    new TermsOfUse(),
 
   // Forbidden
   new Env()

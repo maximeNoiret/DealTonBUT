@@ -59,6 +59,18 @@ abstract class AbstractView {
    */
   public function footer(): string {
     return '</main>
+      <footer class="site-footer">
+        <div class="footer-content">
+          <div class="footer-links">
+            <a href="/confidentiality" class="footer-link">Politique de confidentialité</a>
+            <span class="footer-separator">|</span>
+            <a href="/termsofuse" class="footer-link">Conditions d\'utilisation</a>
+          </div>
+          <div class="footer-copyright">
+            &copy; ' . date('Y') . ' DealTonBUT - Tous droits réservés
+          </div>
+        </div>
+      </footer>
       <script>
         function openSidebar() {
           document.getElementById("sidebar").classList.add("active");

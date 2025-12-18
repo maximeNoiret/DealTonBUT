@@ -1,0 +1,30 @@
+<?php
+
+namespace controllers\Legal\Confidentiality;
+
+use views\Legal\Confidentiality\ConfidentialityView;
+
+class Confidentiality
+{
+    const string PATH = '/confidentiality';
+    const string METH = 'POST';
+
+    const array STYLESHEET = [
+        '/_assets/styles/style.css',
+        '/_assets/styles/navbar.css'
+    ];
+
+    function control(): void
+    {
+        if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
+            header('Location: /user/login');
+        } else {
+            echo (new ConfidentialityView(''))->render("Confidentialité - DealTonBUT", self::STYLESHEET);
+        }
+    }
+
+    static function resolve(string $path, string $meth): bool
+    {
+        return $path === self::PATH && $meth === self::METH;
+    }
+}
