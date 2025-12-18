@@ -2,6 +2,7 @@
 
 namespace controllers\Trade\DeleteOffer;
 
+use core\controllers\Controller;
 use models\DataBase;
 
 /**
@@ -10,7 +11,7 @@ use models\DataBase;
  * Redirects to the marketplace page if the offer does not exist or if the user is not the owner.
  * Deletes the offer and redirects to the marketplace page if all conditions are met.
  */
-class DeleteOffer
+class DeleteOffer implements Controller
 {
     const string PATH = '/offre/delete';
     const string METH = 'GET';

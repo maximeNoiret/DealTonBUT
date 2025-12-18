@@ -3,10 +3,11 @@
 namespace controllers\Trade\SeeOffer;
 
 
+use core\controllers\Controller;
 use dtu\views\Trade\SeeOffer\SeeOfferView;
 use models\DataBase;
 
-class SeeOffer
+class SeeOffer implements Controller
 {
   const string PATH = '/offre/voir';
   const string METH = 'GET';

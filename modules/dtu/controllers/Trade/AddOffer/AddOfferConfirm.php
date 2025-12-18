@@ -2,10 +2,11 @@
 
 namespace controllers\Trade\AddOffer;
 
+use core\controllers\Controller;
 use models\DataBase;
 use views\AddOfferView;
 
-class AddOfferConfirm
+class AddOfferConfirm implements Controller
 {
     const string PATH = '/offre/confirm';
     const string METH = 'POST';
