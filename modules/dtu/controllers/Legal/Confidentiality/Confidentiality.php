@@ -2,9 +2,10 @@
 
 namespace controllers\Legal\Confidentiality;
 
+use core\controllers\Controller;
 use views\Legal\Confidentiality\ConfidentialityView;
 
-class Confidentiality
+class Confidentiality implements Controller
 {
     const string PATH = '/confidentiality';
     const string METH = 'GET';

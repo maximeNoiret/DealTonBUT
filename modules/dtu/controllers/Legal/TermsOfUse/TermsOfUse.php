@@ -2,9 +2,10 @@
 
 namespace controllers\Legal\TermsOfUse;
 
+use core\controllers\Controller;
 use views\Legal\TermsOfUse\TermsOfUseView;
 
-class TermsOfUse
+class TermsOfUse implements Controller
 {
     const string PATH = '/termsofuse';
     const string METH = 'GET';
