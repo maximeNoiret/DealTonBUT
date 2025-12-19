@@ -95,3 +95,4 @@ class SeeOfferTest extends TestCase
     $this->assertTrue(SeeOffer::resolve('/offre/voir?id=123', 'GET'));
   }
 }
+
