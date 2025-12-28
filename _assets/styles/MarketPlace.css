@@ -78,6 +78,19 @@
     width: 300px;
 }
 
+a.offer-card,
+a .offer-card,
+.offer-grid a {
+    text-decoration: none !important;
+}
+
+/* S'assurer que TOUS les éléments à l'intérieur ne sont pas soulignés */
+a.offer-card *,
+a .offer-card *,
+.offer-grid a * {
+    text-decoration: none !important;
+}
+
 @media screen and (max-width: 480px) {
     .search-container {
         padding: 15px 20px;

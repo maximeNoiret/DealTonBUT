@@ -1,22 +1,8 @@
-.offer-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    padding: 0.5rem;
-}
+
 
 .offer-card {
-    background: #BFBFBF;
-    border: 2px solid #000;
-    border-radius: 10px;
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
-    min-height: 200px;
-    width: 100%;
-    transition: all 0.2s ease-in-out;
+    height: 230px;
+    width: 300px;
 }
 
 .offer-card:hover {
@@ -188,7 +174,20 @@
 .user-offer-section .offer-card,
 .user-bought-offer-section .offer-card {
     width: 100%;
-    margin: 0;
+    margin-left: 3.5rem;
+}
+
+a.offer-card,
+a .offer-card,
+.offer-grid a {
+    text-decoration: none !important;
+}
+
+/* S'assurer que TOUS les éléments à l'intérieur ne sont pas soulignés */
+a.offer-card *,
+a .offer-card *,
+.offer-grid a * {
+    text-decoration: none !important;
 }
 
 @media screen and (max-width: 768px) {
@@ -248,7 +247,12 @@
         max-width: 320px;
         margin: 0 auto;
     }
+    .user-offer-section .offer-card,
+    .user-bought-offer-section .offer-card {
+        margin: 0
+    }
 }
+
 
 @media screen and (max-width: 480px) {
     .offer-description,
@@ -269,5 +273,10 @@
     .section-title-bought {
         font-size: 1rem;
         padding: 0.8rem;
+    }
+
+    .user-offer-section .offer-card,
+    .user-bought-offer-section .offer-card {
+        margin: 0
     }
 }
