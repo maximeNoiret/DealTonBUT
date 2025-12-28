@@ -1,76 +1,73 @@
-/* Grille de cartes d'offres - 2 colonnes */
 .offer-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
-    gap: clamp(1rem, 2vw, 1.5rem);
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
     padding: 0.5rem;
 }
-/* Carte d'offre individuelle */
+
 .offer-card {
     background: #BFBFBF;
     border: 2px solid #000;
-    border-radius: 0.625rem;
-    padding: clamp(0.8rem, 1.5vw, 1.2rem);
+    border-radius: 10px;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
-    gap:01rem;
-    box-shadow: 0.125rem 0.125rem 0.3rem rgba(0,0,0,0.2);
+    gap: 0.6rem;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
     min-height: 200px;
     width: 100%;
-    margin-left : 70px;
-    margin-right: 0;
-}
-.offer-card:hover {
-    box-shadow: 0.25rem 0.25rem 0.5rem rgba(0,0,0,0.3);
-    transform: translateY(-0.1rem);
     transition: all 0.2s ease-in-out;
 }
-/* Header de la carte (avatar + pseudo) */
+
+.offer-card:hover {
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+    transform: translateY(-2px);
+}
+
 .offer-header {
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    margin-bottom: 0.3rem;
 }
+
 .offer-avatar {
-    width: clamp(35px, 4vw, 45px);
-    height: clamp(35px, 4vw, 45px);
+    width: 45px;
+    height: 45px;
     object-fit: cover;
     flex-shrink: 0;
 }
+
 .offer-author {
     font-weight: bold;
-    font-size: clamp(0.8rem, 1.2vw, 0.9rem);
+    font-size: 0.9rem;
     word-break: break-word;
 }
-/* Titre de l'offre */
+
 .offer-title {
-    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    font-size: 1.2rem;
     font-weight: bold;
     margin: 0.3rem 0;
     word-wrap: break-word;
 }
-/* Tags */
+
 .offer-tags {
     display: flex;
     gap: 0.4rem;
     flex-wrap: wrap;
-    margin: 0.3rem 0;
 }
+
 .tag {
-    font-size: clamp(0.75rem, 1vw, 0.85rem);
+    font-size: 0.85rem;
     font-weight: bold;
 }
-/* Description */
+
 .offer-description {
-    font-size: clamp(0.75rem, 1.1vw, 0.85rem);
+    font-size: 0.85rem;
     line-height: 1.4;
-    margin: 0.3rem 0;
     flex-grow: 1;
     word-wrap: break-word;
-    overflow-wrap: break-word;
 }
-/* Footer de la carte (date + prix) */
+
 .offer-footer {
     display: flex;
     justify-content: space-between;
@@ -79,19 +76,19 @@
     padding-top: 0.6rem;
     border-top: 1px solid #8C8C8C;
     gap: 0.5rem;
-    flex-wrap: wrap;
 }
+
 .offer-date {
-    font-size: clamp(0.7rem, 1vw, 0.8rem);
+    font-size: 0.8rem;
     font-weight: bold;
 }
+
 .offer-price {
-    font-size: clamp(0.9rem, 1.3vw, 1rem);
+    font-size: 1rem;
     font-weight: bold;
     text-align: right;
-    line-height: 1.2;
 }
-/* Footer compact pour les offres achetées */
+
 .offer-footer-compact {
     display: flex;
     justify-content: flex-end;
@@ -99,167 +96,175 @@
     margin-top: auto;
     padding-top: 0.6rem;
 }
-@media screen and (max-width: 480px) {
-    .offer-description {
-        font-size: 15px;
-    }
-    .offer-date{
-        font-size: 15px;
-    }
-}
 
-/* PAGE COMPTE */
 .account-main {
     background: #D9D9D9;
     display: flex;
     flex-direction: column;
-    width: min(90%, 1400px);
+    width: 90%;
+    max-width: 1400px;
     margin: 2vh auto;
     border-radius: 1.5rem;
-    box-sizing: border-box;
 }
+
 .user-data {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: clamp(1rem, 2vw, 2rem) clamp(1.5rem, 3vw, 3rem);
-    border-bottom: 0.4rem solid #8C8C8C;
+    padding: 2rem 3rem;
+    border-bottom: 4px solid #8C8C8C;
     gap: 2rem;
     flex-wrap: wrap;
 }
+
 .user-profile {
     display: flex;
-    gap: clamp(1rem, 2vw, 2rem);
+    gap: 2rem;
     align-items: center;
 }
+
 .user-pp {
-    width: clamp(80px, 10vw, 120px);
-    height: clamp(80px, 10vw, 120px);
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     object-fit: cover;
 }
+
 .user-name,
 .user-component {
     display: flex;
     flex-direction: column;
     gap: 0.3rem;
 }
+
 .user-name p,
 .user-component p {
     margin: 0;
 }
+
 .user-component {
     text-align: right;
 }
+
 .tittle-offer-section {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    border-bottom: 0.4rem solid #8C8C8C;
+    border-bottom: 4px solid #8C8C8C;
 }
+
 .section-title-offer,
 .section-title-bought {
     text-align: center;
     padding: 1.5rem;
     margin: 0;
-    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    font-size: 1.5rem;
 }
+
 .section-title-offer {
-    border-right: 0.4rem solid #8C8C8C;
+    border-right: 4px solid #8C8C8C;
 }
+
 .offer-section {
     display: grid;
     grid-template-columns: 1fr 1fr;
     min-height: 400px;
-    margin-right: 10px;
 }
 
-/* ✅ CORRECTION - 2 cartes par ligne dans chaque colonne sur ORDINATEUR */
 .user-offer-section {
-    border-right: 0.4rem solid #8C8C8C;
+    border-right: 4px solid #8C8C8C;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
-    width: 100%;
+    padding: 1.5rem;
 }
+
 .user-bought-offer-section {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
-    width: 100%;
-    margin-left: 20px;
+    padding: 1.5rem;
 }
 
-/* Les cartes s'adaptent automatiquement à la grille */
 .user-offer-section .offer-card,
 .user-bought-offer-section .offer-card {
     width: 100%;
-    max-width: 100%;
+    margin: 0;
 }
 
-@media screen and (max-width: 1024px) {
-    .user-offer-section,
-    .user-bought-offer-section {
-        gap: 1.5rem;
-    }
-}
 @media screen and (max-width: 768px) {
     .user-data {
         flex-direction: column;
         align-items: flex-start;
-        gap: 1.5rem;
+        padding: 1.5rem;
     }
+
     .user-component {
         text-align: left;
     }
+
     .account-main {
         width: 95%;
         margin: 1vh auto;
     }
+
     .tittle-offer-section {
         border-bottom: none;
     }
+
     .section-title-offer,
     .section-title-bought {
         cursor: pointer;
         padding: 1rem;
         background: #BFBFBF;
-        border-bottom: 0.4rem solid #8C8C8C;
+        border-bottom: 4px solid #8C8C8C;
         user-select: none;
     }
+
     .section-title-offer {
-        border-right: 0.2rem solid #8C8C8C;
+        border-right: 2px solid #8C8C8C;
     }
+
     .section-title-bought {
-        border-left: 0.2rem solid #8C8C8C;
+        border-left: 2px solid #8C8C8C;
     }
+
     .section-title-offer.active,
     .section-title-bought.active {
         background: #D9D9D9;
         font-weight: bold;
     }
+
     .offer-section {
         grid-template-columns: 1fr;
-        justify-items: center;
     }
+
     .user-offer-section,
     .user-bought-offer-section {
         border-right: none;
-        padding: 1.5rem;
+        grid-template-columns: 1fr;
     }
-    /* ✅ limitation UNIQUEMENT sur mobile */
+
     .offer-card {
         max-width: 320px;
         margin: 0 auto;
     }
 }
+
 @media screen and (max-width: 480px) {
+    .offer-description,
+    .offer-date {
+        font-size: 15px;
+    }
+
     .user-profile {
         font-size: 14px;
     }
+
     .user-offer-section,
     .user-bought-offer-section {
         padding: 1rem;
     }
+
     .section-title-offer,
     .section-title-bought {
         font-size: 1rem;
