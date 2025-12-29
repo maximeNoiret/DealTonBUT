@@ -10,5 +10,8 @@ return array(
     'models\\' => array($baseDir . '/modules/dtu/models'),
     'dtu\\' => array($baseDir . '/modules/dtu'),
     'controllers\\' => array($baseDir . '/modules/dtu/controllers'),
+    'PhpParser\\' => array($vendorDir . '/nikic/php-parser/lib/PhpParser'),
     'PHPMailer\\PHPMailer\\' => array($vendorDir . '/phpmailer/phpmailer/src'),
+    'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator'),
+    'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),
 );
