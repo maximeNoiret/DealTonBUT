@@ -25,7 +25,7 @@ class SeeOfferView extends AbstractView
       'description' => $offer['description'],
       'price' => $offer['price'],
       'deadline' => $offer['deadline'],
-      'button-offer' => (new SeeOffer())->buttonOffer()
+      'button-offer' => new SeeOffer()->buttonOffer()
     ];
   }
 
