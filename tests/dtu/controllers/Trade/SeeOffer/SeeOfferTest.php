@@ -4,15 +4,15 @@ use PHPUnit\Framework\TestCase;
 use views\Trade\MarketPlace\MarketPlaceView;
 use controllers\Trade\MarketPlace\MarketPlace;
 
-class MarketPlaceViewTest extends TestCase {
+class SeeOfferTest extends TestCase {
 
-  public function returnsCorrectPath() {
+  public function testReturnsCorrectPath() {
     $view = new MarketPlaceView();
     $expectedPath = __DIR__ . DIRECTORY_SEPARATOR . 'MarketPlace.html';
     $this->assertEquals($expectedPath, $view->path());
   }
 
-  public function returnsTemplateValuesWithOffers() {
+  public function TestReturnsTemplateValuesWithOffers() {
     $mockOffers = ['offer1', 'offer2'];
     $this->mockStaticMethod(MarketPlace::class, 'getOffers', $mockOffers);
 
@@ -23,7 +23,7 @@ class MarketPlaceViewTest extends TestCase {
     $this->assertEquals($mockOffers, $values['OFFERS']);
   }
 
-  public function returnsCorrectNavbarText() {
+  public function testReturnsCorrectNavbarText() {
     $view = new MarketPlaceView();
     $this->assertEquals('Place De Marché', $view->navbarText());
   }
