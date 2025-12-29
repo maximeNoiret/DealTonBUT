@@ -350,12 +350,11 @@ class DataBase {
         float $price,
         string $description,
         string $deadline
-    ): void {
-        // Insérer l'offre
+    ): int {
         $query = $this->dbConn->prepare('
-        INSERT INTO offer(owner, title, description, price, creation_time, deadline)
-        VALUES (:owner, :title, :description, :price, :creation_time, :deadline)
-    ');
+    INSERT INTO offer(owner, title, description, price, creation_time, deadline)
+    VALUES (:owner, :title, :description, :price, :creation_time, :deadline)
+');
 
         $query->bindValue('owner', $userEmail);
         $query->bindValue('title', $title);
@@ -364,6 +363,25 @@ class DataBase {
         $query->bindValue('creation_time', date('Y-m-d H:i:s'));
         $query->bindValue('deadline', $deadline . ' 23:59:59');
         $query->execute();
+
+        return (int) $this->dbConn->lastInsertId();
+    }
+
+    /**
+     * @description Inserts a tag and associates it with an offer.
+     * @param string $tagname The name of the tag.
+     * @param int $ouid The unique identifier of the offer.
+     * @return void
+     */
+    public function insertTag(string $tagname, int $ouid): void {
+        $query1 = $this->dbConn->prepare('INSERT IGNORE INTO tag (tagname) VALUES (:tagname)');
+        $query1->bindValue('tagname', $tagname);
+        $query1->execute();
+
+        $query2 = $this->dbConn->prepare('INSERT INTO tags (ouid, tagname) VALUES (:ouid, :tagname)');
+        $query2->bindValue('ouid', $ouid);
+        $query2->bindValue('tagname', $tagname);
+        $query2->execute();
     }
 
 /**
