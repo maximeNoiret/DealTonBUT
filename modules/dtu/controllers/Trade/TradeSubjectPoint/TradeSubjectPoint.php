@@ -20,7 +20,7 @@ class TradeSubjectPoint implements Controller {
     if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
       header('Location: /user/login');
     } else {
-      echo (new TradeSubjectPointView())->render("Échanger Points - DealTonBUT", static::STYLESHEET);
+      echo new TradeSubjectPointView()->render("Échanger Points - DealTonBUT", static::STYLESHEET);
     }
   }
 

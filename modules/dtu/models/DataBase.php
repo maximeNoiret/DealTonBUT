@@ -412,6 +412,25 @@ class DataBase {
     }
 
     /**
+     * @description ensures that the subject exists, then associates it with the user.
+     * @param string $email The email address of the user.
+     * @param string $subject_name The name of the subject.
+     * @param float $points The new points value.
+     * @return void
+     */
+    public function insertSubjectSafe(string $email, string $subject_name, float $points = 0): void {
+        $query1 = $this->dbConn->prepare('INSERT IGNORE INTO subject (subject_name) VALUES (:name)');
+        $query1->bindValue('name', $subject_name);
+        $query1->execute();
+
+        $query2 = $this->dbConn->prepare('INSERT IGNORE INTO points (email, subject_name, points) VALUES (:email, :name, :points)');
+        $query2->bindValue('email', $email);
+        $query2->bindValue('name', $subject_name);
+        $query2->bindValue('points', $points);
+        $query2->execute();
+    }
+
+    /**
      * @description Updates the points for a specific subject of a user.
      * @param string $email The email address of the user.
      * @param float $points The new points value.
