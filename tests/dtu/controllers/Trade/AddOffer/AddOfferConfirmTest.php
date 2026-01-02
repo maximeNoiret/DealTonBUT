@@ -1,5 +1,4 @@
 <?php
-//TODO: write and correct the tests made by this dumb IA
 namespace Trade\AddOffer;
 
 use controllers\Trade\AddOffer\AddOfferConfirm;
@@ -13,22 +12,6 @@ class AddOfferConfirmTest extends TestCase
   public function setUp(): void{
     // create a AddOfferConfirm instance
     $this->addOfferConfirm = new AddOfferConfirm();
-
-    // create a mock for DataBase.php
-/*    $mockDb = $this->getMockBuilder(DataBase::class)
-      ->disableOriginalConstructor()
-      ->onlyMethods(['insertOffre'])
-      ->getMock();
-
-    $mockDb->expects($this->once())
-      ->method('insertOffre')
-      ->with(
-        $this->equalTo('test@example.com'),
-        $this->equalTo('Valid Offer'),
-        $this->equalTo(100.0),
-        $this->equalTo('Valid Description'),
-        $this->equalTo('2023-12-31')
-      );*/
   }
 
   /**
