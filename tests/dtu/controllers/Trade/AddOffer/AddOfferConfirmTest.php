@@ -98,4 +98,19 @@ class AddOfferConfirmTest extends TestCase
     $this->assertContains('Location: /marketplace', $headers);
   }
 
+  public function testResolvesCorrectPathAndMethod()
+  {
+    $this->assertTrue(AddOfferConfirm::resolve('/offre/confirm', 'POST'));
+  }
+
+  public function testDoesNotResolveIncorrectPath()
+  {
+    $this->assertFalse(AddOfferConfirm::resolve('/wrong-path', 'POST'));
+  }
+
+  public function testDoesNotResolveIncorrectMethod()
+  {
+    $this->assertFalse(AddOfferConfirm::resolve('/offre/confirm', 'GET'));
+  }
+
 }
