@@ -14,32 +14,15 @@ class DeleteOfferTest extends TestCase
 
   private DeleteOffer $deleteOffer;
   private DataBase $dbConn;
-  /*
- USER :
-    Email: test@testUser01.com
-    Username: testUser01
-    password: password
- */
   private string $testEmail01='test@testUser01.com';
   private string $testUsername01='testUser01';
   private string $testPassword01='password';
-  private int $testOuid01=12;
+  private int $testOuid01=0;
 
   public function setUp(): void{
     // create a DeleteOffer instance
     $this->deleteOffer = new DeleteOffer();
-    // create a mock for DataBase.php
-    // TODO: figure how to mock database
-    /*$mockDb = $this->getMockBuilder(DataBase::class)
-          ->disableOriginalConstructor()
-          ->onlyMethods(['deleteOffer'])
-          ->getMock();
-
-        $mockDb->expects($this->once())
-          ->method('deleteOffer')
-          ->with(
-            $this->equalTo(12)
-          );*/
+    // set up for database related unit tests
     $this->dbConn = DataBase::getInstance();
 
     // create a test account, that will have to be deleted in teardown()
@@ -49,7 +32,8 @@ class DeleteOfferTest extends TestCase
     $this->dbConn->setRole($this->testEmail01,'student');
 
     // OFFER
-    //  param of the offer :
+    //TODO: find a way to get his ouid after insertion
+    //param of the offer :
     $_SESSION['email'] = $this->testEmail01;
     $title = 'UNIT_TEST_OFFER';
     $price = '100';
@@ -62,6 +46,15 @@ class DeleteOfferTest extends TestCase
       $description,
       $end_date
     );
+
+    // get the ouid of the offers of the test user
+    $offer = $this->dbConn->executeQuery(
+      'SELECT ouid FROM offer WHERE owner =\'test@testUser01.com\';'
+    );
+    // second version made by autocomplete, i don't use it because i don't really understand it
+    /*'SELECT ouid FROM offer WHERE owner =? AND title = ? AND description =?',
+      [$this->testEmail01, $title, $description]*/
+    $this->testOuid01 = $offer[0]['ouid'];
   }
 
   public function testRedirectsToLoginIfNotLoggedIn()
@@ -139,7 +132,6 @@ class DeleteOfferTest extends TestCase
 
   public function tearDown(): void
   {
-    // delete the test offer and user from database
     $this->dbConn->deleteOffer($this->testOuid01);
     $this->dbConn->deleteUser($this->testEmail01);
   }
