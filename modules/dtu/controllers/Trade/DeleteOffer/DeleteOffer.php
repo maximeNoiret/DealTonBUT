@@ -20,12 +20,14 @@ class DeleteOffer implements Controller
     {
         if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
             header('Location: /user/login');
-            exit;
+//            exit;
+            return;
         }
 
         if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
             header('Location: /marketplace');
-            exit;
+//            exit;
+          return;
         }
 
         $id = (int)$_GET['id'];
@@ -33,7 +35,8 @@ class DeleteOffer implements Controller
 
         if (!$offer) {
             header('Location: /marketplace');
-            exit;
+//            exit;
+          return;
         }
 
         /**
@@ -42,7 +45,8 @@ class DeleteOffer implements Controller
         $owner = $offer['owner'];
         if ($owner !== $_SESSION['email']) {
             header('Location: /marketplace');
-            exit;
+//            exit;
+          return;
         }
 
         DataBase::getInstance()->deleteOffer($id);

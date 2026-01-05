@@ -30,7 +30,7 @@ class DataBase {
      * @var array<string, string> $env
      */
     // if any of the env variables aren't set, throw
-    if (!isset($env['DB_HOSTNAME']) || 
+    if (!isset($env['DB_HOSTNAME']) ||
       !isset($env['DB_NAME']) ||
       !isset($env['DB_USER']) ||
       !isset($env['DB_PASSWORD'])) {
@@ -75,7 +75,7 @@ class DataBase {
     string $username,
     string $email
   ): void {
-    //$hashedpwd = password_hash($password, PASSWORD_DEFAULT);
+     // password_hash($password, PASSWORD_DEFAULT);
     $query = $this->dbConn->prepare(
       'REPLACE INTO user_(email, username)
       VALUES (:email, :username)');
@@ -123,16 +123,16 @@ class DataBase {
       WHERE email = :email');
     $query->bindValue('email', $email);
     $query->execute();
-    
+
     /**
      * @var array<string, string> $user
      */
     $user = $query->fetch(PDO::FETCH_ASSOC);
-    
+
     if (!$user) {
         return false;
     }
-    
+
     // Verify password against stored hash
     if (password_verify($password, $user['hashedpwd'])) {
         // Return user data WITHOUT the password hash
@@ -277,7 +277,78 @@ class DataBase {
     return $query->fetch(PDO::FETCH_ASSOC);
   }
 
-  /**
+
+    public function buyOffer(string $email, int $ouid): bool
+    {
+        try {
+            $this->dbConn->beginTransaction();
+            $offerQuery = $this->dbConn->prepare('
+                SELECT owner, price, deadline 
+                FROM offer 
+                WHERE ouid = :ouid
+            ');
+            $offerQuery->bindValue('ouid', $ouid);
+            $offerQuery->execute();
+            $offer = $offerQuery->fetch(PDO::FETCH_ASSOC);
+
+            //Si l'offre n'existe pas
+            if (!$offer) {
+                $this->dbConn->rollBack();
+                return false;
+            }
+            // Si l'utilisateur essaye d'acheter ça propre offre
+            if ($offer['owner'] == $email) {
+                $this->dbConn->rollBack();
+                return false;
+            }
+            //Si la date max a été dépasser
+            if (strtotime($offer['deadline']) < time()) {
+                $this->dbConn->rollBack();
+                return false;
+            }
+            // Si l'utilisateur n'as pas assez de sous
+            $queryForBalance = $this->getBalance($email);
+            if ($queryForBalance === false || $queryForBalance < $offer['price']) {
+                $this->dbConn->rollBack();
+                return false;
+            }
+            $queryRemoveMoney = $this->dbConn->prepare('
+                UPDATE user_
+                SET balance = balance - :price
+                WHERE email = :email'
+            );
+            $queryRemoveMoney->bindValue('price', $offer['price']);
+            $queryRemoveMoney->bindValue('email', $email);
+            $queryRemoveMoney->execute();
+
+            $queryAddMoney = $this->dbConn->prepare('
+                UPDATE user_ 
+                SET balance = balance + :price 
+                WHERE email = :email
+            ');
+            $queryAddMoney->bindValue('price', $offer['price']);
+            $queryAddMoney->bindValue('email', $offer['owner']);
+            $queryAddMoney->execute();
+
+            $transactionQuery = $this->dbConn->prepare('
+                INSERT INTO transaction(email, ouid, amount, transaction_time) 
+                VALUES (:email, :ouid, :amount, :transaction_time)
+            ');
+            $transactionQuery->bindValue('email', $email);
+            $transactionQuery->bindValue('ouid', $ouid);
+            $transactionQuery->bindValue('amount', $offer['price']);
+            $transactionQuery->bindValue('transaction_time', date('Y-m-d H:i:s'));
+            $transactionQuery->execute();
+
+            $this->dbConn->commit();
+            return true;
+        } catch (\Exception $e) {
+            $this->dbConn->rollBack();
+            return false;
+        }
+    }
+
+    /**
    * @description Deletes an offer from the database.
    * @param int $ouid The unique identifier of the offer to delete.
    * @return void
@@ -384,20 +455,6 @@ class DataBase {
         $query2->execute();
     }
 
-/**
-     * @description Adds a subject for a user with initial points.
-     * @param string $email The email address of the user.
-     * @param string $subject_name The name of the subject.
-     * @param float $points The initial points for the subject.
-     * @return void
-     */
-    public function setSubject(string $email, string $subject_name, float $points): void {
-        $query = $this->dbConn->prepare('INSERT INTO points(email, subject_name, points) VALUES (:email, :subject_name, :points)');
-        $query->bindValue('email', $email);
-        $query->bindValue('subject_name', $subject_name);
-        $query->bindValue('points', $points);
-        $query->execute();
-    }
 
     /**
      * @description Retrieves all subjects for a user.
@@ -409,6 +466,25 @@ class DataBase {
         $query->bindValue('email', $email);
         $query->execute();
         return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * @description ensures that the subject exists, then associates it with the user.
+     * @param string $email The email address of the user.
+     * @param string $subject_name The name of the subject.
+     * @param float $points The new points value.
+     * @return void
+     */
+    public function insertSubjectSafe(string $email, string $subject_name, float $points): void {
+        $query1 = $this->dbConn->prepare('INSERT IGNORE INTO subject (subject_name) VALUES (:name)');
+        $query1->bindValue('name', $subject_name);
+        $query1->execute();
+
+        $query2 = $this->dbConn->prepare('INSERT IGNORE INTO points (email, subject_name, points) VALUES (:email, :name, :points)');
+        $query2->bindValue('email', $email);
+        $query2->bindValue('name', $subject_name);
+        $query2->bindValue('points', $points);
+        $query2->execute();
     }
 
     /**
@@ -447,11 +523,12 @@ class DataBase {
      * @param string $from_subject The subject from which points are deducted.
      * @param string $to_subject The subject to which points are added.
      * @return void
+     * @throws \Exception
      */
     public function transferPoints(string $email, float $points, string $from_subject, string $to_subject): void {
         try {
             $this->dbConn->beginTransaction();
-            
+
             $query1 = $this->dbConn->prepare(
               'UPDATE points SET points = points - :points WHERE email = :email AND subject_name = :subject_name'
             );
@@ -460,7 +537,7 @@ class DataBase {
             $query1->bindValue('points', $points);
             $query1->bindValue('subject_name', $from_subject);
             $query1->execute();
-            
+
             $query2 = $this->dbConn->prepare(
               'UPDATE points SET points = points + :points WHERE email = :email AND subject_name = :subject_name'
             );
@@ -470,7 +547,7 @@ class DataBase {
             $query2->bindValue('points', $points);
             $query2->bindValue('subject_name', $to_subject);
             $query2->execute();
-            
+
             $this->dbConn->commit();
         } catch (\Exception $e) {
             $this->dbConn->rollBack();

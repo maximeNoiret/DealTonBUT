@@ -10,6 +10,7 @@ use controllers\Main;
 use controllers\Trade\AddOffer\AddOffer;
 use controllers\Trade\AddOffer\AddOfferConfirm;
 use controllers\Trade\DeleteOffer\DeleteOffer;
+use controllers\Trade\BuyOffer\BuyOffer;
 use controllers\Trade\MarketPlace\MarketPlace;
 use controllers\Trade\SeeOffer\SeeOffer;
 use controllers\Trade\TradeSubjectPoint\TradeSubjectPoint;
@@ -74,8 +75,9 @@ $controllers = [
   new TradeSubjectPoint(),
   new PasswordReset(),
   new PasswordResetConfirm(),
-    new Confidentiality(),
-    new TermsOfUse(),
+  new Confidentiality(),
+  new TermsOfUse(),
+  new BuyOffer(),
 
   // Forbidden
   new Env()
