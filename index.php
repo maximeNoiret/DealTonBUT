@@ -27,7 +27,7 @@ use controllers\User\Settings\Settings;
 use controllers\User\Register\Register;
 use controllers\User\Register\RegisterConfirm;
 use dtu\views\Forbidden;
-use models\DataBase;
+use models\AccountDB;
 
 include __DIR__ . '/_assets/includes/Autoloader.php';
 
@@ -80,7 +80,7 @@ $controllers = [
 foreach ($controllers as $controller) {
   if ($controller::resolve($path, $meth)) {
     if (isset($_SESSION['email']) && isset($_SESSION['logged-in']) && $_SESSION['logged-in'] === true) {
-      DataBase::getInstance()->updateBalance($_SESSION['email']);
+      AccountDB::getInstance()->updateBalance($_SESSION['email']);
     }
     $controller->control();
     exit();

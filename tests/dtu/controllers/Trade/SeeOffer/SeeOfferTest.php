@@ -3,14 +3,14 @@
 namespace Trade\SeeOffer;
 
 use controllers\Trade\SeeOffer\SeeOffer;
-use models\DataBase;
+use models\AccountDB;
 use PHPUnit\Framework\TestCase;
 
 class SeeOfferTest extends TestCase
 {
 
   private SeeOffer $seeOffer;
-  private DataBase $dbConn;
+  private AccountDB $dbConn;
   private string $testEmail01='test@testUser01.com';
   private string $testUsername01='testUser01';
   private string $testPassword01='password';
@@ -20,7 +20,7 @@ class SeeOfferTest extends TestCase
   {
     $seeOffer = new SeeOffer();
     // set up for database related unit tests
-    $this->dbConn = DataBase::getInstance();
+    $this->dbConn = AccountDB::getInstance();
 
     // create a test account, that will have to be deleted in teardown()
     $this->dbConn->registerAccount($this->testUsername01,$this->testEmail01);

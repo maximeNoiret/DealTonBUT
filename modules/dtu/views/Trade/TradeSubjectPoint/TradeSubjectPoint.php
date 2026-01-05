@@ -3,7 +3,8 @@
 namespace views\Trade\TradeSubjectPoint;
 
 use core\views\AbstractView;
-use models\DataBase;
+use dtu\models\SubjectDB;
+use models\AccountDB;
 
 class TradeSubjectPoint extends AbstractView {
 
@@ -11,8 +12,11 @@ class TradeSubjectPoint extends AbstractView {
         return __DIR__ . DIRECTORY_SEPARATOR . 'TradeSubjectPointTemplate.html';
     }
 
-    function templateValues(): array {
-        $db = DataBase::getInstance();
+  /**
+   * @throws Exception
+   */
+  function templateValues(): array {
+        $db = SubjectDB::getInstance();
         $email = $_SESSION['email'] ?? '';
         $flash = '';
 

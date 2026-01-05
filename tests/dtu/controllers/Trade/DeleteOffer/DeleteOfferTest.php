@@ -4,7 +4,7 @@ namespace Trade\DeleteOffer;
 
 use controllers\Trade\DeleteOffer\DeleteOffer;
 use PHPUnit\Framework\TestCase;
-use models\DataBase;
+use models\AccountDB;
 
 /**
  * @runTestsInSeparateProcesses
@@ -13,7 +13,7 @@ class DeleteOfferTest extends TestCase
 {
 
   private DeleteOffer $deleteOffer;
-  private DataBase $dbConn;
+  private AccountDB $dbConn;
   private string $testEmail01='test@testUser01.com';
   private string $testUsername01='testUser01';
   private string $testPassword01='password';
@@ -23,7 +23,7 @@ class DeleteOfferTest extends TestCase
     // create a DeleteOffer instance
     $this->deleteOffer = new DeleteOffer();
     // set up for database related unit tests
-    $this->dbConn = DataBase::getInstance();
+    $this->dbConn = AccountDB::getInstance();
 
     // create a test account, that will have to be deleted in teardown()
     $this->dbConn->registerAccount($this->testUsername01,$this->testEmail01);

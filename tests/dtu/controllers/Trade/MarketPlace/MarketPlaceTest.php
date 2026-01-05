@@ -3,7 +3,7 @@
 namespace Trade\MarketPlace;
 
 use controllers\Trade\MarketPlace\MarketPlace;
-use models\DataBase;
+use models\AccountDB;
 use PHPUnit\Framework\TestCase;
 //TODO: finish the tests
 /**
@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 class MarketPlaceTest extends TestCase
 {
   private MarketPlace $marketPlace;
-  private DataBase $dbConn;
+  private AccountDB $dbConn;
   private string $testEmail01='test@testUser01.com';
   private string $testUsername01='testUser01';
   private string $testPassword01='password';
@@ -21,7 +21,7 @@ class MarketPlaceTest extends TestCase
   public function setUp(): void{
     // create a DeleteOffer instance
     $this->marketPlace = new MarketPlace();
-    $this->dbConn = DataBase::getInstance();
+    $this->dbConn = AccountDB::getInstance();
 
     // create a test account, that will have to be deleted in teardown()
     $this->dbConn->registerAccount($this->testUsername01,$this->testEmail01);

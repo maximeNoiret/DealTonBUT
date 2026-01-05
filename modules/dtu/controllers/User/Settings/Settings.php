@@ -4,7 +4,7 @@ namespace controllers\User\Settings;
 
 use core\controllers\Controller;
 use views\User\SettingsPage\SettingsPageView;
-use models\DataBase;
+use models\AccountDB;
 //use views\SettingsPageView;
 
 class Settings implements Controller
@@ -31,7 +31,7 @@ class Settings implements Controller
     if (isset($_SESSION['email']) && is_string($_SESSION['email'])) {
       $email = $_SESSION['email'];
     }
-    DataBase::getInstance()->deleteUser($email);
+    AccountDB::getInstance()->deleteUser($email);
     session_destroy();
     header('Location: /user/login');
   }

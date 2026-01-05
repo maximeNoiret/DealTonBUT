@@ -4,8 +4,9 @@ namespace controllers\Trade\SeeOffer;
 
 
 use core\controllers\Controller;
+use dtu\models\TradeDB;
 use dtu\views\Trade\SeeOffer\SeeOfferView;
-use models\DataBase;
+use models\AccountDB;
 
 class SeeOffer implements Controller
 {
@@ -38,7 +39,7 @@ class SeeOffer implements Controller
       /**
        * @var $offers array<mixed>
        */
-      self::$offer = DataBase::getInstance()->getOffer(self::$id);
+      self::$offer = TradeDB::getInstance()->getOffer(self::$id);
       return;
     }
     self::$offer = [];
