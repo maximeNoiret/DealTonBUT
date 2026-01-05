@@ -29,11 +29,13 @@ class AddOfferConfirm implements Controller
         if (empty($title) || empty($price) || empty($end_date) || empty($description)) {
             echo "Veuillez remplir tous les champs";
             header('Location: /offre');
-            exit();
+            /*exit();*/
+          return;
         }
         if (!is_numeric($price) || $price <= 0 || $price > 999999) {
             header('Location: /offre');
-            exit();
+           /* exit();*/
+            return;
         }
 
 
