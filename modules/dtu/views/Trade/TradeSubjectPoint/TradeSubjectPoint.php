@@ -69,8 +69,10 @@ class TradeSubjectPoint extends AbstractView {
                     $subjects = array_unique($subjects);
 
                     // Insertion en base
+
                     foreach ($subjects as $subject) {
-                        $db->insertSubjectSafe($email, $subject, 0);
+                        $rand_point = rand(0, 20);
+                        $db->insertSubjectSafe($email, $subject, $rand_point);
                     }
 
                     $flash = '<div class="flash success">Matières importées avec succès.</div>';
