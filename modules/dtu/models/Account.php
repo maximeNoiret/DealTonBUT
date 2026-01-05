@@ -34,7 +34,7 @@ class Account {
     $token = bin2hex(random_bytes(16));
     $hashedToken = hash('sha256', $token);
     $db->insertToken($email, $token);
-    $verifyLink = 'https://' . self::DOMAIN_NAME .
+    $verifyLink = 'http://' . $_SERVER['HTTP_HOST'] . //self::DOMAIN_NAME .
       '/user/register/verify?token=' . $token;
     if (!Mailer::sendVerificationEmail($email, $verifyLink)) {
       return 'mailer_error';
@@ -82,9 +82,9 @@ class Account {
       }
 
       $token = bin2hex(random_bytes(16));
-      $hashedToken = hash('sha256', $token);
+      //$hashedToken = hash('sha256', $token);
       $db->insertToken($email, $token);  // TODO: update db
-      $resetLink = 'https://' . self::DOMAIN_NAME .
+      $resetLink = 'http://' . $_SERVER['HTTP_HOST'] . //self::DOMAIN_NAME .
         '/user/validate?email=' . urlencode($email) . '&token=' . $token;
       if (!Mailer::sendForgotPassword($email, $resetLink)) {
         return 'message';
