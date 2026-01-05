@@ -24,9 +24,9 @@ class PasswordResetConfirm implements Controller
      * @var array<string, string> $_SESSION
      */
     if (DataBase::getInstance()->updatePassword($_SESSION['reset_email'] ?? '', $hashedPassword)) {
-      echo (new LoginFormView('password_changed')->render('Login - DealTonBUT', Login::STYLESHEET));
+      echo ((new LoginFormView('password_changed'))->render('Login - DealTonBUT', Login::STYLESHEET));
     } else {
-      echo (new LoginFormView('unknownerroroccured')->render('Login - DealTonBUT', Login::STYLESHEET));
+      echo ((new LoginFormView('unknownerroroccured'))->render('Login - DealTonBUT', Login::STYLESHEET));
     }
     // - else: display "invalid link" and quit
   }

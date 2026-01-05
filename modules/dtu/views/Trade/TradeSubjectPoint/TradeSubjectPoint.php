@@ -13,20 +13,36 @@ class TradeSubjectPoint extends AbstractView {
 
   function templateValues(): array {
     $db = DataBase::getInstance();
+    /**
+     * @var string $email
+     */
     $email = $_SESSION['email'] ?? '';
     
     $subjectsRows = $db->getSubject($email);
     $subjects = [];
     foreach ($subjectsRows as $row) {
+      /**
+       * @var array<string, mixed> $row
+       */
       $subjects[] = $row['subject_name'];
     }
 
     $flash = '';
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      /**
+       * @var string $from
+       */
       $from = $_POST['from_subject'];
+      /**
+       * @var string $to
+       */
       $to = $_POST['to_subject'];
-      $points = floatval($_POST['points']);
+      /**
+       * @var string|float|int|bool $pointsValue
+       */
+      $pointsValue = $_POST['points'];
+      $points = floatval($pointsValue);
 
       if ($from == $to) {
         $flash = '<div class="flash error">Tu dois choisir deux matières différentes.</div>';
@@ -45,6 +61,9 @@ class TradeSubjectPoint extends AbstractView {
     $toOptions = '';
     
     foreach ($subjects as $subject) {
+      /**
+       * @var string $subject
+       */
       $pts = $db->getPoints($email, $subject);
       $option = '<option value="' . $subject . '">' . $subject . ' (' . $pts . ' pts)</option>';
       $fromOptions .= $option;

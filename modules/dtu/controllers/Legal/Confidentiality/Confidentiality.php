@@ -21,7 +21,7 @@ class Confidentiality implements Controller
         if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
             header('Location: /user/login');
         } else {
-            echo (new ConfidentialityView(''))->render("Confidentialité - DealTonBUT", self::STYLESHEET);
+            echo (new ConfidentialityView())->render("Confidentialité - DealTonBUT", self::STYLESHEET);
         }
     }
 

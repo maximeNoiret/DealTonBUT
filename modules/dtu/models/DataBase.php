@@ -342,7 +342,7 @@ class DataBase {
      * @param float $price The price of the offer.
      * @param string $description The description of the offer.
      * @param string $deadline The deadline for the offer in 'YYYY-MM-DD' format.
-     * @return void
+     * @return int
      */
     public function insertOffre(
         string $userEmail,
@@ -514,6 +514,3 @@ class DataBase {
     return (string) $query->fetchColumn();
   }
 }
-
-
-

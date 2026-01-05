@@ -36,7 +36,11 @@ class DeleteOffer implements Controller
             exit;
         }
 
-        if ($offer['owner'] !== $_SESSION['email']) {
+        /**
+         * @var array<string, mixed> $offer
+         */
+        $owner = $offer['owner'];
+        if ($owner !== $_SESSION['email']) {
             header('Location: /marketplace');
             exit;
         }
