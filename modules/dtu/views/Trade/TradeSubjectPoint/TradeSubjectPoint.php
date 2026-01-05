@@ -80,6 +80,7 @@ class TradeSubjectPoint extends AbstractView {
             }
         }
 
+
         $subjectsRows = $db->getSubject($email);
         $fromOptions = '';
         $toOptions = '';
