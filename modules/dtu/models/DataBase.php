@@ -75,7 +75,7 @@ class DataBase {
     string $username,
     string $email
   ): void {
-    //$hashedpwd = password_hash($password, PASSWORD_DEFAULT);
+     // password_hash($password, PASSWORD_DEFAULT);
     $query = $this->dbConn->prepare(
       'REPLACE INTO user_(email, username)
       VALUES (:email, :username)');

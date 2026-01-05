@@ -15,9 +15,9 @@ require 'vendor/autoload.php';
 
 class Mailer {
   /**
-   * @return string : Returns the API key stored in the .apkey file.
+   * @return string : Returns the API key stored in the ..apkey file.
    */
-  // NOTE: Make sure to get the .apkey file, it is not in the repository
+  // NOTE: Make sure to get the ..apkey file, it is not in the repository
   public static function getApiKey(): string {
     $file = fopen(__DIR__ . '/../../../.apkey', 'r') or die('File didn\'t open.');
     $apiKey = fgets($file);
