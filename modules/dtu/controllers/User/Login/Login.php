@@ -2,9 +2,10 @@
 
 namespace controllers\User\Login;
 
+use core\controllers\Controller;
 use views\User\LoginForm\LoginFormView;
 //use views\User\LoginFormView;
-class Login
+class Login implements Controller
 {
   const string PATH = '/user/login';
   const string METH = 'GET';

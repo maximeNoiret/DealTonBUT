@@ -2,9 +2,10 @@
 
 namespace controllers\Trade\AddOffer;
 
+use core\controllers\Controller;
 use views\Trade\AddOffer\AddOfferView;
 
-class AddOffer{
+class AddOffer implements Controller {
 
     const string PATH = '/offre';
     const string METH = 'GET';

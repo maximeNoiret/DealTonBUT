@@ -2,11 +2,12 @@
 
 namespace controllers\User\AccountPage;
 
+use core\controllers\Controller;
 use models\DataBase;
 use views\User\SettingsPage\SettingsPageView;
 //use views\SettingsPageView;
 
-class DeleteAccount
+class DeleteAccount implements Controller
 {
   const string PATH = '/user/delete-account';
   const string METH = 'POST';

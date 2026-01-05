@@ -11,7 +11,7 @@ use models\Account;
 use views\User\LoginForm\LoginFormView;
 use views\Trade\MarketPlace\MarketPlaceView;
 
-class LoginConfirm
+class LoginConfirm implements Controller
 {
     const string PATH = '/user/login';
     const string METH = 'POST';

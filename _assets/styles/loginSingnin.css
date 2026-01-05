@@ -107,57 +107,34 @@
     text-decoration-style: dashed;
 }
 
-@media screen and (max-width: 1024px) {
-    .description-text {
-        width: 85%;
+@media screen and (max-width:  480px) {
+    .description-text{
+        width: 80%;
+        font-size: 16px;
+
+    }
+    .btn-container{
+        grid-template-columns: auto;
+        gap: 20px;
+    }
+
+    .btn-login, .btn-register{
+        padding: 20px 80px;
         font-size: 18px;
+    }
+
+    .container-form{
+        width: 90%;
         padding: 20px;
+        font-size: 16px;
+
     }
 
-    .container-form {
-        width: 60%;
-        font-size: 18px;
-    }
-
-    .btn-register, .btn-login {
-        padding: 20px 35px;
-        font-size: 18px;
-        min-width: 150px;
-    }
-}
-
-@media screen and (max-width: 768px) { /* rendre le CSS adaptatif */
-
-    .logo-main {
-        width: clamp(120px, 30vw, 200px);
-        margin : 15px 0;
-    }
-
-    .description-text {
-        width: 90%;
-        max-width: 600px;
-        font-size: clamp(16px, 2vw, 16px);
-        padding: 1.25rem;
-    }
-
-    .description-text h1 {
-        font-size: 24px;
-        margin: 10px 0;
-    }
-
-    .container-form {
-        width: 90%;
-        max-width: 400px;
-        font-size: clamp(16px, 2vw, 16px);
-        padding: 1.25rem;
-    }
-
-    .btn-container {
-        grid-template-columns: 1fr;
-        gap: 15px;
-        padding: 0 20px;
-        max-width: 100%;
-    }
+    .container-form{
+        width: 70%;
+        height: auto;
+        padding: 40px;
+        font-size: 20px;
 
     .btn-register, .btn-login {
         padding: 18px 30px;
@@ -166,72 +143,18 @@
         min-width: unset;
     }
 
-    .input-class {
-        font-size: 16px;
-        padding: 10px 15px;
+    .input-class{
+        font-size: 20px;
+        line-height: 10px;
+        margin-bottom: 40px;
     }
 
     .btn-inscription {
         font-size: 18px;
-        padding: 12px 25px;
     }
 
-    .oublier {
-        font-size: 16px;
-    }
-}
-
-@media screen and (max-width: 480px) {
-
-    .logo-main {
-        width: 120px;
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
-
-    .description-text {
-        width: 92%;
-        font-size: 14px;
-        padding: 15px;
-    }
-
-    .description-text h1 {
+    .oublier{
         font-size: 20px;
-        margin: 8px 0;
-    }
 
-    .container-form {
-        width: 92%;
-        font-size: 14px;
-        padding: 15px;
-    }
-
-    .btn-container {
-        gap: 12px;
-        padding: 0 15px;
-        justify-content: center;
-        max-width: 100%;
-    }
-
-    .btn-register, .btn-login {
-        padding: 15px 25px;
-        font-size: 16px;
-        width: 100%;
-        min-width: unset;
-    }
-
-    .input-class {
-        font-size: 14px;
-        padding: 8px 12px;
-        margin: 6px 0 20px 0;
-    }
-
-    .btn-inscription {
-        font-size: 16px;
-        padding: 10px 20px;
-    }
-
-    .oublier {
-        font-size: 14px;
     }
 }

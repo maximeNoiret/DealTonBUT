@@ -2,7 +2,9 @@
 
 namespace controllers\User\Login;
 
-class Logout
+use core\controllers\Controller;
+
+class Logout implements Controller
 {
   const string PATH = '/user/logout';
   const string METH = 'GET';

@@ -94,17 +94,17 @@
     color: black;
 }
 
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
     .trade-subject-point-container {
         margin: 20px;
         padding: 20px;
     }
-    
+
     .trade-subject-point-form {
         grid-template-columns: 1fr;
         gap: 20px;
     }
-    
+
     .trade-subject-point-form .form-group:nth-child(3) {
         max-width: 100%;
     }

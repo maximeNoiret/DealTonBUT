@@ -2,10 +2,11 @@
 
 namespace controllers\Trade\AddOffer;
 
+use core\controllers\Controller;
 use models\DataBase;
 use views\AddOfferView;
 
-class AddOfferConfirm
+class AddOfferConfirm implements Controller
 {
     const string PATH = '/offre/confirm';
     const string METH = 'POST';
@@ -16,14 +17,15 @@ class AddOfferConfirm
     function control(): void
     {
       echo "Vous avez accédé à AddOfferConfirm\n";
-        // Récupérer les données du formulaire
+
         $title = $_POST['title'] ?? '';
         $price = $_POST['price'] ?? '';
         $end_date = $_POST['end_date'] ?? '';
         $description = $_POST['description'] ?? '';
         $tag = $_POST['tag'] ?? '';
+        $tagsArray = !empty($tag) ? explode(',', $tag) : [];
 
-        // vérification de l'offre
+
         if (empty($title) || empty($price) || empty($end_date) || empty($description)) {
             echo "Veuillez remplir tous les champs";
             header('Location: /offre');
@@ -42,13 +44,22 @@ class AddOfferConfirm
         /**
          * @var array<string, string> $_SESSION
          */
-        DataBase::getInstance()->insertOffre(
+        $ouid =DataBase::getInstance()->insertOffre(
             $_SESSION['email'],
             $title,
             (float)$price,
             $description,
             $end_date
         );
+
+        if($ouid && !empty($tagsArray)) {
+            foreach ($tagsArray as $tagname) {
+                if(!empty($tagname)) {
+                    DataBase::getInstance()->insertTag($tagname, $ouid);
+                }
+            }
+        }
+
         header('Location: /marketplace');
 
     }

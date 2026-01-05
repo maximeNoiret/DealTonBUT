@@ -3,10 +3,11 @@
 namespace controllers\Trade\SeeOffer;
 
 
+use core\controllers\Controller;
 use dtu\views\Trade\SeeOffer\SeeOfferView;
 use models\DataBase;
 
-class SeeOffer
+class SeeOffer implements Controller
 {
   const string PATH = '/offre/voir';
   const string METH = 'GET';
@@ -34,6 +35,9 @@ class SeeOffer
        * @var array<string, int> $_GET
        */
       self::$id = $_GET['id'];
+      /**
+       * @var $offers array<mixed>
+       */
       self::$offer = DataBase::getInstance()->getOffer(self::$id);
       return;
     }

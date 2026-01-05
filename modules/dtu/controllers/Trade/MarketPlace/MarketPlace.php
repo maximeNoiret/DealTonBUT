@@ -39,13 +39,25 @@ class MarketPlace implements Controller {
   public static function getOffers(): string {
     $sort = $_GET['sort'] ?? null;
     $query =
-      'SELECT u.username as \'username\', title, description, price, deadline
+      'SELECT DISTINCT o.ouid ,u.username as \'username\', title, description, price, deadline
        FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email ';
     //  for searching a string in the title of the offers
+
+    /**
+     * @var array<string> $_GET['search-string']
+     */
     if (isset($_GET['search-string']) && !empty($_GET['search-string'])) {
-      $query .= 'WHERE title LIKE \'%' . $_GET['search-string'] . '%\'';
+        $searchString = trim($_GET['search-string']);
+        if(str_starts_with($searchString, '#')) {
+            $tagname = substr($searchString, 1);
+            $query.= 'INNER JOIN tags t ON t.ouid = o.ouid ';
+            $query.= " WHERE t.tagname LIKE '%" . $tagname . "%'";
+        }else{
+            $query.= 'WHERE title LIKE "%' . $searchString . '%"';
+            $query.= " OR description LIKE '" . $searchString . "%'";
+        }
     }
     switch ($sort) {
       case 'price-asc':

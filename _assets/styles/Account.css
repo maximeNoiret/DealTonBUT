@@ -1,161 +1,282 @@
+
+
+.offer-card {
+    height: 230px;
+    width: 300px;
+}
+
+.offer-card:hover {
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+    transform: translateY(-2px);
+}
+
+.offer-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.offer-avatar {
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.offer-author {
+    font-weight: bold;
+    font-size: 0.9rem;
+    word-break: break-word;
+}
+
+.offer-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 0.3rem 0;
+    word-wrap: break-word;
+}
+
+.offer-tags {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+}
+
+.tag {
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.offer-description {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    flex-grow: 1;
+    word-wrap: break-word;
+}
+
+.offer-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: auto;
+    padding-top: 0.6rem;
+    border-top: 1px solid #8C8C8C;
+    gap: 0.5rem;
+}
+
+.offer-date {
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.offer-price {
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: right;
+}
+
+.offer-footer-compact {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 0.6rem;
+}
+
 .account-main {
     background: #D9D9D9;
     display: flex;
     flex-direction: column;
-    width: min(90%, 1400px); /* Adaptatif avec une largeur max */
+    width: 90%;
+    max-width: 1400px;
     margin: 2vh auto;
     border-radius: 1.5rem;
-    box-sizing: border-box;
 }
 
 .user-data {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: clamp(1rem, 2vw, 2rem) clamp(1.5rem, 3vw, 3rem);
-    border-bottom: 0.4rem solid #8C8C8C;
+    padding: 2rem 3rem;
+    border-bottom: 4px solid #8C8C8C;
     gap: 2rem;
     flex-wrap: wrap;
 }
 
 .user-profile {
     display: flex;
-    flex-direction: row;
-    gap: clamp(1rem, 2vw, 2rem);
+    gap: 2rem;
     align-items: center;
 }
 
 .user-pp {
-    width: clamp(80px, 10vw, 120px);
-    height: clamp(80px, 10vw, 120px);
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     object-fit: cover;
 }
 
-.user-name {
+.user-name,
+.user-component {
     display: flex;
     flex-direction: column;
     gap: 0.3rem;
 }
 
-.user-name p {
+.user-name p,
+.user-component p {
     margin: 0;
 }
 
 .user-component {
     text-align: right;
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
 }
 
-.user-component p {
-    margin: 0;
-}
-
-.account-bigger-text {
-    font-size: clamp(1.2rem, 2vw, 1.5rem);
-    margin: 0;
-}
-
-/* Conteneur principal des offres - 2 colonnes */
-.account-offer {
+.tittle-offer-section {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    width: 100%;
-    min-height: 50vh;
+    border-bottom: 4px solid #8C8C8C;
 }
 
-/* Section "Mes offres" */
-.user-offer-section {
-    border-right: 0.4rem solid #8C8C8C;
-    padding: clamp(1rem, 2vw, 2rem);
-    display: flex;
-    flex-direction: column;
-}
-
-/* Section "Offres achetées" */
-.user-bought-offer-section {
-    padding: clamp(1rem, 2vw, 2rem);
-    display: flex;
-    flex-direction: column;
-}
-
-/* Titre des sections */
-.section-title {
+.section-title-offer,
+.section-title-bought {
     text-align: center;
-    font-size: clamp(1.5rem, 3vw, 2rem);
-    font-weight: bold;
-    margin: 0 calc(-1 * clamp(1rem, 2vw, 2rem)) 1rem;
-    padding-bottom: 1rem;
-    border-bottom: 0.3rem solid #8C8C8C;
+    padding: 1.5rem;
+    margin: 0;
+    font-size: 1.5rem;
 }
 
-/* Cartes d'offres achetées plus compactes */
+.section-title-offer {
+    border-right: 4px solid #8C8C8C;
+}
+
+.offer-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 400px;
+}
+
+.user-offer-section {
+    border-right: 4px solid #8C8C8C;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    padding: 1.5rem;
+}
+
+.user-bought-offer-section {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    padding: 1.5rem;
+}
+
+.user-offer-section .offer-card,
 .user-bought-offer-section .offer-card {
-    min-height: 120px;
-    padding: clamp(0.6rem, 1.2vw, 0.9rem);
-    gap: 0.4rem;
+    width: 100%;
+    margin-left: 3.5rem;
 }
 
-.user-bought-offer-section .offer-title {
-    font-size: clamp(0.9rem, 1.3vw, 1.1rem);
-    margin: 0.2rem 0;
+a.offer-card,
+a .offer-card,
+.offer-grid a {
+    text-decoration: none !important;
 }
 
-.user-bought-offer-section .offer-header {
-    margin-bottom: 0.2rem;
-}
-
-.user-bought-offer-section .offer-footer-compact {
-    padding-top: 0.4rem;
-}
-
-/* Media queries pour petits écrans */
-@media screen and (max-width: 1024px) {
-    .account-offer {
-        grid-template-columns: 1fr;
-    }
-
-    .user-offer-section {
-        border-right: none;
-        border-bottom: 0.4rem solid #8C8C8C;
-    }
-
-    .offer-grid {
-        grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
-    }
+/* S'assurer que TOUS les éléments à l'intérieur ne sont pas soulignés */
+a.offer-card *,
+a .offer-card *,
+.offer-grid a * {
+    text-decoration: none !important;
 }
 
 @media screen and (max-width: 768px) {
     .user-data {
         flex-direction: column;
         align-items: flex-start;
-        gap: 1.5rem;
+        padding: 1.5rem;
     }
 
     .user-component {
         text-align: left;
-        align-self: flex-start;
-    }
-
-    .offer-grid {
-        grid-template-columns: 1fr;
     }
 
     .account-main {
         width: 95%;
         margin: 1vh auto;
     }
-}
 
-@media screen and (max-width: 480px) {
-    .user-profile {
-        flex-direction: column;
-        align-items: flex-start;
+    .tittle-offer-section {
+        border-bottom: none;
     }
 
-    .section-title {
-        font-size: 1.3rem;
+    .section-title-offer,
+    .section-title-bought {
+        cursor: pointer;
+        padding: 1rem;
+        background: #BFBFBF;
+        border-bottom: 4px solid #8C8C8C;
+        user-select: none;
+    }
+
+    .section-title-offer {
+        border-right: 2px solid #8C8C8C;
+    }
+
+    .section-title-bought {
+        border-left: 2px solid #8C8C8C;
+    }
+
+    .section-title-offer.active,
+    .section-title-bought.active {
+        background: #D9D9D9;
+        font-weight: bold;
+    }
+
+    .offer-section {
+        grid-template-columns: 1fr;
+    }
+
+    .user-offer-section,
+    .user-bought-offer-section {
+        border-right: none;
+        grid-template-columns: 1fr;
+    }
+
+    .offer-card {
+        max-width: 320px;
+        margin: 0 auto;
+    }
+    .user-offer-section .offer-card,
+    .user-bought-offer-section .offer-card {
+        margin: 0
+    }
+}
+
+
+@media screen and (max-width: 480px) {
+    .offer-description,
+    .offer-date {
+        font-size: 15px;
+    }
+
+    .user-profile {
+        font-size: 14px;
+    }
+
+    .user-offer-section,
+    .user-bought-offer-section {
+        padding: 1rem;
+    }
+
+    .section-title-offer,
+    .section-title-bought {
+        font-size: 1rem;
+        padding: 0.8rem;
+    }
+
+    .user-offer-section .offer-card,
+    .user-bought-offer-section .offer-card {
+        margin: 0
     }
 }
