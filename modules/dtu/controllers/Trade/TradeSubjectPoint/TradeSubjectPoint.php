@@ -45,7 +45,7 @@ class TradeSubjectPoint implements Controller {
                             $error = 'error_insufficient_points';
                         } else {
                             $db->transferPoints($email, $points, $from, $to);
-                            $flash = 'success_transfer';
+                            $error = 'success_transfer';
                         }
                     }
                 }

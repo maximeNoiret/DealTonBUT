@@ -20,9 +20,6 @@ class TradeSubjectPointView extends AbstractView {
         return __DIR__ . DIRECTORY_SEPARATOR . 'TradeSubjectPointTemplate.html';
     }
 
-    /**
-     * @throws Exception
-     */
     function templateValues(): array {
         $db = SubjectDB::getInstance();
         $email = $_SESSION['email'] ?? '';
@@ -36,6 +33,7 @@ class TradeSubjectPointView extends AbstractView {
                 'error_insufficient_points' => '<span class="error-text">Points insuffisants pour effectuer l\'échange.</span>',
                 'success_transfer' => '<span class="success-text">Échange de points effectué avec succès.</span>',
                 'error_upload' => '<span class="error-text">Erreur lors du téléchargement du fichier ICS.</span>',
+                'sucess_import' => '<span class="success-text">Importation ICS réussie.</span>',
                 default => '<span class="error-text">Une erreur inconnue s\'est produite.</span><br>' . htmlspecialchars($this->error)
             };
         }
