@@ -3,7 +3,7 @@
 namespace controllers\Trade\MarketPlace;
 
 use core\controllers\Controller;
-use models\DataBase;
+use models\AccountDB;
 use views\Trade\MarketPlace\MarketPlaceView;
 use views\Trade\Offer\Offer;
 
@@ -62,24 +62,24 @@ class MarketPlace implements Controller {
     switch ($sort) {
       case 'price-asc':
         $query .= " ORDER BY price ASC";
-//        $offers = DataBase::getInstance()->getOffers('price', 'ASC');
+//        $offers = AccountDB::getInstance()->getOffers('price', 'ASC');
         break;
       case 'price-desc':
         $query .= " ORDER BY price DESC";
-//        $offers = DataBase::getInstance()->getOffers('price', 'DESC');
+//        $offers = AccountDB::getInstance()->getOffers('price', 'DESC');
         break;
       case 'date':
         $query .= " ORDER BY creation_time DESC";
-//        $offers = DataBase::getInstance()->getOffers('creation_time', 'DESC');
+//        $offers = AccountDB::getInstance()->getOffers('creation_time', 'DESC');
         break;
       case 'alphabetic':
         $query .= " ORDER BY title ASC";
-//        $offers = DataBase::getInstance()->getOffers('title', 'ASC');
+//        $offers = AccountDB::getInstance()->getOffers('title', 'ASC');
         break;
       default:
         break;
     }
-    $offers = DataBase::getInstance()->executeQuery($query);
+    $offers = AccountDB::getInstance()->executeQuery($query);
     if ($offers) {
       $ret = '<section class="offer-grid">' . "\n";
       foreach ($offers as $offer) {

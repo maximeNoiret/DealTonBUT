@@ -2,7 +2,7 @@
 namespace Trade\AddOffer;
 
 use controllers\Trade\AddOffer\AddOfferConfirm;
-use models\DataBase;
+use models\AccountDB;
 use PHPUnit\Framework\TestCase;
 
 class AddOfferConfirmTest extends TestCase
@@ -71,7 +71,7 @@ class AddOfferConfirmTest extends TestCase
     ];
 
 
-//    DataBase::setInstance($mockDb);
+//    AccountDB::setInstance($mockDb);
 
     ob_start();
     $this->addOfferConfirm->control();

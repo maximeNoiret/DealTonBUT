@@ -2,7 +2,7 @@
 
 namespace models;
 use exceptions\AccountAlreadyExists;
-use models\DataBase;
+use models\AccountDB;
 use core\models\Mailer;
 use Random\RandomException;
 
@@ -20,7 +20,7 @@ class Account {
     string $username,
     string $email,
   ): string {
-    $db = DataBase::getInstance();
+    $db = AccountDB::getInstance();
     if ($db->accountExists($email) && $db->isAccountVerified($email)) {
       throw new AccountAlreadyExists();
     }
@@ -51,8 +51,7 @@ class Account {
 
   static function validateCredentials(string $email, string $password): bool {
     // CHECK IF (email, hash(password)) IN user_
-    $db = DataBase::getInstance();
-    $account = $db->getAccount($email, $password);
+    $account = AccountDB::getInstance()->getAccount($email, $password);
       if (is_array($account) && !empty($account)) {
           session_regenerate_id(true);
           $_SESSION['username'] = $account['username'] ?? '';
@@ -72,7 +71,7 @@ class Account {
      */
     static function forgotPassword(string $email): string {
       // check if account exists at all
-      $db = DataBase::getInstance();
+      $db = AccountDB::getInstance();
       if (!$db->accountExists($email)) {
         return 'message';
       }

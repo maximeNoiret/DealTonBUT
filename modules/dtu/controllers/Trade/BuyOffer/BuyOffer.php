@@ -3,7 +3,7 @@
 namespace controllers\Trade\BuyOffer;
 
 use core\controllers\Controller;
-use models\DataBase;
+use dtu\models\TradeDB;
 
 class BuyOffer implements Controller
 {
@@ -23,7 +23,7 @@ class BuyOffer implements Controller
         }
 
         $ouid = (int) $_GET['id'];
-        $offer = DataBase::getInstance()->getOffer($ouid);
+        $offer = TradeDB::getInstance()->getOffer($ouid);
 
         if (!$offer) {
             header('Location: /marketplace');
@@ -40,7 +40,7 @@ class BuyOffer implements Controller
             exit;
         }
         $email = trim($_SESSION['email']);
-        DataBase::getInstance()->buyOffer($email, $ouid);
+        TradeDB::getInstance()->buyOffer($email, $ouid);
         header('Location: /marketplace');
     }
 

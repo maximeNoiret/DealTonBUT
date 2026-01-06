@@ -4,7 +4,7 @@ namespace controllers\User\PasswordForgot;
 
 use controllers\User\Login\Login;
 use core\controllers\Controller;
-use models\DataBase;
+use models\AccountDB;
 use views\User\ForgotPassword\PasswordResetView;
 use views\User\LoginForm\LoginFormView;
 
@@ -20,7 +20,7 @@ class PasswordReset implements Controller
     /**
      * @var array<string, string> $_GET
      */
-    if (DataBase::getInstance()->checkToken($_GET['email'] ?? '', $_GET['token'] ?? '')) {
+    if (AccountDB::getInstance()->checkToken($_GET['email'] ?? '', $_GET['token'] ?? '')) {
       $_SESSION['reset_email'] = $_GET['email'];
       echo (new PasswordResetView()->render('Reset Password - DealTonBUT', Login::STYLESHEET));
     } else {

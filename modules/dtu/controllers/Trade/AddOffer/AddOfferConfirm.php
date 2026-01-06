@@ -3,7 +3,8 @@
 namespace controllers\Trade\AddOffer;
 
 use core\controllers\Controller;
-use models\DataBase;
+use dtu\models\TradeDB;
+use models\AccountDB;
 use views\AddOfferView;
 
 class AddOfferConfirm implements Controller
@@ -46,7 +47,7 @@ class AddOfferConfirm implements Controller
         /**
          * @var array<string, string> $_SESSION
          */
-        $ouid =DataBase::getInstance()->insertOffre(
+        $ouid = TradeDB::getInstance()->insertOffre(
             $_SESSION['email'],
             $title,
             (float)$price,
@@ -57,7 +58,7 @@ class AddOfferConfirm implements Controller
         if($ouid && !empty($tagsArray)) {
             foreach ($tagsArray as $tagname) {
                 if(!empty($tagname)) {
-                    DataBase::getInstance()->insertTag($tagname, $ouid);
+                    TradeDB::getInstance()->insertTag($tagname, $ouid);
                 }
             }
         }
