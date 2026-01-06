@@ -3,7 +3,8 @@
 namespace Trade\MarketPlace;
 
 use controllers\Trade\MarketPlace\MarketPlace;
-use models\DataBase;
+use dtu\models\TradeDB;
+use models\AccountDB;
 use PHPUnit\Framework\TestCase;
 //TODO: finish the tests
 /**
@@ -12,7 +13,8 @@ use PHPUnit\Framework\TestCase;
 class MarketPlaceTest extends TestCase
 {
   private MarketPlace $marketPlace;
-  private DataBase $dbConn;
+  private AccountDB $dbAccConn;
+  private TradeDB $dbTradeConn;
   private string $testEmail01='test@testUser01.com';
   private string $testUsername01='testUser01';
   private string $testPassword01='password';
@@ -21,13 +23,14 @@ class MarketPlaceTest extends TestCase
   public function setUp(): void{
     // create a DeleteOffer instance
     $this->marketPlace = new MarketPlace();
-    $this->dbConn = DataBase::getInstance();
+    $this->dbAccConn = AccountDB::getInstance();
+    $this->dbTradeConn = TradeDB::getInstance();
 
     // create a test account, that will have to be deleted in teardown()
-    $this->dbConn->registerAccount($this->testUsername01,$this->testEmail01);
+    $this->dbAccConn->registerAccount($this->testUsername01,$this->testEmail01);
     // no need to hash password here
-    $this->dbConn->updatePassword($this->testEmail01, $this->testPassword01);
-    $this->dbConn->setRole($this->testEmail01,'student');
+    $this->dbAccConn->updatePassword($this->testEmail01, $this->testPassword01);
+    $this->dbAccConn->setRole($this->testEmail01,'student');
 
     // OFFER
     //  param of the offer :
@@ -36,7 +39,7 @@ class MarketPlaceTest extends TestCase
     $price = '100';
     $end_date = '2077-12-31';
     $description = 'UNIT_TEST_DESC';
-    $this->dbConn->insertOffre(
+    $this->dbTradeConn->insertOffre(
       $_SESSION['email'],
       $title,
       (float)$price,
@@ -45,7 +48,7 @@ class MarketPlaceTest extends TestCase
     );
 
     // get the ouid of the offers of the test user
-    $offer = $this->dbConn->executeQuery(
+    $offer = $this->dbAccConn->executeQuery(
       'SELECT ouid FROM offer WHERE owner =\'test@testUser01.com\';'
     );
     $this->testOuid01 = $offer[0]['ouid'];
@@ -80,7 +83,7 @@ class MarketPlaceTest extends TestCase
   }
 
   public function tearDown(): void{
-    $this->dbConn->deleteOffer($this->testOuid01);
-    $this->dbConn->deleteUser($this->testEmail01);
+    $this->dbTradeConn->deleteOffer($this->testOuid01);
+    $this->dbAccConn->deleteUser($this->testEmail01);
   }
 }
