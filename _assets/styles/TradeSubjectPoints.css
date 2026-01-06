@@ -83,21 +83,16 @@
     font-size: 0.9rem;
 }
 
-.flash {
-    padding: 15px;
-    margin-bottom: 20px;
+.error-text {
+    margin-bottom: 50px;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    color: red;
 }
 
-.flash.success {
-    background: #bfbfbf;
-    color: black;
-}
-
-.flash.error {
-    background: #8c8c8c;
-    color: black;
+.success-text {
+    margin-bottom: 50px;
+    border-radius: 8px;
+    color: green;
 }
 
 @media screen and (max-width: 768px) {

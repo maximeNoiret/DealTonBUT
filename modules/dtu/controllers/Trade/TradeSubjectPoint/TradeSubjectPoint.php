@@ -39,11 +39,17 @@ class TradeSubjectPoint implements Controller {
                     if ($from === $to) {
                         $error = 'error_same_subject';
                     } else {
-                        $available = $db->getPoints($email, $from);
+                        $availableFrom = $db->getPoints($email, $from);
+                        $availableTo = $db->getPoints($email, $to);
 
-                        if ($available < $points) {
+                        if ($availableFrom < $points) {
                             $error = 'error_insufficient_points';
-                        } else {
+                        }
+                        elseif (($availableTo + $points) > 20) {
+                            $error = 'error_exceed_max_points';
+                        }
+
+                        else {
                             $db->transferPoints($email, $points, $from, $to);
                             $error = 'success_transfer';
                         }

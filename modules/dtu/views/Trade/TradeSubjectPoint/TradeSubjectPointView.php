@@ -31,6 +31,7 @@ class TradeSubjectPointView extends AbstractView {
             $error = match ($this->error) {
                 'error_same_subject' => '<span class="error-text">Vous ne pouvez pas échanger des points entre la même matière.</span>',
                 'error_insufficient_points' => '<span class="error-text">Points insuffisants pour effectuer l\'échange.</span>',
+                'error_exceed_max_points' => '<span class="error-text">L\'échange dépasserait le maximum de 20 points dans la matière cible.</span>',
                 'success_transfer' => '<span class="success-text">Échange de points effectué avec succès.</span>',
                 'error_upload' => '<span class="error-text">Erreur lors du téléchargement du fichier ICS.</span>',
                 'sucess_import' => '<span class="success-text">Importation ICS réussie.</span>',
