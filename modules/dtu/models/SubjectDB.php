@@ -3,6 +3,7 @@
 namespace dtu\models;
 
 use core\models\DataBase;
+use PDO;
 
 class SubjectDB extends DataBase {
 

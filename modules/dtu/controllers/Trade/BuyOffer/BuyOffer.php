@@ -4,7 +4,6 @@ namespace controllers\Trade\BuyOffer;
 
 use core\controllers\Controller;
 use dtu\models\TradeDB;
-use models\AccountDB;
 
 class BuyOffer implements Controller
 {
@@ -41,7 +40,7 @@ class BuyOffer implements Controller
             exit;
         }
         $email = trim($_SESSION['email']);
-        AccountDB::getInstance()->buyOffer($email, $ouid);
+        TradeDB::getInstance()->buyOffer($email, $ouid);
         header('Location: /marketplace');
     }
 

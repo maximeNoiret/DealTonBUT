@@ -51,8 +51,7 @@ class Account {
 
   static function validateCredentials(string $email, string $password): bool {
     // CHECK IF (email, hash(password)) IN user_
-    $db = AccountDB::getInstance();
-    $account = $db->getAccount($email, $password);
+    $account = AccountDB::getInstance()->getAccount($email, $password);
       if (is_array($account) && !empty($account)) {
           session_regenerate_id(true);
           $_SESSION['username'] = $account['username'] ?? '';

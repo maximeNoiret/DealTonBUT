@@ -3,6 +3,7 @@
 namespace Trade\DeleteOffer;
 
 use controllers\Trade\DeleteOffer\DeleteOffer;
+use dtu\models\TradeDB;
 use PHPUnit\Framework\TestCase;
 use models\AccountDB;
 
@@ -13,7 +14,8 @@ class DeleteOfferTest extends TestCase
 {
 
   private DeleteOffer $deleteOffer;
-  private AccountDB $dbConn;
+  private AccountDB $dbAccConn;
+  private TradeDB $dbTradeConn;
   private string $testEmail01='test@testUser01.com';
   private string $testUsername01='testUser01';
   private string $testPassword01='password';
@@ -23,13 +25,14 @@ class DeleteOfferTest extends TestCase
     // create a DeleteOffer instance
     $this->deleteOffer = new DeleteOffer();
     // set up for database related unit tests
-    $this->dbConn = AccountDB::getInstance();
+    $this->dbAccConn = AccountDB::getInstance();
+    $this->dbTradeConn = TradeDB::getInstance();
 
     // create a test account, that will have to be deleted in teardown()
-    $this->dbConn->registerAccount($this->testUsername01,$this->testEmail01);
+    $this->dbAccConn->registerAccount($this->testUsername01,$this->testEmail01);
     // no need to hash password here
-    $this->dbConn->updatePassword($this->testEmail01, $this->testPassword01);
-    $this->dbConn->setRole($this->testEmail01,'student');
+    $this->dbAccConn->updatePassword($this->testEmail01, $this->testPassword01);
+    $this->dbAccConn->setRole($this->testEmail01,'student');
 
     // OFFER
     //TODO: find a way to get his ouid after insertion
@@ -39,7 +42,7 @@ class DeleteOfferTest extends TestCase
     $price = '100';
     $end_date = '2077-12-31';
     $description = 'UNIT_TEST_DESC';
-    $this->dbConn->insertOffre(
+    $this->dbTradeConn->insertOffre(
       $_SESSION['email'],
       $title,
       (float)$price,
@@ -48,10 +51,11 @@ class DeleteOfferTest extends TestCase
     );
 
     // get the ouid of the offers of the test user
-    $offer = $this->dbConn->executeQuery(
+    $offer = $this->dbTradeConn->executeQuery(
       'SELECT ouid FROM offer WHERE owner =\'test@testUser01.com\';'
     );
     // second version made by autocomplete, i don't use it because i don't really understand it
+    // --Maxime: That version uses parameterized queries to customize the statement to allow dynamic testing values.
     /*'SELECT ouid FROM offer WHERE owner =? AND title = ? AND description =?',
       [$this->testEmail01, $title, $description]*/
     $this->testOuid01 = $offer[0]['ouid'];
@@ -132,7 +136,7 @@ class DeleteOfferTest extends TestCase
 
   public function tearDown(): void
   {
-    $this->dbConn->deleteOffer($this->testOuid01);
-    $this->dbConn->deleteUser($this->testEmail01);
+    $this->dbTradeConn->deleteOffer($this->testOuid01);
+    $this->dbAccConn->deleteUser($this->testEmail01);
   }
 }
