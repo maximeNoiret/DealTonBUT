@@ -10,7 +10,10 @@ class TradeSubjectPoint implements Controller {
   public const PATH = '/trade/points';
   public const METH = 'GET';
 
-  const array STYLESHEET = [
+  /**
+   * @var array<string>
+   */
+  const STYLESHEET = [
     '/_assets/styles/style.css',
     '/_assets/styles/TradeSubjectPoints.css',
     '/_assets/styles/navbar.css'

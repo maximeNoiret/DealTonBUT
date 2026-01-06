@@ -11,8 +11,8 @@ use views\User\LoginForm\LoginFormView;
 class PasswordResetConfirm implements Controller
 {
 
-  const string PATH = '/user/validate';
-  const string METH = 'POST';
+  const PATH = '/user/validate';
+  const METH = 'POST';
 
   function control(): void {
     /**

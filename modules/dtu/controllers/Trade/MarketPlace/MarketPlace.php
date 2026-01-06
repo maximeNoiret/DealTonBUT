@@ -23,7 +23,7 @@ class MarketPlace implements Controller {
         '/_assets/styles/navbar.css',
         '/_assets/styles/offer.css'
     ];
-  
+
   function control(): void {
     if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
       header('Location: /user/login');
