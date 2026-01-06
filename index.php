@@ -35,7 +35,7 @@ include __DIR__ . '/_assets/includes/Autoloader.php';
 $path = $_SERVER['REQUEST_URI'];
 $meth = $_SERVER['REQUEST_METHOD'];
 
-if (preg_match('/^\/(\.env|\.git|\.htaccess|composer\.(json|lock)|\.php)/', $path)) {
+if (preg_match('/^\/(\.env|\.git|\.htaccess|\.apkey|composer\.(json|lock)|.*\.php.*|.*\.sql)/', $path)) {
   http_response_code(403);
   echo new Forbidden()->render('Forbidden - DealTonBUT', Main::STYLESHEET);
   exit();
