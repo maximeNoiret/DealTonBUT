@@ -8,11 +8,11 @@ use models\AccountDB;
 
 class TradeSubjectPointView extends AbstractView {
 
-    private $flash = '';
+    private ?string $error = null;
     private $subjectsRows = [];
 
-    public function setData($flash, $subjectsRows) {
-        $this->flash = $flash;
+    public function setData(?string $error, $subjectsRows) {
+        $this->error = $error;
         $this->subjectsRows = $subjectsRows;
     }
 
@@ -27,7 +27,20 @@ class TradeSubjectPointView extends AbstractView {
         $db = SubjectDB::getInstance();
         $email = $_SESSION['email'] ?? '';
 
-        $flash = $this->flash;
+        $error = '';
+
+        if ($this->error !== null)
+        {
+            $error = match ($this->error) {
+                'error_same_subject' => '<span class="error-text">Vous ne pouvez pas échanger des points entre la même matière.</span>',
+                'error_insufficient_points' => '<span class="error-text">Points insuffisants pour effectuer l\'échange.</span>',
+                'success_transfer' => '<span class="success-text">Échange de points effectué avec succès.</span>',
+                'error_upload' => '<span class="error-text">Erreur lors du téléchargement du fichier ICS.</span>',
+                default => '<span class="error-text">Une erreur inconnue s\'est produite.</span><br>' . htmlspecialchars($this->error)
+            };
+        }
+
+
         $subjectsRows = $this->subjectsRows;
 
         $fromOptions = '';
@@ -47,7 +60,7 @@ class TradeSubjectPointView extends AbstractView {
         return [
             'FROM_OPTIONS' => $fromOptions,
             'TO_OPTIONS'   => $toOptions,
-            'FLASH'        => $flash
+            'FLASH'        => $error
         ];
     }
 

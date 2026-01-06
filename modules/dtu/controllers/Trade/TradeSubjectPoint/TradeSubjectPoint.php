@@ -24,7 +24,7 @@ class TradeSubjectPoint implements Controller {
 
             $db = SubjectDB::getInstance();
             $email = $_SESSION['email'] ?? '';
-            $flash = '';
+            $error = null;
 
             //Point Transfer
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -37,15 +37,15 @@ class TradeSubjectPoint implements Controller {
                     $points = floatval($_POST['points'] ?? 0);
 
                     if ($from === $to) {
-                        $flash = '<div class="flash error">Tu dois choisir deux matières différentes.</div>';
+                        $error = 'error_same_subject';
                     } else {
                         $available = $db->getPoints($email, $from);
 
                         if ($available < $points) {
-                            $flash = '<div class="flash error">Tu n\'as pas assez de points.</div>';
+                            $error = 'error_insufficient_points';
                         } else {
                             $db->transferPoints($email, $points, $from, $to);
-                            $flash = '<div class="flash success">Transfert réussi.</div>';
+                            $flash = 'success_transfer';
                         }
                     }
                 }
@@ -54,7 +54,7 @@ class TradeSubjectPoint implements Controller {
                 if ($formType === 'ics_import') {
 
                     if (!isset($_FILES['ics_file']) || $_FILES['ics_file']['error'] !== 0) {
-                        $flash = '<div class="flash error">Erreur lors de l\'upload du fichier.</div>';
+                        $error = 'error_upload';
                     } else {
 
                         $subjects = [];
@@ -83,14 +83,14 @@ class TradeSubjectPoint implements Controller {
                             $db->insertSubjectSafe($email, $subject, $rand_point);
                         }
 
-                        $flash = '<div class="flash success">Matières importées avec succès.</div>';
+                        $error = 'success_import';
                     }
                 }
             }
 
             $subjectsRows = $db->getSubject($email);
             $view = new TradeSubjectPointView();
-            $view->setData($flash, $subjectsRows);
+            $view->setData($error, $subjectsRows);
             echo $view->render("Échanger Points - DealTonBUT", static::STYLESHEET);
         }
     }
