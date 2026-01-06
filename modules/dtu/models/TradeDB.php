@@ -3,9 +3,12 @@
 namespace dtu\models;
 
 use core\models\DataBase;
+use models\AccountDB;
+use PDO;
 
 class TradeDB extends DataBase {
 
+  protected static $instance;
 
   /**
    * @description Return the offers in function of the args given ( the args are MySQL operator), see MarketPlace->getOffers() for the used method
@@ -97,7 +100,7 @@ class TradeDB extends DataBase {
         return false;
       }
       // Si l'utilisateur n'as pas assez de sous
-      $queryForBalance = $this->getBalance($email);
+      $queryForBalance = AccountDB::getInstance()->getBalance($email);
       if ($queryForBalance === false || $queryForBalance < $offer['price']) {
         $this->dbConn->rollBack();
         return false;

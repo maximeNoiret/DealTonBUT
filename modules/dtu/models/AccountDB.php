@@ -8,6 +8,8 @@ use PDO;
 
 class AccountDB extends DataBase {
 
+  protected static $instance;
+
   /**
    * @description Registers a new account in the database.
    * @param string $username The desired username for the new account.

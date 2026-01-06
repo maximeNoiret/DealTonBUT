@@ -7,6 +7,7 @@ use PDO;
 
 class SubjectDB extends DataBase {
 
+  protected static $instance;
 
   /**
    * @description Retrieves all subjects for a user.
