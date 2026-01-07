@@ -26,7 +26,8 @@ use controllers\User\Register\RegisterVerifyConfirm;
 use controllers\User\Settings\Settings;
 use controllers\User\Register\Register;
 use controllers\User\Register\RegisterConfirm;
-use dtu\views\Forbidden;
+use views\Forbidden;
+use views\NotFound;
 use models\AccountDB;
 
 include __DIR__ . '/_assets/includes/Autoloader.php';
@@ -88,7 +89,8 @@ foreach ($controllers as $controller) {
 }
 http_response_code(404);
 echo 'path: ' . $path . ' | meth: ' . $meth . '<br>';
-echo '404 NOT FOUND';
+http_response_code(403);
+echo new NotFound()->render('Not Found - DealTonBUT', Main::STYLESHEET);
 exit();
 
 // code externe par clé sans mdp
