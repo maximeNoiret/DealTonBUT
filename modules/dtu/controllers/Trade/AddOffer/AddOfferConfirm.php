@@ -19,10 +19,14 @@ class AddOfferConfirm implements Controller
     {
       echo "Vous avez accédé à AddOfferConfirm\n";
 
+
         $title = $_POST['title'] ?? '';
         $price = $_POST['price'] ?? '';
         $end_date = $_POST['end_date'] ?? '';
         $description = $_POST['description'] ?? '';
+        /**
+         * @var string $tag
+         */
         $tag = $_POST['tag'] ?? '';
         $tagsArray = !empty($tag) ? explode(',', $tag) : [];
 

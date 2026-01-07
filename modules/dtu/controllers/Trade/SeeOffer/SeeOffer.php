@@ -46,6 +46,8 @@ class SeeOffer implements Controller
   }
 
   /**
+   * Checks if the logged-in user is the offer owner.
+   *
    * @return bool Returns true if the logged-in user is the offer owner, otherwise false.
    */
   public function isOwnerOfOffer(): bool {
@@ -53,6 +55,11 @@ class SeeOffer implements Controller
   }
 
   /**
+   * Generates the appropriate action button for the offer.
+   *
+   * Returns a delete button if the current user is the offer owner,
+   * otherwise returns a buy button.
+   *
    * @return string Returns the appropriate HTML button code based on offer ownership.
    */
   public function buttonOffer(): string{
@@ -62,6 +69,15 @@ class SeeOffer implements Controller
       return '<a class="button-buy" href="/offre/buy?id=' . self::$id . '">Buy</a>';
     }
   }
+
+  /**
+   * Main control method executed for the offer page.
+   *
+   * Checks if the user is logged in before displaying the offer.
+   * Redirects to the login page if the user is not authenticated.
+   *
+   * @return void
+   */
   function control(): void
   {
     if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
@@ -71,6 +87,13 @@ class SeeOffer implements Controller
     }
   }
 
+  /**
+   * Resolves whether the request matches this controller's route.
+   *
+   * @param string $path The request path to match against the controller's PATH constant.
+   * @param string $meth The HTTP method to match against the controller's METH constant.
+   * @return bool Returns true if the path and method match, false otherwise.
+   */
   static function resolve(string $path, string $meth): bool
   {
     return strtok($path, '?') === static::PATH && $meth === static::METH;

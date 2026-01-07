@@ -4,6 +4,8 @@ error_reporting(E_ALL);
 ini_set('display_errors',"On");
 
 use controllers\Forbidden\Env;
+use controllers\Legal\Confidentiality\Confidentiality;
+use controllers\Legal\TermsOfUse\TermsOfUse;
 use controllers\Main;
 use controllers\Trade\AddOffer\AddOffer;
 use controllers\Trade\AddOffer\AddOfferConfirm;
@@ -28,6 +30,8 @@ use controllers\User\Register\Register;
 use controllers\User\Register\RegisterConfirm;
 use dtu\views\Forbidden;
 use models\AccountDB;
+use views\Legal\Confidentiality\ConfidentialityView;
+use views\Legal\TermsOfUse\TermsOfUseView;
 
 include __DIR__ . '/_assets/includes/Autoloader.php';
 
@@ -71,6 +75,8 @@ $controllers = [
   new TradeSubjectPoint(),
   new PasswordReset(),
   new PasswordResetConfirm(),
+  new Confidentiality(),
+  new TermsOfUse(),
   new BuyOffer(),
 
   // Forbidden

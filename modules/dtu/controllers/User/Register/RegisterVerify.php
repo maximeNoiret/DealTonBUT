@@ -34,9 +34,9 @@ class RegisterVerify implements Controller
       /**
        * @var array<string, string> $_SESSION
        */
-      echo new RegisterFormPasswordView($_SESSION['email'])->render("Register - DealTonBUT", self::STYLESHEET);
+      echo (new RegisterFormPasswordView($_SESSION['email']))->render("Register - DealTonBUT", self::STYLESHEET);
     } else {
-      echo new RegisterFormView('verification_link_expired')->render("Register - DealTonBUT", self::STYLESHEET);
+      echo (new RegisterFormView('verification_link_expired'))->render("Register - DealTonBUT", self::STYLESHEET);
     }
   }
 

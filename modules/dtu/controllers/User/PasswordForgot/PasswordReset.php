@@ -22,9 +22,9 @@ class PasswordReset implements Controller
      */
     if (AccountDB::getInstance()->checkToken($_GET['email'] ?? '', $_GET['token'] ?? '')) {
       $_SESSION['reset_email'] = $_GET['email'];
-      echo (new PasswordResetView()->render('Reset Password - DealTonBUT', Login::STYLESHEET));
+      echo ((new PasswordResetView())->render('Reset Password - DealTonBUT', Login::STYLESHEET));
     } else {
-      echo (new LoginFormView('reset_link_expired')->render('Login - DealTonBUT', Login::STYLESHEET));
+      echo ((new LoginFormView('reset_link_expired'))->render('Login - DealTonBUT', Login::STYLESHEET));
     }
     // - else: display "invalid link" and quit
   }
