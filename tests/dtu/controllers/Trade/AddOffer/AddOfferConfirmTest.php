@@ -2,14 +2,29 @@
 namespace Trade\AddOffer;
 
 use controllers\Trade\AddOffer\AddOfferConfirm;
+use dtu\models\TradeDB;
 use models\AccountDB;
 use PHPUnit\Framework\TestCase;
 
 class AddOfferConfirmTest extends TestCase
 {
   private AddOfferConfirm $addOfferConfirm;
+  private AccountDB $dbAccConn;
+  private TradeDB $dbTradeConn;
+  private string $testEmail01='test@testUser01.com';
+  private string $testUsername01='testUser01';
+  private string $testPassword01='password';
+  private int $testOuid01=0;
 
   public function setUp(): void{
+    // set up for database related unit tests
+    $this->dbAccConn = AccountDB::getInstance();
+    $this->dbTradeConn = TradeDB::getInstance();
+    // create a test account, that will have to be deleted in teardown()
+    $this->dbAccConn->registerAccount($this->testUsername01,$this->testEmail01);
+    // no need to hash password here
+    $this->dbAccConn->updatePassword($this->testEmail01, $this->testPassword01);
+    $this->dbAccConn->setRole($this->testEmail01,'student');
     // create a AddOfferConfirm instance
     $this->addOfferConfirm = new AddOfferConfirm();
   }
@@ -56,18 +71,16 @@ class AddOfferConfirmTest extends TestCase
     $this->assertContains('Location: /offre', $headers);
   }
 
-
   /**
    * @runInSeparateProcess
    */
   public function testRedirectsToMarketplaceOnValidInput() {
-    $_SESSION['email'] = 'martin.demange@etu.univ-amu.fr';
+    $_SESSION['email'] = $this->testEmail01;
     $_POST = [
-      'title' => 'Valid Offer',
+      'title' => 'UNIT_TEST_OFFER',
       'price' => '100',
-      'end_date' => '2029-12-31',
-      'description' => 'Valid Description',
-      'tag' => 'Valid'
+      'end_date' => '2077-12-31',
+      'description' => 'UNIT_TEST_DESC',
     ];
 
 
@@ -94,6 +107,16 @@ class AddOfferConfirmTest extends TestCase
   public function testDoesNotResolveIncorrectMethod()
   {
     $this->assertFalse(AddOfferConfirm::resolve('/offre/confirm', 'GET'));
+  }
+
+  public function tearDown(): void{
+/*    // get the ouid of the offers of the test user
+    $offer = $this->dbAccConn->executeQuery(
+      'SELECT ouid FROM offer WHERE owner =\'test@testUser01.com\';'
+    );
+    $this->testOuid01 = $offer[0]['ouid'];*/
+    $this->dbTradeConn->deleteOffer($this->testOuid01);
+    $this->dbAccConn->deleteUser($this->testEmail01);
   }
 
 }

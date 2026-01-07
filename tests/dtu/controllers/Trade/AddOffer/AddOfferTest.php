@@ -13,7 +13,6 @@ class AddOfferTest extends TestCase
     $this->addOfferController = new AddOffer();
   }
 
-  // It seems that headers cannot be tested in the same process.
   /**
    * @runInSeparateProcess
    */

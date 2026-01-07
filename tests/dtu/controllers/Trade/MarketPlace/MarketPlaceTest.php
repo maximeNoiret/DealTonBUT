@@ -69,6 +69,7 @@ class MarketPlaceTest extends TestCase
     $this->assertIsString($result);
     $this->assertStringContainsString('<section class="offer-grid">', $result);
   }
+  //TODO: add more tests for getOffers with different sort and search parameters
 
   public function testDoesNotResolveIncorrectPath(){
     $this->assertFalse(MarketPlace::resolve('/offre/wrongpath', 'GET'));
