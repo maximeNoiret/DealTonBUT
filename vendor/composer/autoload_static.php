@@ -13,28 +13,28 @@ class ComposerStaticInit6b4aab63cc4f1d90afb5d1add1029330
     );
 
     public static $prefixLengthsPsr4 = array (
-        'v' =>
+        'v' => 
         array (
             'views\\' => 6,
         ),
-        'm' =>
+        'm' => 
         array (
             'models\\' => 7,
         ),
-        'd' =>
+        'd' => 
         array (
             'dtu\\' => 4,
         ),
-        'c' =>
+        'c' => 
         array (
             'controllers\\' => 12,
         ),
-        'P' =>
+        'P' => 
         array (
             'PhpParser\\' => 10,
             'PHPMailer\\PHPMailer\\' => 20,
         ),
-        'D' =>
+        'D' => 
         array (
             'Doctrine\\Instantiator\\' => 22,
             'DeepCopy\\' => 9,
@@ -42,35 +42,35 @@ class ComposerStaticInit6b4aab63cc4f1d90afb5d1add1029330
     );
 
     public static $prefixDirsPsr4 = array (
-        'views\\' =>
+        'views\\' => 
         array (
             0 => __DIR__ . '/../..' . '/modules/dtu/views',
         ),
-        'models\\' =>
+        'models\\' => 
         array (
             0 => __DIR__ . '/../..' . '/modules/dtu/models',
         ),
-        'dtu\\' =>
+        'dtu\\' => 
         array (
             0 => __DIR__ . '/../..' . '/modules/dtu',
         ),
-        'controllers\\' =>
+        'controllers\\' => 
         array (
             0 => __DIR__ . '/../..' . '/modules/dtu/controllers',
         ),
-        'PhpParser\\' =>
+        'PhpParser\\' => 
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
         ),
-        'PHPMailer\\PHPMailer\\' =>
+        'PHPMailer\\PHPMailer\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
         ),
-        'Doctrine\\Instantiator\\' =>
+        'Doctrine\\Instantiator\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator',
         ),
-        'DeepCopy\\' =>
+        'DeepCopy\\' => 
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
         ),

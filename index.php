@@ -84,6 +84,7 @@ $controllers = [
   new Env()
 ];
 
+
 foreach ($controllers as $controller) {
   if ($controller::resolve($path, $meth)) {
     if (isset($_SESSION['email']) && isset($_SESSION['logged-in']) && $_SESSION['logged-in'] === true) {
@@ -93,6 +94,7 @@ foreach ($controllers as $controller) {
     exit();
   }
 }
+
 http_response_code(404);
 echo 'path: ' . $path . ' | meth: ' . $meth . '<br>';
 http_response_code(403);
