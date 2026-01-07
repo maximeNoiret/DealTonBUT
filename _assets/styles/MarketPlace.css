@@ -1,4 +1,4 @@
-.search-container {
+    .search-container {
     padding: 30px 40px;
     position: relative;
 }
@@ -96,7 +96,7 @@ a .offer-card *,
         padding: 15px 20px;
     }
     .search-wrapper {
-        max-width: 100%;
+        max-width: 90%;
     }
     .search-box {
         padding: 10px 15px 10px 40px;
