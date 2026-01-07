@@ -11,8 +11,7 @@ use PHPUnit\Framework\TestCase;
 class TradeSubjectPointTest extends TestCase
 {
   private TradeSubjectPoint $tradeSubjectPoint;
-  private AccountDB $dbAccConn;
-  private TradeDB $dbTradeConn;
+
   public function setUp(): void
   {
     $this->tradeSubjectPoint = new TradeSubjectPoint();
