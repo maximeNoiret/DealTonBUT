@@ -13,7 +13,7 @@ class Env implements Controller
 
   function control(): void
   {
-    echo new Forbidden()->render('Forbidden - DealTonBUT', Main::STYLESHEET);
+    echo (new Forbidden())->render('Forbidden - DealTonBUT', Main::STYLESHEET);
   }
 
   static function resolve(string $path, string $meth): bool

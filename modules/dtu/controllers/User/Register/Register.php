@@ -16,7 +16,7 @@ class Register implements Controller{
         '/_assets/styles/navbar.css'
         ];
   function control(): void {
-    echo new RegisterFormView()->render("Register - DealTonBUT", self::STYLESHEET);
+    echo (new RegisterFormView())->render("Register - DealTonBUT", self::STYLESHEET);
   }
 
   static function resolve(string $path, string $meth): bool {

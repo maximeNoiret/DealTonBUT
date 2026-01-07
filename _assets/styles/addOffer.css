@@ -160,7 +160,7 @@ textarea.input-class {
 @media (max-width: 480px) {
 
     .container-form {
-        width: 95%;
+        width: 90%;
         padding: 20px;
         margin-top: 5%;
         font-size: 16px;
