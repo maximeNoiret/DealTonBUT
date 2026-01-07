@@ -103,6 +103,13 @@ class AccountDB extends DataBase {
     return $query->fetchColumn();
   }
 
+  public function setBalance(string $email, int $balance): bool {
+      $query = $this->dbConn->prepare(
+          'UPDATE user_ SET balance = :balance WHERE email = :email');
+      $query->bindValue('email', $email);
+      $query->bindValue('balance', $balance);
+      return $query->execute();
+    }
     /**
      * @description Checks if a password reset has already been requested for the given email.
      * @param string $email The email address to check.

@@ -69,6 +69,8 @@ class SubjectDB extends DataBase {
     return (float) $query->fetchColumn();
   }
 
+
+
   /**
    * @description Transfers points between two subjects for a user.
    * @param string $email The email address of the user.

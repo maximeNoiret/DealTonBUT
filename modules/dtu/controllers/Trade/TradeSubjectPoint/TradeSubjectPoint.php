@@ -5,6 +5,8 @@ namespace controllers\Trade\TradeSubjectPoint;
 use core\controllers\Controller;
 use views\Trade\TradeSubjectPoint\TradeSubjectPointView as TradeSubjectPointView;
 use dtu\models\SubjectDB;
+use models\AccountDB;
+
 
 class TradeSubjectPoint implements Controller {
 
@@ -22,9 +24,12 @@ class TradeSubjectPoint implements Controller {
             header('Location: /user/login');
         } else {
 
-            $db = SubjectDB::getInstance();
+            $dbSubject = SubjectDB::getInstance();
             $email = $_SESSION['email'] ?? '';
             $error = null;
+
+            $dbBalance = AccountDB::getInstance();
+
 
             //Point Transfer
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -39,8 +44,9 @@ class TradeSubjectPoint implements Controller {
                     if ($from === $to) {
                         $error = 'error_same_subject';
                     } else {
-                        $availableFrom = $db->getPoints($email, $from);
-                        $availableTo = $db->getPoints($email, $to);
+                        $availableFrom = ($from === 'DTC_BALANCE') ? $dbBalance->getBalance($email) : $dbSubject->getPoints($email, $from);
+                        $availableTo   = ($to === 'DTC_BALANCE')   ? $dbBalance->getBalance($email) : $dbSubject->getPoints($email, $to);
+
 
                         if ($availableFrom < $points) {
                             $error = 'error_insufficient_points';
@@ -50,53 +56,80 @@ class TradeSubjectPoint implements Controller {
                         }
 
                         else {
-                            $db->transferPoints($email, $points, $from, $to);
+                            if ($from === 'DTC_BALANCE') {
+                                $dbBalance->setBalance($email, $availableFrom - $points);
+                            } else {
+                                $dbSubject->transferPoints($email, $points, $from, $to);
+                            }
+
+                            if ($to === 'DTC_BALANCE') {
+                                $dbBalance->setBalance($email, $availableTo + $points);
+                            }
+                            elseif ($from === 'DTC_BALANCE') {
+                                $dbSubject->transferPoints($email, $points, $from, $to);
+                            }
+
                             $error = 'success_transfer';
                         }
+
                     }
                 }
 
                 //ICS Import
                 if ($formType === 'ics_import') {
+                    $maxsize= 2 * 1024 * 1024; // Taille max 2MB
 
                     if (!isset($_FILES['ics_file']) || $_FILES['ics_file']['error'] !== 0) {
                         $error = 'error_upload';
-                    } else {
+                    }
 
-                        $subjects = [];
-                        $lines = file($_FILES['ics_file']['tmp_name']);
-
-                        foreach ($lines as $line) {
-                            if (strpos($line, 'SUMMARY:') === false) {
-                                continue;
-                            }
-                            $parts = explode(':', $line, 2);
-                            if (!isset($parts[1])) {
-                                continue;
-                            }
-                            $subject = trim($parts[1]);
-                            if (!preg_match('/[SR]/', $subject)) {
-                                continue;
-                            }
-                            $subjects[] = $subject;
+                    else {
+                        $extension = strtolower(pathinfo($_FILES['ics_file']['name'], PATHINFO_EXTENSION));
+                        if ($extension !== 'ics') {
+                            $error = 'error_invalid_file_type';
                         }
-
-                        // Suppression des doublons
-                        $subjects = array_unique($subjects);
-
-                        foreach ($subjects as $subject) {
-                            $rand_point = rand(0, 20);
-                            $db->insertSubjectSafe($email, $subject, $rand_point);
+                        elseif ($_FILES['ics_file']['size'] > $maxsize) {
+                            $error = 'error_file_too_large';
                         }
+                        else {
 
-                        $error = 'success_import';
+                            $subjects = [];
+                            $lines = file($_FILES['ics_file']['tmp_name']);
+
+                            foreach ($lines as $line) {
+                                if (strpos($line, 'SUMMARY:') === false) {
+                                    continue;
+                                }
+                                $parts = explode(':', $line, 2);
+                                if (!isset($parts[1])) {
+                                    continue;
+                                }
+                                $subject = trim($parts[1]);
+                                // Only keep subjects that start with S or R followed by a digit
+                                if (!preg_match('/^[SR]\d/', $subject)) {
+                                    continue;
+                                }
+                                $subjects[] = $subject;
+                            }
+
+                            // Suppression des doublons
+                            $subjects = array_unique($subjects);
+
+                            foreach ($subjects as $subject) {
+                                $rand_point = rand(0, 20);
+                                $dbSubject->insertSubjectSafe($email, $subject, $rand_point);
+                            }
+
+                            $error = 'success_import';
+                        }
                     }
                 }
             }
 
-            $subjectsRows = $db->getSubject($email);
+            $subjectsRows = $dbSubject->getSubject($email);
+            $balance = $dbBalance->getBalance($email);
             $view = new TradeSubjectPointView();
-            $view->setData($error, $subjectsRows);
+            $view->setData($error, $subjectsRows, $balance);
             echo $view->render("Échanger Points - DealTonBUT", static::STYLESHEET);
         }
     }
