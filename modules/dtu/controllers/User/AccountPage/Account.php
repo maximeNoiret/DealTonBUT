@@ -69,25 +69,6 @@ class Account implements Controller
     return '<h1 class="description-text">There are no offers!</h1>';
   }
 
-  /**
-   * @description Show the name of the user, by using their university email
-   * @return string
-   */
-  static function getName(): string
-  {
-    // Récupère l'email uniquement s'il s'agit bien d'une chaîne
-    $email = '';
-    if (isset($_SESSION['email']) && is_string($_SESSION['email'])) {
-      $email = $_SESSION['email'];
-    }
-    // Extrait la partie locale avant le @
-    $parts = explode('@', $email);
-    $name = $parts[0];
-    // Remplace les points par des espaces et capitalise
-    $name = str_replace('.', ' ', $name);
-    return ucwords($name);
-  }
-
     function control(): void
     {
         if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {

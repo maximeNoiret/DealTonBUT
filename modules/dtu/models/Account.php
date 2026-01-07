@@ -1,6 +1,7 @@
 <?php
 
 namespace models;
+use dtu\models\AccountMailer;
 use exceptions\AccountAlreadyExists;
 use models\AccountDB;
 use core\models\Mailer;
@@ -34,9 +35,9 @@ class Account {
     $token = bin2hex(random_bytes(16));
     $hashedToken = hash('sha256', $token);
     $db->insertToken($email, $token);
-    $verifyLink = 'http://' . $_SERVER['HTTP_HOST'] . //self::DOMAIN_NAME .
+    $verifyLink = 'https://' . $_SERVER['HTTP_HOST'] . //self::DOMAIN_NAME .
       '/user/register/verify?token=' . $token;
-    if (!Mailer::sendVerificationEmail($email, $verifyLink)) {
+    if (!AccountMailer::sendVerificationEmail($email, $verifyLink)) {
       return 'mailer_error';
     };
     return 'verification_mail_sent';
@@ -83,12 +84,30 @@ class Account {
       $token = bin2hex(random_bytes(16));
       //$hashedToken = hash('sha256', $token);
       $db->insertToken($email, $token);  // TODO: update db
-      $resetLink = 'http://' . $_SERVER['HTTP_HOST'] . //self::DOMAIN_NAME .
+      $resetLink = 'https://' . $_SERVER['HTTP_HOST'] . //self::DOMAIN_NAME .
         '/user/validate?email=' . urlencode($email) . '&token=' . $token;
-      if (!Mailer::sendForgotPassword($email, $resetLink)) {
+      if (!AccountMailer::sendForgotPassword($email, $resetLink)) {
         return 'message';
       };
       return 'message';
 
     }
+
+  /**
+   * @description Show the name of the user, by using their university email
+   * @return string
+   */
+  static function getName(?string $email = null): string
+  {
+    // Récupère l'email uniquement s'il s'agit bien d'une chaîne
+    if (isset($_SESSION['email']) && is_string($_SESSION['email'])) {
+      $email = $_SESSION['email'];
+    }
+    // Extrait la partie locale avant le @
+    $parts = explode('@', $email);
+    $name = $parts[0];
+    // Remplace les points par des espaces et capitalise
+    $name = str_replace('.', ' ', $name);
+    return ucwords($name);
+  }
 }
