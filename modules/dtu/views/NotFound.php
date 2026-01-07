@@ -4,7 +4,7 @@ namespace views;
 
 use core\views\AbstractView;
 
-class Forbidden extends AbstractView
+class NotFound extends AbstractView
 {
 
   /**
@@ -12,7 +12,7 @@ class Forbidden extends AbstractView
    */
   function path(): string
   {
-    return __DIR__ . DIRECTORY_SEPARATOR . 'Forbidden.html';
+    return __DIR__ . DIRECTORY_SEPARATOR . 'NotFound.html';
   }
 
   /**
@@ -27,7 +27,7 @@ class Forbidden extends AbstractView
    */
   function navbarText(): string
   {
-    return 'Forbidden';
+    return 'Not Found';
   }
 
   public function showNavbar(): bool {

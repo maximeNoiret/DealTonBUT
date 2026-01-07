@@ -33,7 +33,7 @@ class AccountPageView extends AbstractView
         'USEROFFERS' => Account::getUserOffers(),
         'USERBALANCE' => $_SESSION['balance'] ?? 0,
         'USERBOUGHTOFFERS' => Account::getUserBoughtOffers(),
-        'NAME' => Account::getName()
+        'NAME' => \models\Account::getName()
     ];
   }
 

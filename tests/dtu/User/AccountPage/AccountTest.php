@@ -57,7 +57,7 @@ class AccountTest extends TestCase
     {
         $_SESSION['email'] = 'jean.dupont@university.fr';
 
-        $result = Account::getName();
+        $result = \models\Account::getName();
 
         $this->assertEquals('Jean Dupont', $result);
     }
@@ -69,7 +69,7 @@ class AccountTest extends TestCase
     {
         $_SESSION['email'] = 'admin@university.fr';
 
-        $result = Account::getName();
+        $result = \models\Account::getName();
 
         $this->assertEquals('Admin', $result);
     }
@@ -81,7 +81,7 @@ class AccountTest extends TestCase
     {
         $_SESSION['email'] = 'marie.claire.martin@university.fr';
 
-        $result = Account::getName();
+        $result = \models\Account::getName();
 
         $this->assertEquals('Marie Claire Martin', $result);
     }
@@ -93,7 +93,7 @@ class AccountTest extends TestCase
     {
         // $_SESSION['email'] n'est pas défini
 
-        $result = Account::getName();
+        $result = \models\Account::getName();
 
         $this->assertEquals('', $result);
     }
@@ -105,7 +105,7 @@ class AccountTest extends TestCase
     {
         $_SESSION['email'] = 12345; // Non string
 
-        $result = Account::getName();
+        $result = \models\Account::getName();
 
         $this->assertEquals('', $result);
     }
@@ -249,19 +249,19 @@ class AccountTest extends TestCase
     {
         // Test avec email complet
         $_SESSION['email'] = 'pierre.paul.jacques@university.fr';
-        $this->assertEquals('Pierre Paul Jacques', Account::getName());
+        $this->assertEquals('Pierre Paul Jacques', \models\Account::getName());
 
         // Test avec un seul mot
         $_SESSION['email'] = 'admin@university.fr';
-        $this->assertEquals('Admin', Account::getName());
+        $this->assertEquals('Admin', \models\Account::getName());
 
         // Test avec chiffres
         $_SESSION['email'] = 'user123@university.fr';
-        $this->assertEquals('User123', Account::getName());
+        $this->assertEquals('User123', \models\Account::getName());
 
         // Test avec tirets (ne sont pas remplacés)
         $_SESSION['email'] = 'jean-pierre@university.fr';
-        $this->assertEquals('Jean-pierre', Account::getName());
+        $this->assertEquals('Jean-pierre', \models\Account::getName());
     }
 
     /**
@@ -271,16 +271,16 @@ class AccountTest extends TestCase
     {
         // Email vide
         $_SESSION['email'] = '';
-        $this->assertEquals('', Account::getName());
+        $this->assertEquals('', \models\Account::getName());
 
         // Email sans @
         $_SESSION['email'] = 'invalidemail';
-        $result = Account::getName();
+        $result = \models\Account::getName();
         $this->assertEquals('Invalidemail', $result);
 
         // Email avec @ à la fin
         $_SESSION['email'] = 'test@';
-        $this->assertEquals('Test', Account::getName());
+        $this->assertEquals('Test', \models\Account::getName());
     }
 
     /**
