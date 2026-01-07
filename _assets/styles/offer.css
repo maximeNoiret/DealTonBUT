@@ -13,7 +13,7 @@
     flex-direction: column;
     gap: 0.6rem;
     box-shadow: 0.125rem 0.125rem 0.3rem rgba(0,0,0,0.2);
-    min-height: 200px;
+    min-height: 310px;
     color: #000;
     transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
 }
