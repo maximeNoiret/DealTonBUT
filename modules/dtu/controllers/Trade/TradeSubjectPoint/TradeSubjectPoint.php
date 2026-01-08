@@ -70,6 +70,7 @@ class TradeSubjectPoint implements Controller {
                             }
 
                             $error = 'success_transfer';
+                            $dbBalance->updateBalance($email);
                         }
 
                     }

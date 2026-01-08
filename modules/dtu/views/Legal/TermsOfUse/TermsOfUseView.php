@@ -38,4 +38,8 @@ class TermsOfUseView extends AbstractView
     {
         return "Condition d'utilisation";
     }
+
+  public function showNavbar(): bool {
+    return false;
+  }
 }

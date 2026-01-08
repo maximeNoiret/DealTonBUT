@@ -18,11 +18,7 @@ class TermsOfUse implements Controller
 
     function control(): void
     {
-        if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
-            header('Location: /user/login');
-        } else {
-            echo (new TermsOfUseView())->render("Condition d'utilisation - DealTonBUT", self::STYLESHEET);
-        }
+      echo (new TermsOfUseView())->render("Condition d'utilisation - DealTonBUT", self::STYLESHEET);
     }
 
     static function resolve(string $path, string $meth): bool

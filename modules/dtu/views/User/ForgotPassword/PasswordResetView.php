@@ -27,4 +27,8 @@ class PasswordResetView extends AbstractView {
   {
     return 'Réinitialisation du mot de passe';
   }
+
+  public function showNavbar(): bool {
+    return false;
+  }
 }

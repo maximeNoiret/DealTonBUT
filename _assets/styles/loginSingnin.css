@@ -130,11 +130,12 @@
 
     }
 
-    .container-form{
+    .container-form {
         width: 70%;
         height: auto;
         padding: 40px;
         font-size: 20px;
+    }
 
     .btn-register, .btn-login {
         padding: 18px 30px;
