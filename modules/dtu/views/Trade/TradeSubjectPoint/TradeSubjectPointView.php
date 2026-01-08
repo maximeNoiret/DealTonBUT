@@ -42,9 +42,15 @@ class TradeSubjectPointView extends AbstractView {
             };
         }
 
+
+
         $subjectsRows = $this->subjectsRows;
         $fromOptions = '';
         $toOptions = '';
+
+        $balance = '<option value="DTC_BALANCE">DTC Balance (' . htmlspecialchars((string)$this->balance) . ' pts)</option>';
+        $fromOptions .= $balance;
+        $toOptions .= $balance;
 
         foreach ($subjectsRows as $row) {
             $subject = $row['subject_name'];
@@ -56,10 +62,6 @@ class TradeSubjectPointView extends AbstractView {
             $fromOptions .= $option;
             $toOptions .= $option;
         }
-
-        $balance = '<option value="DTC_BALANCE">DTC Balance (' . htmlspecialchars((string)$this->balance) . ' pts)</option>';
-        $fromOptions .= $balance;
-        $toOptions .= $balance;
 
         return [
             'FROM_OPTIONS' => $fromOptions,
