@@ -69,7 +69,7 @@ class TradeSubjectPointTest extends TestCase {
         $dbMock->expects($this->once())
             ->method('getPoints')
             ->with($email, 'FromSub')
-            ->willReturn(50);
+            ->willReturn(50.0);
 
         $dbMock->expects($this->once())
             ->method('transferPoints')
@@ -109,7 +109,7 @@ class TradeSubjectPointTest extends TestCase {
         $dbMock->expects($this->once())
             ->method('getPoints')
             ->with($email, 'FromSub')
-            ->willReturn(5);
+            ->willReturn(5.0);
 
         $dbMock->expects($this->never())
             ->method('transferPoints');

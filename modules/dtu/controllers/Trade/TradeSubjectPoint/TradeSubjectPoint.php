@@ -51,7 +51,7 @@ class TradeSubjectPoint implements Controller {
                         if ($availableFrom < $points) {
                             $error = 'error_insufficient_points';
                         }
-                        elseif (($availableTo + $points) > 20) {
+                        elseif ($to !== 'DTC_BALANCE' && ($availableTo + $points) > 20) {
                             $error = 'error_exceed_max_points';
                         }
 
