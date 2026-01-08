@@ -4,7 +4,7 @@ namespace controllers\User\Register;
 
 use core\controllers\Controller;
 use views\User\RegisterForm\RegisterFormView;
-//use views\User\RegisterFormView;
+
 class Register implements Controller{
 
   const string PATH = '/user/register';
@@ -16,7 +16,11 @@ class Register implements Controller{
         '/_assets/styles/navbar.css'
         ];
   function control(): void {
-    echo (new RegisterFormView())->render("Register - DealTonBUT", self::STYLESHEET);
+    if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
+      echo (new RegisterFormView())->render("Register - DealTonBUT", self::STYLESHEET);
+    } else {
+      header('Location: /marketplace');
+    }
   }
 
   static function resolve(string $path, string $meth): bool {
