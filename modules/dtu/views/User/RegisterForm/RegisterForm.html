@@ -6,8 +6,14 @@
   <input type="text" name="{USERNAME_KEY}" required class="input-class"><br>
   <label for="{EMAIL_KEY}">Email:</label><br>
   <input type="email" name="{EMAIL_KEY}" required class="input-class"><br>
+  <input type="checkbox" name="legalCheck" id="legalCheck" required>
+  <label for="legalCheck">
+    J'ai lu et j'accepte les
+    <a href="/termsofuse" target="_blank">Conditions d'utilisation</a>
+    et la <a href="/confidentiality" target="_blank">Politique de confidentialité</a>.
+  </label>
   <input type="submit" value="S'inscrire" class="btn-inscription">
-  <p><a href="/user/login">Déjà un compte?</a></p>
+  <p><a href="/user/login">Déjà un compte ?</a></p>
 </form>
   <p>{ERROR_MESSAGE}</p>
 </div>
