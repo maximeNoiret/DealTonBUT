@@ -30,4 +30,8 @@ class ConfidentialityView extends AbstractView
     function navbarText(): string {
         return 'Confidentialité';
     }
+
+  public function showNavbar(): bool {
+    return false;
+  }
 }
