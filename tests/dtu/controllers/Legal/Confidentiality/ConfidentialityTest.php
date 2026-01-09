@@ -12,7 +12,7 @@ class ConfidentialityTest extends TestCase
     $_SESSION = [];
   }
 
-  public function controlRedirectsToLoginWhenUserNotLoggedIn(): void
+  public function testControlRedirectsToLoginWhenUserNotLoggedIn(): void
   {
     unset($_SESSION['logged-in']);
 
@@ -27,7 +27,7 @@ class ConfidentialityTest extends TestCase
     $confidentiality->control();
   }
 
-  public function controlRedirectsToLoginWhenLoggedInIsFalse(): void
+  public function testControlRedirectsToLoginWhenLoggedInIsFalse(): void
   {
     $_SESSION['logged-in'] = false;
 
@@ -42,7 +42,7 @@ class ConfidentialityTest extends TestCase
     $confidentiality->control();
   }
 
-  public function controlRendersConfidentialityViewWhenUserIsLoggedIn(): void
+  public function testControlRendersConfidentialityViewWhenUserIsLoggedIn(): void
   {
     $_SESSION['logged-in'] = true;
 
@@ -57,57 +57,57 @@ class ConfidentialityTest extends TestCase
     $confidentiality->control();
   }
 
-  public function resolveReturnsTrueForMatchingPathAndMethod(): void
+  public function testResolveReturnsTrueForMatchingPathAndMethod(): void
   {
     $this->assertTrue(Confidentiality::resolve('/confidentiality', 'GET'));
   }
 
-  public function resolveReturnsFalseForNonMatchingPath(): void
+  public function testResolveReturnsFalseForNonMatchingPath(): void
   {
     $this->assertFalse(Confidentiality::resolve('/privacy', 'GET'));
   }
 
-  public function resolveReturnsFalseForNonMatchingMethod(): void
+  public function testResolveReturnsFalseForNonMatchingMethod(): void
   {
     $this->assertFalse(Confidentiality::resolve('/confidentiality', 'POST'));
   }
 
-  public function resolveReturnsFalseForDifferentHttpMethod(): void
+  public function testResolveReturnsFalseForDifferentHttpMethod(): void
   {
     $this->assertFalse(Confidentiality::resolve('/confidentiality', 'PUT'));
   }
 
-  public function resolveReturnsFalseForDeleteMethod(): void
+  public function testResolveReturnsFalseForDeleteMethod(): void
   {
     $this->assertFalse(Confidentiality::resolve('/confidentiality', 'DELETE'));
   }
 
-  public function resolveReturnsFalseForEmptyPath(): void
+  public function testResolveReturnsFalseForEmptyPath(): void
   {
     $this->assertFalse(Confidentiality::resolve('', 'GET'));
   }
 
-  public function resolveReturnsFalseForRootPath(): void
+  public function testResolveReturnsFalseForRootPath(): void
   {
     $this->assertFalse(Confidentiality::resolve('/', 'GET'));
   }
 
-  public function resolveReturnsFalseForSimilarPath(): void
+  public function testResolveReturnsFalseForSimilarPath(): void
   {
     $this->assertFalse(Confidentiality::resolve('/confidentiality/other', 'GET'));
   }
 
-  public function resolveReturnsFalseForPartialPath(): void
+  public function testResolveReturnsFalseForPartialPath(): void
   {
     $this->assertFalse(Confidentiality::resolve('/confidential', 'GET'));
   }
 
-  public function resolveIsCaseSensitiveForPath(): void
+  public function testResolveIsCaseSensitiveForPath(): void
   {
     $this->assertFalse(Confidentiality::resolve('/Confidentiality', 'GET'));
   }
 
-  public function resolveIsCaseSensitiveForMethod(): void
+  public function testResolveIsCaseSensitiveForMethod(): void
   {
     $this->assertFalse(Confidentiality::resolve('/confidentiality', 'get'));
   }
