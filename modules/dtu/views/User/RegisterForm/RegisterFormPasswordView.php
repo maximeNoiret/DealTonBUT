@@ -57,4 +57,12 @@ class RegisterFormPasswordView extends AbstractView {
   function navbarText(): string {
     return 'Inscription';
   }
+
+    /**
+   * @description Toggle that show the navbar
+   * @return bool
+   */
+  public function showNavbar(): bool {
+    return false;
+  }
 }
