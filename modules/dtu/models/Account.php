@@ -30,6 +30,8 @@ class Account {
       return 'already_sent';
     }
 
+    $_SESSION['username'] = $username;
+
     $db->registerAccount($username, $email);
 
     $token = bin2hex(random_bytes(16));
