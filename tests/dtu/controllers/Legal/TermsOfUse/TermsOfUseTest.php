@@ -6,6 +6,7 @@ use controllers\Legal\TermsOfUse\TermsOfUse;
 use views\Legal\TermsOfUse\TermsOfUseView;
 use PHPUnit\Framework\TestCase;
 
+
 class TermsOfUseTest extends TestCase
 {
     protected function setUp(): void
@@ -13,68 +14,73 @@ class TermsOfUseTest extends TestCase
         $_SESSION = [];
     }
 
-    public function resolvesCorrectPathAndMethod()
+    public function testResolvesCorrectPathAndMethod()
     {
         $this->assertTrue(TermsOfUse::resolve('/termsofuse', 'GET'));
     }
 
-    public function resolvesReturnsFalseForIncorrectPath()
+    public function testResolvesReturnsFalseForIncorrectPath()
     {
         $this->assertFalse(TermsOfUse::resolve('/different', 'GET'));
     }
 
-    public function resolvesReturnsFalseForIncorrectMethod()
+    public function testResolvesReturnsFalseForIncorrectMethod()
     {
         $this->assertFalse(TermsOfUse::resolve('/termsofuse', 'POST'));
     }
 
-    public function resolvesReturnsFalseForBothIncorrectPathAndMethod()
+    public function testResolvesReturnsFalseForBothIncorrectPathAndMethod()
     {
         $this->assertFalse(TermsOfUse::resolve('/different', 'POST'));
     }
 
-    public function redirectsToLoginWhenNotLoggedIn()
+  /**
+   * @runInSeparateProcess
+   */
+    public function testRedirectsToLoginWhenNotLoggedIn()
     {
         $_SESSION['logged-in'] = false;
 
         $controller = new TermsOfUse();
 
         ob_start();
-        $this->expectOutputString('');
+        //$this->expectOutputString('');
         $controller->control();
+        $headers =xdebug_get_headers();
         ob_end_clean();
-
-        $this->assertArrayHasKey('Location', $this->getHeadersArray());
+        $this->assertContains('Location: /user/login', $headers);
+       // $this->assertArrayHasKey('Location', $this->getHeadersArray());
     }
 
-    public function redirectsToLoginWhenSessionNotSet()
+  /**
+   * @runInSeparateProcess
+   */
+    public function testRedirectsToLoginWhenSessionNotSet()
     {
         $controller = new TermsOfUse();
 
         ob_start();
-        $this->expectOutputString('');
+        //$this->expectOutputString('');
         $controller->control();
+        $headers = xdebug_get_headers();
         ob_end_clean();
+        $this->assertContains('Location: /user/login', $headers);
 
-        $this->assertArrayHasKey('Location', $this->getHeadersArray());
+/*        $this->assertArrayHasKey('Location', $this->getHeadersArray());*/
     }
 
-    public function rendersViewWhenUserIsLoggedIn()
+    public function testRendersViewWhenUserIsLoggedIn()
     {
         $_SESSION['logged-in'] = true;
 
-        $mockView = $this->createMock(TermsOfUseView::class);
-        $mockView->method('render')->willReturn('<html>Terms of Use</html>');
-
         $controller = new TermsOfUse();
-
         ob_start();
-        $this->expectOutputString('<html>Terms of Use</html>');
         $controller->control();
-        ob_end_clean();
+        $output = ob_get_clean();
+        $this->assertStringContainsString('<title>Condition d\'utilisation - DealTonBUT</title>', $output);
     }
 
-    public function usesCorrectStylesheets()
+    public function testUsesCorrectStylesheets()
     {
         $expectedStylesheets = [
             '/_assets/styles/style.css',
@@ -85,12 +91,12 @@ class TermsOfUseTest extends TestCase
         $this->assertEquals($expectedStylesheets, TermsOfUse::STYLESHEET);
     }
 
-    public function pathConstantIsCorrect()
+    public function testPathConstantIsCorrect()
     {
         $this->assertEquals('/termsofuse', TermsOfUse::PATH);
     }
 
-    public function methodConstantIsCorrect()
+    public function testMethodConstantIsCorrect()
     {
         $this->assertEquals('GET', TermsOfUse::METH);
     }
