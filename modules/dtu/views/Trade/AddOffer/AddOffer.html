@@ -1,15 +1,15 @@
 <form action="{ACTION_KEY}" method="post" class="container-form">
     <aside class="container-un">
         <aside class="form-group">
-            <label for="{NAME_KEY}">Nom de l'offre:</label>
+            <label for="{NAME_KEY}">*Nom de l'offre:</label>
             <input type="text" name="{NAME_KEY}" required class="input-class-un">
         </aside>
         <aside class="form-group">
-            <label for="{PRICE_KEY}">Coût:</label>
+            <label for="{PRICE_KEY}">*Prix (DT₡):</label>
             <input type="number" step="any" name="{COUT_KEY}" placeholder="X.XX" required class="input-class-price">
         </aside>
         <div class="form-group">
-            <label for="{DATE_KEY}">Date limite:</label>
+            <label for="{DATE_KEY}">*Date limite:</label>
             <input type="date" name="{DATE_KEY}" required class="input-class-un">
         </div>
     </aside>
@@ -20,5 +20,6 @@
     <label for="{TAG_KEY}">Tag:</label>
     <input type="text" name="{TAG_KEY}" class="input-class-tag">
 
+    <p>*: Obligatoire</p>
     <input type="submit" value="Poster" class="btn-inscription">
 </form>

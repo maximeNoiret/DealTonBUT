@@ -42,13 +42,17 @@ class MarketPlace implements Controller {
       'SELECT ouid ,u.username as \'username\', title, description, price, deadline
        FROM offer o
        INNER JOIN user_ u
-       ON o.owner = u.email ';
+       ON o.owner = u.email 
+       WHERE ouid NOT IN (
+            SELECT ouid
+            FROM transaction
+       )';
     //  for searching a string in the title of the offers
     /**
      * @var array<string> $_GET['search-string']
      */
     if (isset($_GET['search-string']) && !empty($_GET['search-string'])) {
-      $query .= 'WHERE title LIKE \'%' . $_GET['search-string'] . '%\'';
+      $query .= ' AND title LIKE \'%' . $_GET['search-string'] . '%\'';
     }
     switch ($sort) {
       case 'price-asc':
