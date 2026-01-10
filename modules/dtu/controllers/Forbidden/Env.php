@@ -4,7 +4,7 @@ namespace controllers\Forbidden;
 
 use controllers\Main;
 use core\controllers\Controller;
-use dtu\views\Forbidden;
+use \views\Forbidden;
 
 class Env implements Controller
 {
