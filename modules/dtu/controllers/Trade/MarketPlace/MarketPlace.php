@@ -87,7 +87,7 @@ class MarketPlace implements Controller {
     }
 
     // Count total offers for pagination
-    $countQuery = str_replace('SELECT ouid ,u.username as \'username\', title, description, price, deadline', 'SELECT COUNT(*) as total', $query);
+    $countQuery = str_replace('SELECT DISTINCT o.ouid ,u.username as \'username\', title, description, price, deadline', 'SELECT COUNT(*) as total', $query);
     $countResult = DataBase::getInstance()->executeQuery($countQuery);
     $totalOffers = $countResult ? (int)$countResult[0]['total'] : 0;
 
