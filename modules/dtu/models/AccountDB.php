@@ -116,6 +116,12 @@ class AccountDB extends DataBase {
     return $query->fetch() !== false;
   }
 
+  /**
+   * @description Updates the password for the given email.
+   * @param string $email The email address of the account.
+   * @param string $hashedPassword The new hashed password.
+   * @return bool True on success, false on failure.
+   */
   public function updatePassword(string $email, string $hashedPassword): bool
   {
     $query = $this->dbConn->prepare(
@@ -201,6 +207,11 @@ class AccountDB extends DataBase {
     return $result && $result['role'] != 'not-verified';
   }
 
+  /**
+   * @description Retrieves the email associated with a given token.
+   * @param string $token The token
+   * @return string The email associated with the token.
+   */
   public function getEmailFromToken(string $token): string
   {
     $query = $this->dbConn->prepare(
