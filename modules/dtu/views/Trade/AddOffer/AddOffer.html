@@ -5,11 +5,11 @@
             <input type="text" name="{NAME_KEY}" required class="input-class-un" maxlength="30">
         </aside>
         <aside class="form-group">
-            <label for="{PRICE_KEY}">Coût:</label>
+            <label for="{PRICE_KEY}">*Prix (DT₡):</label>
             <input type="number" step="any" name="{COUT_KEY}" placeholder="X.XX" required class="input-class-price">
         </aside>
         <div class="form-group">
-            <label for="{DATE_KEY}">Date limite:</label>
+            <label for="{DATE_KEY}">*Date limite:</label>
             <input type="date" name="{DATE_KEY}" required class="input-class-un">
         </div>
     </aside>
@@ -79,6 +79,9 @@
             updateHiddenInput();
         }
 
+    <p>*: Obligatoire</p>
+    <input type="submit" value="Poster" class="btn-inscription">
+</form>
         // Mettre à jour le champ caché avec tous les tags
         function updateHiddenInput() {
             tagsHidden.value = tags.join(',');

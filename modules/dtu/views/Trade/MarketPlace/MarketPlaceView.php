@@ -30,6 +30,6 @@ class MarketPlaceView extends AbstractView {
    * @return string
    */
   function navbarText(): string {
-    return 'Place De Marché';
+    return 'Le BUTin';
   }
 }
