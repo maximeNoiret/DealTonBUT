@@ -72,4 +72,41 @@
 .sort-option:hover {
     background: #f0f0f0;
 }
+
+/* Load More Button Styles */
+.load-more-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    margin-bottom: 40px;
+}
+
+.load-more-btn {
+    background-color: #D9D9D9;
+    border: 2px solid #666;
+    border-radius: 25px;
+    padding: 15px 40px;
+    font-family: ShareTechMono, monospace;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: normal;
+}
+
+.load-more-btn:hover {
+    background-color: #c0c0c0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.load-more-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.load-more-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
 /*---------------------------------------------------------------------------*/

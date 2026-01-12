@@ -38,6 +38,9 @@ class MarketPlace implements Controller {
    */
   public static function getOffers(): string {
     $sort = $_GET['sort'] ?? null;
+    $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
+    $limit = 30;
+
     $query =
       'SELECT ouid ,u.username as \'username\', title, description, price, deadline
        FROM offer o
@@ -57,33 +60,50 @@ class MarketPlace implements Controller {
     switch ($sort) {
       case 'price-asc':
         $query .= " ORDER BY price ASC";
-//        $offers = DataBase::getInstance()->getOffers('price', 'ASC');
         break;
       case 'price-desc':
         $query .= " ORDER BY price DESC";
-//        $offers = DataBase::getInstance()->getOffers('price', 'DESC');
         break;
       case 'date':
         $query .= " ORDER BY creation_time DESC";
-//        $offers = DataBase::getInstance()->getOffers('creation_time', 'DESC');
         break;
       case 'alphabetic':
         $query .= " ORDER BY title ASC";
-//        $offers = DataBase::getInstance()->getOffers('title', 'ASC');
         break;
       default:
         break;
     }
+
+    // Count total offers for pagination
+    $countQuery = str_replace('SELECT ouid ,u.username as \'username\', title, description, price, deadline', 'SELECT COUNT(*) as total', $query);
+    $countResult = DataBase::getInstance()->executeQuery($countQuery);
+    $totalOffers = $countResult ? (int)$countResult[0]['total'] : 0;
+
+    // Add limit and offset
+    $query .= " LIMIT $limit OFFSET $offset";
+
     $offers = DataBase::getInstance()->executeQuery($query);
     if ($offers) {
-      $ret = '<section class="offer-grid">' . "\n";
+      $ret = '<section class="offer-grid" id="offer-grid">' . "\n";
       foreach ($offers as $offer) {
         /**
          * @var array<string, string> $offer
          */
         $ret = $ret . (new Offer($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
       }
-      return $ret . '</section>';
+      $ret .= '</section>';
+
+      // Add "Load More" button if there are more offers
+      if ($totalOffers > $offset + $limit) {
+        $nextOffset = $offset + $limit;
+        $sortParam = $sort ? '&sort=' . urlencode($sort) : '';
+        $searchParam = isset($_GET['search-string']) ? '&search-string=' . urlencode($_GET['search-string']) : '';
+        $ret .= '<div class="load-more-container">';
+        $ret .= '<button class="load-more-btn" onclick="loadMoreOffers(' . $nextOffset . ', \'' . htmlspecialchars($sortParam . $searchParam, ENT_QUOTES) . '\')">Plus d\'offres ?</button>';
+        $ret .= '</div>';
+      }
+
+      return $ret;
     }
     return '<h1 class="description-text">There are no offers!</h1>';
   }
