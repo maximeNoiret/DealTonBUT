@@ -98,7 +98,7 @@ class MarketPlace implements Controller {
          */
         // Add button based on ownership
         $offer['button'] = self::generateOfferButton($offer['ouid'], $offer['owner']);
-        $ret = $ret . new Offer($offer)->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
+        $ret = $ret . new Offer($offer)->render('article', 'offer-card');
       }
       $ret .= '</section>';
 
