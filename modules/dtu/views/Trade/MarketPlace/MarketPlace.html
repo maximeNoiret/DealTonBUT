@@ -67,10 +67,11 @@
             const currentOfferGrid = document.querySelector('#offer-grid');
 
             if (newOfferGrid && currentOfferGrid) {
-                // Append new offers to existing grid
-                const newOffers = newOfferGrid.querySelectorAll('.offer-card');
-                newOffers.forEach(offer => {
-                    currentOfferGrid.appendChild(offer);
+                // Append new offers to existing grid (including the <a> wrappers)
+                const newOffers = newOfferGrid.children;
+                // Convert HTMLCollection to Array to avoid issues with live collections
+                Array.from(newOffers).forEach(offer => {
+                    currentOfferGrid.appendChild(offer.cloneNode(true));
                 });
             }
 
