@@ -82,7 +82,7 @@
     color: #000;
 }
 .offer-price {
-    font-size: clamp(0.9rem, 1.3vw, 1rem);
+    font-size: clamp(0.9rem, 1.3vw, 4rem);
     font-weight: bold;
     text-align: right;
     line-height: 1.2;
