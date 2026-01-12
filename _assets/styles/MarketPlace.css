@@ -1,4 +1,4 @@
-    .search-container {
+.search-container {
     padding: 30px 40px;
     position: relative;
 }
@@ -127,6 +127,24 @@ a .offer-card *,
 .offer-grid a * {
     text-decoration: none !important;
 }
+
+.popup-notification {
+    position: fixed;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 30px;
+    border-radius: 0 0 10px 10px;
+    color: white;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    z-index: 9999;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    transition: top 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+.popup-notification.error { background-color: #ed675c; border: 2px solid #c0392b; }
+.popup-notification.success { background-color: #2ecc71; border: 2px solid #27ae60; }
+.popup-notification.show { top: 0; }
 
 @media screen and (max-width: 480px) {
     .search-container {

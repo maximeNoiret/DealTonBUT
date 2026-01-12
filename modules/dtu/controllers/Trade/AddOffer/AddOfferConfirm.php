@@ -31,7 +31,7 @@ class AddOfferConfirm implements Controller
         $tagsArray = !empty($tag) ? explode(',', $tag) : [];
 
 
-        if (empty($title) || empty($price) || empty($end_date) || empty($description)) {
+        if (empty($title) || empty($price) || empty($end_date)) {
             echo "Veuillez remplir tous les champs";
             header('Location: /offre');
             /*exit();*/
@@ -70,9 +70,6 @@ class AddOfferConfirm implements Controller
         header('Location: /marketplace');
 
     }
-
-
-
 
     static function resolve(string $path, string $meth): bool
     {
