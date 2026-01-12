@@ -58,7 +58,19 @@ class AccountDBTest extends TestCase
     $this->assertFalse($result);
   }
 
+  public function testFailGetBalanceBecauseOfWrongEmail(){
+    $result = $this->accountDb->getBalance('wrong.email');
+    $this->assertFalse($result);
+  }
+
+  public function testGetBalanceSuccessfully(){
+    $this->accountDb->registerAccount($this->testUsername01,$this->testEmail01);
+    $this->accountDb->updateBalance($this->testEmail01, 100);
+    $result = $this->accountDb->getBalance($this->testEmail01);
+    $this->assertEquals(100, $result);
+  }
+
   public function tearDown(): void {
-   $this->accountDb->deleteUser($this->testEmail01);
+   //$this->accountDb->deleteUser($this->testEmail01);
   }
 }
