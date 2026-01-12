@@ -70,7 +70,60 @@ class AccountDBTest extends TestCase
     $this->assertEquals(100, $result);
   }
 
+  public function testUpdatePasswordSuccessfully(){
+    $this->accountDb->registerAccount($this->testUsername01,$this->testEmail01);
+    $this->accountDb->updatePassword($this->testEmail01, $this->testHahsedPassword01);
+    $result = $this->accountDb->getAccount($this->testEmail01, $this->testPassword01);
+    $this->assertIsArray($result);
+  }
+
+  public function testInsertTokenSuccessfully()
+  {
+    $this->accountDb->registerAccount($this->testUsername01,$this->testEmail01);
+    $this->accountDb->insertToken($this->testEmail01, 'unit_test_token_011');
+
+    $testQuery = 'SELECT token FROM token WHERE email = \''.$this->testEmail01.'\';';
+    $result = $this->accountDb->executeQuery($testQuery);
+    $this->assertEquals('unit_test_token_011', $result[0]['token']);
+  }
+
+  public function testDeleteUserSuccessfully(){
+    $this->accountDb->registerAccount($this->testUsername01,$this->testEmail01);
+    $this->accountDb->deleteUser($this->testEmail01);
+    $result = $this->accountDb->accountExists($this->testEmail01);
+    $this->assertFalse($result);
+  }
+
+  public function testUpdateBalanceSuccessfully(){
+    $this->accountDb->registerAccount($this->testUsername01,$this->testEmail01);
+    $this->accountDb->updateBalance($this->testEmail01);
+    $this->assertEquals(0, $_SESSION['balance']);
+  }
+
+  public function testIsAccountVerifiedUnsuccessfully()
+  {
+    $this->accountDb->registerAccount($this->testUsername01,$this->testEmail01);
+    $result = $this->accountDb->isAccountVerified($this->testEmail01);
+    $this->assertFalse($result);
+  }
+
+  public function testIsAccountVerifiedSuccessfully(){
+    $this->accountDb->registerAccount($this->testUsername01,$this->testEmail01);
+    $query = 'UPDATE user_ SET role = \'student\' WHERE email = \''.$this->testEmail01.'\';';
+    $this->accountDb->executeQuery($query);
+    $result = $this->accountDb->isAccountVerified($this->testEmail01);
+    $this->assertTrue($result);
+  }
+
+  public function testGetEmailFromTokenSuccessfully()
+  {
+    $this->accountDb->registerAccount($this->testUsername01,$this->testEmail01);
+    $this->accountDb->insertToken($this->testEmail01, 'unit_test_token_012');
+    $result = $this->accountDb->getEmailFromToken('unit_test_token_012');
+    $this->assertEquals($this->testEmail01, $result);
+  }
+
   public function tearDown(): void {
-   //$this->accountDb->deleteUser($this->testEmail01);
+   $this->accountDb->deleteUser($this->testEmail01);
   }
 }
