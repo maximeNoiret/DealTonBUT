@@ -23,7 +23,7 @@ CREATE TABLE token(
     email VARCHAR(70),
     token VARCHAR(32),
     deadline TIMESTAMP DEFAULT (CURRENT_TIMESTAMP + INTERVAL 10 MINUTE) NOT NULL,
-    PRIMARY KEY (email, token),
+    PRIMARY KEY (token),
     FOREIGN KEY (email) REFERENCES user_(email) ON DELETE CASCADE
 ) DEFAULT CHARSET=utf8;
 
