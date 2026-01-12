@@ -38,6 +38,8 @@ class Account implements Controller
         /**
          * @var array<string, string> $offer
          */
+        // Add button based on ownership
+        $offer['button'] = self::generateOfferButton($offer['ouid'], $offer['owner']);
         $ret = $ret . (new Offer($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
       }
       return $ret . '</section>';
@@ -62,11 +64,27 @@ class Account implements Controller
         /**
          * @var array<string, string> $offer
          */
+        // Add button based on ownership
+        $offer['button'] = self::generateOfferButton($offer['ouid'], $offer['owner']);
         $ret = $ret . (new Offer($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
       }
       return $ret . '</section>';
     }
     return '<h1 class="description-text">There are no offers!</h1>';
+  }
+
+  /**
+   * @description Generates the appropriate action button for an offer
+   * @param int $offerId The offer ID
+   * @param string $ownerEmail The email of the offer owner
+   * @return string Returns the appropriate HTML button code based on offer ownership
+   */
+  private static function generateOfferButton(int $offerId, string $ownerEmail): string {
+    if (isset($_SESSION['email']) && $_SESSION['email'] === $ownerEmail) {
+      return '<a class="button-delete" href="/offre/delete?id=' . $offerId . '">Delete</a>';
+    } else {
+      return '<a class="button-buy" href="/offre/buy?id=' . $offerId . '">Buy</a>';
+    }
   }
 
     function control(): void

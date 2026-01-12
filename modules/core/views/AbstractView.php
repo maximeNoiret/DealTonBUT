@@ -42,9 +42,6 @@ abstract class AbstractView {
    */
   public function body(): string {
     $body = file_get_contents($this->path());
-//    if (!$body) {
-//      throw new ViewException('Unable to load <body>');
-//    }
     /**
      * @var string $value
      */

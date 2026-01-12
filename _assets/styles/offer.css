@@ -103,3 +103,39 @@
         font-size: 15px;
     }
 }
+
+.button-delete {
+    background-color: #ff4d4d;
+    color: white;
+    font-family: ShareTechMono, monospace;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.button-delete:hover {
+    background-color: #e60000;
+}
+
+.button-buy {
+    background-color: #4CAF50;
+    color: white;
+    font-family: ShareTechMono, monospace;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.button-buy:hover {
+    background-color: #45a049;
+}
