@@ -4,15 +4,15 @@ namespace controllers\User\PasswordForgot;
 
 use controllers\User\Login\Login;
 use core\controllers\Controller;
-use models\DataBase;
+use models\AccountDB;
 use views\User\ForgotPassword\PasswordResetView;
 use views\User\LoginForm\LoginFormView;
 
 class PasswordResetConfirm implements Controller
 {
 
-  const string PATH = '/user/validate';
-  const string METH = 'POST';
+  const PATH = '/user/validate';
+  const METH = 'POST';
 
   function control(): void {
     /**
@@ -23,7 +23,7 @@ class PasswordResetConfirm implements Controller
     /**
      * @var array<string, string> $_SESSION
      */
-    if (DataBase::getInstance()->updatePassword($_SESSION['reset_email'] ?? '', $hashedPassword)) {
+    if (AccountDB::getInstance()->updatePassword($_SESSION['reset_email'] ?? '', $hashedPassword)) {
       echo (new LoginFormView('password_changed')->render('Login - DealTonBUT', Login::STYLESHEET));
     } else {
       echo (new LoginFormView('unknownerroroccured')->render('Login - DealTonBUT', Login::STYLESHEET));

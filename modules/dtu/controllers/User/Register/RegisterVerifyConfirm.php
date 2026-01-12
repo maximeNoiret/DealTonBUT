@@ -4,7 +4,7 @@ namespace controllers\User\Register;
 
 use core\controllers\Controller;
 use exceptions\AccountAlreadyExists;
-use models\DataBase;
+use models\AccountDB;
 
 class RegisterVerifyConfirm implements Controller
 {
@@ -13,7 +13,7 @@ class RegisterVerifyConfirm implements Controller
 
   function control(): void
   {
-    $db = DataBase::getInstance();
+    $db = AccountDB::getInstance();
     $tempAccount = ['username' => $_SESSION['username'], 'email' => $_SESSION['email']];
     session_regenerate_id(true);
     /**

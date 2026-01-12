@@ -3,7 +3,7 @@
 namespace controllers\Trade\MarketPlace;
 
 use core\controllers\Controller;
-use models\DataBase;
+use models\AccountDB;
 use views\Trade\MarketPlace\MarketPlaceView;
 use views\Trade\Offer\Offer;
 
@@ -23,7 +23,7 @@ class MarketPlace implements Controller {
         '/_assets/styles/navbar.css',
         '/_assets/styles/offer.css'
     ];
-  
+
   function control(): void {
     if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
       header('Location: /user/login');
@@ -42,7 +42,7 @@ class MarketPlace implements Controller {
     $limit = 30;
 
     $query =
-      'SELECT ouid ,u.username as \'username\', title, description, price, deadline
+      'SELECT DISTINCT o.ouid ,u.username as \'username\', title, description, price, deadline
        FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email 
@@ -51,11 +51,22 @@ class MarketPlace implements Controller {
             FROM transaction
        )';
     //  for searching a string in the title of the offers
+
     /**
      * @var array<string> $_GET['search-string']
      */
     if (isset($_GET['search-string']) && !empty($_GET['search-string'])) {
       $query .= ' AND title LIKE \'%' . $_GET['search-string'] . '%\'';
+      $searchString = trim($_GET['search-string']);
+      if(str_starts_with($searchString, '#')) {
+          $tagname = substr($searchString, 1);
+          $query.= 'INNER JOIN tags t ON t.ouid = o.ouid ';
+          $query.= " WHERE t.tagname LIKE '%" . $tagname . "%'";
+      }
+      else{
+          $query.= 'WHERE title LIKE "%' . $searchString . '%"';
+          $query.= " OR description LIKE '" . $searchString . "%'";
+      }
     }
     switch ($sort) {
       case 'price-asc':

@@ -8,7 +8,7 @@ use core\views\AbstractView;
 class SeeOfferView extends AbstractView
 {
 
-  const string PATH = __DIR__ . DIRECTORY_SEPARATOR . 'SeeOffer.html';
+  const PATH = __DIR__ . DIRECTORY_SEPARATOR . 'SeeOffer.html';
 
   function path(): string {
     return __DIR__ . DIRECTORY_SEPARATOR . 'SeeOffer.html';
@@ -25,7 +25,7 @@ class SeeOfferView extends AbstractView
       'description' => $offer['description'],
       'price' => $offer['price'],
       'deadline' => $offer['deadline'],
-      'button-offer' => (new SeeOffer())->buttonOffer()
+      'button-offer' => new SeeOffer()->buttonOffer()
     ];
   }
 

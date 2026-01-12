@@ -60,6 +60,18 @@ abstract class AbstractView {
    */
   public function footer(): string {
     return '</main>
+      <footer class="site-footer">
+        <div class="footer-content">
+          <div class="footer-links">
+            <a href="/confidentiality" class="footer-link">Politique de confidentialité</a>
+            <span class="footer-separator">|</span>
+            <a href="/termsofuse" class="footer-link">Conditions d\'utilisation</a>
+          </div>
+          <div class="footer-copyright">
+            &copy; ' . date('Y') . ' DealTonBUT - Tous droits réservés
+          </div>
+        </div>
+      </footer>
       <script>
         function openSidebar() {
           document.getElementById("sidebar").classList.add("active");
@@ -91,54 +103,58 @@ abstract class AbstractView {
    * @param string $placeholder : Name of the page in the navbar
    * @return string
    */
-  function navbar(string $placeholder = ''): string {
-    $username = $_SESSION['username'] ?? 'NOM DE COMPTE';
-    settype($username, 'string');
-    $balance = $_SESSION['balance'] ?? 0.00;
-    settype($balance, 'float');
-    return '
-      <nav class="nav">
+    function navbar(string $placeholder = ''): string {
+        $username = $_SESSION['username'] ?? 'NOM DE COMPTE';
+        $balance = $_SESSION['balance'] ?? 0.00;
+
+        return '
+    <nav class="nav">
         <div class="nav-left">
-          <img class="overlay-nav" src="/_assets/images/overlayNavbar.webp" alt="Menu" onclick="openSidebar()">
+            <img class="overlay-nav" src="/_assets/images/overlayNavbar.webp" alt="Menu" onclick="openSidebar()">
         </div>
         <div class="nav-center">
-          <h1 class="page-title">' . $placeholder . '</h1>
+            <h1 class="page-title">' . htmlspecialchars($placeholder) . '</h1>
         </div>
         <div class="nav-right">
-          <a href="/">
-            <img class="logo-nav" src="/_assets/images/navbarLogo.webp" alt="Logo">
-          </a>
+            <a href="/"><img class="logo-nav" src="/_assets/images/navbarLogo.webp" alt="Logo"></a>
         </div>
-      </nav>    
-      
-      <!-- Pour la Sidebar -->
-      <div class="sidebar" id="sidebar">
+    </nav>      
+    
+    <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-          <button class="close-btn" id="close-btn" onclick="closeSidebar()">
-            <span></span>
-            <span></span>
-          </button>
+            <button class="close-btn" onclick="closeSidebar()">X</button>
         </div>
+
         <div class="sidebar-content">
-          <a class="sidebar-link" href="/trade/points">Échanger Points</a>
-          <a class="sidebar-link" href="/marketplace">Place de marché</a>
-          <a class="sidebar-link" href="/offre">Ajouter une offre</a>
+            <a class="sidebar-link" href="/marketplace">🛒 Place de marché</a>
+            <a class="sidebar-link" href="/offre">➕ Ajouter une offre</a>
         </div>
+
         <div class="sidebar-footer">
-          <div class="sidebar-user-card" onclick=\'window.location.href="/user/account"\' style="cursor:pointer;">
-            <div class="sidebar-user-info">
-              <div class="sidebar-user-name">' . strtoupper($username) . '</div>
-              <div class="sidebar-user-points">' . number_format($balance, 2, '.', '') . ' pts</div>
+            
+            <div class="user-info-block">
+                <div class="user-text">
+                    <span class="username">' . strtoupper(htmlspecialchars($username)) . '</span>
+                    <a href="/user/account" class="profile-link">Voir mon profil</a>
+                </div>
+                <a href="/user/settings" class="settings-icon">
+                    <img
+                        class="icon_parameter" src="/_assets/images/icon_parameter.webp" alt="Paramètres"
+                    >
+                </a>
             </div>
-            <a href="/user/settings" class="sidebar-settings-icon">⚙</a>
-          </div>
-          <a class="sidebar-disconnect-btn" href="/user/logout">SE DECONNECTER</a>
+            <div class="balance-card">
+                <small>Mon solde</small>
+                <div class="balance-value">' . number_format($balance, 2, '.', '') . ' DTȻ</div>
+                <a href="/trade/points" class="exchange-link">➔ ÉCHANGER MES POINTS</a>
+            </div>
+            
+            <a class="btn-logout" href="/user/logout">SE DÉCONNECTER</a>
         </div>
-      </div>
-      
-      <!-- Overlay -->
-      <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>';
-  }
+    </div>
+    
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>';
+    }
 
   /**
    * @description Abstract method that contain the path to the corresponding .html

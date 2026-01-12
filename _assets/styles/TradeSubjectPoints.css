@@ -7,6 +7,7 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
+
 .trade-subject-point-container h2 {
     text-align: center;
     font-size: 1.5rem;
@@ -19,11 +20,16 @@
     gap: 30px;
 }
 
-.trade-subject-point-form .form-group:nth-child(3) {
+.hiddenInput {
+    position: absolute;
+}
+
+.trade-subject-point-form .form-group:nth-of-type(3) {
     grid-column: 1 / -1;
     max-width: 400px;
     margin: 0 auto;
 }
+
 
 .trade-subject-point-form label {
     display: block;
@@ -77,34 +83,29 @@
     font-size: 0.9rem;
 }
 
-.flash {
-    padding: 15px;
-    margin-bottom: 20px;
+.error-text {
+    margin-bottom: 50px;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    color: red;
 }
 
-.flash.success {
-    background: #bfbfbf;
-    color: black;
+.success-text {
+    margin-bottom: 50px;
+    border-radius: 8px;
+    color: green;
 }
 
-.flash.error {
-    background: #8c8c8c;
-    color: black;
-}
-
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
     .trade-subject-point-container {
         margin: 20px;
         padding: 20px;
     }
-    
+
     .trade-subject-point-form {
         grid-template-columns: 1fr;
         gap: 20px;
     }
-    
+
     .trade-subject-point-form .form-group:nth-child(3) {
         max-width: 100%;
     }

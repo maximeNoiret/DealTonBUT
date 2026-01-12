@@ -3,7 +3,8 @@
 namespace controllers\User\AccountPage;
 
 use core\controllers\Controller;
-use models\DataBase;
+use dtu\models\TradeDB;
+use models\AccountDB;
 use views\Trade\Offer\Offer;
 use views\User\AccountPage\AccountPageView;
 use views\User\LoginForm\LoginFormView;
@@ -30,7 +31,7 @@ class Account implements Controller
      * @var string $email : The email of the user
      */
     $email = $_SESSION['email'] ?? '';
-    $offers = DataBase::getInstance()->getUserOffers($email);
+    $offers = TradeDB::getInstance()->getUserOffers($email);
     if ($offers) {
       $ret = '<section class="offer-grid">' . "\n";
       foreach ($offers as $offer) {
@@ -54,7 +55,7 @@ class Account implements Controller
      * @var string $email : The email of the user
      */
     $email = $_SESSION['email'] ?? '';
-    $offers = DataBase::getInstance()->getBoughtOffers($email);
+    $offers = TradeDB::getInstance()->getBoughtOffers($email);
     if ($offers) {
       $ret = '<section class="offer-grid">' . "\n";
       foreach ($offers as $offer) {
@@ -66,25 +67,6 @@ class Account implements Controller
       return $ret . '</section>';
     }
     return '<h1 class="description-text">There are no offers!</h1>';
-  }
-
-  /**
-   * @description Show the name of the user, by using their university email
-   * @return string
-   */
-  static function getName(): string
-  {
-    // Récupère l'email uniquement s'il s'agit bien d'une chaîne
-    $email = '';
-    if (isset($_SESSION['email']) && is_string($_SESSION['email'])) {
-      $email = $_SESSION['email'];
-    }
-    // Extrait la partie locale avant le @
-    $parts = explode('@', $email);
-    $name = $parts[0];
-    // Remplace les points par des espaces et capitalise
-    $name = str_replace('.', ' ', $name);
-    return ucwords($name);
   }
 
     function control(): void

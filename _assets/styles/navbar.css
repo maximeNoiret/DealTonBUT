@@ -1,293 +1,199 @@
+@font-face {
+    font-family: ShareTechMono;
+    src: url(/_assets/fonts/Share_Tech_Mono/ShareTechMono-Regular.ttf);
+}
 .nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 30px;
+    padding: 10px 30px;
     background-color: rgba(200, 200, 200, 0.9);
-    margin-bottom: 0;
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 900;
+    font-family: ShareTechMono, monospace;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
 }
 
-.nav-left{
-    flex: 0;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-.nav-center{
-    flex: 1;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding-left: 30px;
-}
-
-.nav-right{
-    flex: 0;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-}
-
-.page-title{
-    font-size: 24px;
-    color: #000000;
+.nav-center h1 {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    font-weight: bold;
     margin: 0;
-    font-weight: normal;
 }
 
-.logo-nav{
-    width: 50px;
-    height: auto;
-}
-
-.overlay-nav{
-    width: 40px;
-    height: auto;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-.overlay-nav:hover{
-    transform: scale(1.1);
-}
+.logo-nav { height: 50px; width: auto; }
+.overlay-nav { width: 30px; cursor: pointer; }
 
 .sidebar {
     position: fixed;
     top: 0;
     left: -300px;
-    width: 250px;
+    width: 280px;
     height: 100vh;
-    background-color: rgba(180, 180, 180, 0.95);
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
-    transition: left 0.3s ease;
+
+    background-color: rgba(200, 200, 200, 0.9);
+    backdrop-filter: blur(10px); /* MEME EFFET DE FLOU */
+
+    border-right: 1px solid rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    transition: 0.3s;
     z-index: 1000;
-    overflow-y: auto;
+    font-family: ShareTechMono, monospace;
 }
 
-.sidebar.active {
-    left: 0;
-}
+.sidebar.active { left: 0; }
 
 .sidebar-header {
-    padding: 20px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    border-bottom: none;
+    padding: 10px;
+    text-align: right;
 }
-
 
 .close-btn {
     background: none;
     border: none;
+    font-size: 20px;
     cursor: pointer;
-    padding: 10px;
-    width: 40px;
-    height: 40px;
-    position: relative;
+    font-weight: bold;
+    color: #333;
 }
 
-.close-btn span {
-    display: block;
-    position: absolute;
-    width: 30px;
-    height: 3px;
-    background-color: #000000;
-    transition: all 0.3s ease;
-    left: 5px;
-}
-
-.close-btn span:first-child {
-    transform: rotate(45deg);
-    top: 18px;
-}
-
-.close-btn span:last-child {
-    transform: rotate(-45deg);
-    top: 18px;
-}
-
-.close-btn:hover span {
-    background-color: #404040;
-}
 
 .sidebar-content {
-    padding: 40px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.sidebar-link {
-    color: #000000;
-    text-decoration: none;
-    font-size: 18px;
-    padding: 15px 20px;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    text-align: center;
-    background-color: rgba(220, 220, 220, 0.9);
-}
-
-.sidebar-link:hover {
-    background-color: rgba(64, 64, 64, 0.8);
-    color: white;
-    transform: translateX(5px);
-}
-
-.sidebar-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.4s ease, visibility 0.4s ease;
-    z-index: 999;
-}
-
-.sidebar-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-.sidebar-footer {
     padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 15px;
-    margin-top: auto;
+    justify-content: flex-end;
+    align-content: center;
+    flex-wrap: wrap;
+
 }
 
-.sidebar-user-card {
-    background-color: rgba(200, 200, 200, 0.95);
-    border-radius: 15px;
-    padding: 15px 20px;
+.sidebar-link {
+    display: block;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 5px;
+    text-decoration: none;
+    color: black;
+    text-align: center;
+    transition: 0.2s;
+}
+
+.sidebar-link:hover {
+    background: white;
+    transform: translateX(5px);
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding: 20px;
+    border-top: 2px solid rgba(0,0,0,0.1);
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
     gap: 15px;
 }
 
-.sidebar-user-info {
-    flex: 1;
+.user-info-block {
     display: flex;
-    flex-direction: column;
-    gap: 3px;
-}
-
-.sidebar-user-name {
-    font-size: 16px;
-    font-weight: normal;
-    color: #000000;
-    line-height: 1.2;
-    letter-spacing: 0.5px;
-}
-
-.sidebar-user-points {
-    font-size: 14px;
-    color: #000000;
-    line-height: 1.2;
-}
-.sidebar-user-card:hover, sidebar-user-name :hover, .sidebar-user-points :hover{
-    background-color: rgba(64, 64, 64, 0.8);
-    transform: translateX(5px);
-}
-
-.sidebar-user-card:hover .sidebar-user-name,
-.sidebar-user-card:hover .sidebar-user-points{
-    color: #ffffff;
-    transform: translateX(5px);
-}
-
-.sidebar-settings-icon {
-    flex-shrink: 0;
-    font-size: 28px;
-    color: #000000;
-    text-decoration: none;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-    line-height: 1;
-    display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
+    margin-bottom: 5px;
 }
 
-.sidebar-settings-icon:hover {
-    transform: scale(1.15);
-}
-
-.sidebar-disconnect-btn {
-    color: #000000;
-    text-decoration: none;
+.username {
+    font-weight: bold;
     font-size: 16px;
-    padding: 15px 20px;
-    border-radius: 15px;
-    transition: all 0.3s ease;
-    text-align: center;
-    background-color: rgba(200, 200, 200, 0.95);
     display: block;
-    letter-spacing: 0.5px;
+    color: #000;
 }
 
-.sidebar-disconnect-btn:hover {
-    background-color: rgba(64, 64, 64, 0.8);
+.profile-link {
+    font-size: 13px;
+    color: #333;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-top: 2px;
+    display: block;
+    font-weight: bold;
+}
+
+.profile-link:hover {
+    color: #000;
+}
+
+.icon_parameter{
+    text-decoration: none;
+    font-size: 45px;
+    display: inline-block;
+    transition: transform 0.9s ease;
+    width: 30px;
+}
+.icon_parameter:hover {
+    transform: rotate(90deg);
+}
+
+.balance-card {
+    background: rgb(174 174 174);
+    padding: 15px;
+    border: 3px solid rgb(0 0 0 / 10%);
+    border-radius: 5px;
+    text-align: center;
+}
+
+.balance-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2e7d32;
+    margin: 5px 0;
+}
+
+.exchange-link {
+    font-size: 12px;
+    color: #2e7d32;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+    transition: transform 0.15s ease;
+}
+
+.exchange-link:hover {
+    text-decoration: underline;
+    transform: scale(1.08);
+}
+
+.btn-logout {
+    display: block;
+    text-align: center;
+    color: #cf1322;
+    border: 1px solid #cf1322;
+    padding: 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    background: transparent;
+    transition: 0.2s;
+}
+
+.btn-logout:hover {
+    background-color: #cf1322;
     color: white;
-    transform: translateX(5px);
 }
 
-@media screen and (max-width: 768px) {
-    .page-title {
-        font-size: 20px;
-    }
+.sidebar-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.4);
 
-    .overlay-nav {
-        width: 35px;
-    }
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
 
-    .logo-nav {
-        width: 45px;
-    }
-
-    .sidebar {
-        width: 220px;
-        left: -220px;
-    }
-
-    .sidebar-link {
-        font-size: 16px;
-        padding: 12px 15px;
-    }
+    display: none;
+    z-index: 999;
 }
 
-@media screen and (max-width: 480px){
-    .nav {
-        padding: 10px 15px;
-    }
-
-    .page-title {
-        font-size: 18px;
-        padding-left: 10px;
-    }
-
-    .overlay-nav {
-        width: 30px;
-    }
-
-    .logo-nav {
-        width: 40px;
-    }
-
-    .sidebar {
-        width: 200px;
-        left: -200px;
-    }
-
-    .sidebar-link {
-        font-size: 20px;
-        padding: 10px 12px;
-    }
-}
+.sidebar-overlay.active { display: block; }

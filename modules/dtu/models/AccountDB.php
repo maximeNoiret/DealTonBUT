@@ -1,0 +1,222 @@
+<?php
+
+namespace models;
+
+use core\models\DataBase;
+use exceptions\AccountAlreadyExists;
+use PDO;
+
+class AccountDB extends DataBase {
+
+  protected static $instance;
+
+  /**
+   * @description Registers a new account in the database.
+   * @param string $username The desired username for the new account.
+   * @param string $email The email address associated with the new account.
+   * @return void
+   */
+  public function registerAccount (
+    string $username,
+    string $email
+  ): void {
+    //$hashedpwd = password_hash($password, PASSWORD_DEFAULT);
+    $query = $this->dbConn->prepare(
+      'REPLACE INTO user_(email, username)
+      VALUES (:email, :username)');
+
+    $query->bindValue('email', $email);
+    $query->bindValue('username', $username);
+    $query->execute();
+  }
+
+  /**
+   * @param string $email User whose role to set
+   * @param string $role Role to set
+   * @return bool True on success, false on failure
+   */
+  public function setRole(string $email, string $role): bool {
+    $query = $this->dbConn->prepare(
+      'UPDATE user_ SET role = :role WHERE email = :email');
+    $query->bindValue('email', $email);
+    $query->bindValue('role', $role);
+    return $query->execute();
+  }
+
+  /**
+   * @description Checks if an account with the given email exists.
+   * @param string $email The email address to check.
+   * @return bool True if the account exists, false otherwise.
+   */
+  public function accountExists(string $email): bool {
+    $query = $this->dbConn->prepare('SELECT email FROM user_ WHERE email = :email');
+    $query->bindValue('email', $email);
+    $query->execute();
+    return $query->fetch() !== false;
+  }
+
+  /**
+   * @description Retrieves account information for the given email and password.
+   * @param string $email The email address of the account.
+   * @param string $password The password of the account.
+   * @return bool|array<string, string>
+   */
+  public function getAccount(string $email, string $password): bool|array {
+    $query = $this->dbConn->prepare('
+      SELECT username, email, hashedpwd, balance 
+      FROM user_
+      WHERE email = :email');
+    $query->bindValue('email', $email);
+    $query->execute();
+
+    /**
+     * @var array<string, string> $user
+     */
+    $user = $query->fetch(PDO::FETCH_ASSOC);
+
+    if (!$user) {
+        return false;
+    }
+
+    // Verify password against stored hash
+    if (password_verify($password, $user['hashedpwd'])) {
+        // Return user data WITHOUT the password hash
+        return [
+            'username' => $user['username'],
+            'email' => $user['email'],
+            'balance' => $user['balance']
+        ];
+    }
+    return false;
+  }
+
+  /**
+   * @description Retrieves the balance for the given email.
+   * @param string $email The email address of the account.
+   * @return int|string|false|null The balance amount, or false/null if not found.
+   */
+  public function getBalance(string $email): int|string|false|null {
+    $query = $this->dbConn->prepare('
+      SELECT balance FROM user_ WHERE email = :email');
+    $query->bindValue('email', $email);
+    $query->execute();
+    return $query->fetchColumn();
+  }
+
+  public function setBalance(string $email, int $balance): bool {
+      $query = $this->dbConn->prepare(
+          'UPDATE user_ SET balance = :balance WHERE email = :email');
+      $query->bindValue('email', $email);
+      $query->bindValue('balance', $balance);
+      return $query->execute();
+    }
+    /**
+     * @description Checks if a password reset has already been requested for the given email.
+     * @param string $email The email address to check.
+     * @return bool True if a password reset has already been requested, false otherwise.
+     */
+  public function alreadyForgotPassword(string $email): bool {
+    $query = $this->dbConn->prepare(
+      'SELECT email FROM token WHERE email = :email AND deadline > CURRENT_TIMESTAMP');
+    $query->bindValue('email', $email);
+    $query->execute();
+    return $query->fetch() !== false;
+  }
+
+  public function updatePassword(string $email, string $hashedPassword): bool
+  {
+    $query = $this->dbConn->prepare(
+      'UPDATE user_ SET hashedpwd = :hashedpwd WHERE email = :email');
+    $query->bindValue('hashedpwd', $hashedPassword);
+    $query->bindValue('email', $email);
+    return $query->execute();
+  }
+
+  /**
+   * @param string $email The email address associated with the token.
+   * @param string $token The password reset token.
+   * @return bool True if the token is valid for the given email, false otherwise.
+   */
+  public function checkToken(string $email, string $token): bool {
+    $query = $this->dbConn->prepare(
+      'SELECT email FROM token WHERE email = :email AND token = :token AND deadline > CURRENT_TIMESTAMP');
+    $query->bindValue('email', $email);
+    $query->bindValue('token', $token);
+    $query->execute();
+    $returnValue = $query->fetch() !== false;
+
+    if ($returnValue) {
+      // delete the token after use
+      $query = $this->dbConn->prepare(
+        'DELETE FROM token WHERE email = :email');
+      $query->bindValue('email', $email);
+      $query->execute();
+    }
+
+    return $returnValue;
+  }
+
+    /**
+     * @description Inserts a password reset token for the given email.
+     * @param string $email The email address associated with the token.
+     * @param string $token The password reset token.
+     * @return void
+     */
+  public function insertToken(string $email, string $token): void {
+    $query = $this->dbConn->prepare('INSERT INTO token(email, token) VALUES (:email, :token)');
+    $query->bindValue('email', $email);
+    $query->bindValue('token', $token);
+    $query->execute();
+  }
+
+
+    /**
+     * @description Deletes a user from the database.
+     * @param string $email The email address of the user to delete.
+     * @return void
+     */
+  public function deleteUser(string $email): void {
+    $query = $this->dbConn->prepare('DELETE FROM user_ WHERE email = :email');
+    $query->bindValue('email', $email);
+    $query->execute();
+  }
+
+  /**
+   * @description Updates the SESSION balance of the user.
+   * @param string $email The email address of the user.
+   * @return void
+   */
+  public function updateBalance(string $email): void {
+    $balance = $this->getBalance($email);
+    if ($balance) {
+      $_SESSION['balance'] = $balance;
+    }
+  }
+
+  /**
+   * @param string $email The email address of the user.
+   * @return bool True if the account is verified, false otherwise.
+   */
+  public function isAccountVerified(string $email): bool {
+    $query = $this->dbConn->prepare('SELECT role FROM user_ WHERE email = :email');
+    $query->bindValue('email', $email);
+    $query->execute();
+    /**
+     * @var array<string, string>|false $result
+     */
+    $result = $query->fetch(PDO::FETCH_ASSOC);
+    return $result && $result['role'] != 'not-verified';
+  }
+
+  public function getEmailFromToken(string $token): string
+  {
+    $query = $this->dbConn->prepare(
+      'SELECT email FROM token WHERE token = :token');
+    $query->bindValue('token', $token);
+    $query->execute();
+    return (string) $query->fetchColumn();
+  }
+}
+
+
+

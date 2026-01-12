@@ -8,7 +8,7 @@ use core\models\Mailer;
 use dtu\views\User\RegisterForm\RegisterFormPasswordView;
 use exceptions\AccountAlreadyExists;
 use models\Account;
-use models\DataBase;
+use models\AccountDB;
 use Random\RandomException;
 use views\User\RegisterForm\RegisterFormView;
 
@@ -21,7 +21,7 @@ class RegisterVerify implements Controller
 
   function control(): void
   {
-    $db = DataBase::getInstance();
+    $db = AccountDB::getInstance();
     /**
      * @var array<string, string> $_GET
      */
@@ -34,9 +34,9 @@ class RegisterVerify implements Controller
       /**
        * @var array<string, string> $_SESSION
        */
-      echo new RegisterFormPasswordView($_SESSION['email'])->render("Register - DealTonBUT", self::STYLESHEET);
+      echo (new RegisterFormPasswordView($_SESSION['email']))->render("Register - DealTonBUT", self::STYLESHEET);
     } else {
-      echo new RegisterFormView('verification_link_expired')->render("Register - DealTonBUT", self::STYLESHEET);
+      echo (new RegisterFormView('verification_link_expired'))->render("Register - DealTonBUT", self::STYLESHEET);
     }
   }
 

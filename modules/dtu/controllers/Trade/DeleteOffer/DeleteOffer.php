@@ -3,7 +3,7 @@
 namespace controllers\Trade\DeleteOffer;
 
 use core\controllers\Controller;
-use models\DataBase;
+use dtu\models\TradeDB;
 
 /**
  * Checks if the user is logged in and is the offer owner before deleting it.
@@ -20,28 +20,36 @@ class DeleteOffer implements Controller
     {
         if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
             header('Location: /user/login');
-            exit;
+//            exit;
+            return;
         }
 
         if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
             header('Location: /marketplace');
-            exit;
+//            exit;
+          return;
         }
 
         $id = (int)$_GET['id'];
-        $offer = DataBase::getInstance()->getOffer($id);
+        $offer = TradeDB::getInstance()->getOffer($id);
 
         if (!$offer) {
             header('Location: /marketplace');
-            exit;
+//            exit;
+          return;
         }
 
-        if ($offer['owner'] !== $_SESSION['email']) {
+        /**
+         * @var array<string, mixed> $offer
+         */
+        $owner = $offer['owner'];
+        if ($owner !== $_SESSION['email']) {
             header('Location: /marketplace');
-            exit;
+//            exit;
+          return;
         }
 
-        DataBase::getInstance()->deleteOffer($id);
+        TradeDB::getInstance()->deleteOffer($id);
         header('Location: /marketplace');
     }
 

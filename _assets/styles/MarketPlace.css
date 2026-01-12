@@ -1,4 +1,4 @@
-.search-container {
+    .search-container {
     padding: 30px 40px;
     position: relative;
 }
@@ -20,7 +20,7 @@
 
 .sort-button {
     position: absolute;
-    right: -50px;
+    right: 0;
     top: 50%;
     transform: translateY(-50%);
     background: transparent;
@@ -110,3 +110,51 @@
     cursor: not-allowed;
 }
 /*---------------------------------------------------------------------------*/
+.offer-card {
+    height: 230px;
+    width: 300px;
+}
+
+a.offer-card,
+a .offer-card,
+.offer-grid a {
+    text-decoration: none !important;
+}
+
+/* S'assurer que TOUS les éléments à l'intérieur ne sont pas soulignés */
+a.offer-card *,
+a .offer-card *,
+.offer-grid a * {
+    text-decoration: none !important;
+}
+
+@media screen and (max-width: 480px) {
+    .search-container {
+        padding: 15px 20px;
+    }
+    .search-wrapper {
+        max-width: 90%;
+    }
+    .search-box {
+        padding: 10px 15px 10px 40px;
+        font-size: 0.9em;
+    }
+    .sort-button {
+        padding: 5px 10px;
+        font-size: 0.9em;
+    }
+    .sort-menu {
+        right: 0;
+        min-width: 150px;
+    }
+    .sort-option {
+        padding: 10px 15px;
+        font-size: 0.9em;
+    }
+    .offer-card {
+        height: auto;
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+    }
+}

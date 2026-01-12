@@ -1,3 +1,5 @@
 parameters:
-	bootstrapFiles:
-		- _assets/includes/Autoloader.php
+	level: 10
+	paths:
+		- modules/dtu
+	phpVersion: 80300

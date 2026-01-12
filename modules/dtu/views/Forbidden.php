@@ -1,6 +1,6 @@
 <?php
 
-namespace dtu\views;
+namespace views;
 
 use core\views\AbstractView;
 
