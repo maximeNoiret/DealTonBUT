@@ -3,13 +3,10 @@
 namespace controllers\Trade\MarketPlace;
 
 use core\controllers\Controller;
-use models\AccountDB;
 use core\models\DataBase;
+use dtu\models\TradeDB;
 use views\Trade\MarketPlace\MarketPlaceView;
 use views\Trade\Offer\Offer;
-
-//use views\MarketPlaceView;
-
 class MarketPlace implements Controller {
   
   public const PATH = '/marketplace';
@@ -40,10 +37,10 @@ class MarketPlace implements Controller {
   public static function getOffers(): string {
     $sort = $_GET['sort'] ?? null;
     $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
-    $limit = 30;
+    $limit = 8;
 
     $query =
-      'SELECT DISTINCT o.ouid ,u.username as \'username\', title, description, price, deadline
+      'SELECT DISTINCT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline
        FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email
@@ -58,7 +55,6 @@ class MarketPlace implements Controller {
      * @var array<string> $_GET['search-string']
      */
     if (isset($_GET['search-string']) && !empty($_GET['search-string'])) {
-      $query .= ' AND title LIKE \'%' . $_GET['search-string'] . '%\'';
       $searchString = trim($_GET['search-string']);
       if(str_starts_with($searchString, '#')) {
           $tagname = substr($searchString, 1);
@@ -66,8 +62,8 @@ class MarketPlace implements Controller {
           $query.= " WHERE t.tagname LIKE '%" . $tagname . "%'";
       }
       else{
-          $query.= 'WHERE title LIKE "%' . $searchString . '%"';
-          $query.= " OR description LIKE '" . $searchString . "%'";
+          $query.= ' AND (title LIKE "%' . $searchString . '%"';
+          $query.= " OR description LIKE '%" . $searchString . "%')";
       }
     }
     switch ($sort) {
@@ -88,7 +84,7 @@ class MarketPlace implements Controller {
     }
 
     // Count total offers for pagination
-    $countQuery = str_replace('SELECT DISTINCT o.ouid ,u.username as \'username\', title, description, price, deadline', 'SELECT COUNT(*) as total', $query);
+    $countQuery = str_replace('SELECT DISTINCT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline', 'SELECT COUNT(*) as total', $query);
     $countResult = DataBase::getInstance()->executeQuery($countQuery);
     $totalOffers = $countResult ? (int)$countResult[0]['total'] : 0;
 
@@ -102,11 +98,9 @@ class MarketPlace implements Controller {
         /**
          * @var array<string, string> $offer
          */
-        $ret = $ret . (new Offer($offer))->renderWithLink(
-          'article',
-          'offer-card' . (AccountDB::ownsOffer($_SESSION['email'], (int)$offer['ouid']) ? ' own-offer' : ''),
-          '/offre/voir?id=' . $offer['ouid']
-          );
+        // Add button based on ownership
+        $offer['button'] = self::generateOfferButton($offer['ouid'], $offer['owner']);
+        $ret = $ret . new Offer($offer)->render('article', 'offer-card');
       }
       $ret .= '</section>';
 
@@ -124,6 +118,22 @@ class MarketPlace implements Controller {
     }
     return '<h1 class="description-text">There are no offers!</h1>';
   }
+
+  /**
+   * @description Generates the appropriate action button for an offer
+   * @param int $offerId The offer ID
+   * @param string $ownerEmail The email of the offer owner
+   * @return string Returns the appropriate HTML button code based on offer ownership
+   */
+  private static function generateOfferButton(int $offerId, string $ownerEmail): string {
+    if (isset($_SESSION['email']) && $_SESSION['email'] === $ownerEmail) {
+      return '<a class="button-delete" href="/offre/delete?id=' . $offerId . '">Delete</a>';
+    } else if (TradeDB::getInstance()->isOfferBought($offerId)) return '';
+    else {
+      return '<a class="button-buy" href="/offre/buy?id=' . $offerId . '">Buy</a>';
+    }
+  }
+
   public static function resolve(string $path, string $meth): bool {
     return strtok($path, '?') === static::PATH && $meth === static::METH;
   }

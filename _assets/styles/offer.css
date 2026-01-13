@@ -1,7 +1,7 @@
 .offer-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
-    gap: clamp(1rem, 2vw, 1.5rem);
+    gap: clamp(3rem, 2vw, 4rem);
     padding: 0.5rem;
 }
 .offer-card {
@@ -70,6 +70,14 @@
     overflow-wrap: break-word;
     color: #000;
 }
+.offer-date {
+    font-size: clamp(0.7rem, 1vw, 0.8rem);
+    font-weight: bold;
+    color: #000;
+    display: block;
+    margin-top: 0.5rem;
+    margin-bottom: 0.3rem;
+}
 .offer-footer {
     display: flex;
     justify-content: space-between;
@@ -79,11 +87,6 @@
     border-top: 1px solid #8C8C8C;
     gap: 0.5rem;
     flex-wrap: wrap;
-}
-.offer-date {
-    font-size: clamp(0.7rem, 1vw, 0.8rem);
-    font-weight: bold;
-    color: #000;
 }
 .offer-price {
     font-size: clamp(0.9rem, 1.3vw, 4rem);
@@ -106,4 +109,40 @@
     .offer-date {
         font-size: 15px;
     }
+}
+
+.button-delete {
+    background-color: #ff4d4d;
+    color: white;
+    font-family: ShareTechMono, monospace;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.button-delete:hover {
+    background-color: #e60000;
+}
+
+.button-buy {
+    background-color: #4CAF50;
+    color: white;
+    font-family: ShareTechMono, monospace;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.button-buy:hover {
+    background-color: #45a049;
 }
