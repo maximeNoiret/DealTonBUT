@@ -101,7 +101,11 @@ class MarketPlace implements Controller {
         /**
          * @var array<string, string> $offer
          */
-        $ret = $ret . (new Offer($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
+        $ret = $ret . (new Offer($offer))->renderWithLink(
+          'article',
+          'offer-card' . (AccountDB::ownsOffer($_SESSION['email'], (int)$offer['ouid']) ? ' own-offer' : ''),
+          '/offre/voir?id=' . $offer['ouid']
+          );
       }
       $ret .= '</section>';
 
