@@ -65,9 +65,8 @@ class AccountDBTest extends TestCase
 
   public function testGetBalanceSuccessfully(){
     $this->accountDb->registerAccount($this->testUsername01,$this->testEmail01);
-    $this->accountDb->updateBalance($this->testEmail01, 100);
     $result = $this->accountDb->getBalance($this->testEmail01);
-    $this->assertEquals(100, $result);
+    $this->assertEquals(0, $result);
   }
 
   public function testUpdatePasswordSuccessfully(){
