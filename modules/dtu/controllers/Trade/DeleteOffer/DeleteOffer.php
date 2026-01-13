@@ -50,6 +50,7 @@ class DeleteOffer implements Controller
         }
 
         TradeDB::getInstance()->deleteOffer($id);
+        $_SESSION ['flash_success'] = "Offre supprimée avec succès.";
         header('Location: /marketplace');
     }
 
