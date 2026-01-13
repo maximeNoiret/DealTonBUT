@@ -114,7 +114,7 @@ class AccountDB extends DataBase {
     return $query->fetchColumn();
   }
 
-  public function setBalance(string $email, int $balance): bool {
+  public function setBalance(string $email, float $balance): bool {
       $query = $this->dbConn->prepare(
           'UPDATE user_ SET balance = :balance WHERE email = :email');
       $query->bindValue('email', $email);

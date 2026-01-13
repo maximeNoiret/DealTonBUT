@@ -9,9 +9,9 @@ class TradeSubjectPointView extends AbstractView {
 
     private ?string $error = null;
     private $subjectsRows = [];
-    private int $balance = 0;
+    private float $balance = 0;
 
-    public function setData(?string $error, array $subjectsRows, int $balance): void {
+    public function setData(?string $error, array $subjectsRows, float $balance): void {
         $this->error = $error;
         $this->subjectsRows = $subjectsRows;
         $this->balance = $balance;
