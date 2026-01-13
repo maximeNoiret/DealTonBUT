@@ -10,6 +10,17 @@ class AccountDB extends DataBase {
 
   protected static $instance;
 
+  public static function ownsOffer(mixed $email, int $param): bool
+  {
+    $dbConn = self::getInstance()->dbConn;
+    $query = $dbConn->prepare(
+      'SELECT ouid FROM offer WHERE owner = :email AND ouid = :ouid');
+    $query->bindValue('email', $email);
+    $query->bindValue('ouid', $param);
+    $query->execute();
+    return $query->fetch() !== false;
+  }
+
   /**
    * @description Registers a new account in the database.
    * @param string $username The desired username for the new account.

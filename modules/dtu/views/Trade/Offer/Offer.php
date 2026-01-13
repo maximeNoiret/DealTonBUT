@@ -2,8 +2,8 @@
 
 namespace views\Trade\Offer;
 
+use controllers\Trade\Offer\OfferController;
 use core\views\AbstractSubView;
-use http\Encoding\Stream\Inflate;
 
 class Offer extends AbstractSubView {
 
