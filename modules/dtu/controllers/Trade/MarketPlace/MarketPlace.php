@@ -4,6 +4,7 @@ namespace controllers\Trade\MarketPlace;
 
 use core\controllers\Controller;
 use core\models\DataBase;
+use dtu\models\TradeDB;
 use views\Trade\MarketPlace\MarketPlaceView;
 use views\Trade\Offer\Offer;
 class MarketPlace implements Controller {
@@ -36,7 +37,7 @@ class MarketPlace implements Controller {
   public static function getOffers(): string {
     $sort = $_GET['sort'] ?? null;
     $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
-    $limit = 30;
+    $limit = 8;
 
     $query =
       'SELECT DISTINCT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline
@@ -126,7 +127,8 @@ class MarketPlace implements Controller {
   private static function generateOfferButton(int $offerId, string $ownerEmail): string {
     if (isset($_SESSION['email']) && $_SESSION['email'] === $ownerEmail) {
       return '<a class="button-delete" href="/offre/delete?id=' . $offerId . '">Delete</a>';
-    } else {
+    } else if (TradeDB::getInstance()->isOfferBought($offerId)) return '';
+    else {
       return '<a class="button-buy" href="/offre/buy?id=' . $offerId . '">Buy</a>';
     }
   }

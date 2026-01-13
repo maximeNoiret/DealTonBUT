@@ -142,7 +142,7 @@ abstract class AbstractView {
             </div>
             <div class="balance-card">
                 <small>Mon solde</small>
-                <div class="balance-value">' . number_format($balance, 2, '.', '') . ' DTȻ</div>
+                <div class="balance-value">' . number_format($balance, 2, '.', '') . ' DT₡</div>
                 <a href="/trade/points" class="exchange-link">➔ ÉCHANGER MES POINTS</a>
             </div>
             

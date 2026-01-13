@@ -65,8 +65,10 @@ class SeeOffer implements Controller
   public function buttonOffer(): string{
     if ($this->isOwnerOfOffer()) {
       return '<a class="button-delete" href="/offre/delete?id=' . self::$id . '">Delete</a>';
-    } else {
+    } else if (!TradeDB::getInstance()->isOfferBought(self::$id)) {
       return '<a class="button-buy" href="/offre/buy?id=' . self::$id . '">Buy</a>';
+    } else {
+        return '';
     }
   }
 

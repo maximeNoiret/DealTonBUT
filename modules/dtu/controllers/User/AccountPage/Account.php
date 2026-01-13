@@ -82,6 +82,8 @@ class Account implements Controller
   private static function generateOfferButton(int $offerId, string $ownerEmail): string {
     if (isset($_SESSION['email']) && $_SESSION['email'] === $ownerEmail) {
       return '<a class="button-delete" href="/offre/delete?id=' . $offerId . '">Delete</a>';
+    } else if (TradeDB::getInstance()->isOfferBought($offerId)) {
+        return '';
     } else {
       return '<a class="button-buy" href="/offre/buy?id=' . $offerId . '">Buy</a>';
     }

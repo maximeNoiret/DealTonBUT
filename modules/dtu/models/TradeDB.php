@@ -188,6 +188,20 @@ class TradeDB extends DataBase {
     return $query->fetchAll(PDO::FETCH_ASSOC);
   }
 
+   /**
+   * @description Checks if an offer has been bought by any user.
+   * @param int $ouid The unique identifier of the offer.
+   * @return bool Returns true if the offer has been bought, false otherwise.
+   */
+  public function isOfferBought(int $ouid): bool {
+    $query = $this->dbConn->prepare(
+      'SELECT COUNT(*) as count FROM transaction WHERE ouid = :ouid');
+    $query->bindValue('ouid', $ouid);
+    $query->execute();
+    $result = $query->fetch(PDO::FETCH_ASSOC);
+    return $result && $result['count'] > 0;
+  }
+
   /**
    * @description Inserts a new offer into the database.
    * @param string $userEmail The email address of the offer owner.
