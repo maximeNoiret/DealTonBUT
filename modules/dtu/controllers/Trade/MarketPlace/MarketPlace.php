@@ -46,8 +46,9 @@ class MarketPlace implements Controller {
       'SELECT DISTINCT o.ouid ,u.username as \'username\', title, description, price, deadline
        FROM offer o
        INNER JOIN user_ u
-       ON o.owner = u.email 
-       WHERE ouid NOT IN (
+       ON o.owner = u.email
+       WHERE deadline > NOW()
+       AND ouid NOT IN (
             SELECT ouid
             FROM transaction
        )';
