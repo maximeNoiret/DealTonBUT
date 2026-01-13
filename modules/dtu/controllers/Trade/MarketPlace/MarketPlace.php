@@ -45,8 +45,10 @@ class MarketPlace implements Controller {
        FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email
+       INNER JOIN tags t 
+       ON t.ouid = o.ouid
        WHERE deadline > NOW()
-       AND ouid NOT IN (
+       AND o.ouid NOT IN (
             SELECT ouid
             FROM transaction
        )';
@@ -59,8 +61,7 @@ class MarketPlace implements Controller {
       $searchString = trim($_GET['search-string']);
       if(str_starts_with($searchString, '#')) {
           $tagname = substr($searchString, 1);
-          $query.= 'INNER JOIN tags t ON t.ouid = o.ouid ';
-          $query.= " WHERE t.tagname LIKE '%" . $tagname . "%'";
+          $query.= " AND t.tagname LIKE '%" . $tagname . "%'";
       }
       else{
           $query.= ' AND (title LIKE "%' . $searchString . '%"';
