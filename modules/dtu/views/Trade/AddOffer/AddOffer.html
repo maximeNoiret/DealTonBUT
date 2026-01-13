@@ -1,12 +1,12 @@
 <form action="{ACTION_KEY}" method="post" class="container-form">
     <aside class="container-un">
         <aside class="form-group">
-            <label for="{NAME_KEY}">Nom de l'offre:</label>
+            <label for="{NAME_KEY}">*Nom de l'offre:</label>
             <input type="text" name="{NAME_KEY}" required class="input-class-un" maxlength="30">
         </aside>
         <aside class="form-group">
             <label for="{PRICE_KEY}">*Prix (DT₡):</label>
-            <input type="number" step="any" name="{COUT_KEY}" placeholder="X.XX" required class="input-class-price">
+            <input type="number" step="any" name="{COUT_KEY}" placeholder="X.XX ₡" required class="input-class-price">
         </aside>
         <div class="form-group">
             <label for="{DATE_KEY}">*Date limite:</label>
@@ -15,7 +15,7 @@
     </aside>
 
     <label for="{DESCRIPTION_KEY}">Description:</label>
-    <textarea name="{DESCRIPTION_KEY}" required class="input-class" maxlength="300"></textarea>
+    <textarea name="{DESCRIPTION_KEY}" class="input-class" maxlength="300"></textarea>
 
     <label for="tag-input">Tag:</label>
     <div class="tag-submit-row">
@@ -27,6 +27,7 @@
 
         <input type="submit" value="Poster" class="btn-inscription">
     </div>
+    <p>*: Obligatoire</p>
 </form>
 
 <script>
@@ -41,7 +42,6 @@
             if (e.key === 'Enter') {
                 e.preventDefault();
                 const tagValue = tagInput.value.trim();
-
                 if (tagValue !== '' && !tags.includes(tagValue)) {
                     tags.push(tagValue);
                     addTagToDisplay(tagValue);
@@ -79,9 +79,6 @@
             updateHiddenInput();
         }
 
-    <p>*: Obligatoire</p>
-    <input type="submit" value="Poster" class="btn-inscription">
-</form>
         // Mettre à jour le champ caché avec tous les tags
         function updateHiddenInput() {
             tagsHidden.value = tags.join(',');

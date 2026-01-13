@@ -17,7 +17,7 @@ class AddOfferConfirm implements Controller
 
     function control(): void
     {
-      echo "Vous avez accédé à AddOfferConfirm\n";
+//      echo "Vous avez accédé à AddOfferConfirm\n";
 
 
         $title = $_POST['title'] ?? '';
@@ -31,7 +31,7 @@ class AddOfferConfirm implements Controller
         $tagsArray = !empty($tag) ? explode(',', $tag) : [];
 
 
-        if (empty($title) || empty($price) || empty($end_date) || empty($description)) {
+        if (empty($title) || empty($price) || empty($end_date)) {
             echo "Veuillez remplir tous les champs";
             header('Location: /offre');
             /*exit();*/
@@ -40,6 +40,11 @@ class AddOfferConfirm implements Controller
         if (!is_numeric($price) || $price <= 0 || $price > 999999) {
             header('Location: /offre');
            /* exit();*/
+            return;
+        }
+        if (strtotime($end_date) === false || strtotime($end_date) <= time()) {
+            header('Location: /offre');
+            /*exit();*/
             return;
         }
 
@@ -70,9 +75,6 @@ class AddOfferConfirm implements Controller
         header('Location: /marketplace');
 
     }
-
-
-
 
     static function resolve(string $path, string $meth): bool
     {

@@ -103,6 +103,10 @@ abstract class AbstractView {
     function navbar(string $placeholder = ''): string {
         $username = $_SESSION['username'] ?? 'NOM DE COMPTE';
         $balance = $_SESSION['balance'] ?? 0.00;
+        $firstLogin = !empty($_SESSION['first-login']);
+        if ($firstLogin) {
+            unset($_SESSION['first-login']);
+        }
 
         return '
     <nav class="nav">
@@ -117,13 +121,13 @@ abstract class AbstractView {
         </div>
     </nav>      
     
-    <div class="sidebar" id="sidebar">
+    <div class="sidebar ' . ($firstLogin ? 'active' : '') . '" id="sidebar">
         <div class="sidebar-header">
             <button class="close-btn" onclick="closeSidebar()">X</button>
         </div>
 
         <div class="sidebar-content">
-            <a class="sidebar-link" href="/marketplace">🛒 Place de marché</a>
+            <a class="sidebar-link" href="/marketplace">🛒 Voir les offres</a>
             <a class="sidebar-link" href="/offre">➕ Ajouter une offre</a>
         </div>
 

@@ -17,6 +17,10 @@
     color: #000;
     transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
 }
+.own-offer {
+    border-color: #FF5733;
+    background: #CFBFBF;
+}
 .offer-card:hover {
     box-shadow: 0.25rem 0.25rem 0.5rem rgba(0,0,0,0.3);
     transform: translateY(-0.1rem);

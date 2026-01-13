@@ -1,4 +1,5 @@
 <!--<input class="research-bar" type="text" placeholder="Rechercher..." />-->
+{POPUP}
 <div class="search-container">
     <div class="search-wrapper">
         <form class="search-wrapper" action="/marketplace" method="GET">
@@ -16,8 +17,23 @@
         </div>
     </div>
 </div>
+
+
 <!--TODO: do some code cleaning and move <script> in a JS file-->
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var popup = document.getElementById("popup-message");
+        if (popup) {
+            setTimeout(function() {
+                popup.classList.add("show");
+            }, 100);
+
+            setTimeout(function() {
+                popup.classList.remove("show");
+            }, 4000);
+        }
+    });
+
     function toggleDropdown() {
         // // take the elements
         // var dropdown = document.getElementById('sortDropdown');
