@@ -5,6 +5,7 @@ namespace controllers\Trade\MarketPlace;
 use core\controllers\Controller;
 use core\models\DataBase;
 use dtu\models\TradeDB;
+use models\AccountDB;
 use views\Trade\MarketPlace\MarketPlaceView;
 use views\Trade\Offer\Offer;
 class MarketPlace implements Controller {
@@ -100,7 +101,7 @@ class MarketPlace implements Controller {
          */
         // Add button based on ownership
         $offer['button'] = self::generateOfferButton($offer['ouid'], $offer['owner']);
-        $ret = $ret . new Offer($offer)->render('article', 'offer-card');
+        $ret = $ret . new Offer($offer)->render('article', 'offer-card' . (AccountDB::ownsOffer($_SESSION['email'], (int)$offer['ouid']) ? ' own-offer' : '')). "\n";
       }
       $ret .= '</section>';
 
