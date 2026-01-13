@@ -7,12 +7,16 @@ use PHPUnit\Framework\TestCase;
 
 class EnvTest extends TestCase
 {
+  public Env $env;
+  public function setUp(): void
+  {
+    $this->env = new Env();
+  }
+
   public function testControlRendersForbiddenView()
   {
     ob_start();
-
-    $envController = new Env();
-    $envController->control();
+    $this->env->control();
 
     // Get the output and clean the buffer
     $output = ob_get_clean();
@@ -29,5 +33,10 @@ class EnvTest extends TestCase
   public function testDoesNotResolveIncorrectPath()
   {
     $this->assertFalse(Env::resolve('/wrongpath', 'GET'));
+  }
+
+  public function tearDown(): void
+  {
+    unset($this->env);
   }
 }

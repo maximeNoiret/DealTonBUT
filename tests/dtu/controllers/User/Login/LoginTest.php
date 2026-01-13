@@ -5,7 +5,7 @@ use PHPUnit\Framework\TestCase;
 use controllers\User\Login\Login;
 use views\User\LoginForm\LoginFormView;
 
-class LoginTestAlternative extends TestCase
+class LoginTest extends TestCase
 {
     protected function setUp(): void
     {
