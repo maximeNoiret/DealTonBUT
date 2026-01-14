@@ -3,7 +3,7 @@
     src: url(/_assets/fonts/Share_Tech_Mono/ShareTechMono-Regular.ttf);
 }
 
-body{
+body {
     background-image: url("/_assets/images/background.webp");
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -12,243 +12,64 @@ body{
     font-family: ShareTechMono, monospace;
     margin: 0;
     padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-.logo-main{
-    width: 200px;
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+#forbiddenImage {
+    width: 400px;
     height: auto;
-    margin-top: 20px;
-    margin-bottom: 20px;
     display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.description-text{
-    background: #D9D9D9;
-    width: 80%;
-    padding: 25px;
-    border-radius: 25px;
-    text-align: center;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    font-size: 20px;
-}
-
-.btn-container{
-    display: grid;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    grid-template-columns: auto auto;
-    max-width: 600px;
     margin: 20px auto;
 }
 
-.btn-register, .btn-login{
-    background-color: #D9D9D9;
-    border: none;
-    color: black;
-    padding: 25px 42px;
-    text-align: center;
-    text-decoration: none;
-    font-size: 20px;
-    border-radius: 12px;
-    cursor: pointer;
+/* Footer Styles */
+.site-footer {
+    background-color: rgba(40, 40, 40, 0.95);
+    border-radius: 15px 15px 0 0;
+    margin-top: 40px;
+    padding: 25px 30px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.footer-links {
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 100%;
-    box-sizing: border-box;
+    gap: 15px;
 }
 
-.btn-login{
-    background-color: #404040;
-    color: white;
+.footer-link {
+    color: rgba(220, 220, 220, 0.9);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s ease;
 }
 
-
-.container-form{
-    background: #D9D9D9;
-    width: 30%;
-    height: auto;
-    padding: 25px;
-    border-radius: 25px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    font-size: 20px;
+.footer-link:hover {
+    color: #ffffff;
+    text-decoration: underline;
 }
 
-.input-class{
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0 30px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    font-size: 18px;
-    border-radius: 20px;
-    font-family: ShareTechMono, monospace;
+.footer-separator {
+    color: rgba(150, 150, 150, 0.7);
+    font-size: 14px;
 }
 
-
-.btn-inscription {
-    background-color: #404040;
-    color: white;
-    border: none;
-    padding: 15px 32px;
-    text-align: center;
-    font-size: 20px;
-    font-family: ShareTechMono, monospace;
-    border-radius: 12px;
-    cursor: pointer;
-    width: 80%;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+.footer-copyright {
+    color: rgba(180, 180, 180, 0.8);
+    font-size: 12px;
 }
-
-
-.oublier{
-    text-align: center;
-    display: block;
-    font-size: 18px;
-}
-
-.error-text {
-    color: darkred;
-    stroke: black;
-    text-decoration-style: dashed;
-}
-
-@media screen and (max-width: 1024px) {
-    .description-text{
-        width: 85%;
-        font-size: 18px;
-        padding: 20px;
-    }
-
-    .container-form{
-        width: 60%;
-        font-size: 18px;
-    }
-
-    .btn-register, .btn-login{
-        padding: 20px 35px;
-        font-size: 18px;
-        width: auto;
-        min-width: 150px;
-    }
-}
-
-
-@media screen and (max-width: 768px) {
-    .logo-main{
-        width: 150px;
-        margin-top: 15px;
-        margin-bottom: 15px;
-    }
-
-    .description-text{
-        width: 90%;
-        font-size: 16px;
-        padding: 20px;
-    }
-
-    .description-text h1{
-        font-size: 24px;
-        margin: 10px 0;
-    }
-
-    .container-form{
-        width: 85%;
-        font-size: 16px;
-        padding: 20px;
-    }
-
-    .btn-container{
-        grid-template-columns: 1fr;
-        gap: 15px;
-        padding: 0 20px;
-        justify-content: center;
-        max-width: 100%;
-    }
-
-    .btn-register, .btn-login{
-        padding: 18px 30px;
-        font-size: 18px;
-        width: 100%;
-        min-width: unset;
-    }
-
-    .input-class{
-        font-size: 16px;
-        padding: 10px 15px;
-    }
-
-    .btn-inscription{
-        font-size: 18px;
-        padding: 12px 25px;
-    }
-
-    .oublier{
-        font-size: 16px;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    .logo-main{
-        width: 120px;
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
-
-    .description-text{
-        width: 92%;
-        font-size: 14px;
-        padding: 15px;
-    }
-
-    .description-text h1{
-        font-size: 20px;
-        margin: 8px 0;
-    }
-
-    .container-form{
-        width: 92%;
-        font-size: 14px;
-        padding: 15px;
-    }
-
-    .btn-container{
-        gap: 12px;
-        padding: 0 15px;
-        justify-content: center;
-        max-width: 100%;
-    }
-
-    .btn-register, .btn-login{
-        padding: 15px 25px;
-        font-size: 16px;
-        width: 100%;
-        min-width: unset;
-    }
-
-    .input-class{
-        font-size: 14px;
-        padding: 8px 12px;
-        margin: 6px 0 20px 0;
-    }
-
-    .btn-inscription{
-        font-size: 16px;
-        padding: 10px 20px;
-    }
-
-    .oublier{
-        font-size: 14px;
-    }
-}
-

@@ -1,79 +1,115 @@
 <?php
 
 namespace models;
+use dtu\models\AccountMailer;
 use exceptions\AccountAlreadyExists;
-use exceptions\DatabaseNotInitiated;
-use models\DataBase;
-use models\Mailer;
+use models\AccountDB;
+use core\models\Mailer;
+use Random\RandomException;
 
 class Account {
   private const string DOMAIN_NAME = 'dealtonbut.app';
 
-
   /**
-   * @throws AccountAlreadyExists
+   * @description Registers a new account in the database.
+   * @param string $username The desired username for the new account.
+   * @param string $email The email address associated with the new account.
+   * @return string Status message indicating the result of the operation.
+   * @throws AccountAlreadyExists|RandomException
    */
-  function registerAccount(
+  static function registerAccount(
     string $username,
     string $email,
-    string $password,
-  ): void {
-    DataBase::getInstance()->registerAccount(
-      $username,
-      $email,
-      $password
-    );
-  }
-
-  static function validateCredentials(string $email, string $password): bool {
-    // CHECK IF (email, hash(password)) IN user_
-    $db = DataBase::getInstance();
-    $account = $db->getAccount($email, $password);
-    if ($account) {
-      session_regenerate_id(true);
-      $_SESSION['username'] = $account['username'];
-      $_SESSION['email'] = $account['email'];
-      $_SESSION['balance'] = $account['balance'];
-      $_SESSION['logged-in'] = true;
-      return true;
+  ): string {
+    $db = AccountDB::getInstance();
+    if ($db->accountExists($email) && $db->isAccountVerified($email)) {
+      throw new AccountAlreadyExists();
     }
-    return false;
-  }
-
-  static function forgotPassword(string $email): string {
-    // check if account exists at all
-    $db = DataBase::getInstance();
-    if(!$db->accountExists($email)) {
-      return 'already_exists';
-    }
-    // check if account already requested password reset with alive ttl
+    // check if account already tried creating an account with alive ttl
     if ($db->alreadyForgotPassword($email)) {
       return 'already_sent';
     }
-    // at this point, account exists AND hasn't already requested a password reset.
 
-    // TODO:
-    // generate a random token
+    $_SESSION['username'] = $username;
+
+    $db->registerAccount($username, $email);
+
     $token = bin2hex(random_bytes(16));
-    // hash the token for storing
     $hashedToken = hash('sha256', $token);
-    // store (email, token, now+10min) into 'token' relation
-    // NOTE: 'token' relation has default deadline value set to now + 10 min.
-    $db->insertToken($email, $token);   
-    // - [optional] encrypt (email, token) into single string
-    // mail a GET link with "/user/validate?mail=:mail&token=:token" (or "/user/validate?token=:token" if encrypted)
-    $mailer = new Mailer('noreply@' . SELF::DOMAIN_NAME, 'DealTonBUT');  // TODO: change domain to correct one
-    $resetLink = 'https://' . SELF::DOMAIN_NAME .
-      '/user/validate?email=' . urlencode($email) . '&token=' . $token;
-    if (!$mailer->sendPasswordReset($email, $resetLink)) {
-      return 'message';
+    $db->insertToken($email, $token);
+    $verifyLink = 'https://' . $_SERVER['HTTP_HOST'] . //self::DOMAIN_NAME .
+      '/user/register/verify?token=' . $token;
+    if (!AccountMailer::sendVerificationEmail($email, $verifyLink)) {
+      return 'mailer_error';
     };
-    return 'reached_end';
-    // ----------------
-    // Someone goes to /user/validate with GET method
-    // - [optional] decrypt token from url
-    // - if (email, token) in 'token' && ttl not reached: ask new password
-    // - else: display "invalid link" and quit
+    return 'verification_mail_sent';
+  }
 
+/**
+   * @description Validates user credentials against the database.
+   * @param string $email The email address of the user.
+   * @param string $password The password provided by the user.
+   * @return bool Returns true if the credentials are valid, false otherwise.
+ */
+
+  static function validateCredentials(string $email, string $password): bool {
+    // CHECK IF (email, hash(password)) IN user_
+    $account = AccountDB::getInstance()->getAccount($email, $password);
+      if (is_array($account) && !empty($account)) {
+          session_regenerate_id(true);
+          $_SESSION['username'] = $account['username'] ?? '';
+          $_SESSION['email'] = $account['email'] ?? '';
+          $_SESSION['balance'] = $account['balance'] ?? 0;
+          $_SESSION['logged-in'] = true;
+          return true;
+      }
+    return false;
+  }
+
+    /**
+     * @description Initiates the password reset process for a user.
+     * @param string $email The email address of the user requesting a password reset.
+     * @return string Status message indicating the result of the operation.
+     * @throws RandomException
+     */
+    static function forgotPassword(string $email): string {
+      // check if account exists at all
+      $db = AccountDB::getInstance();
+      if (!$db->accountExists($email)) {
+        return 'message';
+      }
+      // check if account already requested password reset with alive ttl
+      if ($db->alreadyForgotPassword($email)) {
+        return 'already_sent';
+      }
+
+      $token = bin2hex(random_bytes(16));
+      //$hashedToken = hash('sha256', $token);
+      $db->insertToken($email, $token);  // TODO: update db
+      $resetLink = 'https://' . $_SERVER['HTTP_HOST'] . //self::DOMAIN_NAME .
+        '/user/validate?email=' . urlencode($email) . '&token=' . $token;
+      if (!AccountMailer::sendForgotPassword($email, $resetLink)) {
+        return 'message';
+      };
+      return 'message';
+
+    }
+
+  /**
+   * @description Show the name of the user, by using their university email
+   * @return string
+   */
+  static function getName(?string $email = null): string
+  {
+    // Récupère l'email uniquement s'il s'agit bien d'une chaîne
+    if (isset($_SESSION['email']) && is_string($_SESSION['email'])) {
+      $email = $_SESSION['email'];
+    }
+    // Extrait la partie locale avant le @
+    $parts = explode('@', $email);
+    $name = $parts[0];
+    // Remplace les points par des espaces et capitalise
+    $name = str_replace('.', ' ', $name);
+    return ucwords($name);
   }
 }

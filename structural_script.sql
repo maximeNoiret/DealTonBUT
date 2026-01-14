@@ -10,9 +10,9 @@ DROP TABLE IF EXISTS user_;
 CREATE TABLE user_(
    email VARCHAR(70) PRIMARY KEY,
    username VARCHAR(50) NOT NULL,
-   hashedpwd VARCHAR(100) NOT NULL,
+   hashedpwd VARCHAR(100) NOT NULL DEFAULT 'not-verified',
    balance DECIMAL(8,2) NOT NULL DEFAULT 0.00,
-   role VARCHAR(15) NOT NULL DEFAULT 'student',
+   role VARCHAR(15) NOT NULL DEFAULT 'not-verified',
    CONSTRAINT CHK_USER_EMAIL
     CHECK (email LIKE '%_@__%.__%'),
    CONSTRAINT CHK_USER_BAL
@@ -20,15 +20,14 @@ CREATE TABLE user_(
 ) DEFAULT CHARSET=utf8;
 
 CREATE TABLE token(
-    email VARCHAR(70),
-    token VARCHAR(32),
+    token VARCHAR(32) PRIMARY KEY,
+    email VARCHAR(70) NOT NULL,
     deadline TIMESTAMP DEFAULT (CURRENT_TIMESTAMP + INTERVAL 10 MINUTE) NOT NULL,
-    PRIMARY KEY (email, token),
     FOREIGN KEY (email) REFERENCES user_(email) ON DELETE CASCADE
 ) DEFAULT CHARSET=utf8;
 
 CREATE TABLE offer(
-   ouid INT PRIMARY KEY,
+   ouid INT PRIMARY KEY AUTO_INCREMENT,
    owner VARCHAR(70) NOT NULL,
    title VARCHAR(50) NOT NULL,
    description TEXT,

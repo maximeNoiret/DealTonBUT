@@ -1,0 +1,111 @@
+<!--<input class="research-bar" type="text" placeholder="Rechercher..." />-->
+{POPUP}
+<div class="search-container">
+    <div class="search-wrapper">
+        <form class="search-wrapper" action="/marketplace" method="GET">
+            <!--        <span class="search-icon">🔍</span>&ndash;&gt;-->
+            <input type="text" name='search-string' class="search-box" placeholder="Rechercher...">
+        </form>
+        <button class="sort-button" onclick="toggleDropdown()">
+            Trier ▼
+        </button>
+        <div class="sort-menu" id="sortDropdown">
+            <a href="/marketplace?sort=date"><div class="sort-option">Plus récent</div></a>
+            <a href="/marketplace"><div class="sort-option">Plus vieux</div></a>
+            <a href="/marketplace?sort=price-asc"><div class="sort-option">Moins cher</div></a>
+            <a href="/marketplace?sort=price-desc"><div class="sort-option">Plus cher</div></a>
+            <a href="/marketplace?sort=alphabetic"><div class="sort-option" >Alphabétique</div></a>
+        </div>
+    </div>
+</div>
+
+
+<!--TODO: do some code cleaning and move <script> in a JS file-->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var popup = document.getElementById("popup-message");
+        if (popup) {
+            setTimeout(function() {
+                popup.classList.add("show");
+            }, 100);
+
+            setTimeout(function() {
+                popup.classList.remove("show");
+            }, 4000);
+        }
+    });
+
+    function toggleDropdown() {
+        // // take the elements
+        // var dropdown = document.getElementById('sortDropdown');
+        // // activate the dropdown menu
+        // dropdown.classList.toggle('active');
+        document.getElementById('sortDropdown').classList.toggle('active');
+
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        const dropdown = document.getElementById('sortDropdown');
+        const sortButton = document.querySelector('.sort-button');
+
+        if (!sortButton.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.classList.remove('active');
+        }
+    });
+
+    // Function to load more offers
+    function loadMoreOffers(offset, params) {
+        const loadMoreBtn = document.querySelector('.load-more-btn');
+        const loadMoreContainer = document.querySelector('.load-more-container');
+
+        // Disable button while loading
+        loadMoreBtn.disabled = true;
+        loadMoreBtn.textContent = 'Chargement...';
+
+        // Build the URL with offset and other params
+        const url = '/marketplace?offset=' + offset + params;
+
+        // Fetch the new offers
+        fetch(url, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.text())
+        .then(html => {
+            // Parse the HTML response
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+
+            // Get the offer grid and new offers
+            const newOfferGrid = doc.querySelector('#offer-grid');
+            const newLoadMoreContainer = doc.querySelector('.load-more-container');
+            const currentOfferGrid = document.querySelector('#offer-grid');
+
+            if (newOfferGrid && currentOfferGrid) {
+                // Append new offers to existing grid (including the <a> wrappers)
+                const newOffers = newOfferGrid.children;
+                // Convert HTMLCollection to Array to avoid issues with live collections
+                Array.from(newOffers).forEach(offer => {
+                    currentOfferGrid.appendChild(offer.cloneNode(true));
+                });
+            }
+
+            // Update or remove the load more button
+            if (newLoadMoreContainer) {
+                loadMoreContainer.replaceWith(newLoadMoreContainer);
+            } else {
+                loadMoreContainer.remove();
+            }
+        })
+        .catch(error => {
+            console.error('Error loading more offers:', error);
+            loadMoreBtn.disabled = false;
+            loadMoreBtn.textContent = 'Plus d\'offres ?';
+            alert('Erreur lors du chargement des offres. Veuillez réessayer.');
+        });
+    }
+</script>
+
+{OFFERS}
