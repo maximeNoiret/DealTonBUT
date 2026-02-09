@@ -33,6 +33,7 @@ use views\NotFound;
 use models\AccountDB;
 use views\Legal\Confidentiality\ConfidentialityView;
 use views\Legal\TermsOfUse\TermsOfUseView;
+use controllers\Trade\SeeOtherAccount\SeeOtherAccount;
 
 include __DIR__ . '/_assets/includes/Autoloader.php';
 
@@ -79,6 +80,7 @@ $controllers = [
   new Confidentiality(),
   new TermsOfUse(),
   new BuyOffer(),
+  new SeeOtherAccount(),
 
   // Forbidden
   new Env()
