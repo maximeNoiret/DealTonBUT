@@ -54,7 +54,7 @@ class AccountTest extends TestCase
 
   public function testRegisterAccountThrowsExceptionWhenAccountExists(): void {
     $username = 'john_doe';
-    $email = 'john@example.com';
+    $email = 'john@etu.univ-amu.fr';
 
     $this->mockAccountDB->expects($this->once())
       ->method('accountExists')
@@ -73,7 +73,7 @@ class AccountTest extends TestCase
 
   public function testRegisterAccountReturnsAlreadySentWhenTokenExists(): void {
     $username = 'john_doe';
-    $email = 'john@example.com';
+    $email = 'john@etu.univ-amu.fr';
 
     $this->mockAccountDB->expects($this->once())
       ->method('accountExists')
@@ -93,7 +93,7 @@ class AccountTest extends TestCase
   // cant mock static methods
   public function testRegisterAccountSuccessfullyCreatesAccount(): void {
     $username = 'john_doe';
-    $email = 'john@example.com';
+    $email = 'john@etu.univ-amu.fr';
 
     $this->mockAccountDB->expects($this->once())
       ->method('accountExists')
@@ -107,7 +107,7 @@ class AccountTest extends TestCase
 
     $this->mockAccountDB->expects($this->once())
       ->method('registerAccount')
-      ->with($username, $email);
+      ->with($username, $email, 'student');
 
     $this->mockAccountDB->expects($this->once())
       ->method('insertToken')
@@ -120,9 +120,59 @@ class AccountTest extends TestCase
     $this->assertContains($result, ['verification_mail_sent', 'mailer_error']);
   }
 
+  public function testRegisterAccountWithTeacherEmail(): void {
+    $username = 'prof_smith';
+    $email = 'smith@univ-amu.fr';
+
+    $this->mockAccountDB->expects($this->once())
+      ->method('accountExists')
+      ->with($email)
+      ->willReturn(false);
+
+    $this->mockAccountDB->expects($this->once())
+      ->method('alreadyForgotPassword')
+      ->with($email)
+      ->willReturn(false);
+
+    $this->mockAccountDB->expects($this->once())
+      ->method('registerAccount')
+      ->with($username, $email, 'teacher');
+
+    $this->mockAccountDB->expects($this->once())
+      ->method('insertToken')
+      ->with($email, $this->isType('string'));
+
+    $result = Account::registerAccount($username, $email);
+
+    $this->assertIsString($result);
+    $this->assertContains($result, ['verification_mail_sent', 'mailer_error']);
+  }
+
+  public function testRegisterAccountRejectsInvalidEmail(): void {
+    $username = 'invalid_user';
+    $email = 'user@example.com';
+
+    $this->mockAccountDB->expects($this->once())
+      ->method('accountExists')
+      ->with($email)
+      ->willReturn(false);
+
+    $this->mockAccountDB->expects($this->once())
+      ->method('alreadyForgotPassword')
+      ->with($email)
+      ->willReturn(false);
+
+    $this->mockAccountDB->expects($this->never())
+      ->method('registerAccount');
+
+    $result = Account::registerAccount($username, $email);
+
+    $this->assertEquals('invalid_email', $result);
+  }
+
   public function testRegisterAccountReturnsMailerErrorWhenEmailFails(): void {
     $username = 'john_doe';
-    $email = 'john@example.com';
+    $email = 'john@etu.univ-amu.fr';
 
     $this->mockAccountDB->method('accountExists')->willReturn(false);
     $this->mockAccountDB->method('alreadyForgotPassword')->willReturn(false);
@@ -337,7 +387,7 @@ class AccountTest extends TestCase
 
   public function testRegisterAccountAllowsUnverifiedExistingAccount(): void {
     $username = 'john_doe';
-    $email = 'john@example.com';
+    $email = 'john@etu.univ-amu.fr';
 
     $this->mockAccountDB->expects($this->once())
       ->method('accountExists')
@@ -356,7 +406,7 @@ class AccountTest extends TestCase
 
     $this->mockAccountDB->expects($this->once())
       ->method('registerAccount')
-      ->with($username, $email);
+      ->with($username, $email, 'student');
 
     $this->mockAccountDB->expects($this->once())
       ->method('insertToken')
@@ -367,32 +417,8 @@ class AccountTest extends TestCase
     $this->assertIsString($result);
   }
 
-  public function testForgotPasswordGeneratesUniqueToken(): void {
-    $email = 'test@example.com';
-
-    $this->mockAccountDB->method('accountExists')->willReturn(true);
-    $this->mockAccountDB->method('alreadyForgotPassword')->willReturn(false);
-
-    $capturedToken = null;
-    $this->mockAccountDB->expects($this->once())
-      ->method('insertToken')
-      ->with(
-        $email,
-        $this->callback(function ($token) use (&$capturedToken) {
-          $capturedToken = $token;
-          return is_string($token) && strlen($token) === 32; // bin2hex(16 bytes) = 32 chars
-        })
-      );
-
-    Account::forgotPassword($email);
-
-    $this->assertNotNull($capturedToken);
-    $this->assertEquals(32, strlen($capturedToken));
-  }
-
-  public function testRegisterAccountGeneratesUniqueToken(): void {
-    $username = 'test_user';
-    $email = 'test@example.com';
+  public function testRegisterAccountForgotPasswordGeneratesUniqueToken(): void {
+    $email = 'test@etu.univ-amu.fr';
 
     $this->mockAccountDB->method('accountExists')->willReturn(false);
     $this->mockAccountDB->method('alreadyForgotPassword')->willReturn(false);
@@ -405,14 +431,119 @@ class AccountTest extends TestCase
         $email,
         $this->callback(function ($token) use (&$capturedToken) {
           $capturedToken = $token;
-          return is_string($token) && strlen($token) === 32;
+          return is_string($token) && strlen($token) === 32; // bin2hex(16 bytes) = 32 chars
         })
       );
 
-    Account::registerAccount($username, $email);
+    Account::registerAccount('test_user', $email);
 
     $this->assertNotNull($capturedToken);
     $this->assertEquals(32, strlen($capturedToken));
+  }
+
+  public function testRegisterAccountSetsUsernameInSession(): void {
+    session_start();
+    $username = 'john_doe';
+    $email = 'john@etu.univ-amu.fr';
+
+    $this->mockAccountDB->method('accountExists')->willReturn(false);
+    $this->mockAccountDB->method('alreadyForgotPassword')->willReturn(false);
+    $this->mockAccountDB->method('registerAccount');
+    $this->mockAccountDB->method('insertToken');
+
+    Account::registerAccount($username, $email);
+
+    $this->assertArrayHasKey('username', $_SESSION);
+    $this->assertEquals($username, $_SESSION['username']);
+  }
+
+  public function testRegisterAccountDoesNotSetUsernameIfEmailInvalid(): void {
+    session_start();
+    $_SESSION = [];
+    $username = 'invalid_user';
+    $email = 'user@gmail.com';
+
+    $this->mockAccountDB->method('accountExists')->willReturn(false);
+    $this->mockAccountDB->method('alreadyForgotPassword')->willReturn(false);
+
+    $result = Account::registerAccount($username, $email);
+
+    $this->assertEquals('invalid_email', $result);
+    $this->assertArrayNotHasKey('username', $_SESSION);
+  }
+
+  public function testRegisterAccountStudentRoleWithEtuEmail(): void {
+    $username = 'student_user';
+    $email = 'student@etu.univ-amu.fr';
+
+    $this->mockAccountDB->method('accountExists')->willReturn(false);
+    $this->mockAccountDB->method('alreadyForgotPassword')->willReturn(false);
+
+    $this->mockAccountDB->expects($this->once())
+      ->method('registerAccount')
+      ->with($username, $email, 'student');
+
+    $this->mockAccountDB->method('insertToken');
+
+    Account::registerAccount($username, $email);
+  }
+
+  public function testRegisterAccountTeacherRoleWithUnivAmuEmail(): void {
+    $username = 'teacher_user';
+    $email = 'teacher@univ-amu.fr';
+
+    $this->mockAccountDB->method('accountExists')->willReturn(false);
+    $this->mockAccountDB->method('alreadyForgotPassword')->willReturn(false);
+
+    $this->mockAccountDB->expects($this->once())
+      ->method('registerAccount')
+      ->with($username, $email, 'teacher');
+
+    $this->mockAccountDB->method('insertToken');
+
+    Account::registerAccount($username, $email);
+  }
+
+  public function testRegisterAccountEtuDomainIsNotTeacher(): void {
+    $username = 'student_user';
+    $email = 'student@etu.univ-amu.fr';
+
+    $this->mockAccountDB->method('accountExists')->willReturn(false);
+    $this->mockAccountDB->method('alreadyForgotPassword')->willReturn(false);
+
+    $this->mockAccountDB->expects($this->once())
+      ->method('registerAccount')
+      ->with($username, $email, 'student');
+
+    $this->mockAccountDB->method('insertToken');
+
+    Account::registerAccount($username, $email);
+  }
+
+  public function testRegisterAccountRejectsGmailEmail(): void {
+    $username = 'gmail_user';
+    $email = 'user@gmail.com';
+
+    $this->mockAccountDB->method('accountExists')->willReturn(false);
+    $this->mockAccountDB->method('alreadyForgotPassword')->willReturn(false);
+    $this->mockAccountDB->expects($this->never())->method('registerAccount');
+
+    $result = Account::registerAccount($username, $email);
+
+    $this->assertEquals('invalid_email', $result);
+  }
+
+  public function testRegisterAccountRejectsOutlookEmail(): void {
+    $username = 'outlook_user';
+    $email = 'user@outlook.com';
+
+    $this->mockAccountDB->method('accountExists')->willReturn(false);
+    $this->mockAccountDB->method('alreadyForgotPassword')->willReturn(false);
+    $this->mockAccountDB->expects($this->never())->method('registerAccount');
+
+    $result = Account::registerAccount($username, $email);
+
+    $this->assertEquals('invalid_email', $result);
   }
 
   public function testGetNameReturnsEmptyStringWithInvalidEmail(): void {
