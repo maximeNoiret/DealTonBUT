@@ -30,9 +30,17 @@ class Account {
       return 'already_sent';
     }
 
+    if (!(str_contains($email, '@etu.univ-amu.fr') || str_contains($email, '@univ-amu.fr'))) {
+        return 'invalid_email';
+    }
+
     $_SESSION['username'] = $username;
 
-    $db->registerAccount($username, $email);
+    if (str_contains($email, '@univ-amu.fr')) {
+        $db->registerAccount($username, $email, 'teacher');
+    } else {
+        $db->registerAccount($username, $email, 'student');
+    }
 
     $token = bin2hex(random_bytes(16));
     $hashedToken = hash('sha256', $token);

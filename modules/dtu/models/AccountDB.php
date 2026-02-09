@@ -29,13 +29,15 @@ class AccountDB extends DataBase {
    */
   public function registerAccount (
     string $username,
-    string $email
+    string $email,
+    string $role
   ): void {
     //$hashedpwd = password_hash($password, PASSWORD_DEFAULT);
     $query = $this->dbConn->prepare(
       'REPLACE INTO user_(email, username)
       VALUES (:email, :username)');
 
+    $this->setRole($email, $role);
     $query->bindValue('email', $email);
     $query->bindValue('username', $username);
     $query->execute();
