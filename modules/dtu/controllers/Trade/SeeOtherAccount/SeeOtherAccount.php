@@ -15,7 +15,7 @@ class SeeOtherAccount implements Controller
     '/_assets/styles/Account.css',
     '/_assets/styles/style.css',
     '/_assets/styles/navbar.css',
-    '/_assets/styles/offer.css'
+    '/_assets/styles/offer.css',
   ];
 
   static function resolve(string $path, string $meth): bool{
