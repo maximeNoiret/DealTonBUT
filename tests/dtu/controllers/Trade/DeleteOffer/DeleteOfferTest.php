@@ -35,7 +35,6 @@ class DeleteOfferTest extends TestCase
     $this->dbAccConn->setRole($this->testEmail01,'student');
 
     // OFFER
-    //TODO: find a way to get his ouid after insertion
     //param of the offer :
     $_SESSION['email'] = $this->testEmail01;
     $title = 'UNIT_TEST_OFFER';
