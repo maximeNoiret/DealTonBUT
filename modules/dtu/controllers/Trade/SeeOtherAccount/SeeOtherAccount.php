@@ -21,7 +21,6 @@ class SeeOtherAccount implements Controller
   static function resolve(string $path, string $meth): bool{
     return strtok($path, '?') === static::PATH && $meth === static::METH;
   }
-  // TODO: find a way for a better to def the attribute path
 
   function control(): void
   {
@@ -30,6 +29,5 @@ class SeeOtherAccount implements Controller
     } else {
       echo (new SeeOtherAccountView())->render("Account - DealTonBUT", self::STYLESHEET);
     }
-    //TODO: implement the seeOtherAccount page
   }
 }
