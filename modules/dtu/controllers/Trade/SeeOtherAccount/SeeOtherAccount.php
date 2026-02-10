@@ -25,7 +25,8 @@ class SeeOtherAccount implements Controller
   function control(): void
   {
     if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
-      echo (new LoginFormView())->render("Login - DealTonBUT", self::STYLESHEET);
+      //echo (new LoginFormView())->render("Login - DealTonBUT", self::STYLESHEET);
+      header('Location: /user/login');
     } else {
       if ($_GET['email'] == $_SESSION['email']) {
         echo (new AccountPageView())->render("Account - DealTonBUT", self::STYLESHEET);
