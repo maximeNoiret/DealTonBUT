@@ -27,6 +27,10 @@ class SeeOtherAccount implements Controller
     if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
       echo (new LoginFormView())->render("Login - DealTonBUT", self::STYLESHEET);
     } else {
+      if ($_GET['email'] == $_SESSION['email']) {
+        echo (new AccountPageView())->render("Account - DealTonBUT", self::STYLESHEET);
+        return;
+      }
       echo (new SeeOtherAccountView())->render("Account - DealTonBUT", self::STYLESHEET);
     }
   }
