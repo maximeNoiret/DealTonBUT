@@ -3,11 +3,16 @@ namespace views\Trade\SeeOtherAccount;
 
 use core\views\AbstractView;
 use dtu\models\TradeDB;
-use models\Account;
+use controllers\User\AccountPage\Account;
+use models\AccountDB;
 use views\Trade\Offer\Offer;
 
 class SeeOtherAccountView extends AbstractView {
 
+  /**
+   * @description Method that give the path to the corresponding .html
+   * @return string the path to the .html file associated to this view
+   */
   function path(): string
   {
     return __DIR__ . DIRECTORY_SEPARATOR . 'SeeOtherAccountTemplate.html';
@@ -15,45 +20,16 @@ class SeeOtherAccountView extends AbstractView {
 
   function templateValues(): array
   {
+    // update the var in $_SESSION that contain the balance value to now hold the balance of the observed user
+    AccountDB::getInstance()->updateBalance($_GET['email'] ?? '');
     return [
-//      'USERNAME' => $_SESSION['username'] ?? '',
+      'USERNAME' =>AccountDB::getInstance()->getUserUsername($_GET['email'] ?? ''),
       'EMAIL' => $_GET['email'] ?? '',
-      'USEROFFERS' => $this->getOfferByUser($_SESSION['email'] ?? ''),
-      'USERBALANCE' => 0,
-      'USERBOUGHTOFFERS' => $this->getOfferBoughtByUser($_GET['email'] ?? ''),
-      'NAME' => Account::getName($_GET['email'] ?? ''),
+      'USEROFFERS' => Account::getOfferByOtherUser($_GET['email'] ?? ''),
+      'USERBALANCE' => $_SESSION['balance'] ?? 0,
+      'USERBOUGHTOFFERS' => Account::getOfferBoughtByOtherUser($_GET['email'] ?? ''),
+      'NAME' => \models\Account::getName($_GET['email'] ?? ''),
     ];
-  }
-
-  //TODO: find a way to not have to reinvent the wheel for these function
-  function getOfferByUser($email) : string {
-    $offers = TradeDB::getInstance()->getUserOffers($email);
-    if ($offers) {
-      $ret = '<section class="offer-grid">' . "\n";
-      foreach ($offers as $offer) {
-        /**
-         * @var array<string, string> $offer
-         */
-        $ret = $ret . (new SeeUserOfferView($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
-      }
-      return $ret . '</section>';
-    }
-    return '<h1 class="description-text">There are no offers!</h1>';
-  }
-  function getOfferBoughtByUser($email): string
-  {
-    $offers = TradeDB::getInstance()->getBoughtOffers($email);
-    if ($offers) {
-      $ret = '<section class="offer-grid">' . "\n";
-      foreach ($offers as $offer) {
-        /**
-         * @var array<string, string> $offer
-         */
-        $ret = $ret . (new SeeUserOfferView($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
-      }
-      return $ret . '</section>';
-    }
-    return '<h1 class="description-text">There are no offers!</h1>';
   }
 
   function navbarText(): string

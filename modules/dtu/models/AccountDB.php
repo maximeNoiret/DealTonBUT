@@ -3,8 +3,10 @@
 namespace models;
 
 use core\models\DataBase;
+use dtu\models\TradeDB;
 use exceptions\AccountAlreadyExists;
 use PDO;
+use views\Trade\SeeOtherAccount\SeeUserOfferView;
 
 class AccountDB extends DataBase {
 
@@ -237,6 +239,21 @@ class AccountDB extends DataBase {
     $query->bindValue('token', $token);
     $query->execute();
     return (string) $query->fetchColumn();
+  }
+
+  /**
+   * @description Retrieves the username associated with a given email.
+   * @param $email string email address of the user
+   * @return string The username associated with the given email.
+   */
+  public function getUserUsername($email): string
+  {
+    $query = $this->dbConn->prepare(
+      'SELECT username FROM user_ WHERE email = :email');
+    $query->bindValue('email', $email);
+    $query->execute();
+    $res = $query->fetch();
+    return $res['username'];
   }
 }
 
