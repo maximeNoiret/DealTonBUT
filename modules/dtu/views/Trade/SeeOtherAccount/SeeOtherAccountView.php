@@ -34,7 +34,7 @@ class SeeOtherAccountView extends AbstractView {
         /**
          * @var array<string, string> $offer
          */
-        $ret = $ret . (new Offer($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
+        $ret = $ret . (new SeeUserOfferView($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
       }
       return $ret . '</section>';
     }
@@ -49,7 +49,7 @@ class SeeOtherAccountView extends AbstractView {
         /**
          * @var array<string, string> $offer
          */
-        $ret = $ret . (new Offer($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
+        $ret = $ret . (new SeeUserOfferView($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
       }
       return $ret . '</section>';
     }
