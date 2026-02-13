@@ -18,6 +18,13 @@ class SeeOtherAccountView extends AbstractView {
     return __DIR__ . DIRECTORY_SEPARATOR . 'SeeOtherAccountTemplate.html';
   }
 
+  /**
+   * @return array|mixed[] The value of the different keys in the .html file,
+   * that will be replaced by the corresponding value
+   * @description Method that give the value of the different keys in the .html
+   * file. The value of the keys are the information of the observed user, such
+   * as his username, his email, his offers, his balance and his bought offers
+   */
   function templateValues(): array
   {
     // update the var in $_SESSION that contain the balance value to now hold the balance of the observed user
@@ -32,6 +39,10 @@ class SeeOtherAccountView extends AbstractView {
     ];
   }
 
+  /**
+   * @description Method that give the title of the page, that will be shown on the navbar
+   * @return string the title of the page
+   */
   function navbarText(): string
   {
     return 'Compte de ' . ($_GET['email'] ?? '');
