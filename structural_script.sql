@@ -34,6 +34,7 @@ CREATE TABLE offer(
    price DECIMAL(8,2) NOT NULL,
    creation_time DATETIME NOT NULL,
    deadline DATETIME NOT NULL,
+   style ENUM('normal', 'amethyst', 'space', 'cat') default 'normal',
    FOREIGN KEY(owner) REFERENCES user_(email)
     ON DELETE CASCADE,
    CONSTRAINT CHK_OFFER_PRICE
