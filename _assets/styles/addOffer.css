@@ -10,11 +10,68 @@
     font-size: 20px;
     margin-top: 3rem;
 }
+
+.toggleCheckbox {
+    display: none;
+}
+
+.toggleContainer {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: fit-content;
+    border: 3px solid #343434;
+    border-radius: 20px;
+    background: #343434;
+    font-weight: bold;
+    color: #343434;
+    cursor: pointer;
+}
+
+.toggleContainer::before {
+    content: '';
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    left: 0%;
+    border-radius:20px;
+    background: white;
+    transition: all 0.3s;
+}
+
+.toggleContainer div {
+    padding: 6px;
+    text-align: center;
+    z-index: 1;
+}
+
+.toggleCheckbox:checked + .toggleContainer::before {
+    left: 50%;
+}
+
+.toggleCheckbox:checked + .toggleContainer div:first-child{
+    color: white;
+    transition: color 0.3s;
+}
+.toggleCheckbox:checked + .toggleContainer div:last-child{
+    color: #343434;
+    transition: color 0.3s;
+}
+.toggleCheckbox + .toggleContainer div:first-child{
+    color: #343434;
+    transition: color 0.3s;
+}
+.toggleCheckbox + .toggleContainer div:last-child{
+    color: white;
+    transition: color 0.3s;
+}
+
 .container-un {
     display: flex;
     justify-content: space-between;
     gap: 20px;
     margin-bottom: 30px;
+    align-items: flex-end;
 }
 .form-group {
     display: flex;
@@ -73,7 +130,6 @@ label {
     border-radius: 20px;
     font-family: ShareTechMono, monospace;
     background: white;
-    margin-bottom: 20px;
 }
 
 .tag-submit-row {
@@ -88,7 +144,7 @@ label {
     flex: 1;
     flex-direction: column;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
 }
 
 .tags-display {
@@ -96,6 +152,7 @@ label {
     flex-wrap: wrap;
     gap: 10px;
     min-height: 40px;
+    width: 450px;
 }
 
 .tag-item {
@@ -132,7 +189,7 @@ textarea.input-class {
     min-height: 150px;
     margin-bottom: 20px;
 }
-.btn-inscription {
+.btn-creat {
     padding: 15px 40px;
     background: #333;
     color: white;
@@ -143,16 +200,35 @@ textarea.input-class {
     font-family: ShareTechMono, monospace;
     cursor: pointer;
     transition: all 0.3s ease;
+    float: right;
 }
-.btn-inscription:hover {
+.btn-creat:hover {
     background: #555;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.input-class-quantite{
+    width: 40%;
+    padding: 15px 20px;
+    border: none;
+    box-sizing: border-box;
+    font-size: 16px;
+    border-radius: 20px;
+    font-family: ShareTechMono, monospace;
+    background: white;
+    margin-bottom: 50px;
+    margin-left: 55%;
+}
+
+.label-quantite{
+    margin-left: 15%;
+    margin-bottom: 40px;
 }
 @media (max-width: 768px) {
     .container-un {
         grid-template-columns: 1fr;
     }
-    .btn-inscription {
+    .btn-creat {
         float: none;
         width: 100%;
     }
@@ -217,9 +293,17 @@ textarea.input-class {
         padding: 6px 10px;
     }
 
-    .btn-inscription {
+    .btn-creat {
         width: 100%;
         padding: 14px;
         font-size: 16px;
+    }
+
+    .tags-display{
+        width: 200px;
+    }
+
+    .label-quantite{
+        margin-left: 50px;
     }
 }
