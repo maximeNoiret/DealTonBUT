@@ -24,6 +24,9 @@ class AddOfferConfirm implements Controller
         $price = $_POST['price'] ?? '';
         $end_date = $_POST['end_date'] ?? '';
         $description = $_POST['description'] ?? '';
+        $quantity = $_POST['quantity'] ?? '';
+        $type = $_POST['type'] ? 'request' : 'offer';
+
         /**
          * @var string $tag
          */
@@ -31,7 +34,7 @@ class AddOfferConfirm implements Controller
         $tagsArray = !empty($tag) ? explode(',', $tag) : [];
 
 
-        if (empty($title) || empty($price) || empty($end_date)) {
+        if (empty($title) || empty($price) || empty($end_date) || empty($quantity) || empty($description)) {
             echo "Veuillez remplir tous les champs";
             header('Location: /offre');
             /*exit();*/
@@ -40,6 +43,11 @@ class AddOfferConfirm implements Controller
         if (!is_numeric($price) || $price <= 0 || $price > 999999) {
             header('Location: /offre');
            /* exit();*/
+            return;
+        }
+        if(!is_numeric($quantity) || $quantity <= 0 || $quantity > 100) {
+            header('Location: /offre');
+            /*exit();*/
             return;
         }
         if (strtotime($end_date) === false || strtotime($end_date) <= time()) {
@@ -56,12 +64,15 @@ class AddOfferConfirm implements Controller
         /**
          * @var array<string, string> $_SESSION
          */
+
         $ouid = TradeDB::getInstance()->insertOffre(
             $_SESSION['email'],
             $title,
             (float)$price,
             $description,
-            $end_date
+            $end_date,
+            (int)$quantity,
+            $type
         );
 
         if($ouid && !empty($tagsArray)) {
