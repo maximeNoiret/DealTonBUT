@@ -75,6 +75,7 @@ class TradeDB extends DataBase {
   {
     try {
       $this->dbConn->beginTransaction();
+
       $offerQuery = $this->dbConn->prepare('
                 SELECT owner, price, deadline 
                 FROM offer 
@@ -99,19 +100,29 @@ class TradeDB extends DataBase {
         $this->dbConn->rollBack();
         return false;
       }
-      // Si l'utilisateur n'as pas assez de sous
-      $queryForBalance = AccountDB::getInstance()->getBalance($email);
-      if ($queryForBalance === false || $queryForBalance < $offer['price']) {
-        $this->dbConn->rollBack();
-        return false;
+
+      if ($offer['type'] === 'offer') {
+        $buyerQuery = $email;
+        $sellerQuery = $offer['owner'];
+      } else {
+        $buyerQuery = $offer['owner'];
+        $sellerQuery = $email;
       }
+
+        // Si l'utilisateur n'as pas assez de sous
+        $queryForBalance = AccountDB::getInstance()->getBalance($buyerQuery);
+        if ($queryForBalance === false || $queryForBalance < $offer['price']) {
+            $this->dbConn->rollBack();
+            return false;
+        }
+
       $queryRemoveMoney = $this->dbConn->prepare('
                 UPDATE user_
                 SET balance = balance - :price
                 WHERE email = :email'
       );
       $queryRemoveMoney->bindValue('price', $offer['price']);
-      $queryRemoveMoney->bindValue('email', $email);
+      $queryRemoveMoney->bindValue('email', $buyerQuery);
       $queryRemoveMoney->execute();
 
       $queryAddMoney = $this->dbConn->prepare('
@@ -120,7 +131,7 @@ class TradeDB extends DataBase {
                 WHERE email = :email
             ');
       $queryAddMoney->bindValue('price', $offer['price']);
-      $queryAddMoney->bindValue('email', $offer['owner']);
+      $queryAddMoney->bindValue('email', $sellerQuery);
       $queryAddMoney->execute();
 
       $transactionQuery = $this->dbConn->prepare('
@@ -134,7 +145,22 @@ class TradeDB extends DataBase {
       $transactionQuery->execute();
 
       $this->dbConn->commit();
-      return true;
+
+        $queryQuantity = $this->dbConn->prepare('
+                UPDATE offer SET quantity = quantity - 1 WHERE ouid = :ouid
+            ');
+
+        $queryQuantity->bindValue('ouid', $ouid);
+        $queryQuantity->execute();
+        $queryCheck  = $this->dbConn->prepare('SELECT quantity FROM offer WHERE ouid = :ouid');
+        $queryCheck ->bindValue('ouid', $ouid);
+        $queryCheck ->execute();
+        $result = $queryCheck ->fetch(PDO::FETCH_ASSOC);
+        if ($result['quantity'] < 0) {
+            $this->deleteOffer($ouid);
+        }
+
+        return true;
     } catch (\Exception $e) {
       $this->dbConn->rollBack();
       return false;
