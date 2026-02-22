@@ -49,10 +49,10 @@ class SeeOtherAccount implements Controller
       header('Location: /user/login');
     } else {
       if ($_GET['email'] == $_SESSION['email']) {
-        echo (new AccountPageView())->render("Account - DealTonBUT", self::STYLESHEET);
+        echo new AccountPageView()->render("Account - DealTonBUT", self::STYLESHEET);
         return;
       }
-      echo (new SeeOtherAccountView())->render("Account - DealTonBUT", self::STYLESHEET);
+      echo new SeeOtherAccountView()->render("Account - DealTonBUT", self::STYLESHEET);
     }
   }
 }
