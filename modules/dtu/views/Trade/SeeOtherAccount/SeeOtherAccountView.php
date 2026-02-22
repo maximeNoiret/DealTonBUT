@@ -19,7 +19,7 @@ class SeeOtherAccountView extends AbstractView {
   }
 
   /**
-   * @return array|mixed[] The value of the different keys in the .html file,
+   * @return array<mixed>|mixed[] The value of the different keys in the .html file,
    * that will be replaced by the corresponding value
    * @description Method that give the value of the different keys in the .html
    * file. The value of the keys are the information of the observed user, such
@@ -27,13 +27,11 @@ class SeeOtherAccountView extends AbstractView {
    */
   function templateValues(): array
   {
-    // update the var in $_SESSION that contain the balance value to now hold the balance of the observed user
-    AccountDB::getInstance()->updateBalance($_GET['email'] ?? '');
     return [
       'USERNAME' =>AccountDB::getInstance()->getUserUsername($_GET['email'] ?? ''),
       'EMAIL' => $_GET['email'] ?? '',
       'USEROFFERS' => Account::getOfferByOtherUser($_GET['email'] ?? ''),
-      'USERBALANCE' => $_SESSION['balance'] ?? 0,
+      'USERBALANCE' => AccountDB::getInstance()->getBalance($_GET['email'] ?? ''),
       'USERBOUGHTOFFERS' => Account::getOfferBoughtByOtherUser($_GET['email'] ?? ''),
       'NAME' => \models\Account::getName($_GET['email'] ?? ''),
     ];
