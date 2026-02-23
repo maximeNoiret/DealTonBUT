@@ -63,13 +63,23 @@ class SeeOffer implements Controller
    * @return string Returns the appropriate HTML button code based on offer ownership.
    */
   public function buttonOffer(): string{
-    if ($this->isOwnerOfOffer()) {
-      return '<a class="button-delete" href="/offre/delete?id=' . self::$id . '">Delete</a>';
-    } else if (!TradeDB::getInstance()->isOfferBought(self::$id)) {
-      return '<a class="button-buy" href="/offre/buy?id=' . self::$id . '">Buy</a>';
-    } else {
-        return '';
-    }
+      if ($this->isOwnerOfOffer()) {
+          return '<a class="button-delete" href="/offre/delete?id=' . self::$id . '">Delete</a>';
+      }
+
+      $offer = TradeDB::getInstance()->getOffer(self::$id);
+      if (!$offer) return '';
+
+      if (TradeDB::getInstance()->isOfferBought(self::$id)) {
+          return '';
+      }
+
+      $type = $offer['type'] ?? 'offer';
+      if ($type === 'request') {
+          return '<a class="button-accept" href="/offre/buy?id=' . self::$id . '">Accept</a>';
+      } else {
+          return '<a class="button-buy" href="/offre/buy?id=' . self::$id . '">Buy</a>';
+      }
   }
 
   /**

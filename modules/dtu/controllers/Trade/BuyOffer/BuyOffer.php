@@ -57,8 +57,6 @@ class BuyOffer implements Controller
         } else {
             $_SESSION['flash_error'] = "Erreur lors de la transaction BDD.";
         }
-        $email = trim($_SESSION['email']);
-        TradeDB::getInstance()->buyOffer($email, $ouid);
         header('Location: /marketplace');
         exit;
     }

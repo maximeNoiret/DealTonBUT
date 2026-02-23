@@ -20,7 +20,7 @@ class TradeDB extends DataBase {
   public function getOffers(string $orderBy, string $suffixe): array {
     if ($orderBy == '') {
       $query = $this->dbConn->prepare(
-        'SELECT u.username as \'username\', title, description, price, deadline
+        'SELECT u.username as \'username\', title, description, price, deadline, o.type
        FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email');
@@ -60,7 +60,7 @@ class TradeDB extends DataBase {
     // return mixed, it raised a phpstan error. And so the method return
     // mixed
     $query = $this->dbConn->prepare(
-      'SELECT owner, u.username as \'username\', title, description, price, deadline
+      'SELECT owner, u.username as \'username\', title, description, price, deadline,o.type
        FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email
@@ -109,6 +109,20 @@ class TradeDB extends DataBase {
         $sellerQuery = $email;
       }
 
+        $quantityQuery = $this->dbConn->prepare('
+            SELECT quantity, 
+                   (SELECT COUNT(*) FROM transaction t WHERE t.ouid = :ouid) as bought
+            FROM offer WHERE ouid = :ouid2
+        ');
+        $quantityQuery->bindValue('ouid', $ouid);
+        $quantityQuery->bindValue('ouid2', $ouid);
+        $quantityQuery->execute();
+        $quantityResult = $quantityQuery->fetch(PDO::FETCH_ASSOC);
+        if (!$quantityResult || $quantityResult['bought'] >= $quantityResult['quantity']) {
+            $this->dbConn->rollBack();
+            return false;
+        }
+
         // Si l'utilisateur n'as pas assez de sous
         $queryForBalance = AccountDB::getInstance()->getBalance($buyerQuery);
         if ($queryForBalance === false || $queryForBalance < $offer['price']) {
@@ -146,20 +160,6 @@ class TradeDB extends DataBase {
 
       $this->dbConn->commit();
 
-        $queryQuantity = $this->dbConn->prepare('
-                UPDATE offer SET quantity = quantity - 1 WHERE ouid = :ouid
-            ');
-
-        $queryQuantity->bindValue('ouid', $ouid);
-        $queryQuantity->execute();
-        $queryCheck  = $this->dbConn->prepare('SELECT quantity FROM offer WHERE ouid = :ouid');
-        $queryCheck ->bindValue('ouid', $ouid);
-        $queryCheck ->execute();
-        $result = $queryCheck ->fetch(PDO::FETCH_ASSOC);
-        if ($result['quantity'] < 0) {
-            $this->deleteOffer($ouid);
-        }
-
         return true;
     } catch (\Exception $e) {
       $this->dbConn->rollBack();
@@ -185,7 +185,7 @@ class TradeDB extends DataBase {
    */
   public function getUserOffers(string $email): array {
     $query = $this->dbConn->prepare(
-      'SELECT o.ouid, owner, u.username as \'username\', title, description, price, deadline
+      'SELECT o.ouid, owner, u.username as \'username\', title, description, price, deadline, o.type
        FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email
@@ -202,7 +202,7 @@ class TradeDB extends DataBase {
    */
   public function getBoughtOffers(string $email): array {
     $query = $this->dbConn->prepare(
-      'SELECT o.ouid, owner, u.username as \'username\', o.title, o.description, o.price, o.deadline
+      'SELECT o.ouid, owner, u.username as \'username\', o.title, o.description, o.price, o.deadline, o.type
         FROM transaction t
         INNER JOIN offer o
         ON t.ouid = o.ouid

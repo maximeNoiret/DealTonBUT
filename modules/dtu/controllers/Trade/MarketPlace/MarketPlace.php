@@ -128,12 +128,23 @@ class MarketPlace implements Controller {
    * @return string Returns the appropriate HTML button code based on offer ownership
    */
   private static function generateOfferButton(int $offerId, string $ownerEmail): string {
-    if (isset($_SESSION['email']) && $_SESSION['email'] === $ownerEmail) {
-      return '<a class="button-delete" href="/offre/delete?id=' . $offerId . '">Delete</a>';
-    } else if (TradeDB::getInstance()->isOfferBought($offerId)) return '';
-    else {
-      return '<a class="button-buy" href="/offre/buy?id=' . $offerId . '">Buy</a>';
-    }
+      if (isset($_SESSION['email']) && $_SESSION['email'] === $ownerEmail) {
+          return '<a class="button-delete" href="/offre/delete?id=' . $offerId . '">Delete</a>';
+      }
+
+      $offer = TradeDB::getInstance()->getOffer($offerId);
+      if (!$offer) return '';
+
+      if (TradeDB::getInstance()->isOfferBought($offerId)) {
+          return '';
+      }
+
+      $type = $offer['type'] ?? 'offer';
+      if ($type === 'request') {
+          return '<a class="button-accept" href="/offre/buy?id=' . $offerId . '">Accept</a>';
+      } else {
+          return '<a class="button-buy" href="/offre/buy?id=' . $offerId . '">Buy</a>';
+      }
   }
 
   public static function resolve(string $path, string $meth): bool {
