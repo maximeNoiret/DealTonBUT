@@ -40,6 +40,11 @@
     border: 2px solid #6a0dad;
     background-size: cover;
 }
+.offer-card-bad-apple-theme {
+    background: #8B0000 url("/_assets/images/offerTheme/bad-apple.gif") no-repeat center center;
+    border: 2px solid #777777;
+    background-size: cover;
+}
 /* Offer Card Elements */
 .offer-header {
     display: flex;
