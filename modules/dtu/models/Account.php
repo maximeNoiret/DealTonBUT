@@ -110,7 +110,7 @@ class Account {
   static function getName(?string $email = null): string
   {
     // Récupère l'email uniquement s'il s'agit bien d'une chaîne
-    if (isset($_SESSION['email']) && is_string($_SESSION['email'])) {
+    if (isset($_SESSION['email']) && is_string($_SESSION['email']) && !isset($email)) {
       $email = $_SESSION['email'];
     }
     // Extrait la partie locale avant le @
