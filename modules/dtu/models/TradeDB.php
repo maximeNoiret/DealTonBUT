@@ -77,7 +77,7 @@ class TradeDB extends DataBase {
       $this->dbConn->beginTransaction();
 
       $offerQuery = $this->dbConn->prepare('
-                SELECT owner, price, deadline 
+                SELECT owner, price, deadline, type 
                 FROM offer 
                 WHERE ouid = :ouid
             ');
