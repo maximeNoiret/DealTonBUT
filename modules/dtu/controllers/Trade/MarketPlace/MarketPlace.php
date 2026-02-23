@@ -41,7 +41,7 @@ class MarketPlace implements Controller {
     $limit = 8;
 
     $query =
-      'SELECT DISTINCT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline
+      'SELECT DISTINCT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline, style
        FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email
@@ -102,7 +102,10 @@ class MarketPlace implements Controller {
          */
         // Add button based on ownership
         $offer['button'] = self::generateOfferButton($offer['ouid'], $offer['owner']);
-        $ret = $ret . new Offer($offer)->render('article', 'offer-card' . (AccountDB::ownsOffer($_SESSION['email'], (int)$offer['ouid']) ? ' own-offer' : '')). "\n";
+        if ($offer['style'] === 'normal')
+            $ret = $ret . new Offer($offer)->render('article', 'offer-card' . (AccountDB::ownsOffer($_SESSION['email'], (int)$offer['ouid']) ? ' own-offer' : '')). "\n";
+        else
+            $ret = $ret . new Offer($offer)->render('article', 'offer-card' . (AccountDB::ownsOffer($_SESSION['email'], (int)$offer['ouid']) ? ' own-offer' : ' offer-card-' . $offer['style'] . '-theme')). "\n";
       }
       $ret .= '</section>';
 
