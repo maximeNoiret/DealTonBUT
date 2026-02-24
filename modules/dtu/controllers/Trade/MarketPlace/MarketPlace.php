@@ -41,17 +41,14 @@ class MarketPlace implements Controller {
     $limit = 8;
 
     $query =
-      'SELECT DISTINCT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline
+      'SELECT DISTINCT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline, o.quantity
        FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email
        INNER JOIN tags t 
        ON t.ouid = o.ouid
        WHERE deadline > NOW()
-       AND o.ouid NOT IN (
-            SELECT ouid
-            FROM transaction
-       )';
+       AND quantity >= 0';
     //  for searching a string in the title of the offers
 
     /**
@@ -135,10 +132,10 @@ class MarketPlace implements Controller {
       $offer = TradeDB::getInstance()->getOffer($offerId);
       if (!$offer) return '';
 
-      if (TradeDB::getInstance()->isOfferBought($offerId)) {
+      $quantity = $offer['quantity'] ?? 0;
+      if ($quantity < 0) {
           return '';
       }
-
       $type = $offer['type'] ?? 'offer';
       if ($type === 'request') {
           return '<a class="button-accept" href="/offre/buy?id=' . $offerId . '">Accept</a>';

@@ -77,7 +77,7 @@ class TradeDB extends DataBase {
       $this->dbConn->beginTransaction();
 
       $offerQuery = $this->dbConn->prepare('
-                SELECT owner, price, deadline, type 
+                SELECT owner, price, deadline, type, quantity 
                 FROM offer 
                 WHERE ouid = :ouid
             ');
@@ -86,7 +86,7 @@ class TradeDB extends DataBase {
       $offer = $offerQuery->fetch(PDO::FETCH_ASSOC);
 
       //Si l'offre n'existe pas
-      if (!$offer) {
+      if (!$offer|| !isset($offer['type'])) {
         $this->dbConn->rollBack();
         return false;
       }
@@ -108,20 +108,6 @@ class TradeDB extends DataBase {
         $buyerQuery = $offer['owner'];
         $sellerQuery = $email;
       }
-
-        $quantityQuery = $this->dbConn->prepare('
-            SELECT quantity, 
-                   (SELECT COUNT(*) FROM transaction t WHERE t.ouid = :ouid) as bought
-            FROM offer WHERE ouid = :ouid2
-        ');
-        $quantityQuery->bindValue('ouid', $ouid);
-        $quantityQuery->bindValue('ouid2', $ouid);
-        $quantityQuery->execute();
-        $quantityResult = $quantityQuery->fetch(PDO::FETCH_ASSOC);
-        if (!$quantityResult || $quantityResult['bought'] >= $quantityResult['quantity']) {
-            $this->dbConn->rollBack();
-            return false;
-        }
 
         // Si l'utilisateur n'as pas assez de sous
         $queryForBalance = AccountDB::getInstance()->getBalance($buyerQuery);

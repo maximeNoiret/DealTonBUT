@@ -76,11 +76,11 @@ CREATE TABLE points(
 ) DEFAULT CHARSET=utf8;
 
 CREATE TABLE transaction(
+    tid INT PRIMARY KEY AUTO_INCREMENT,
    email VARCHAR(70),
    ouid INT,
    amount DECIMAL(8,2) NOT NULL,
    transaction_time DATETIME NOT NULL,
-   PRIMARY KEY(email, ouid),
    FOREIGN KEY(email) REFERENCES user_(email) 
     ON DELETE CASCADE,
    FOREIGN KEY(ouid) REFERENCES offer(ouid) 
