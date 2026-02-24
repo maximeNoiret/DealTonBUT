@@ -1,0 +1,24 @@
+<div class="chat-container">
+    <header class="chat-header">
+        <a href="/user/account" class="back-btn">← Retour profil</a>
+        <h2>Discussion</h2>
+    </header>
+
+    <section class="messages-area" id="chat-messages">
+        {MESSAGES}
+    </section>
+
+    <footer class="chat-footer" style="display: {DISPLAY_FORM};">
+        <form method="POST" class="chat-form">
+            <input type="hidden" name="id_conv" value="{ID_CONV}">
+            <textarea name="content" placeholder="Écrivez votre message..." required></textarea>
+            <button type="submit">Envoyer</button>
+        </form>
+    </footer>
+</div>
+
+<script>
+    // Pour que le chat soit toujours en bas à l'ouverture
+    const area = document.getElementById('chat-messages');
+    area.scrollTop = area.scrollHeight;
+</script>
