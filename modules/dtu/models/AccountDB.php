@@ -229,6 +229,17 @@ class AccountDB extends DataBase {
     return $result && $result['role'] != 'not-verified';
   }
 
+  public function isAdmin(string $email): bool {
+    $query = $this->dbConn->prepare('SELECT role FROM user_ WHERE email = :email');
+    $query->bindValue('email', $email);
+    $query->execute();
+    /**
+     * @var array<string, string>|false $result
+     */
+    $result = $query->fetch(PDO::FETCH_ASSOC);
+    return $result && $result['role'] == 'admin';
+  }
+
   /**
    * @description Retrieves the email associated with a given token.
    * @param string $token The token
