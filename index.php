@@ -28,12 +28,14 @@ use controllers\User\Register\RegisterVerifyConfirm;
 use controllers\User\Settings\Settings;
 use controllers\User\Register\Register;
 use controllers\User\Register\RegisterConfirm;
+use controllers\Trade\Message\ChatController;
+use controllers\Trade\Message\ListConversations;
+
 use views\Forbidden;
 use views\NotFound;
 use models\AccountDB;
 use views\Legal\Confidentiality\ConfidentialityView;
 use views\Legal\TermsOfUse\TermsOfUseView;
-
 include __DIR__ . '/_assets/includes/Autoloader.php';
 
 
@@ -79,7 +81,8 @@ $controllers = [
   new Confidentiality(),
   new TermsOfUse(),
   new BuyOffer(),
-
+  new ChatController(),
+  new ListConversations(),
   // Forbidden
   new Env()
 ];
