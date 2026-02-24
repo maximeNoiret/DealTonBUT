@@ -6,6 +6,7 @@ use core\controllers\Controller;
 use dtu\models\TradeDB;
 use models\AccountDB;
 use views\Trade\Offer\Offer;
+use views\Trade\SeeOtherAccount\SeeUserOfferView;
 use views\User\AccountPage\AccountPageView;
 use views\User\LoginForm\LoginFormView;
 
@@ -30,7 +31,7 @@ class Account implements Controller
     /**
      * @var string $email : The email of the user
      */
-    $email = $_SESSION['email'] ?? '';
+      $email = $_SESSION['email'] ?? '';
     $offers = TradeDB::getInstance()->getUserOffers($email);
     if ($offers) {
       $ret = '<section class="offer-grid">' . "\n";
@@ -89,6 +90,48 @@ class Account implements Controller
     } else {
       return '<a class="button-buy" href="/offre/buy?id=' . $offerId . '">Buy</a>';
     }
+  }
+
+  /**
+   * @description Retrieves the offers associated with a user email.
+   * @param $email string email address of the user
+   * @return string html code of the offers associated with the given email or a message if no offers are found
+   */
+  static function getOfferByOtherUser($email) : string {
+    $offers = TradeDB::getInstance()->getUserOffers($email);
+    if ($offers) {
+      $ret = '<section class="offer-grid">' . "\n";
+      foreach ($offers as $offer) {
+        /**
+         * @var array<string, string> $offer
+         */
+        $offer['button'] = self::generateOfferButton($offer['ouid'], $offer['owner']);
+        $ret = $ret . (new SeeUserOfferView($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
+      }
+      return $ret . '</section>';
+    }
+    return '<h1 class="description-text">There are no offers!</h1>';
+  }
+
+  /**
+   * @description Retrieves the offers bought by a user associated with the given email.
+   * @param $email string email address of the user
+   * @return string html code of the offers bought by the user associated with the given email or a message if no offers are found
+   */
+  static function getOfferBoughtByOtherUser($email): string
+  {
+    $offers = TradeDB::getInstance()->getBoughtOffers($email);
+    if ($offers) {
+      $ret = '<section class="offer-grid">' . "\n";
+      foreach ($offers as $offer) {
+        /**
+         * @var array<string, string> $offer
+         */
+        $ret = $ret . (new SeeUserOfferView($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
+      }
+      return $ret . '</section>';
+    }
+    return '<h1 class="description-text">There are no offers!</h1>';
   }
 
     function control(): void
