@@ -70,7 +70,7 @@ class Mailer {
       return true;
     } catch (Exception $e) {
       // TODO: REMOVE THIS, PURELY FOR DEBUGGING
-      echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+      echo "ChatController could not be sent. Mailer Error: {$mail->ErrorInfo}";
       exit;
     }
   }

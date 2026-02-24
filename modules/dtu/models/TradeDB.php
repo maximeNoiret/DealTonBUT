@@ -124,7 +124,7 @@ class TradeDB extends DataBase {
       $queryAddMoney->execute();
 
       $transactionQuery = $this->dbConn->prepare('
-                INSERT INTO transaction(email, ouid, amount, transaction_time) 
+                INSERT INTO transactions(email, ouid, amount, transaction_time) 
                 VALUES (:email, :ouid, :amount, :transaction_time)
             ');
       $transactionQuery->bindValue('email', $email);
@@ -177,7 +177,7 @@ class TradeDB extends DataBase {
   public function getBoughtOffers(string $email): array {
     $query = $this->dbConn->prepare(
       'SELECT o.ouid, owner, u.username as \'username\', o.title, o.description, o.price, o.deadline
-        FROM transaction t
+        FROM transactions t
         INNER JOIN offer o
         ON t.ouid = o.ouid
         JOIN user_ u
@@ -195,7 +195,7 @@ class TradeDB extends DataBase {
    */
   public function isOfferBought(int $ouid): bool {
     $query = $this->dbConn->prepare(
-      'SELECT COUNT(*) as count FROM transaction WHERE ouid = :ouid');
+      'SELECT COUNT(*) as count FROM transactions WHERE ouid = :ouid');
     $query->bindValue('ouid', $ouid);
     $query->execute();
     $result = $query->fetch(PDO::FETCH_ASSOC);

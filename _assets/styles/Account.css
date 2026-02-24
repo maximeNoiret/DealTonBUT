@@ -188,6 +188,26 @@ a .offer-card *,
     text-decoration: none !important;
 }
 
+.button-chat {
+    display: inline-block;
+    background-color: #333;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.button-chat:hover {
+    background-color: #ffffff;
+    color: #333;
+}
+
 @media screen and (max-width: 768px) {
     .user-data {
         flex-direction: column;

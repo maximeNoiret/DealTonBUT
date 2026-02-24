@@ -28,6 +28,9 @@ use controllers\User\Register\RegisterVerifyConfirm;
 use controllers\User\Settings\Settings;
 use controllers\User\Register\Register;
 use controllers\User\Register\RegisterConfirm;
+use controllers\Trade\Message\ChatController;
+use controllers\Trade\Message\ListConversations;
+
 use views\Forbidden;
 use views\NotFound;
 use models\AccountDB;
@@ -80,6 +83,8 @@ $controllers = [
   new Confidentiality(),
   new TermsOfUse(),
   new BuyOffer(),
+  new ChatController(),
+  new ListConversations(),
   new SeeOtherAccount(),
 
   // Forbidden

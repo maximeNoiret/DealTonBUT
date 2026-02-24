@@ -1,0 +1,78 @@
+@font-face {
+    font-family: ShareTechMono;
+    src: url(/_assets/fonts/Share_Tech_Mono/ShareTechMono-Regular.ttf);
+}
+
+.inbox-container {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 20px;
+    font-family: 'ShareTechMono', monospace;
+}
+
+.inbox-title {
+    font-size: 1.8rem;
+    color: #2d3436;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid #ff5e5e;
+}
+
+.conv-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.conv-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 25px;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #333;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.conv-item:hover {
+    transform: translateX(8px);
+    border-color: #ff5e5e;
+    box-shadow: 0 6px 15px rgba(255, 94, 94, 0.15);
+}
+
+.conv-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.conv-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #2d3436;
+    text-transform: capitalize;
+}
+
+.conv-user {
+    font-size: 0.9rem;
+    color: #636e72;
+}
+
+.conv-user strong {
+    color: #ff5e5e;
+    font-weight: 600;
+}
+
+.arrow {
+    font-size: 1.4rem;
+    color: #b2bec3;
+    transition: color 0.3s ease;
+}
+
+.conv-item:hover .arrow {
+    color: #ff5e5e;
+}
