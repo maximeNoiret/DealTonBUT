@@ -39,7 +39,7 @@ CREATE TABLE offer(
    FOREIGN KEY(owner) REFERENCES user_(email)
     ON DELETE CASCADE,
    CONSTRAINT CHK_OFFER_PRICE
-    CHECK (price >= 0),
+    CHECK (price > 0),
    CONSTRAINT CHK_OFFER_TIME
     CHECK (creation_time < deadline)
 ) DEFAULT CHARSET=utf8;

@@ -62,16 +62,17 @@ class TradeDB extends DataBase {
     $query = $this->dbConn->prepare(
       'SELECT owner, u.username as \'username\', title, description, price, deadline,o.type
        FROM offer o
-       INNER JOIN user_ u
+       LEFT JOIN user_ u
        ON o.owner = u.email
        WHERE o.ouid = :ouid');
-    $query->bindValue('ouid', $ouid);
+
+      $query->bindValue('ouid', $ouid);
     $query->execute();
     return $query->fetch(PDO::FETCH_ASSOC);
   }
 
 
-  public function buyOffer(string $email, int $ouid): bool
+  public function buyOffer(string $email, int $ouid): string|bool
   {
     try {
       $this->dbConn->beginTransaction();
@@ -97,6 +98,12 @@ class TradeDB extends DataBase {
       }
       //Si la date max a été dépasser
       if (strtotime($offer['deadline']) < time()) {
+        $this->dbConn->rollBack();
+        return false;
+      }
+
+      //si l'offre n'est plus disponible
+      if($offer['quantity'] <= 0) {
         $this->dbConn->rollBack();
         return false;
       }
@@ -144,12 +151,20 @@ class TradeDB extends DataBase {
       $transactionQuery->bindValue('transaction_time', date('Y-m-d H:i:s'));
       $transactionQuery->execute();
 
+        $queryQuantity = $this->dbConn->prepare('
+                update offer
+                set quantity = quantity - 1
+                where ouid = :ouid
+            ');
+        $queryQuantity->bindValue('ouid', $ouid);
+        $queryQuantity->execute();
+
       $this->dbConn->commit();
 
         return true;
     } catch (\Exception $e) {
       $this->dbConn->rollBack();
-      return false;
+      return "Erreur lors de la transaction : " . $e->getMessage();
     }
   }
 
@@ -251,6 +266,19 @@ class TradeDB extends DataBase {
 
     return (int) $this->dbConn->lastInsertId();
   }
+
+    public function hasBoughtOffer(int $ouid, string $email): bool {
+      $queryTransaction = $this->dbConn->prepare(
+          'SELECT *
+          FROM transaction t
+          WHERE t.ouid = :ouid AND t.email = :email'
+      );
+        $queryTransaction->bindValue('ouid', $ouid);
+        $queryTransaction->bindValue('email', $email);
+        $queryTransaction->execute();
+        $transaction = $queryTransaction->fetch(PDO::FETCH_ASSOC);
+        return $transaction !== false;
+    }
 
   /**
    * @description Inserts a tag and associates it with an offer.

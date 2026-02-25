@@ -17,7 +17,7 @@ class AddOfferConfirm implements Controller
 
     function control(): void
     {
-//      echo "Vous avez accédé à AddOfferConfirm\n";
+//        throw "Vous avez accédé à AddOfferConfirm\n";
 
 
         $title = $_POST['title'] ?? '';
@@ -40,7 +40,7 @@ class AddOfferConfirm implements Controller
             /*exit();*/
           return;
         }
-        if (!is_numeric($price) || $price <= 0 || $price > 999999) {
+        if (!is_numeric($price) || $price < 0 || $price > 999999) {
             header('Location: /offre');
            /* exit();*/
             return;

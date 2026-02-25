@@ -48,7 +48,7 @@ class MarketPlace implements Controller {
        INNER JOIN tags t 
        ON t.ouid = o.ouid
        WHERE deadline > NOW()
-       AND quantity >= 0';
+       AND quantity > 0';
     //  for searching a string in the title of the offers
 
     /**
