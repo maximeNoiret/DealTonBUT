@@ -112,7 +112,7 @@ class TradeSubjectPoint implements Controller {
                                     continue;
                                 }
                                 // remove subjects that contain "Autonomie" or "Aide"
-                                if (preg_match('/\b(Autonomie|Aide)\b/i', $subject)) {
+                                if (preg_match('/\b(Autonomie|Aide|Soutien|Certification)\b/i', $subject)) {
                                     continue;
                                 }
 
