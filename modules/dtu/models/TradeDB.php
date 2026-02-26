@@ -2,53 +2,139 @@
 
 namespace dtu\models;
 
+use controllers\Trade\MarketPlace\MarketPlace;
 use core\models\DataBase;
 use models\AccountDB;
 use PDO;
+use views\Trade\Offer\Offer;
 
 class TradeDB extends DataBase {
 
   protected static $instance;
 
   /**
-   * @description Return the offers in function of the args given ( the args are MySQL operator), see MarketPlace->getOffers() for the used method
-   * @param string $orderBy Type of the sort (eg : COST ( order by the cost of the offer ))
-   * @param string $suffixe Supplementary information for the sort (eg : ASC ( Ascending order ))
-   * @return array<mixed> The list of offers
-   * @deprecated
+   * @description Show The offers in function of the sort parameter, show all offers by default
+   * @return string The HTML that contain the info of the offers
    */
-  public function getOffers(string $orderBy, string $suffixe): array {
-    if ($orderBy == '') {
-      $query = $this->dbConn->prepare(
-        'SELECT u.username as \'username\', title, description, price, deadline
-       FROM offer o
-       INNER JOIN user_ u
-       ON o.owner = u.email');
-      $query->execute();
-      return $query->fetchAll(PDO::FETCH_ASSOC);
-    }
-    if ($orderBy == 'search-string' && $suffixe == '') {
-      $query = $this->dbConn->prepare(
-        "SELECT u.username as 'username', title, description, price, deadline
+  public static function getOffers(): string {
+    $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
+    $limit = 8;
+
+    //build the base query
+    $query =
+              'SELECT DISTINCT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline
        FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email
-       WHERE title LIKE CONCAT('%',$orderBy,'%')");
-      $query->execute();
-      return $query->fetchAll(PDO::FETCH_ASSOC);
-    }
-    else {
-      $query = $this->dbConn->prepare(
-        'SELECT u.username as \'username\', title, description, price, deadline
-       FROM offer o
-       INNER JOIN user_ u
-       ON o.owner = u.email
-       ORDER BY ' . $orderBy . ' ' . $suffixe);
-      $query->execute();
-      return $query->fetchAll(PDO::FETCH_ASSOC);
-    }
+       LEFT JOIN tags t 
+       ON t.ouid = o.ouid
+       WHERE deadline > NOW()
+       AND o.ouid NOT IN (
+            SELECT ouid
+            FROM transactions
+       )';
+
+    $query = self::SortOffers($query);
+
+    // Add limit and offset
+    $query .= " LIMIT $limit OFFSET $offset";
+
+    // make the html for the offers, and the pagination
+    return self::getOffersHtml($query);
   }
 
+  /**
+   * @description Add to the incomplete SQL query the order by clause in
+   * function of the sort parameter, and the search string if it exists.
+   * Meant to be used in the getOffers() method.
+   * @param string $query the sql query that his under construction
+   * @return string SQL query that include the order by clause in function of
+   * the sort parameter, and the search string if it exists.
+   */
+  static function SortOffers( string $query): string
+  {
+    $sort = $_GET['sort'] ?? null;
+    /**
+     * @var array<string> $_GET['search-string']
+     */
+    if (isset($_GET['search-string']) && !empty($_GET['search-string'])) {
+      $searchString = trim($_GET['search-string']);
+      if(str_starts_with($searchString, '#')) {
+        $tagname = substr($searchString, 1);
+        $query.= " AND t.tagname LIKE '%" . $tagname . "%'";
+      }
+      else{
+        $query.= ' AND (title LIKE "%' . $searchString . '%"';
+        $query.= " OR description LIKE '%" . $searchString . "%')";
+      }
+    }
+    switch ($sort) {
+      case 'price-asc':
+        $query .= " ORDER BY price ASC";
+        break;
+      case 'price-desc':
+        $query .= " ORDER BY price DESC";
+        break;
+      case 'date':
+        $query .= " ORDER BY creation_time DESC";
+        break;
+      case 'alphabetic':
+        $query .= " ORDER BY title ASC";
+        break;
+      default:
+        break;
+    }
+    return $query;
+  }
+
+  /**
+   * @description This method is used to generate the html for the offers, and
+   * the pagination. It is used in the getOffers() method.
+   * @param string $query the sql query to get the offers and order them in
+   * function of the sort parameter
+   * @return string The html that contain the info of the offers, and the
+   * pagination
+   */
+  static function getOffersHtml(string $query): string
+  {
+    $sort = $_GET['sort'] ?? null;
+    $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
+    $limit = 8;
+
+    $offers = DataBase::getInstance()->executeQuery($query);
+
+    // Count total offers for pagination
+    $countQuery = str_replace('SELECT DISTINCT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline', 'SELECT COUNT(*) as total', $query);
+    $countResult = DataBase::getInstance()->executeQuery($countQuery);
+    $totalOffers = $countResult ? (int)$countResult[0]['total'] : 0;
+
+    // create the html for the offers
+    if ($offers) {
+      $ret = '<section class="offer-grid" id="offer-grid">' . "\n";
+      foreach ($offers as $offer) {
+        /**
+         * @var array<string, string> $offer
+         */
+        // Add button based on ownership
+        $offer['button'] = MarketPlace::generateOfferButton($offer['ouid'], $offer['owner']);
+        $ret = $ret . new Offer($offer)->render('article', 'offer-card' . (AccountDB::ownsOffer($_SESSION['email'], (int)$offer['ouid']) ? ' own-offer' : '')). "\n";
+      }
+      $ret .= '</section>';
+
+      // Add "Load More" button if there are more offers
+      if ($totalOffers > $offset + $limit) {
+        $nextOffset = $offset + $limit;
+        $sortParam = $sort ? '&sort=' . urlencode($sort) : '';
+        $searchParam = isset($_GET['search-string']) ? '&search-string=' . urlencode($_GET['search-string']) : '';
+        $ret .= '<div class="load-more-container">';
+        $ret .= '<button class="load-more-btn" onclick="loadMoreOffers(' . $nextOffset . ', \'' . htmlspecialchars($sortParam . $searchParam, ENT_QUOTES) . '\')">Plus d\'offres ?</button>';
+        $ret .= '</div>';
+      }
+
+      return $ret;
+    }
+    return '<h1 class="description-text">There are no offers!</h1>';
+  }
 
   /**
    * @description Retrieves a specific offer by its unique identifier.
@@ -124,7 +210,7 @@ class TradeDB extends DataBase {
       $queryAddMoney->execute();
 
       $transactionQuery = $this->dbConn->prepare('
-                INSERT INTO transaction(email, ouid, amount, transaction_time) 
+                INSERT INTO transactions(email, ouid, amount, transaction_time) 
                 VALUES (:email, :ouid, :amount, :transaction_time)
             ');
       $transactionQuery->bindValue('email', $email);
@@ -177,7 +263,7 @@ class TradeDB extends DataBase {
   public function getBoughtOffers(string $email): array {
     $query = $this->dbConn->prepare(
       'SELECT o.ouid, owner, u.username as \'username\', o.title, o.description, o.price, o.deadline
-        FROM transaction t
+        FROM transactions t
         INNER JOIN offer o
         ON t.ouid = o.ouid
         JOIN user_ u
@@ -195,7 +281,7 @@ class TradeDB extends DataBase {
    */
   public function isOfferBought(int $ouid): bool {
     $query = $this->dbConn->prepare(
-      'SELECT COUNT(*) as count FROM transaction WHERE ouid = :ouid');
+      'SELECT COUNT(*) as count FROM transactions WHERE ouid = :ouid');
     $query->bindValue('ouid', $ouid);
     $query->execute();
     $result = $query->fetch(PDO::FETCH_ASSOC);

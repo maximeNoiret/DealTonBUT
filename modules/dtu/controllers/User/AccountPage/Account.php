@@ -66,8 +66,10 @@ class Account implements Controller
          * @var array<string, string> $offer
          */
         // Add button based on ownership
-        $offer['button'] = self::generateOfferButton($offer['ouid'], $offer['owner']);
-        $ret = $ret . (new Offer($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
+          $chatUrl = '/chat?ouid=' . $offer['ouid'] . '&email=' . urlencode($email);
+          $offer['button'] = '<a class="button-chat" href="' . $chatUrl . '">Contacter le vendeur</a>';
+
+          $ret = $ret . (new Offer($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
       }
       return $ret . '</section>';
     }
