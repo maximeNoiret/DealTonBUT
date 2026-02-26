@@ -2,6 +2,8 @@
 
 namespace core\views;
 
+use models\AccountDB;
+
 abstract class AbstractView {
   /**
    * @description Build a .html header for the pages
@@ -129,6 +131,7 @@ abstract class AbstractView {
         <div class="sidebar-content">
             <a class="sidebar-link" href="/marketplace">🛒 Voir les offres</a>
             <a class="sidebar-link" href="/offre">➕ Ajouter une offre</a>
+            '.$this->genAdminPanelButton().'
             <hr class="hr-navbar">
             <a class="sidebar-link" href="/messages">✉️ Accéder aux messages</a>
         </div>
@@ -158,6 +161,15 @@ abstract class AbstractView {
     <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>';
     }
 
+    // TODO: find a way to not access a model in a view, may be by putting the nav bar in a another class ?
+    function genAdminPanelButton(): string
+    {
+      if (!AccountDB::getInstance()->isAdmin($_SESSION['email'] ?? '')) {
+        return '';
+      }
+      return '<a class="sidebar-link" href="/admin">⚙️ Admin Panel</a>';
+    }
+    
   /**
    * @description Abstract method that contain the path to the corresponding .html
    * @return string

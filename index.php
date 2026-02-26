@@ -16,6 +16,7 @@ use controllers\Trade\SeeOffer\SeeOffer;
 use controllers\Trade\TradeSubjectPoint\TradeSubjectPoint;
 use controllers\User\AccountPage\Account;
 use controllers\User\AccountPage\DeleteAccount;
+use controllers\User\AdminPanel\AdminPanel;
 use controllers\User\Login\Login;
 use controllers\User\Login\LoginConfirm;
 use controllers\User\Login\Logout;
@@ -86,6 +87,7 @@ $controllers = [
   new ChatController(),
   new ListConversations(),
   new SeeOtherAccount(),
+  new AdminPanel(),
 
   // Forbidden
   new Env()
