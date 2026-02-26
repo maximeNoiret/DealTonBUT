@@ -4,6 +4,7 @@ namespace views\Trade\MarketPlace;
 
 use controllers\Trade\MarketPlace\MarketPlace;
 use core\views\AbstractView;
+use dtu\models\TradeDB;
 
 class MarketPlaceView extends AbstractView {
   /**
@@ -20,7 +21,7 @@ class MarketPlaceView extends AbstractView {
    */
     function templateValues(): array {
         $values = [
-            'OFFERS' => MarketPlace::getOffers(),
+            'OFFERS' => TradeDB::getOffers(),
             'POPUP'  => $this->getPopupHtml()
         ];
         return $values;
