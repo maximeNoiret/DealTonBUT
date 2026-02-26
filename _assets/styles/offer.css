@@ -146,3 +146,24 @@
 .button-buy:hover {
     background-color: #45a049;
 }
+
+.button-accept {
+    background-color: #79a8f3;
+    color: white;
+    font-family: ShareTechMono, monospace;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.button-accept:hover {
+    background-color: #6188ca;
+}
+
+
+

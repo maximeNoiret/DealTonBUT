@@ -1,4 +1,14 @@
 <form action="{ACTION_KEY}" method="post" class="container-form">
+
+    <p>*: Obligatoire</p>
+
+    <input type="checkbox" id="toggle" name="{TYPE_KEY}" class="toggleCheckbox" value="request"  />
+    <label for="toggle" class="toggleContainer">
+        <div>
+            Offre</div> <div>Demande</div>
+    </label>
+
+
     <aside class="container-un">
         <aside class="form-group">
             <label for="{NAME_KEY}">*Nom de l'offre:</label>
@@ -8,26 +18,40 @@
             <label for="{PRICE_KEY}">*Prix (DT₡):</label>
             <input type="number" step="any" name="{COUT_KEY}" placeholder="X.XX ₡" required class="input-class-price">
         </aside>
-        <div class="form-group">
+        <aside class="form-group">
             <label for="{DATE_KEY}">*Date limite:</label>
             <input type="date" name="{DATE_KEY}" required class="input-class-un">
-        </div>
+        </aside>
     </aside>
 
     <label for="{DESCRIPTION_KEY}">*Description:</label>
     <textarea name="{DESCRIPTION_KEY}" class="input-class" maxlength="300"></textarea>
 
-    <label for="tag-input">Tag:</label>
-    <div class="tag-submit-row">
-        <div class="tag-container">
-            <div class="tags-display" id="tags-display"></div>
-            <input type="text" id="tag-input" class="input-class-tag" placeholder="Appuyez sur Entrée pour ajouter un tag">
-        </div>
-        <input type="hidden" name="{TAG_KEY}" id="tags-hidden">
 
-        <input type="submit" value="Poster" class="btn-inscription">
-    </div>
-    <p>*: Obligatoire</p>
+    <aside class="container-un">
+    <aside>
+        <label for="tag-input">Tag:</label>
+        <div class="tag-submit-row">
+            <div class="tag-container">
+                <div class="tags-display" id="tags-display"></div>
+                <input type="text" id="tag-input" class="input-class-tag" placeholder="Entré pour ajouter un tag">
+            </div>
+        </div>
+    <input type="hidden" name="{TAG_KEY}" id="tags-hidden">
+    </aside>
+
+        <aside>
+            <label for="{QUANTITY_KEY}" class="label-quantite">*Quantité de l'offre:</label>
+            <input type="number" name="{QUANTITY_KEY}" required class="input-class-quantite">
+        </aside>
+    </aside>
+
+
+        <input type="submit" value="Poster" class="btn-creat">
+
+
+
+
 </form>
 
 <script>
