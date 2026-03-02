@@ -37,7 +37,7 @@ class MarketPlace implements Controller {
    * @param string $ownerEmail The email of the offer owner
    * @return string Returns the appropriate HTML button code based on offer ownership
    */
-  private static function generateOfferButton(int $offerId, string $ownerEmail): string {
+  public static function generateOfferButton(int $offerId, string $ownerEmail): string {
       if (isset($_SESSION['email']) && $_SESSION['email'] === $ownerEmail) {
           return '<a class="button-delete" href="/offre/delete?id=' . $offerId . '">Delete</a>';
       }

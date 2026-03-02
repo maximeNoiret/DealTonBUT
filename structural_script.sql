@@ -98,7 +98,6 @@ CREATE TABLE transactions(
    amount DECIMAL(8,2) NOT NULL,
    transaction_time DATETIME NOT NULL,
     id_conv INT NOT NULL,
-    PRIMARY KEY(email, ouid),
    FOREIGN KEY(email) REFERENCES user_(email) 
     ON DELETE CASCADE,
    FOREIGN KEY(ouid) REFERENCES offer(ouid) 

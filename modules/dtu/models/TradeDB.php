@@ -25,17 +25,14 @@ class TradeDB extends DataBase {
 
     //build the base query
     $query =
-              'SELECT DISTINCT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline
+              'SELECT DISTINCT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline, o.quantity
        FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email
        LEFT JOIN tags t 
        ON t.ouid = o.ouid
        WHERE deadline > NOW()
-       AND o.ouid NOT IN (
-            SELECT ouid
-            FROM transactions
-       )';
+       AND o.quantity > 0';
 
     $query = self::SortOffers($query);
 
