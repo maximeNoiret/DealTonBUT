@@ -2,6 +2,7 @@
 
     <p>*: Obligatoire</p>
 
+    <p>*type</p>
     <input type="checkbox" id="toggle" name="{TYPE_KEY}" class="toggleCheckbox" value="request"  />
     <label for="toggle" class="toggleContainer">
         <div>
@@ -9,42 +10,42 @@
     </label>
 
 
-    <aside class="container-un">
-        <aside class="form-group">
+    <section class="container-un">
+        <article class="form-group">
             <label for="{NAME_KEY}">*Nom de l'offre:</label>
             <input type="text" name="{NAME_KEY}" required class="input-class-un" maxlength="30">
-        </aside>
-        <aside class="form-group">
+        </article>
+        <article class="form-group">
             <label for="{PRICE_KEY}">*Prix (DT₡):</label>
             <input type="number" step="any" name="{COUT_KEY}" placeholder="X.XX ₡" required class="input-class-price">
-        </aside>
-        <aside class="form-group">
+        </article>
+        <article class="form-group">
             <label for="{DATE_KEY}">*Date limite:</label>
             <input type="date" name="{DATE_KEY}" required class="input-class-un">
-        </aside>
-    </aside>
+        </article>
+    </section>
 
     <label for="{DESCRIPTION_KEY}">*Description:</label>
     <textarea name="{DESCRIPTION_KEY}" class="input-class" maxlength="300"></textarea>
 
 
-    <aside class="container-un">
-    <aside>
+    <section class="container-un">
+    <article>
         <label for="tag-input">Tag:</label>
-        <div class="tag-submit-row">
-            <div class="tag-container">
-                <div class="tags-display" id="tags-display"></div>
+        <section class="tag-submit-row">
+            <article class="tag-container">
+                <article class="tags-display" id="tags-display"></article>
                 <input type="text" id="tag-input" class="input-class-tag" placeholder="Entré pour ajouter un tag">
-            </div>
-        </div>
+            </article>
+        </section>
     <input type="hidden" name="{TAG_KEY}" id="tags-hidden">
-    </aside>
+    </article>
 
-        <aside>
+        <article>
             <label for="{QUANTITY_KEY}" class="label-quantite">*Quantité de l'offre:</label>
             <input type="number" name="{QUANTITY_KEY}" required class="input-class-quantite">
-        </aside>
-    </aside>
+        </article>
+    </section>
 
 
         <input type="submit" value="Poster" class="btn-creat">
@@ -54,58 +55,4 @@
 
 </form>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const tagInput = document.getElementById('tag-input');
-        const tagsDisplay = document.getElementById('tags-display');
-        const tagsHidden = document.getElementById('tags-hidden');
-        let tags = [];
-
-        // Ajouter un tag quand on appuie sur Entrée
-        tagInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                const tagValue = tagInput.value.trim();
-                if (tagValue !== '' && !tags.includes(tagValue)) {
-                    tags.push(tagValue);
-                    addTagToDisplay(tagValue);
-                    updateHiddenInput();
-                    tagInput.value = '';
-                }
-            }
-        });
-
-        // Afficher un tag avec son bouton de suppression
-        function addTagToDisplay(tagText) {
-            const tagItem = document.createElement('div');
-            tagItem.className = 'tag-item';
-
-            const tagSpan = document.createElement('span');
-            tagSpan.textContent = tagText;
-
-            const removeBtn = document.createElement('button');
-            removeBtn.className = 'tag-remove';
-            removeBtn.innerHTML = '×';
-            removeBtn.type = 'button';
-            removeBtn.onclick = function() {
-                removeTag(tagText, tagItem);
-            };
-
-            tagItem.appendChild(tagSpan);
-            tagItem.appendChild(removeBtn);
-            tagsDisplay.appendChild(tagItem);
-        }
-
-        // Supprimer un tag
-        function removeTag(tagText, tagElement) {
-            tags = tags.filter(tag => tag !== tagText);
-            tagElement.remove();
-            updateHiddenInput();
-        }
-
-        // Mettre à jour le champ caché avec tous les tags
-        function updateHiddenInput() {
-            tagsHidden.value = tags.join(',');
-        }
-    });
-</script>
+<script src="/_assets/scripts/AddOffer.js"></script>
