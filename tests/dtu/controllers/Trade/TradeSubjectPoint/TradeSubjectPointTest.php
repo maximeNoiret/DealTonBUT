@@ -26,8 +26,8 @@ class TradeSubjectPointTest extends TestCase {
             ->method('getSubject')
             ->with($email)
             ->willReturn([
-                ['subject_name' => 'Math'],
-                ['subject_name' => 'Physics']
+                ['subject_name' => 'R Math'],
+                ['subject_name' => 'R Physics']
             ]);
 
         $dbMock->expects($this->exactly(2))
@@ -64,7 +64,7 @@ class TradeSubjectPointTest extends TestCase {
         $dbMock->expects($this->any())
             ->method('getSubject')
             ->with($email)
-            ->willReturn([['subject_name' => 'FromSub'], ['subject_name' => 'ToSub']]);
+            ->willReturn([['subject_name' => 'R FromSub'], ['subject_name' => 'R ToSub']]);
 
         $dbMock->expects($this->once())
             ->method('getPoints')
@@ -104,7 +104,7 @@ class TradeSubjectPointTest extends TestCase {
         $dbMock->expects($this->any())
             ->method('getSubject')
             ->with($email)
-            ->willReturn([['subject_name' => 'FromSub'], ['subject_name' => 'ToSub']]);
+            ->willReturn([['subject_name' => 'R FromSub'], ['subject_name' => 'R ToSub']]);
 
         $dbMock->expects($this->once())
             ->method('getPoints')
@@ -143,7 +143,7 @@ class TradeSubjectPointTest extends TestCase {
         $dbMock->expects($this->any())
             ->method('getSubject')
             ->with($email)
-            ->willReturn([['subject_name' => 'SameSub']]);
+            ->willReturn([['subject_name' => 'R SameSub']]);
 
         $this->mockStaticMethod(DataBase::class, 'getInstance', $dbMock);
 

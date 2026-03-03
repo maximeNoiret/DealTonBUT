@@ -106,10 +106,20 @@ class TradeSubjectPoint implements Controller {
                                     continue;
                                 }
                                 $subject = trim($parts[1]);
+
                                 // Only keep subjects that start with S or R followed by a digit
                                 if (!preg_match('/^[SR]\d/', $subject)) {
                                     continue;
                                 }
+                                // remove subjects that contain "Autonomie" or "Aide"
+                                if (preg_match('/\b(Autonomie|Aide|Soutien|Certification)\b/i', $subject)) {
+                                    continue;
+                                }
+
+                                // Truncate before TD, TP, Examen CM
+                                $subject = preg_replace('/\s*(TD|TP|Examen|CM|Oral|\()\b.*$/i', '', $subject);
+                                $subject = trim($subject);
+
                                 $subjects[] = $subject;
                             }
 

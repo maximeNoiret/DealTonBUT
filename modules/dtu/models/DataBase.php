@@ -6,7 +6,7 @@ use exceptions\AccountAlreadyExists;
 use exceptions\DatabaseNotInitiated;
 use PDO;
 
-class DataBase {
+class   DataBase {
   private PDO $dbConn;
 
   private static self $instance;
@@ -313,7 +313,7 @@ class DataBase {
   public function getBoughtOffers(string $email): array {
     $query = $this->dbConn->prepare(
       'SELECT o.ouid, owner, u.username as \'username\', o.title, o.description, o.price, o.deadline
-        FROM transaction t
+        FROM transactions t
         INNER JOIN offer o
         ON t.ouid = o.ouid
         JOIN user_ u

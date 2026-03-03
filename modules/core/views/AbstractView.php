@@ -129,8 +129,9 @@ abstract class AbstractView {
         <div class="sidebar-content">
             <a class="sidebar-link" href="/marketplace">🛒 Voir les offres</a>
             <a class="sidebar-link" href="/offre">➕ Ajouter une offre</a>
+            <hr class="hr-navbar">
+            <a class="sidebar-link" href="/messages">✉️ Accéder aux messages</a>
         </div>
-
         <div class="sidebar-footer">
             
             <div class="user-info-block">

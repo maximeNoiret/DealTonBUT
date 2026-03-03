@@ -1,0 +1,103 @@
+<section class="account-main">
+    <div class="user-data">
+        <div class="user-profile">
+            <img class="user-pp" src="/_assets/images/account_pp.webp" alt="Profile Picture">
+            <div class="user-name">
+                <p class="account-bigger-text"><strong>{USERNAME}</strong></p>
+                <p>{NAME}</p>
+            </div>
+        </div>
+        <div class="user-component">
+            <p class="account-bigger-text"><strong>{USERBALANCE} DT₡</strong></p>
+            <p>{EMAIL}</p>
+        </div>
+    </div>
+
+    <div class="account-offer">
+        <!--title-->
+        <section class = "tittle-offer-section">
+            <h2 class="section-title-offer">Ses offres</h2>
+
+            <h2 class="section-title-bought">Offre acheté</h2>
+        </section>
+        <!--offers-->
+        <section class="offer-section">
+            <section class="user-offer-section">
+                {USEROFFERS}
+            </section>
+            <section class="user-bought-offer-section">
+                {USERBOUGHTOFFERS}
+            </section>
+        </section>
+    </div>
+</section>
+
+<script>
+    // TODO : create a .js file, we a duplicate of the script in AccountPage.html here
+    document.addEventListener('DOMContentLoaded', function() {
+        const titleOffer = document.querySelector('.section-title-offer');
+        const titleBought = document.querySelector('.section-title-bought');
+        const offerSection = document.querySelector('.user-offer-section');
+        const boughtSection = document.querySelector('.user-bought-offer-section');
+
+        // Fonction pour afficher "Mes offres"
+        function showOffers() {
+            // Afficher/masquer les sections
+            offerSection.style.display = 'grid';
+            boughtSection.style.display = 'none';
+
+            // Mettre à jour les styles des titres
+            titleOffer.classList.add('active');
+            titleBought.classList.remove('active');
+        }
+
+        // Fonction pour afficher "Offres achetées"
+        function showBought() {
+            // Afficher/masquer les sections
+            offerSection.style.display = 'none';
+            boughtSection.style.display = 'grid';
+
+            // Mettre à jour les styles des titres
+            titleOffer.classList.remove('active');
+            titleBought.classList.add('active');
+        }
+
+        // Fonction pour gérer le mode (mobile/desktop)
+        function handleResize() {
+            if (window.innerWidth <= 768) {
+                // Mode mobile : activer le basculement
+                titleOffer.style.cursor = 'pointer';
+                titleBought.style.cursor = 'pointer';
+                showOffers(); // Initialiser avec "Mes offres"
+            } else {
+                // Mode desktop : afficher les deux sections
+                offerSection.style.display = 'grid';
+                boughtSection.style.display = 'grid';
+                titleOffer.classList.remove('active');
+                titleBought.classList.remove('active');
+                titleOffer.style.cursor = 'default';
+                titleBought.style.cursor = 'default';
+            }
+        }
+
+        // Ajouter les écouteurs d'événements
+        titleOffer.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                showOffers();
+            }
+        });
+
+        titleBought.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                showBought();
+            }
+        });
+
+        // Gérer le redimensionnement de la fenêtre
+        window.addEventListener('resize', handleResize);
+
+        // Initialiser
+        handleResize();
+    });
+</script>-->
+

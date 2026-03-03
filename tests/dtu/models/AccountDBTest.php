@@ -122,6 +122,13 @@ class AccountDBTest extends TestCase
     $this->assertEquals($this->testEmail01, $result);
   }
 
+  function testGetUserNameSuccessfully()
+  {
+    $this->accountDb->registerAccount($this->testUsername01,$this->testEmail01);
+    $result = $this->accountDb->getUserUsername($this->testEmail01);
+    $this->assertEquals($this->testUsername01, $result);
+  }
+
   public function tearDown(): void {
    $this->accountDb->deleteUser($this->testEmail01);
   }

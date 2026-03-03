@@ -198,9 +198,9 @@ class RegisterConfirmTest extends TestCase
         $viewMock->expects($this->once())
             ->method('render')
             ->with('Register - DealTonBUT', RegisterConfirm::STYLESHEET)
-            ->willReturn('<html>Error Message</html>');
+            ->willReturn('<html>Error ChatController</html>');
 
-        $this->expectOutputString('<html>Error Message</html>');
+        $this->expectOutputString('<html>Error ChatController</html>');
         echo $viewMock->render('Register - DealTonBUT', RegisterConfirm::STYLESHEET);
     }
 
