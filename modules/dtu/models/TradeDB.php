@@ -209,18 +209,20 @@ class TradeDB extends DataBase {
    * @param float $price The price of the offer.
    * @param string $description The description of the offer.
    * @param string $deadline The deadline for the offer in 'YYYY-MM-DD' format.
-   * @return void
+   * @param string $style The visual style of the offer card.
+   * @return int The unique identifier of the inserted offer.
    */
   public function insertOffre(
     string $userEmail,
     string $title,
     float $price,
     string $description,
-    string $deadline
+    string $deadline,
+    string $style = 'normal'
   ): int {
     $query = $this->dbConn->prepare('
-    INSERT INTO offer(owner, title, description, price, creation_time, deadline)
-    VALUES (:owner, :title, :description, :price, :creation_time, :deadline)
+    INSERT INTO offer(owner, title, description, price, creation_time, deadline, style)
+    VALUES (:owner, :title, :description, :price, :creation_time, :deadline, :style)
 ');
 
     $query->bindValue('owner', $userEmail);
@@ -229,6 +231,7 @@ class TradeDB extends DataBase {
     $query->bindValue('price', $price);
     $query->bindValue('creation_time', date('Y-m-d H:i:s'));
     $query->bindValue('deadline', $deadline . ' 23:59:59');
+    $query->bindValue('style', $style);
     $query->execute();
 
     return (int) $this->dbConn->lastInsertId();

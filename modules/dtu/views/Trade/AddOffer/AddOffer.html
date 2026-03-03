@@ -6,7 +6,11 @@
     <input type="checkbox" id="toggle" name="{TYPE_KEY}" class="toggleCheckbox" value="request"  />
     <label for="toggle" class="toggleContainer">
         <div>
-            Offre</div> <div>Demande</div>
+            Offre
+        </div>
+        <div>
+            Demande
+        </div>
     </label>
 
 
@@ -44,15 +48,23 @@
         <article>
             <label for="{QUANTITY_KEY}" class="label-quantite">*Quantité de l'offre:</label>
             <input type="number" name="{QUANTITY_KEY}" required class="input-class-quantite">
+
+            <label for="{STYLE_KEY}" class="label-style">Style de l'offre:</label>
+            <select name="{STYLE_KEY}" id="style-select" class="input-class-style">
+                <option value="normal" data-price="0">Par défaut — gratuit</option>
+                <option value="cat" data-price="2">Chat — +2 DT₡</option>
+                <option value="space" data-price="4">Espace — +4 DT₡</option>
+                <option value="amethyst" data-price="6">Améthyste — +6 DT₡</option>
+                <option value="bad-apple" data-price="10">??? — +10 DT₡</option>
+            </select>
         </article>
     </section>
 
 
-    <input type="submit" value="Poster" class="btn-creat">
-
-
-
-
+    <div class="submit-row">
+        <input type="submit" value="Poster" class="btn-create">
+        <span id="style-price-info" class="style-price-info"></span>
+    </div>
 </form>
 
 <script>
@@ -108,5 +120,24 @@
         function updateHiddenInput() {
             tagsHidden.value = tags.join(',');
         }
+
+        // Affichage du coût du style sélectionné
+        const styleSelect = document.getElementById('style-select');
+        const stylePriceInfo = document.getElementById('style-price-info');
+
+        function updateStylePrice() {
+            const selected = styleSelect.options[styleSelect.selectedIndex];
+            const price = parseInt(selected.getAttribute('data-price'), 10);
+            if (price > 0) {
+                stylePriceInfo.textContent = `+ ${price} DT₡ (style)`;
+                stylePriceInfo.classList.add('style-price-active');
+            } else {
+                stylePriceInfo.textContent = 'Style gratuit';
+                stylePriceInfo.classList.remove('style-price-active');
+            }
+        }
+
+        styleSelect.addEventListener('change', updateStylePrice);
+        updateStylePrice();
     });
 </script>

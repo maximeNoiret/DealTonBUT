@@ -33,7 +33,8 @@ class AddOfferView extends AbstractView{
             'COUT_KEY' => 'price',
             'DATE_KEY' => 'end_date',
             'DESCRIPTION_KEY' => 'description',
-            'TAG_KEY' => 'tag'
+            'TAG_KEY' => 'tag',
+            'STYLE_KEY' => 'style'
         ];
     }
 
