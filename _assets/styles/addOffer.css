@@ -251,7 +251,7 @@ textarea.input-class {
 }
 
 .input-class-style{
-    width: 65%;
+    width: fit-content;
     padding: 15px 20px;
     border: none;
     box-sizing: border-box;
@@ -260,7 +260,6 @@ textarea.input-class {
     font-family: ShareTechMono, monospace;
     background: white;
     margin-bottom: 50px;
-    margin-left: 30%;
 }
 @media (max-width: 768px) {
     .container-un {

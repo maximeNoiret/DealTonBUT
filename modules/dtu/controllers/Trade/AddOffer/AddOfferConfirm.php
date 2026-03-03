@@ -95,9 +95,9 @@ class AddOfferConfirm implements Controller
             (float)$price,
             $description,
             $end_date,
-            $style
             (int)$quantity,
-            $type
+            $type,
+            $style
         );
 
         if($ouid && !empty($tagsArray)) {

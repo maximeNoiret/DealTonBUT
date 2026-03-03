@@ -25,7 +25,7 @@ class TradeDB extends DataBase {
 
     //build the base query
     $query =
-              'SELECT DISTINCT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline, o.quantity
+              'SELECT DISTINCT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline, style, o.quantity
        FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email
@@ -104,11 +104,11 @@ class TradeDB extends DataBase {
     $offers = DataBase::getInstance()->executeQuery($query);
 
     // Count total offers for pagination
-    $countQuery = str_replace('SELECT DISTINCT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline', 'SELECT COUNT(*) as total', $query);
+    $countQuery = str_replace('SELECT DISTINCT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline, style', 'SELECT COUNT(*) as total', $query);
     $countResult = DataBase::getInstance()->executeQuery($countQuery);
     $totalOffers = $countResult ? (int)$countResult[0]['total'] : 0;
 
-    // create the html for the offers
+    // create the HTML for the offers
     if ($offers) {
       $ret = '<section class="offer-grid" id="offer-grid">' . "\n";
       foreach ($offers as $offer) {
@@ -117,7 +117,10 @@ class TradeDB extends DataBase {
          */
         // Add button based on ownership
         $offer['button'] = MarketPlace::generateOfferButton($offer['ouid'], $offer['owner']);
-        $ret = $ret . new Offer($offer)->render('article', 'offer-card' . (AccountDB::ownsOffer($_SESSION['email'], (int)$offer['ouid']) ? ' own-offer' : '')). "\n";
+          if ($offer['style'] === 'normal')
+              $ret = $ret . new Offer($offer)->render('article', 'offer-card' . (AccountDB::ownsOffer($_SESSION['email'], (int)$offer['ouid']) ? ' own-offer' : '')). "\n";
+          else
+              $ret = $ret . new Offer($offer)->render('article', 'offer-card' . (AccountDB::ownsOffer($_SESSION['email'], (int)$offer['ouid']) ? ' own-offer' : ' offer-card-' . $offer['style'] . '-theme')). "\n";
       }
       $ret .= '</section>';
 
@@ -338,8 +341,8 @@ class TradeDB extends DataBase {
     string $style = 'normal'
   ): int {
     $query = $this->dbConn->prepare('
-    INSERT INTO offer(owner, title, description, price, creation_time, deadline, style)
-    VALUES (:owner, :title, :description, :price, :creation_time, :deadline, :quantity, :type, :style)
+    INSERT INTO offer(owner, title, description, price, style, creation_time, deadline, quantity, type)
+    VALUES (:owner, :title, :description, :price, :style, :creation_time, :deadline, :quantity, :type)
 ');
 
     $query->bindValue('owner', $userEmail);

@@ -50,4 +50,28 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateHiddenInput() {
         tagsHidden.value = tags.join(',');
     }
+
+    // Mettre à jour le champ caché avec tous les tags
+    function updateHiddenInput() {
+        tagsHidden.value = tags.join(',');
+    }
+
+    // Affichage du coût du style sélectionné
+    const styleSelect = document.getElementById('style-select');
+    const stylePriceInfo = document.getElementById('style-price-info');
+
+    function updateStylePrice() {
+        const selected = styleSelect.options[styleSelect.selectedIndex];
+        const price = parseInt(selected.getAttribute('data-price'), 10);
+        if (price > 0) {
+            stylePriceInfo.textContent = `+ ${price} DT₡ (style)`;
+            stylePriceInfo.classList.add('style-price-active');
+        } else {
+            stylePriceInfo.textContent = 'Style gratuit';
+            stylePriceInfo.classList.remove('style-price-active');
+        }
+    }
+
+    styleSelect.addEventListener('change', updateStylePrice);
+    updateStylePrice();
 });
