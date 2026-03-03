@@ -443,4 +443,13 @@ class TradeDBTest extends TestCase
     $this->assertIsArray($result);
     $this->assertEmpty($result);
   }
+
+
+/*  public function testGetOffersNoSortNoSearch(): void {
+    $_GET = [];
+    $result = TradeDB::getOffers();
+    $this->assertIsString($result);
+    $this->assertStringContainsString('<section class="offer-grid">', $result);
+  }*/
+  //TODO: add tests for getOffers with different sort and search parameters
 }

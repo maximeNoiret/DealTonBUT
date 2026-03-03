@@ -1,38 +1,38 @@
-<div class="trade-subject-point-container">
+<main class="trade-subject-point-container">
     <h2>Échanger des points entre matières</h2>
     {FLASH}
     <form action="" method="post" class="trade-subject-point-form">
         <input class="hiddenInput" type="hidden" name="form_type" value="points_transfer">
-        <div class="form-group">
+        <section class="form-group">
             <label for="from_subject">Matière source</label>
             <select name="from_subject" id="from_subject" required>
                 <option value="">Veuillez sélectionner une matière</option>
                 {FROM_OPTIONS}
             </select>
-        </div>
+        </section>
 
-        <div class="form-group">
+        <section class="form-group">
             <label for="to_subject">Matière destination</label>
             <select name="to_subject" id="to_subject" required>
                 <option value="">Veuillez sélectionner une matière</option>
                 {TO_OPTIONS}
             </select>
-        </div>
+        </section>
 
-        <div class="form-group">
+        <section class="form-group">
             <label for="points">Nombre de points à transférer</label>
             <input type="number" name="points" id="points" min="0.01" step="0.01" required>
-        </div>
+        </section>
 
-        <div class="form-actions">
+        <section class="form-actions">
             <button type="submit" class="btn-submit">Échanger les points</button>
-        </div>
+        </section>
     </form>
 
-    <div class="info-message">
+    <section class="info-message">
         <p><strong>Note:</strong> Assurez-vous d'avoir suffisamment de points dans la matière source avant d'effectuer le transfert. <br></p>
         <p>Si vos matières n'apparaissent pas, veuillez les importer.</p>
-    </div>
+    </section>
     <br>
     <br>
     <form class="formIcs" method="POST" enctype="multipart/form-data">
@@ -45,4 +45,4 @@
         <button type="submit">Importer</button>
     </form>
 
-</div>
+</main>

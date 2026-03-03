@@ -6,7 +6,6 @@ use core\models\DataBase;
 use dtu\models\TradeDB;
 use exceptions\AccountAlreadyExists;
 use PDO;
-use views\Trade\SeeOtherAccount\SeeUserOfferView;
 
 class AccountDB extends DataBase {
 

@@ -31,6 +31,9 @@ class AddOfferConfirm implements Controller
         $end_date = $_POST['end_date'] ?? '';
         $description = $_POST['description'] ?? '';
         $style = $_POST['style'] ?? 'normal';
+        $quantity = $_POST['quantity'] ?? '';
+        $type = $_POST['type'] ? 'request' : 'offer';
+
         /**
          * @var string $tag
          */
@@ -46,8 +49,13 @@ class AddOfferConfirm implements Controller
             header('Location: /offre');
             return;
         }
-        if (!is_numeric($price) || $price <= 0 || $price > 999999) {
+        if (!is_numeric($price) || $price < 0 || $price > 999999) {
             header('Location: /offre');
+            return;
+        }
+        if(!is_numeric($quantity) || $quantity <= 0 || $quantity > 100) {
+            header('Location: /offre');
+            /*exit();*/
             return;
         }
         if (strtotime($end_date) === false || strtotime($end_date) <= time()) {
@@ -88,6 +96,8 @@ class AddOfferConfirm implements Controller
             $description,
             $end_date,
             $style
+            (int)$quantity,
+            $type
         );
 
         if($ouid && !empty($tagsArray)) {
