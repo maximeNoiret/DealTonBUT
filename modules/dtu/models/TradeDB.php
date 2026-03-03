@@ -146,7 +146,7 @@ class TradeDB extends DataBase {
     // return mixed, it raised a phpstan error. And so the method return
     // mixed
     $query = $this->dbConn->prepare(
-      'SELECT owner, u.username as \'username\', title, description, price, deadline,o.type
+      'SELECT owner, u.username as \'username\', title, description, price, deadline, style, o.type
        FROM offer o
        LEFT JOIN user_ u
        ON o.owner = u.email
@@ -324,20 +324,22 @@ class TradeDB extends DataBase {
    * @param string $deadline The deadline for the offer in 'YYYY-MM-DD' format.
    * @param int $quantity The quantity of items in the offer.
    * @param string $type The type of the offer (e.g., 'offer' or 'request').
+   * @param string $style The visual style of the offer card.
    * @return void
    */
-  public function insertOffre(
+  public function insertOffer(
     string $userEmail,
     string $title,
     float $price,
     string $description,
     string $deadline,
     int $quantity,
-    string $type
+    string $type,
+    string $style = 'normal'
   ): int {
     $query = $this->dbConn->prepare('
-    INSERT INTO offer(owner, title, description, price, creation_time, deadline, quantity, type)
-    VALUES (:owner, :title, :description, :price, :creation_time, :deadline, :quantity, :type)
+    INSERT INTO offer(owner, title, description, price, creation_time, deadline, style)
+    VALUES (:owner, :title, :description, :price, :creation_time, :deadline, :quantity, :type, :style)
 ');
 
     $query->bindValue('owner', $userEmail);
@@ -348,6 +350,7 @@ class TradeDB extends DataBase {
     $query->bindValue('deadline', $deadline . ' 23:59:59');
     $query->bindValue('quantity', $quantity);
     $query->bindvalue('type', $type);
+    $query->bindValue('style', $style);
     $query->execute();
 
     return (int) $this->dbConn->lastInsertId();

@@ -6,7 +6,11 @@
     <input type="checkbox" id="toggle" name="{TYPE_KEY}" class="toggleCheckbox" value="request"  />
     <label for="toggle" class="toggleContainer">
         <div>
-            Offre</div> <div>Demande</div>
+            Offre
+        </div>
+        <div>
+            Demande
+        </div>
     </label>
 
 
@@ -30,16 +34,38 @@
 
 
     <section class="container-un">
-    <article>
-        <label for="tag-input">Tag:</label>
-        <section class="tag-submit-row">
-            <article class="tag-container">
-                <article class="tags-display" id="tags-display"></article>
-                <input type="text" id="tag-input" class="input-class-tag" placeholder="Entré pour ajouter un tag">
-            </article>
-        </section>
-    <input type="hidden" name="{TAG_KEY}" id="tags-hidden">
-    </article>
+        <article>
+            <label for="tag-input">Tag:</label>
+            <section class="tag-submit-row">
+                <article class="tag-container">
+                    <article class="tags-display" id="tags-display"></article>
+                    <input type="text" id="tag-input" class="input-class-tag" placeholder="Entré pour ajouter un tag">
+                </article>
+            </section>
+            <input type="hidden" name="{TAG_KEY}" id="tags-hidden">
+        </article>
+
+        <article>
+            <label for="{QUANTITY_KEY}" class="label-quantite">*Quantité de l'offre:</label>
+            <input type="number" name="{QUANTITY_KEY}" required class="input-class-quantite">
+
+            <label for="{STYLE_KEY}" class="label-style">Style de l'offre:</label>
+            <select name="{STYLE_KEY}" id="style-select" class="input-class-style">
+                <option value="normal" data-price="0">Par défaut — gratuit</option>
+                <option value="cat" data-price="2">Chat — +2 DT₡</option>
+                <option value="space" data-price="4">Espace — +4 DT₡</option>
+                <option value="amethyst" data-price="6">Améthyste — +6 DT₡</option>
+                <option value="bad-apple" data-price="10">??? — +10 DT₡</option>
+            </select>
+        </article>
+    </section>
+
+
+    <div class="submit-row">
+        <input type="submit" value="Poster" class="btn-create">
+        <span id="style-price-info" class="style-price-info"></span>
+    </div>
+</form>
 
         <article>
             <label for="{QUANTITY_KEY}" class="label-quantite">*Quantité de l'offre:</label>

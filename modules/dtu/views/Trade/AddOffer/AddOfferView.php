@@ -36,6 +36,7 @@ class AddOfferView extends AbstractView{
             'TAG_KEY' => 'tag',
             'QUANTITY_KEY' => 'quantity',
             'TYPE_KEY' => 'type',
+            'STYLE_KEY' => 'style'
         ];
     }
 

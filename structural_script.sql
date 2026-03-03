@@ -1,13 +1,15 @@
+SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS transactions;
 DROP TABLE IF EXISTS points;
 DROP TABLE IF EXISTS tags;
+DROP TABLE IF EXISTS token;
+DROP TABLE IF EXISTS offer;
 DROP TABLE IF EXISTS subject;
 DROP TABLE IF EXISTS tag;
 DROP TABLE IF EXISTS message;
-DROP TABLE IF EXISTS token;
-DROP TABLE IF EXISTS offer;
 DROP TABLE IF EXISTS user_;
 DROP TABLE IF EXISTS conversation;
+SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE user_(
     email VARCHAR(70) PRIMARY KEY,
@@ -43,8 +45,9 @@ CREATE TABLE offer(
    price DECIMAL(8,2) NOT NULL,
    creation_time DATETIME NOT NULL,
    deadline DATETIME NOT NULL,
+   style ENUM('normal', 'amethyst', 'space', 'cat', 'bad-apple') default 'normal',
    quantity INT NOT NULL DEFAULT 1,
-    type enum('offer', 'request') NOT NULL,
+   type enum('offer', 'request') NOT NULL,
    FOREIGN KEY(owner) REFERENCES user_(email)
     ON DELETE CASCADE,
    CONSTRAINT CHK_OFFER_PRICE

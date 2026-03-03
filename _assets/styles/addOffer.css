@@ -189,7 +189,7 @@ textarea.input-class {
     min-height: 150px;
     margin-bottom: 20px;
 }
-.btn-creat {
+.btn-create {
     padding: 15px 40px;
     background: #333;
     color: white;
@@ -202,9 +202,29 @@ textarea.input-class {
     transition: all 0.3s ease;
     float: right;
 }
-.btn-creat:hover {
+.btn-create:hover {
     background: #555;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+.submit-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 10px;
+}
+.style-price-info {
+    font-family: ShareTechMono, monospace;
+    font-size: 15px;
+    color: #555;
+    padding: 8px 14px;
+    border-radius: 20px;
+    background: #eee;
+    transition: background 0.2s, color 0.2s;
+}
+.style-price-active {
+    background: #333;
+    color: #fff;
 }
 
 .input-class-quantite{
@@ -224,11 +244,29 @@ textarea.input-class {
     margin-left: 15%;
     margin-bottom: 40px;
 }
+
+.label-style {
+    margin-left: 15%;
+    margin-bottom: 40px;
+}
+
+.input-class-style{
+    width: 65%;
+    padding: 15px 20px;
+    border: none;
+    box-sizing: border-box;
+    font-size: 16px;
+    border-radius: 20px;
+    font-family: ShareTechMono, monospace;
+    background: white;
+    margin-bottom: 50px;
+    margin-left: 30%;
+}
 @media (max-width: 768px) {
     .container-un {
         grid-template-columns: 1fr;
     }
-    .btn-creat {
+    .btn-create {
         float: none;
         width: 100%;
     }
@@ -293,7 +331,7 @@ textarea.input-class {
         padding: 6px 10px;
     }
 
-    .btn-creat {
+    .btn-create {
         width: 100%;
         padding: 14px;
         font-size: 16px;
@@ -304,6 +342,10 @@ textarea.input-class {
     }
 
     .label-quantite{
+        margin-left: 50px;
+    }
+
+    .label-style {
         margin-left: 50px;
     }
 }
