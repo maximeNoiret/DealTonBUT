@@ -13,8 +13,11 @@ class TradeDB extends DataBase {
   protected static $instance;
 
   /**
-   * @description Show The offers in function of the sort parameter, show all offers by default
-   * @return string The HTML that contain the info of the offers
+   * @description Return the offers in function of the args given ( the args are MySQL operator), see MarketPlace->getOffers() for the used method
+   * @param string $orderBy Type of the sort (eg : COST ( order by the cost of the offer ))
+   * @param string $suffixe Supplementary information for the sort (eg : ASC ( Ascending order ))
+   * @return array<mixed> The list of offers
+   * @deprecated
    */
   public static function getOffers(): string {
     $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
@@ -22,17 +25,14 @@ class TradeDB extends DataBase {
 
     //build the base query
     $query =
-              'SELECT DISTINCT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline
+              'SELECT DISTINCT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline, o.quantity
        FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email
        LEFT JOIN tags t 
        ON t.ouid = o.ouid
        WHERE deadline > NOW()
-       AND o.ouid NOT IN (
-            SELECT ouid
-            FROM transactions
-       )';
+       AND o.quantity > 0';
 
     $query = self::SortOffers($query);
 
@@ -146,23 +146,25 @@ class TradeDB extends DataBase {
     // return mixed, it raised a phpstan error. And so the method return
     // mixed
     $query = $this->dbConn->prepare(
-      'SELECT owner, u.username as \'username\', title, description, price, deadline
+      'SELECT owner, u.username as \'username\', title, description, price, deadline,o.type
        FROM offer o
-       INNER JOIN user_ u
+       LEFT JOIN user_ u
        ON o.owner = u.email
        WHERE o.ouid = :ouid');
-    $query->bindValue('ouid', $ouid);
+
+      $query->bindValue('ouid', $ouid);
     $query->execute();
     return $query->fetch(PDO::FETCH_ASSOC);
   }
 
 
-  public function buyOffer(string $email, int $ouid): bool
+  public function buyOffer(string $email, int $ouid): string|bool
   {
     try {
       $this->dbConn->beginTransaction();
+
       $offerQuery = $this->dbConn->prepare('
-                SELECT owner, price, deadline 
+                SELECT owner, price, deadline, type, quantity 
                 FROM offer 
                 WHERE ouid = :ouid
             ');
@@ -171,7 +173,7 @@ class TradeDB extends DataBase {
       $offer = $offerQuery->fetch(PDO::FETCH_ASSOC);
 
       //Si l'offre n'existe pas
-      if (!$offer) {
+      if (!$offer|| !isset($offer['type'])) {
         $this->dbConn->rollBack();
         return false;
       }
@@ -185,19 +187,35 @@ class TradeDB extends DataBase {
         $this->dbConn->rollBack();
         return false;
       }
-      // Si l'utilisateur n'as pas assez de sous
-      $queryForBalance = AccountDB::getInstance()->getBalance($email);
-      if ($queryForBalance === false || $queryForBalance < $offer['price']) {
+
+      //si l'offre n'est plus disponible
+      if($offer['quantity'] <= 0) {
         $this->dbConn->rollBack();
         return false;
       }
+
+      if ($offer['type'] === 'offer') {
+        $buyerQuery = $email;
+        $sellerQuery = $offer['owner'];
+      } else {
+        $buyerQuery = $offer['owner'];
+        $sellerQuery = $email;
+      }
+
+        // Si l'utilisateur n'as pas assez de sous
+        $queryForBalance = AccountDB::getInstance()->getBalance($buyerQuery);
+        if ($queryForBalance === false || $queryForBalance < $offer['price']) {
+            $this->dbConn->rollBack();
+            return false;
+        }
+
       $queryRemoveMoney = $this->dbConn->prepare('
                 UPDATE user_
                 SET balance = balance - :price
                 WHERE email = :email'
       );
       $queryRemoveMoney->bindValue('price', $offer['price']);
-      $queryRemoveMoney->bindValue('email', $email);
+      $queryRemoveMoney->bindValue('email', $buyerQuery);
       $queryRemoveMoney->execute();
 
       $queryAddMoney = $this->dbConn->prepare('
@@ -206,7 +224,7 @@ class TradeDB extends DataBase {
                 WHERE email = :email
             ');
       $queryAddMoney->bindValue('price', $offer['price']);
-      $queryAddMoney->bindValue('email', $offer['owner']);
+      $queryAddMoney->bindValue('email', $sellerQuery);
       $queryAddMoney->execute();
 
       $transactionQuery = $this->dbConn->prepare('
@@ -219,8 +237,17 @@ class TradeDB extends DataBase {
       $transactionQuery->bindValue('transaction_time', date('Y-m-d H:i:s'));
       $transactionQuery->execute();
 
+        $queryQuantity = $this->dbConn->prepare('
+                update offer
+                set quantity = quantity - 1
+                where ouid = :ouid
+            ');
+        $queryQuantity->bindValue('ouid', $ouid);
+        $queryQuantity->execute();
+
       $this->dbConn->commit();
-      return true;
+
+        return true;
     } catch (\Exception $e) {
       $this->dbConn->rollBack();
       return false;
@@ -245,7 +272,7 @@ class TradeDB extends DataBase {
    */
   public function getUserOffers(string $email): array {
     $query = $this->dbConn->prepare(
-      'SELECT o.ouid, owner, u.username as \'username\', title, description, price, deadline
+      'SELECT o.ouid, owner, u.username as \'username\', title, description, price, deadline, o.type
        FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email
@@ -295,6 +322,8 @@ class TradeDB extends DataBase {
    * @param float $price The price of the offer.
    * @param string $description The description of the offer.
    * @param string $deadline The deadline for the offer in 'YYYY-MM-DD' format.
+   * @param int $quantity The quantity of items in the offer.
+   * @param string $type The type of the offer (e.g., 'offer' or 'request').
    * @return void
    */
   public function insertOffre(
@@ -302,11 +331,13 @@ class TradeDB extends DataBase {
     string $title,
     float $price,
     string $description,
-    string $deadline
+    string $deadline,
+    int $quantity,
+    string $type
   ): int {
     $query = $this->dbConn->prepare('
-    INSERT INTO offer(owner, title, description, price, creation_time, deadline)
-    VALUES (:owner, :title, :description, :price, :creation_time, :deadline)
+    INSERT INTO offer(owner, title, description, price, creation_time, deadline, quantity, type)
+    VALUES (:owner, :title, :description, :price, :creation_time, :deadline, :quantity, :type)
 ');
 
     $query->bindValue('owner', $userEmail);
@@ -315,10 +346,25 @@ class TradeDB extends DataBase {
     $query->bindValue('price', $price);
     $query->bindValue('creation_time', date('Y-m-d H:i:s'));
     $query->bindValue('deadline', $deadline . ' 23:59:59');
+    $query->bindValue('quantity', $quantity);
+    $query->bindvalue('type', $type);
     $query->execute();
 
     return (int) $this->dbConn->lastInsertId();
   }
+
+    public function hasBoughtOffer(int $ouid, string $email): bool {
+      $queryTransaction = $this->dbConn->prepare(
+          'SELECT *
+          FROM transactions t
+          WHERE t.ouid = :ouid AND t.email = :email'
+      );
+        $queryTransaction->bindValue('ouid', $ouid);
+        $queryTransaction->bindValue('email', $email);
+        $queryTransaction->execute();
+        $transaction = $queryTransaction->fetch(PDO::FETCH_ASSOC);
+        return $transaction !== false;
+    }
 
   /**
    * @description Inserts a tag and associates it with an offer.

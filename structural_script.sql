@@ -28,10 +28,6 @@ CREATE TABLE tag(
     tagname VARCHAR(50) PRIMARY KEY
 ) DEFAULT CHARSET=utf8;
 
-CREATE TABLE subject(
-    subject_name VARCHAR(50) PRIMARY KEY
-) DEFAULT CHARSET=utf8;
-
 CREATE TABLE token(
     token VARCHAR(32) PRIMARY KEY,
     email VARCHAR(70) NOT NULL,
@@ -40,26 +36,25 @@ CREATE TABLE token(
 ) DEFAULT CHARSET=utf8;
 
 CREATE TABLE offer(
-    ouid INT PRIMARY KEY AUTO_INCREMENT,
-    owner VARCHAR(70) NOT NULL,
-    title VARCHAR(50) NOT NULL,
-    description TEXT,
-    price DECIMAL(8,2) NOT NULL,
-    creation_time DATETIME NOT NULL,
-    deadline DATETIME NOT NULL,
-    FOREIGN KEY(owner) REFERENCES user_(email) ON DELETE CASCADE,
-    CONSTRAINT CHK_OFFER_PRICE CHECK (price >= 0),
-    CONSTRAINT CHK_OFFER_TIME CHECK (creation_time < deadline)
+   ouid INT PRIMARY KEY AUTO_INCREMENT,
+   owner VARCHAR(70) NOT NULL,
+   title VARCHAR(50) NOT NULL,
+   description TEXT,
+   price DECIMAL(8,2) NOT NULL,
+   creation_time DATETIME NOT NULL,
+   deadline DATETIME NOT NULL,
+   quantity INT NOT NULL DEFAULT 1,
+    type enum('offer', 'request') NOT NULL,
+   FOREIGN KEY(owner) REFERENCES user_(email)
+    ON DELETE CASCADE,
+   CONSTRAINT CHK_OFFER_PRICE
+    CHECK (price > 0),
+   CONSTRAINT CHK_OFFER_TIME
+    CHECK (creation_time < deadline)
 ) DEFAULT CHARSET=utf8;
 
-CREATE TABLE points(
-    email VARCHAR(70),
-    subject_name VARCHAR(50),
-    points DECIMAL(5,2),
-    PRIMARY KEY(email, subject_name),
-    FOREIGN KEY(email) REFERENCES user_(email) ON DELETE CASCADE,
-    FOREIGN KEY(subject_name) REFERENCES subject(subject_name) ON DELETE CASCADE,
-    CONSTRAINT CHK_POINTS_PTS CHECK (points >= 0)
+CREATE TABLE subject(
+   subject_name VARCHAR(50) PRIMARY KEY
 ) DEFAULT CHARSET=utf8;
 
 CREATE TABLE message(
@@ -74,24 +69,43 @@ CREATE TABLE message(
 ) DEFAULT CHARSET=utf8;
 
 CREATE TABLE tags(
-    ouid INT,
-    tagname VARCHAR(50),
-    PRIMARY KEY(ouid, tagname),
-    FOREIGN KEY(ouid) REFERENCES offer(ouid) ON DELETE CASCADE,
-    FOREIGN KEY(tagname) REFERENCES tag(tagname) ON DELETE CASCADE
+   ouid INT,
+   tagname VARCHAR(50),
+   PRIMARY KEY(ouid, tagname),
+   FOREIGN KEY(ouid) REFERENCES offer(ouid) 
+    ON DELETE CASCADE,
+   FOREIGN KEY(tagname) REFERENCES tag(tagname) 
+    ON DELETE CASCADE
+) DEFAULT CHARSET=utf8;
+
+CREATE TABLE points(
+   email VARCHAR(70),
+   subject_name VARCHAR(50),
+   points DECIMAL(5,2),
+   PRIMARY KEY(email, subject_name),
+   FOREIGN KEY(email) REFERENCES user_(email) 
+    ON DELETE CASCADE,
+   FOREIGN KEY(subject_name) REFERENCES subject(subject_name) 
+    ON DELETE CASCADE,
+   CONSTRAINT CHK_POINTS_PTS
+    CHECK (points >= 0)
 ) DEFAULT CHARSET=utf8;
 
 CREATE TABLE transactions(
-    email VARCHAR(70),
-    ouid INT,
-    amount DECIMAL(8,2) NOT NULL,
-    transaction_time DATETIME NOT NULL,
+    tid INT PRIMARY KEY AUTO_INCREMENT,
+   email VARCHAR(70),
+   ouid INT,
+   amount DECIMAL(8,2) NOT NULL,
+   transaction_time DATETIME NOT NULL,
     id_conv INT NOT NULL,
-    PRIMARY KEY(email, ouid),
-    FOREIGN KEY(email) REFERENCES user_(email) ON DELETE CASCADE,
-    FOREIGN KEY(ouid) REFERENCES offer(ouid) ON DELETE CASCADE,
-    FOREIGN KEY(id_conv) REFERENCES conversation(id_conv),
-    CONSTRAINT CHK_TRANSACTION_AMOUNT CHECK (amount >= 0)
+   FOREIGN KEY(email) REFERENCES user_(email) 
+    ON DELETE CASCADE,
+   FOREIGN KEY(ouid) REFERENCES offer(ouid) 
+    ON DELETE CASCADE,
+    FOREIGN KEY(id_conv)
+     REFERENCES conversation(id_conv),
+   CONSTRAINT CHK_TRANSACTION_AMOUNT
+    CHECK (amount >= 0)
 ) DEFAULT CHARSET=utf8;
 
 DELIMITER //
@@ -109,4 +123,3 @@ END; //
 DELIMITER ;
 
 SET NAMES utf8;
-
