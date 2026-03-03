@@ -212,7 +212,7 @@ class TradeDB extends DataBase {
    * @param string $style The visual style of the offer card.
    * @return int The unique identifier of the inserted offer.
    */
-  public function insertOffre(
+  public function insertOffer(
     string $userEmail,
     string $title,
     float $price,

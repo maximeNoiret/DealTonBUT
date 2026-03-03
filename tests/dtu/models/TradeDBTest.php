@@ -375,7 +375,7 @@ class TradeDBTest extends TestCase
       ->method('lastInsertId')
       ->willReturn((string) $expectedId);
 
-    $result = $this->tradeDB->insertOffre($userEmail, $title, $price, $description, $deadline);
+    $result = $this->tradeDB->insertOffer($userEmail, $title, $price, $description, $deadline);
 
     $this->assertEquals($expectedId, $result);
   }

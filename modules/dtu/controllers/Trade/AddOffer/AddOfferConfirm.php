@@ -81,7 +81,7 @@ class AddOfferConfirm implements Controller
             AccountDB::getInstance()->updateBalance($email);
         }
 
-        $ouid = TradeDB::getInstance()->insertOffre(
+        $ouid = TradeDB::getInstance()->insertOffer(
             $email,
             $title,
             (float)$price,

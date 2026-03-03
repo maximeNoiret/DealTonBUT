@@ -39,7 +39,7 @@ class MarketPlaceTest extends TestCase
     $price = '100';
     $end_date = '2077-12-31';
     $description = 'UNIT_TEST_DESC';
-    $this->dbTradeConn->insertOffre(
+    $this->dbTradeConn->insertOffer(
       $_SESSION['email'],
       $title,
       (float)$price,
