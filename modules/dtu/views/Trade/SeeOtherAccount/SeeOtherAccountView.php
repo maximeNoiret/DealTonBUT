@@ -6,6 +6,7 @@ use dtu\models\TradeDB;
 use controllers\User\AccountPage\Account;
 use models\AccountDB;
 use views\Trade\Offer\Offer;
+use views\User\AccountPage\AccountPageView;
 
 class SeeOtherAccountView extends AbstractView {
 
@@ -15,7 +16,8 @@ class SeeOtherAccountView extends AbstractView {
    */
   function path(): string
   {
-    return __DIR__ . DIRECTORY_SEPARATOR . 'SeeOtherAccountTemplate.html';
+    /*return __DIR__ . DIRECTORY_SEPARATOR . 'SeeOtherAccountTemplate.html';*/
+    return __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'User'.DIRECTORY_SEPARATOR.'AccountPage'.DIRECTORY_SEPARATOR.'AccountPage.html';
   }
 
   /**
