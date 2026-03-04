@@ -3,6 +3,7 @@
 namespace controllers\User\AdminPanel;
 
 use dtu\views\User\AdminPanel\AdminPanelView;
+use models\AccountDB;
 use views\User\AccountPage\AccountPageView;
 use views\User\LoginForm\LoginFormView;
 
@@ -20,9 +21,11 @@ class AdminPanel
   ];
 
   function control():void {
-    if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
+    // NOTE : the moment when the role of the user is written is in the LoginConfirm controller
+    if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true || !isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
       echo (new LoginFormView())->render("Login - DealTonBUT", self::STYLESHEET);
     } else {
+      var_dump($_SESSION);
       echo (new AdminPanelView())->render("Account - DealTonBUT", self::STYLESHEET);
     }
   }

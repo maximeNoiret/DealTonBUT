@@ -229,17 +229,6 @@ class AccountDB extends DataBase {
     return $result && $result['role'] != 'not-verified';
   }
 
-  public function isAdmin(string $email): bool {
-    $query = $this->dbConn->prepare('SELECT role FROM user_ WHERE email = :email');
-    $query->bindValue('email', $email);
-    $query->execute();
-    /**
-     * @var array<string, string>|false $result
-     */
-    $result = $query->fetch(PDO::FETCH_ASSOC);
-    return $result && $result['role'] == 'admin';
-  }
-
   /**
    * @description Retrieves the email associated with a given token.
    * @param string $token The token
@@ -259,7 +248,7 @@ class AccountDB extends DataBase {
    * @param $email string email address of the user
    * @return string The username associated with the given email.
    */
-  public function getUserUsername($email): string
+  public function getUserUsername(string $email): string
   {
     $query = $this->dbConn->prepare(
       'SELECT username FROM user_ WHERE email = :email');
@@ -267,6 +256,38 @@ class AccountDB extends DataBase {
     $query->execute();
     $res = $query->fetch();
     return $res['username'];
+  }
+
+  /**
+   * @description Retrieves the role of a user.
+   * @param string $email The email address of the user.
+   * @return string The role associated with the given email, or an empty string if not found.
+   */
+  public function getRole(string $email): string
+  {
+    $query = $this->dbConn->prepare('SELECT role FROM user_ WHERE email = :email');
+    $query->bindValue('email', $email);
+    $query->execute();
+    /**
+     * @var array<string, string>|false $result
+     */
+    $result = $query->fetch(PDO::FETCH_ASSOC);
+    return $result ? $result['role'] : '';
+  }
+
+  /**
+   * @description Checks if the user associated with the given email has an admin role.
+   * @param string $email The email address of the user.
+   * @return bool True if the user is an admin, false otherwise.
+   */
+  public function isAdmin(string $email): bool {
+    $role = $this->getRole($email);
+    if ($role === 'admin') {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 }
 

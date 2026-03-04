@@ -161,10 +161,9 @@ abstract class AbstractView {
     <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>';
     }
 
-    // TODO: find a way to not access a model in a view, may be by putting the nav bar in a another class ?
     function genAdminPanelButton(): string
     {
-      if (!AccountDB::getInstance()->isAdmin($_SESSION['email'] ?? '')) {
+      if ($_SESSION['role'] !== 'admin') {
         return '';
       }
       return '<a class="sidebar-link" href="/admin">⚙️ Admin Panel</a>';
