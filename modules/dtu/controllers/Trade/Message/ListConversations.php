@@ -11,7 +11,15 @@ use dtu\views\Trade\ListConversations\ListConversationsView;
 
 class ListConversations implements Controller {
 
+    /**
+     * @var string The path to access this page
+     */
     public const PATH = '/messages';
+
+    /**
+     * @description Store all the different stylesheet used
+     * @var array<string> STYLESHEET
+     */
 
     public const STYLESHEET = [
         '/_assets/styles/style.css',

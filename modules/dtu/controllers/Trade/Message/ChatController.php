@@ -12,7 +12,11 @@ use views\Trade\Chat\ChatView;
 
 class ChatController implements Controller
 {
+    /**
+     * @var string PATH : The path to access the chat page
+     */
     public const PATH = '/chat';
+
     /**
      * @description Store all the different stylesheet used
      * @var array<string> STYLESHEET
