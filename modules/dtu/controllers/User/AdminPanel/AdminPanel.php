@@ -17,15 +17,15 @@ class AdminPanel
     '/_assets/styles/Account.css',
     '/_assets/styles/style.css',
     '/_assets/styles/navbar.css',
-    '/_assets/styles/offer.css'
+    '/_assets/styles/offer.css',
+    '/_assets/styles/adminPanel.css'
   ];
 
   function control():void {
     // NOTE : the moment when the role of the user is written is in the LoginConfirm controller
-    if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true || !isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+    if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true || !AccountDB::getInstance()->isAdmin($_SESSION['email'])) {
       echo (new LoginFormView())->render("Login - DealTonBUT", self::STYLESHEET);
     } else {
-      var_dump($_SESSION);
       echo (new AdminPanelView())->render("Account - DealTonBUT", self::STYLESHEET);
     }
   }

@@ -1,0 +1,21 @@
+.admin-panel-container {
+    background: #D9D9D9;
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    max-width: 1400px;
+    margin: 2vh auto;
+    border-radius: 1.5rem;
+}
+
+.admin-panel-title {
+    text-align: center;
+}
+
+.admin-panel-option {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    padding: 2rem 0;
+}

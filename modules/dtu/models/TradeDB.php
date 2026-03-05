@@ -336,4 +336,26 @@ class TradeDB extends DataBase {
     $query2->bindValue('tagname', $tagname);
     $query2->execute();
   }
+
+  /**
+   * @description Return all the offer and their associated information
+   * @return array The offer and their associated information
+   */
+  public function getAllOffer(): array {
+    //TODO : adapte the output in a more user friendly format
+    $query = $this->dbConn->prepare('SELECT * FROM offer');
+    $query->execute();
+    return $query->fetchAll();
+  }
+
+  /**
+   * @description Return all the transaction and their associated information
+   * @return array The transaction and their associated information
+   */
+  public function getAllTransaction(): array {
+    //TODO : adapte the output in a more user friendly format
+    $query = $this->dbConn->prepare('SELECT * FROM transaction_');
+    $query->execute();
+    return $query->fetchAll();
+  }
 }

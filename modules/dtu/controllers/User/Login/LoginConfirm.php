@@ -24,6 +24,13 @@ class LoginConfirm implements Controller
       '/_assets/styles/navbar.css'
     ];
 
+  /**
+   * @description Validates user credentials and manages session state for login.
+   * This method retrieves the email and password from the POST request,
+   * validates them against the database, and if valid, sets the user's role in the session and redirects to the marketplace.
+   * If invalid, it renders the login form with an error message.
+   * @return void
+   */
     function control(): void
     {
         /**
@@ -39,11 +46,8 @@ class LoginConfirm implements Controller
 
         // if logged in
         if ($isValid) {
-            // write in $_SESSION if the user is an admin or a user
-            if (AccountDB::getInstance()->isAdmin($email))
-                $_SESSION['role'] = 'admin';
-            else
-              $_SESSION['role'] = 'user';
+            // write the role of the user in a $_SESSION variable
+            $_SESSION['role'] = AccountDB::getInstance()->getRole($email);
 
             header('Location: /marketplace');
         } else {

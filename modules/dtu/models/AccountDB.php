@@ -283,11 +283,23 @@ class AccountDB extends DataBase {
   public function isAdmin(string $email): bool {
     $role = $this->getRole($email);
     if ($role === 'admin') {
+
       return true;
     }
     else {
       return false;
     }
+  }
+
+  /**
+   * @description Return all the account and their associated information
+   * @return array The account and their associated information
+   */
+  public function getAllAccount(): array {
+    //TODO : adapte the output in a more user friendly format
+    $query = $this->dbConn->prepare('SELECT * FROM user_');
+    $query->execute();
+    return $query->fetchAll();
   }
 }
 
