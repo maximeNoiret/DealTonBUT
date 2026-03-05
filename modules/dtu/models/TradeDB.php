@@ -25,7 +25,7 @@ class TradeDB extends DataBase {
 
     //build the base query
     $query =
-              'SELECT DISTINCT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline, style, o.quantity
+              'SELECT DISTINCT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline, style, o.quantity, u.profile_picture
        FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email
@@ -104,7 +104,11 @@ class TradeDB extends DataBase {
     $offers = DataBase::getInstance()->executeQuery($query);
 
     // Count total offers for pagination
-    $countQuery = str_replace('SELECT DISTINCT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline, style', 'SELECT COUNT(*) as total', $query);
+    $countQuery = str_replace(
+        'SELECT DISTINCT o.ouid ,u.username as \'username\', u.profile_picture ,o.owner, title, description, price, deadline, style'
+        'SELECT COUNT(DISTINCT o.ouid) as total',
+        $query
+    );
     $countResult = DataBase::getInstance()->executeQuery($countQuery);
     $totalOffers = $countResult ? (int)$countResult[0]['total'] : 0;
 
@@ -149,7 +153,7 @@ class TradeDB extends DataBase {
     // return mixed, it raised a phpstan error. And so the method return
     // mixed
     $query = $this->dbConn->prepare(
-      'SELECT owner, u.username as \'username\', title, description, price, deadline, style, o.type
+      'SELECT owner, u.username as \'username\', title, description, price, deadline, style, o.type, u.profile_picture
        FROM offer o
        LEFT JOIN user_ u
        ON o.owner = u.email
@@ -275,7 +279,7 @@ class TradeDB extends DataBase {
    */
   public function getUserOffers(string $email): array {
     $query = $this->dbConn->prepare(
-      'SELECT o.ouid, owner, u.username as \'username\', title, description, price, deadline, o.type
+      'SELECT o.ouid, owner, u.username as \'username\', title, description, price, deadline, o.type, u.profile_picture
        FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email
@@ -292,7 +296,7 @@ class TradeDB extends DataBase {
    */
   public function getBoughtOffers(string $email): array {
     $query = $this->dbConn->prepare(
-      'SELECT o.ouid, owner, u.username as \'username\', o.title, o.description, o.price, o.deadline
+      'SELECT o.ouid, owner, u.username as \'username\', u.profile_picture, o.title, o.description, o.price, o.deadline
         FROM transactions t
         INNER JOIN offer o
         ON t.ouid = o.ouid

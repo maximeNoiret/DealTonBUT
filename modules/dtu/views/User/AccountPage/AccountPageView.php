@@ -27,14 +27,19 @@ class AccountPageView extends AbstractView
    */
   function templateValues(): array
   {
+      $photo = $_SESSION['profile_picture'] ?? 'account_pp.webp';
+      if (empty($photo)) {
+          $photo = 'account_pp.webp';
+      }
     return [
         'USERNAME' => $_SESSION['username'] ?? '',
         'EMAIL' => $_SESSION['email'] ?? '',
         'USEROFFERS' => Account::getUserOffers(),
         'USERBALANCE' => $_SESSION['balance'] ?? 0,
         'USERBOUGHTOFFERS' => Account::getUserBoughtOffers(),
-        'NAME' => \models\Account::getName()
-    ];
+        'NAME' => \models\Account::getName(),
+        'CURRENT_PHOTO' => $photo
+        ];
   }
 
   /**

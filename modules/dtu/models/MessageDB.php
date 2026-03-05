@@ -5,10 +5,22 @@ use PDO;
 
 use core\models\DataBase;
 
+/**
+ * @description Class MessageDB, used to manage the messages in the database
+ */
 class MessageDB extends DataBase {
 
     protected static $instance;
 
+    /**
+     * @description
+     * - Get the conversation id between a user and an offer, if it exists
+     * - If it doesn't exist, return null
+     * - This is used to know if the user has already started a conversation with the offer or not
+     * @param string $email User email
+     * @param int $ouid Offer unique Id
+     * @return int|null
+     */
     public function getConversationId(string $email, int $ouid): ?int
     {
         $query = $this->dbConn->prepare('SELECT id_conv 
@@ -21,6 +33,15 @@ class MessageDB extends DataBase {
         return $result ? (int)$result['id_conv'] : null;
     }
 
+    /**
+     * @description
+     * - Check if the user is allowed to chat in the conversation.
+     * - A user is allowed to chat if he is the buyer or the seller
+     *   of the offer associated to the conversation.
+     * @param string $userEmail User email
+     * @param int $id_conv Conversation id
+     * @return bool
+     */
     public function allowedToChat(string $userEmail, int $id_conv): bool
     {
         $query = $this->dbConn->prepare('SELECT COUNT(*) 
@@ -33,6 +54,14 @@ class MessageDB extends DataBase {
         $query->execute();
         return $query->fetchColumn() > 0;
     }
+
+    /**
+     * @description
+     * - Get all the messages of a conversation, with the username of the sender
+     *   and the date of the message.
+     * @param int $id_conv
+     * @return array<mixed>
+ */
     public function getMessagesByConversation(int $id_conv): array
     {
         $query = $this->dbConn->prepare('SELECT m.content, m.date_msg, m.email, u.username
@@ -44,6 +73,15 @@ class MessageDB extends DataBase {
         $query->execute();
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    /**
+     * @description
+     * - Add a message to the conversation, with the current date and time.
+     * @param int $id_conv Conversation id
+     * @param string $email User email of the sender
+     * @param string $content Content of the message
+     * @return array<mixed>
+     */
 
     public function addMessage(int $id_conv, string $email, string $content) : array {
         $query = $this->dbConn->prepare('INSERT INTO message (id_conv, email, content, date_msg) 
@@ -58,6 +96,14 @@ class MessageDB extends DataBase {
             'content' => $content,
         ];
     }
+
+    /**
+     * @description
+     * - Get all the conversations of a user, with the offer title
+     *  and the username of the buyer and the seller.
+     * @param string $email User email
+     * @return array<mixed>
+     */
     public function getUserConversations(string $email) : array {
         $query = $this->dbConn->prepare ('SELECT c.id_conv, t.ouid, t.email AS buyer_email, u_buyer.username AS buyer_name,
                                                 o.title AS offer_title, o.owner AS seller_email, u_seller.username AS seller_name

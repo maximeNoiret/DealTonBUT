@@ -16,6 +16,7 @@ use controllers\Trade\SeeOffer\SeeOffer;
 use controllers\Trade\TradeSubjectPoint\TradeSubjectPoint;
 use controllers\User\AccountPage\Account;
 use controllers\User\AccountPage\DeleteAccount;
+use controllers\User\AccountPage\ProfilPicture;
 use controllers\User\Login\Login;
 use controllers\User\Login\LoginConfirm;
 use controllers\User\Login\Logout;
@@ -43,6 +44,7 @@ include __DIR__ . '/_assets/includes/Autoloader.php';
 
 $path = $_SERVER['REQUEST_URI'];
 $meth = $_SERVER['REQUEST_METHOD'];
+$path = parse_url($path, PHP_URL_PATH);
 
 if (preg_match('/(\.env|\.git|\.htaccess|\.apkey|composer\.(json|lock)|php|\.sql|vendor)/', $path)) {
   http_response_code(403);
@@ -86,6 +88,7 @@ $controllers = [
   new ChatController(),
   new ListConversations(),
   new SeeOtherAccount(),
+  new ProfilPicture(),
 
   // Forbidden
   new Env()

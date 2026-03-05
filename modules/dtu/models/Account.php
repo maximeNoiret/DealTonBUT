@@ -69,6 +69,7 @@ class Account {
           $_SESSION['email'] = $account['email'] ?? '';
           $_SESSION['balance'] = $account['balance'] ?? 0;
           $_SESSION['logged-in'] = true;
+          $_SESSION['profile_picture'] = $account['profile_picture'] ?? 'account_pp.webp';
           return true;
       }
     return false;
