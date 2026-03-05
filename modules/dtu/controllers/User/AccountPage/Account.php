@@ -6,7 +6,6 @@ use core\controllers\Controller;
 use dtu\models\TradeDB;
 use models\AccountDB;
 use views\Trade\Offer\Offer;
-use views\Trade\SeeOtherAccount\SeeUserOfferView;
 use views\User\AccountPage\AccountPageView;
 use views\User\LoginForm\LoginFormView;
 
@@ -106,7 +105,7 @@ class Account implements Controller
          * @var array<string, string> $offer
          */
         $offer['button'] = self::generateOfferButton($offer['ouid'], $offer['owner']);
-        $ret = $ret . (new SeeUserOfferView($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
+        $ret = $ret . (new Offer($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
       }
       return $ret . '</section>';
     }
@@ -127,7 +126,7 @@ class Account implements Controller
         /**
          * @var array<string, string> $offer
          */
-        $ret = $ret . (new SeeUserOfferView($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
+        $ret = $ret . (new Offer($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
       }
       return $ret . '</section>';
     }
