@@ -3,6 +3,7 @@
 namespace controllers\User\Register;
 
 use core\controllers\Controller;
+use dtu\views\User\RegisterForm\RegisterFormPasswordView;
 use exceptions\AccountAlreadyExists;
 use models\AccountDB;
 
@@ -22,6 +23,11 @@ class RegisterVerifyConfirm implements Controller
      * @var array<string, string> $tempAccount
      */
     $db->setRole($tempAccount['email'], 'student');  // TODO: separate teachers and students from email format
+    $error = $this->validatePassword($_POST['password'] ?? '');
+    if ($error !== null) {
+         echo (new RegisterFormPasswordView()($error))->render("Register - DealTonBUT", Register::STYLESHEET);
+        return;
+    }
     $hashedPassword = password_hash($_POST['password'] ?? '', PASSWORD_BCRYPT);
     $db->updatePassword($tempAccount['email'], $hashedPassword);
     $_SESSION['username'] = $tempAccount['username'];
@@ -31,6 +37,23 @@ class RegisterVerifyConfirm implements Controller
 
     header('Location: /marketplace');
   }
+
+    private function validatePassword(string $password): ?string
+    {
+        if (strlen($password) < 12) {
+            return 'Le mot de passe doit contenir au moins 12 caractères.';
+        }
+        if (!preg_match('/[A-Z]/', $password)) {
+            return 'Le mot de passe doit contenir au moins une majuscule.';
+        }
+        if (!preg_match('/[0-9]/', $password)) {
+            return 'Le mot de passe doit contenir au moins un chiffre.';
+        }
+        if (!preg_match('/[^A-Za-z0-9]/', $password)) {
+            return 'Le mot de passe doit contenir au moins un caractère spécial.';
+        }
+        return null;
+    }
 
   static function resolve(string $path, string $meth): bool
   {
