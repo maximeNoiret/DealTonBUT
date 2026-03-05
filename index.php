@@ -17,6 +17,7 @@ use controllers\Trade\TradeSubjectPoint\TradeSubjectPoint;
 use controllers\User\AccountPage\Account;
 use controllers\User\AccountPage\DeleteAccount;
 use controllers\User\AccountPage\ProfilPicture;
+use controllers\User\AdminPanel\AdminPanel;
 use controllers\User\Login\Login;
 use controllers\User\Login\LoginConfirm;
 use controllers\User\Login\Logout;
@@ -89,6 +90,7 @@ $controllers = [
   new ListConversations(),
   new SeeOtherAccount(),
   new ProfilPicture(),
+  new AdminPanel(),
 
   // Forbidden
   new Env()

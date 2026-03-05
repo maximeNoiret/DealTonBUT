@@ -2,6 +2,8 @@
 
 namespace core\views;
 
+use models\AccountDB;
+
 abstract class AbstractView {
   /**
    * @description Build a .html header for the pages
@@ -129,6 +131,7 @@ abstract class AbstractView {
         <div class="sidebar-content">
             <a class="sidebar-link" href="/marketplace">🛒 Voir les offres</a>
             <a class="sidebar-link" href="/offre">➕ Ajouter une offre</a>
+            '.$this->genAdminPanelButton().'
             <hr class="hr-navbar">
             <a class="sidebar-link" href="/messages">✉️ Accéder aux messages</a>
         </div>
@@ -158,6 +161,19 @@ abstract class AbstractView {
     <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>';
     }
 
+  /**
+   * @description Generate the button to access the admin panel if the user is an admin, otherwise return an empty string
+   * @return string the html of the button to access the admin panel if the user is an admin, otherwise an empty string
+    * @note the role of the user is written in the $_SESSION in the LoginConfirm controller
+   */
+    function genAdminPanelButton(): string
+    {
+      if ($_SESSION['role'] !== 'admin') {
+        return '';
+      }
+      return '<a class="sidebar-link" href="/admin">⚙️ Admin Panel</a>';
+    }
+    
   /**
    * @description Abstract method that contain the path to the corresponding .html
    * @return string
