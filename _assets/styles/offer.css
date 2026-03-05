@@ -4,6 +4,7 @@
     gap: clamp(3rem, 2vw, 4rem);
     padding: 0.5rem;
 }
+/* Offer Card & Styles*/
 .offer-card {
     background: #BFBFBF;
     border: 2px solid #000;
@@ -14,7 +15,6 @@
     gap: 0.6rem;
     box-shadow: 0.125rem 0.125rem 0.3rem rgba(0,0,0,0.2);
     min-height: 310px;
-    color: #000;
     transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
 }
 .own-offer {
@@ -25,6 +25,27 @@
     box-shadow: 0.25rem 0.25rem 0.5rem rgba(0,0,0,0.3);
     transform: translateY(-0.1rem);
 }
+.offer-card-space-theme {
+    background: #2d6fc4 url("/_assets/images/offerTheme/space_background.jpg") no-repeat center center;
+    border: 2px solid #fff;
+    background-size: cover;
+}
+.offer-card-cat-theme {
+    background: #b39b8b url("/_assets/images/offerTheme/cat_background.jpg") no-repeat center center;
+    border: 2px solid #b39b8b;
+    background-size: cover;
+}
+.offer-card-amethyst-theme {
+    background: #6a0dad url("/_assets/images/offerTheme/amethyst_background.webp") no-repeat center center;
+    border: 2px solid #6a0dad;
+    background-size: cover;
+}
+.offer-card-bad-apple-theme {
+    background: #8B0000 url("/_assets/images/offerTheme/bad-apple.gif") no-repeat center center;
+    border: 2px solid #777777;
+    background-size: cover;
+}
+/* Offer Card Elements */
 .offer-header {
     display: flex;
     align-items: center;
@@ -44,14 +65,16 @@
     font-weight: bold;
     font-size: clamp(0.8rem, 1.2vw, 0.9rem);
     word-break: break-word;
-    color: #000;
+    filter: invert(1);
+    mix-blend-mode: difference;
 }
 .offer-title {
     font-size: clamp(1rem, 1.5vw, 1.2rem);
     font-weight: bold;
     margin: 0.3rem 0;
     word-wrap: break-word;
-    color: #000;
+    filter: invert(1);
+    mix-blend-mode: difference;
 }
 .offer-tags {
     display: flex;
@@ -62,21 +85,24 @@
 .tag {
     font-size: clamp(0.75rem, 1vw, 0.85rem);
     font-weight: bold;
-    color: #000;
+    filter: invert(1);
+    mix-blend-mode: difference;
 }
 .offer-description {
-    font-size: clamp(0.75rem, 1.1vw, 0.85rem);
-    line-height: 1.4;
+    font-size: 0.75rem;
+    line-height: 1.1;
     margin: 0.3rem 0;
     flex-grow: 1;
     word-wrap: break-word;
     overflow-wrap: break-word;
-    color: #000;
+    filter: invert(1);
+    mix-blend-mode: difference;
 }
 .offer-date {
     font-size: clamp(0.7rem, 1vw, 0.8rem);
     font-weight: bold;
-    color: #000;
+    filter: invert(1);
+    mix-blend-mode: difference;
     display: block;
     margin-top: 0.5rem;
     margin-bottom: 0.3rem;
@@ -96,7 +122,8 @@
     font-weight: bold;
     text-align: right;
     line-height: 1.2;
-    color: #000;
+    filter: invert(1);
+    mix-blend-mode: difference;
 }
 .offer-footer-compact {
     display: flex;
@@ -113,7 +140,7 @@
         font-size: 15px;
     }
 }
-
+/* Buttons */
 .button-delete {
     background-color: #ff4d4d;
     color: white;
@@ -137,6 +164,8 @@
     color: white;
     font-family: ShareTechMono, monospace;
     border: none;
+    margin-top: auto;
+    margin-bottom: auto;
     padding: 10px 20px;
     cursor: pointer;
     border-radius: 5px;
@@ -149,3 +178,24 @@
 .button-buy:hover {
     background-color: #45a049;
 }
+
+.button-accept {
+    background-color: #79a8f3;
+    color: white;
+    font-family: ShareTechMono, monospace;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.button-accept:hover {
+    background-color: #6188ca;
+}
+
+
+

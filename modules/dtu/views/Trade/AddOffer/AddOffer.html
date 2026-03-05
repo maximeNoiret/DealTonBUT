@@ -1,87 +1,70 @@
 <form action="{ACTION_KEY}" method="post" class="container-form">
-    <aside class="container-un">
-        <aside class="form-group">
+
+    <p>*: Obligatoire</p>
+
+    <p>*type</p>
+    <input type="checkbox" id="toggle" name="{TYPE_KEY}" class="toggleCheckbox" value="request"  />
+    <label for="toggle" class="toggleContainer">
+        <div>
+            Offre
+        </div>
+        <div>
+            Demande
+        </div>
+    </label>
+
+
+    <section class="container-un">
+        <article class="form-group">
             <label for="{NAME_KEY}">*Nom de l'offre:</label>
             <input type="text" name="{NAME_KEY}" required class="input-class-un" maxlength="30">
-        </aside>
-        <aside class="form-group">
+        </article>
+        <article class="form-group">
             <label for="{PRICE_KEY}">*Prix (DT₡):</label>
             <input type="number" step="any" name="{COUT_KEY}" placeholder="X.XX ₡" required class="input-class-price">
-        </aside>
-        <div class="form-group">
+        </article>
+        <article class="form-group">
             <label for="{DATE_KEY}">*Date limite:</label>
             <input type="date" name="{DATE_KEY}" required class="input-class-un">
-        </div>
-    </aside>
+        </article>
+    </section>
 
     <label for="{DESCRIPTION_KEY}">*Description:</label>
     <textarea name="{DESCRIPTION_KEY}" class="input-class" maxlength="300"></textarea>
 
-    <label for="tag-input">Tag:</label>
-    <div class="tag-submit-row">
-        <div class="tag-container">
-            <div class="tags-display" id="tags-display"></div>
-            <input type="text" id="tag-input" class="input-class-tag" placeholder="Appuyez sur Entrée pour ajouter un tag">
-        </div>
-        <input type="hidden" name="{TAG_KEY}" id="tags-hidden">
 
-        <input type="submit" value="Poster" class="btn-inscription">
+    <section class="container-un">
+        <article>
+            <label for="tag-input">Tag:</label>
+            <section class="tag-submit-row">
+                <article class="tag-container">
+                    <article class="tags-display" id="tags-display"></article>
+                    <input type="text" id="tag-input" class="input-class-tag" placeholder="Entré pour ajouter un tag">
+                </article>
+            </section>
+            <input type="hidden" name="{TAG_KEY}" id="tags-hidden">
+        </article>
+
+        <article>
+            <label for="{QUANTITY_KEY}" class="label-quantite">*Quantité de l'offre:</label>
+            <input type="number" name="{QUANTITY_KEY}" required class="input-class-quantite">
+
+            <label for="{STYLE_KEY}" class="label-style">Style de l'offre:</label>
+            <select name="{STYLE_KEY}" id="style-select" class="input-class-style">
+                <option value="normal" data-price="0">Par défaut — gratuit</option>
+                <option value="cat" data-price="2">Chat — +2 DT₡</option>
+                <option value="space" data-price="4">Espace — +4 DT₡</option>
+                <option value="amethyst" data-price="6">Améthyste — +6 DT₡</option>
+                <option value="bad-apple" data-price="10">??? — +10 DT₡</option>
+            </select>
+        </article>
+    </section>
+
+
+    <div class="submit-row">
+        <input type="submit" value="Poster" class="btn-create">
+        <span id="style-price-info" class="style-price-info"></span>
     </div>
-    <p>*: Obligatoire</p>
 </form>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const tagInput = document.getElementById('tag-input');
-        const tagsDisplay = document.getElementById('tags-display');
-        const tagsHidden = document.getElementById('tags-hidden');
-        let tags = [];
-
-        // Ajouter un tag quand on appuie sur Entrée
-        tagInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                const tagValue = tagInput.value.trim();
-                if (tagValue !== '' && !tags.includes(tagValue)) {
-                    tags.push(tagValue);
-                    addTagToDisplay(tagValue);
-                    updateHiddenInput();
-                    tagInput.value = '';
-                }
-            }
-        });
-
-        // Afficher un tag avec son bouton de suppression
-        function addTagToDisplay(tagText) {
-            const tagItem = document.createElement('div');
-            tagItem.className = 'tag-item';
-
-            const tagSpan = document.createElement('span');
-            tagSpan.textContent = tagText;
-
-            const removeBtn = document.createElement('button');
-            removeBtn.className = 'tag-remove';
-            removeBtn.innerHTML = '×';
-            removeBtn.type = 'button';
-            removeBtn.onclick = function() {
-                removeTag(tagText, tagItem);
-            };
-
-            tagItem.appendChild(tagSpan);
-            tagItem.appendChild(removeBtn);
-            tagsDisplay.appendChild(tagItem);
-        }
-
-        // Supprimer un tag
-        function removeTag(tagText, tagElement) {
-            tags = tags.filter(tag => tag !== tagText);
-            tagElement.remove();
-            updateHiddenInput();
-        }
-
-        // Mettre à jour le champ caché avec tous les tags
-        function updateHiddenInput() {
-            tagsHidden.value = tags.join(',');
-        }
-    });
-</script>
+<script src="/_assets/scripts/AddOffer.js"></script>

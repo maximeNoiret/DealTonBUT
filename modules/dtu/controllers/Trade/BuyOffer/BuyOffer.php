@@ -65,14 +65,19 @@ class BuyOffer implements Controller
             exit;
         }
 
+        //tu as déjà acheté cette offre
+        if (TradeDB::getInstance()->hasBoughtOffer($ouid, $_SESSION['email'])) {
+            $_SESSION['flash_error'] = "Tu as déjà acheté cette offre.";
+            header('Location: /marketplace');
+            exit;
+        }
+
         $success = TradeDB::getInstance()->buyOffer($_SESSION['email'], $ouid);
         if ($success) {
-            $_SESSION['flash_success'] = "Achat effectué !";
+            $_SESSION['flash_success'] = "Chat achété !";
         } else {
             $_SESSION['flash_error'] = "Erreur lors de la transaction BDD.";
         }
-        $email = trim($_SESSION['email']);
-        TradeDB::getInstance()->buyOffer($email, $ouid);
         header('Location: /marketplace');
         exit;
     }
