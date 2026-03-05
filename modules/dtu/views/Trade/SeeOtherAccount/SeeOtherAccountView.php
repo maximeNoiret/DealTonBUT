@@ -27,6 +27,7 @@ class SeeOtherAccountView extends AbstractView {
    */
   function templateValues(): array
   {
+
     return [
       'USERNAME' =>AccountDB::getInstance()->getUserUsername($_GET['email'] ?? ''),
       'EMAIL' => $_GET['email'] ?? '',
@@ -34,6 +35,7 @@ class SeeOtherAccountView extends AbstractView {
       'USERBALANCE' => AccountDB::getInstance()->getBalance($_GET['email'] ?? ''),
       'USERBOUGHTOFFERS' => Account::getOfferBoughtByOtherUser($_GET['email'] ?? ''),
       'NAME' => \models\Account::getName($_GET['email'] ?? ''),
+      'CURRENT_PHOTO' => AccountDB::getInstance()->getUserProfilePicture($_GET['email'] ?? '') ?? 'account_pp.webp'
     ];
   }
 

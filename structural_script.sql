@@ -15,6 +15,7 @@ CREATE TABLE user_(
     hashedpwd VARCHAR(100) NOT NULL DEFAULT 'not-verified',
     balance DECIMAL(8,2) NOT NULL DEFAULT 0.00,
     role VARCHAR(15) NOT NULL DEFAULT 'not-verified',
+    profile_picture VARCHAR(255) DEFAULT 'account_pp.webp',
     CONSTRAINT CHK_USER_EMAIL CHECK (email LIKE '%_@__%.__%'),
     CONSTRAINT CHK_USER_BAL CHECK (balance >= 0)
 ) DEFAULT CHARSET=utf8;

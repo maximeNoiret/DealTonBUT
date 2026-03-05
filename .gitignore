@@ -5,3 +5,5 @@ nohup.out
 .htaccess
 .apkey
 test/
+/vendor/
+.phpunit.cache/

@@ -78,7 +78,7 @@ class AccountDB extends DataBase {
    */
   public function getAccount(string $email, string $password): bool|array {
     $query = $this->dbConn->prepare('
-      SELECT username, email, hashedpwd, balance 
+      SELECT username, email, hashedpwd, balance, profile_picture
       FROM user_
       WHERE email = :email');
     $query->bindValue('email', $email);
@@ -99,7 +99,8 @@ class AccountDB extends DataBase {
         return [
             'username' => $user['username'],
             'email' => $user['email'],
-            'balance' => $user['balance']
+            'balance' => $user['balance'],
+            'profile_picture' => $user['profile_picture'],
         ];
     }
     return false;
@@ -256,6 +257,25 @@ class AccountDB extends DataBase {
     $query->execute();
     $res = $query->fetch();
     return $res['username'];
+  }
+
+  public function getUserProfilePicture(string $email): string
+  {
+      $query = $this->dbConn->prepare(
+          'SELECT profile_picture FROM user_ WHERE email = :email');
+      $query->bindValue('email', $email);
+      $query->execute();
+      $res = $query->fetch();
+      return $res['profile_picture'] ?? 'account_pp.webp';
+  }
+
+  public function updateProfilPicture(string $email, string $pictureName): bool
+  {
+      $query = $this->dbConn->prepare(
+          'UPDATE user_ SET profile_picture = :pictureName WHERE email = :email');
+      $query->bindValue('email', $email);
+      $query->bindValue('pictureName', $pictureName);
+      return $query->execute();
   }
 }
 

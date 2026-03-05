@@ -36,7 +36,10 @@
     height: clamp(35px, 4vw, 45px);
     object-fit: cover;
     flex-shrink: 0;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.2);
 }
+
 .offer-author {
     font-weight: bold;
     font-size: clamp(0.8rem, 1.2vw, 0.9rem);

@@ -1,42 +1,55 @@
 <section class="account-main">
     <div class="user-data">
         <div class="user-profile">
-            <img class="user-pp" src="/_assets/images/account_pp.webp" alt="Profile Picture">
+            <form action="/user/update-PDP" method="POST" enctype="multipart/form-data" id="photo-form">
+                <label for="file-input" class="profil-picture">
+                    <img src="/_assets/images/profil_picture/{CURRENT_PHOTO}" id="preview" alt="Photo de profil">
+                </label>
+                <input type="file" name="profile_picture" id="file-input" accept="image/*" style="display:none">
+            </form>
+
             <div class="user-name">
                 <p class="account-bigger-text"><strong>{USERNAME}</strong></p>
                 <p>{NAME}</p>
             </div>
         </div>
+
         <div class="user-component">
             <p class="account-bigger-text"><strong>{USERBALANCE} DT₡</strong></p>
             <p><a href="/trade/points">Besoins de DT₡?</a></p>
             <p>{EMAIL}</p>
         </div>
-    </div>
-
-    <div class="account-offer">
-        <!-- ligne titre -->
-        <section class = "tittle-offer-section">
-            <h2 class="section-title-offer">Mes offres</h2>
-
-            <h2 class="section-title-bought">Offre acheté</h2>
-        </section>
-
-        <!-- ligne affichage offre -->
-        <section class="offer-section">
-            <section class="user-offer-section">
-                {USEROFFERS}
-            </section>
-            <section class="user-bought-offer-section">
-                {USERBOUGHTOFFERS}
-            </section>
-        </section>
-    </div>
+    </div> <div class="account-offer">
+    <section class="tittle-offer-section">
+        <h2 class="section-title-offer">Mes offres</h2>
+        <h2 class="section-title-bought">Offre acheté</h2>
     </section>
 
+    <section class="offer-section">
+        <section class="user-offer-section">
+            {USEROFFERS}
+        </section>
+        <section class="user-bought-offer-section">
+            {USERBOUGHTOFFERS}
+        </section>
+    </section>
+</div>
+</section>
 <script>
     // Script pour gérer le basculement entre "Mes offres" et "Offres achetées" (mobile uniquement)
     document.addEventListener('DOMContentLoaded', function() {
+        const fileInput = document.getElementById('file-input');
+        const photoForm = document.getElementById('photo-form');
+
+        if (fileInput && photoForm) {
+            fileInput.addEventListener('change', function() {
+                if (this.files && this.files.length > 0) {
+                    // Si un fichier est sélectionné, on soumet le formulaire automatiquement
+                    photoForm.submit();
+                }
+            });
+        }
+
         const titleOffer = document.querySelector('.section-title-offer');
         const titleBought = document.querySelector('.section-title-bought');
         const offerSection = document.querySelector('.user-offer-section');
