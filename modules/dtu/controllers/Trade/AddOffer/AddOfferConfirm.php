@@ -18,10 +18,10 @@ class AddOfferConfirm implements Controller
     /** @var array<string, int> Prix en DT₡ à déduire du solde du créateur selon le style choisi */
     const array STYLE_PRICES = [
         'normal'    => 0,
-        'cat'       => 2,
-        'space'     => 4,
-        'amethyst'  => 6,
-        'bad-apple' => 10,
+        'cat'       => 0.1,
+        'space'     => 0.25,
+        'amethyst'  => 0.5,
+        'bad-apple' => 1,
     ];
 
     function control(): void

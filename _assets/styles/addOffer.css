@@ -348,3 +348,14 @@ textarea.input-class {
         margin-left: 50px;
     }
 }
+
+body.theme-rgb .text-theme{
+    animation: rgbColor 2s infinite;
+}
+
+@keyframes rgbColor {
+    0%   { color: rgb(255, 0, 0); }
+    33%  { color: rgb(0, 255, 0); }
+    66%  { color: rgb(0, 0, 255); }
+    100% { color: rgb(255, 0, 0); }
+}

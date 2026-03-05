@@ -57,9 +57,17 @@
     text-transform: capitalize;
 }
 
+body.theme-rgb .conv-title {
+    animation: rgbColor 2s infinite;
+}
+
 .conv-user {
     font-size: 0.9rem;
     color: #636e72;
+}
+
+body.theme-rgb .conv-user{
+    animation: rgbColor 2s infinite;
 }
 
 .conv-user strong {
@@ -75,4 +83,11 @@
 
 .conv-item:hover .arrow {
     color: #ff5e5e;
+}
+
+@keyframes rgbColor {
+    0%   { color: rgb(255, 0, 0); }
+    33%  { color: rgb(0, 255, 0); }
+    66%  { color: rgb(0, 0, 255); }
+    100% { color: rgb(255, 0, 0); }
 }

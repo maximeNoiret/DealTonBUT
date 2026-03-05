@@ -208,6 +208,21 @@ a .offer-card *,
     color: #333;
 }
 
+body.theme-rgb .account-bigger-text{
+    animation: rgbColor 2s infinite;
+}
+
+body.theme-rgb .section-title-offer, .section-title-bought{
+    animation: rgbColor 2s infinite;
+}
+
+@keyframes rgbColor {
+    0%   { color: rgb(255, 0, 0); }
+    33%  { color: rgb(0, 255, 0); }
+    66%  { color: rgb(0, 0, 255); }
+    100% { color: rgb(255, 0, 0); }
+}
+
 @media screen and (max-width: 768px) {
     .user-data {
         flex-direction: column;

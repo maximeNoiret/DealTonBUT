@@ -31,7 +31,6 @@ use controllers\User\Register\Register;
 use controllers\User\Register\RegisterConfirm;
 use controllers\Trade\Message\ChatController;
 use controllers\Trade\Message\ListConversations;
-
 use views\Forbidden;
 use views\NotFound;
 use models\AccountDB;
@@ -41,6 +40,9 @@ use controllers\Trade\SeeOtherAccount\SeeOtherAccount;
 
 include __DIR__ . '/_assets/includes/Autoloader.php';
 
+if (isset($_SESSION['email']) && isset($_SESSION['logged-in']) && $_SESSION['logged-in'] === true) {
+    $_SESSION['theme'] = \models\AccountDB::getInstance()->getTheme($_SESSION['email']) ?? $_SESSION['theme'] ?? 'normal';
+}
 
 $path = $_SERVER['REQUEST_URI'];
 $meth = $_SERVER['REQUEST_METHOD'];

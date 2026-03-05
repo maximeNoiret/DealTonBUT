@@ -26,6 +26,10 @@
     justify-content: space-between;
 }
 
+body.theme-rgb .chat-header {
+    animation: rgbColor 2s infinite;
+}
+
 .chat-header h2 {
     margin: 0;
     font-size: 1.1rem;
@@ -38,6 +42,10 @@
     font-weight: bold;
     font-size: 0.9rem;
     transition: transform 0.2s;
+}
+
+body.theme-rgb .back-btn {
+    animation: rgbColor 2s infinite;
 }
 
 .back-btn:hover {
@@ -165,4 +173,11 @@
     margin-top: 40px;
     font-style: italic;
     font-size: 0.9rem;
+}
+
+@keyframes rgbColor {
+    0%   { color: rgb(255, 0, 0); }
+    33%  { color: rgb(0, 255, 0); }
+    66%  { color: rgb(0, 0, 255); }
+    100% { color: rgb(255, 0, 0); }
 }
