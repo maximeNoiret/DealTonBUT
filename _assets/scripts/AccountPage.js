@@ -5,6 +5,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const offerSection = document.querySelector('.user-offer-section');
     const boughtSection = document.querySelector('.user-bought-offer-section');
 
+    const fileInput = document.getElementById('file-input');
+    const photoForm = document.getElementById('photo-form');
+
+    if (fileInput && photoForm) {
+        fileInput.addEventListener('change', function() {
+            if (this.files && this.files.length > 0) {
+                // Si un fichier est sélectionné, on soumet le formulaire automatiquement
+                photoForm.submit();
+            }
+        });
+    }
+
     // Fonction pour afficher "Mes offres"
     function showOffers() {
         // Afficher/masquer les sections

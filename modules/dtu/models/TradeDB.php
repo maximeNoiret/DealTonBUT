@@ -104,14 +104,9 @@ class TradeDB extends DataBase {
     $offers = DataBase::getInstance()->executeQuery($query);
 
     // Count total offers for pagination
-    $countQuery = str_replace(
-        'SELECT DISTINCT o.ouid ,u.username as \'username\', u.profile_picture ,o.owner, title, description, price, deadline, style'
-        'SELECT COUNT(DISTINCT o.ouid) as total',
-        $query
-    );
+    $countQuery = str_replace('SELECT DISTINCT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline', 'SELECT COUNT(*) as total', $query);
     $countResult = DataBase::getInstance()->executeQuery($countQuery);
     $totalOffers = $countResult ? (int)$countResult[0]['total'] : 0;
-
     // create the HTML for the offers
     if ($offers) {
       $ret = '<section class="offer-grid" id="offer-grid">' . "\n";
