@@ -1,6 +1,18 @@
 <section class="box">
     <h1>Paramètres du compte</h1>
     <p>Gérez vos informations personnelles et les paramètres de votre compte ici.</p>
+    <form method="POST" action="/user/settings">
+        <section class="form-group">
+        <label for="theme" class="label-style">Thème du site :</label>
+        <select name="theme" id="style-select" class="input-class-style">
+            <option value="normal">Par défaut</option>
+            <option value="cat">Chat</option>
+            <option value="space">Espace</option>
+            <option value="rgb">RGB</option>
+        </select>
+        <button type="submit" class="btn-save">Sauvegarder le thème</button>
+        </section>
+    </form>
     <p>En suprimant votre compte, Vous supprimer aussi tout votre presence sur notre base de donné (offre, achats, ...)</p>
     <form method="POST" action="/user/delete-account" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer définitivement votre compte ?');">
         <button type="submit" class="btn-delete">Supprimer mon compte</button>

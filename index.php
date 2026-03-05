@@ -25,6 +25,7 @@ use controllers\User\PasswordForgot\PasswordReset;
 use controllers\User\PasswordForgot\PasswordResetConfirm;
 use controllers\User\Register\RegisterVerify;
 use controllers\User\Register\RegisterVerifyConfirm;
+use controllers\User\Settings\SaveTheme;
 use controllers\User\Settings\Settings;
 use controllers\User\Register\Register;
 use controllers\User\Register\RegisterConfirm;
@@ -71,6 +72,7 @@ $controllers = [
   new MarketPlace(),
   new Account(),
   new Settings(),
+  new SaveTheme(),
   new MarketPlace(),
   new DeleteAccount(),
   new AddOffer(),

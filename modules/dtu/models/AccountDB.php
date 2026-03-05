@@ -256,6 +256,14 @@ class AccountDB extends DataBase {
     $res = $query->fetch();
     return $res['username'];
   }
+
+  public function setTheme(string $email, string $theme):void
+  {
+      $queryTheme = $this->dbConn->prepare('UPDATE user_ SET theme = :theme WHERE email = :email');
+        $queryTheme->bindValue('email', $email);
+        $queryTheme->bindValue('theme', $theme);
+        $queryTheme->execute();
+  }
 }
 
 
