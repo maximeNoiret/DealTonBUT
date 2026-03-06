@@ -5,17 +5,34 @@ document.addEventListener('DOMContentLoaded', function() {
     const offerSection = document.querySelector('.user-offer-section');
     const boughtSection = document.querySelector('.user-bought-offer-section');
 
+    // Gérer le changement de photo de profil
     const fileInput = document.getElementById('file-input');
     const photoForm = document.getElementById('photo-form');
 
     if (fileInput && photoForm) {
         fileInput.addEventListener('change', function() {
             if (this.files && this.files.length > 0) {
-                // Si un fichier est sélectionné, on soumet le formulaire automatiquement
                 photoForm.submit();
             }
         });
     }
+
+    // Gérer les notifications toast
+    const toast = document.getElementById('toast-notification');
+    const hasMessage = toast.querySelector('span');
+
+    if (hasMessage) {
+        setTimeout(() => {
+            toast.classList.add('show');
+        }, 300);
+
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 4000);
+    } else {
+        console.log("Aucun message flash à afficher.");
+    }
+
 
     // Fonction pour afficher "Mes offres"
     function showOffers() {

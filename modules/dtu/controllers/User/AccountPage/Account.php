@@ -148,7 +148,13 @@ class Account implements Controller
         if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
             echo (new LoginFormView())->render("Login - DealTonBUT", self::STYLESHEET);
         } else {
-            echo (new AccountPageView())->render("Account - DealTonBUT", self::STYLESHEET);
+            $flash = $_GET['error'] ?? null;
+            if(isset($_GET['success'])) {
+                $flash = 'update_success';
+            }
+            $view = new AccountPageView();
+            $view->setFlash($flash);
+            echo $view->render("Account - DealTonBUT", self::STYLESHEET);
         }
     }
 

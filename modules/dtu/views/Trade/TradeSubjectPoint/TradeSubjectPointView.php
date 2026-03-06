@@ -86,7 +86,7 @@ class TradeSubjectPointView extends AbstractView {
     /**
      * @description Method that give the title of the page.
      * @return string
-     */
+ */
     function navbarText(): string {
         return 'Échanger Points';
     }
