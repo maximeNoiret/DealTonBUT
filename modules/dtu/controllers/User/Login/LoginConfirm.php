@@ -6,6 +6,7 @@ use core\controllers\Controller;
 use exceptions\AccountAlreadyExists;
 use models\Account;
 /* note these are the old use : */
+use models\AccountDB;
 use views\User\LoginForm\LoginFormView;
 use views\Trade\MarketPlace\MarketPlaceView;
 
@@ -32,6 +33,8 @@ class LoginConfirm implements Controller
         $password = $_POST['password'] ?? '';
 
         $isValid = Account::validateCredentials($email, $password);
+
+        $_SESSION['theme'] = AccountDB::getInstance()->getTheme($_SESSION['email']) ?? 'normal';
 
         // if logged in
         if ($isValid) {

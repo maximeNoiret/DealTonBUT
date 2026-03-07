@@ -20,7 +20,9 @@ class SettingsPageView extends AbstractView
    */
   public function templateValues(): array
   {
-    return [];
+    return [
+        'STYLE_KEY' => 'theme'
+    ];
   }
 
   /**

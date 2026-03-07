@@ -34,6 +34,10 @@
     gap: 5px;
 }
 
+body.theme-rgb .sort-button {
+    animation: rgbColor 2s infinite;
+}
+
 .sort-button:hover {
     background: rgba(0, 0, 0, 0.1);
     border-radius: 5px;
@@ -63,6 +67,10 @@
     border-bottom: 1px solid #ddd;
     font-family: ShareTechMono, monospace;
     transition: background 0.2s;
+}
+
+body.theme-rgb .sort-option {
+    animation: rgbColor 2s infinite;
 }
 
 .sort-option:last-child {
@@ -175,4 +183,15 @@ a .offer-card *,
         max-width: 300px;
         margin: 0 auto;
     }
+}
+
+body.theme-rgb .rainbow{
+    animation: rgbColor 2s infinite;
+}
+
+@keyframes rgbColor {
+    0%   { color: rgb(255, 0, 0); }
+    33%  { color: rgb(0, 255, 0); }
+    66%  { color: rgb(0, 0, 255); }
+    100% { color: rgb(255, 0, 0); }
 }
