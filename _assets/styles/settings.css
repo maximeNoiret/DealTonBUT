@@ -14,6 +14,10 @@
     margin-top: 10%;
 }
 
+body.theme-space .box {
+    background: rgba(217, 217, 217, 0.5);
+}
+
 .form-group {
     width: 100%;
     margin-bottom: 15px;
@@ -74,6 +78,10 @@
 
 body.theme-rgb .rainbow{
     animation: rgbColor 2s infinite;
+}
+
+body.theme-space .rainbow {
+    color: #411d65;
 }
 
 @keyframes rgbColor {

@@ -7,6 +7,10 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
+body.theme-space .trade-subject-point-container {
+    background: rgba(217, 217, 217, 0.5);
+}
+
 
 .trade-subject-point-container h2 {
     text-align: center;
@@ -105,6 +109,10 @@ body.theme-rgb .success-text {
 
 body.theme-rgb .text-theme{
     animation: rgbColor 2s infinite;
+}
+
+body.theme-space .text-theme{
+    color: #411d65;
 }
 
 @media screen and (max-width: 768px) {

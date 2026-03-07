@@ -19,11 +19,8 @@ body {
 body.theme-normal {
     background-image: url("/_assets/images/background/background.webp");
 }
-body.theme-cat {
-    background-image: url("/_assets/images/background/bacgroundCat.webp");
-}
 body.theme-space {
-    background-image: url("/_assets/images/background/bacgroudSpace.gif");
+    background-image: url("/_assets/images/background/backgroundSpace.gif");
 }
 body.theme-rgb {
     background-image: url("/_assets/images/background/backgroudRGB.gif");

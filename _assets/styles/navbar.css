@@ -16,6 +16,10 @@
     border-bottom: 1px solid rgba(0,0,0,0.1);
 }
 
+body.theme-space .nav {
+    background-color: rgba(200, 200, 200, 0.5);
+}
+
 .nav-center h1 {
     font-size: 1.2rem;
     text-transform: uppercase;
@@ -100,6 +104,10 @@ body.theme-rgb .sidebar-link{
     animation: rgbColor 2s infinite;
 }
 
+body.theme-space .sidebar-link{
+    color: #411d65;
+}
+
 .sidebar-link:hover {
     background: #fff;
     transform: translate(-2px, -2px);
@@ -143,6 +151,10 @@ body.theme-rgb .username{
     animation: rgbColor 2s infinite;
 }
 
+body.theme-space .username{
+    color: #411d65;
+}
+
 .profile-link {
     font-size: 13px;
     color: #333;
@@ -152,8 +164,13 @@ body.theme-rgb .username{
     display: block;
     font-weight: bold;
 }
+
 body.theme-rgb .profile-link{
     animation: rgbColor 2s infinite;
+}
+
+body.theme-space .profile-link{
+    color: #411d65;
 }
 
 .profile-link:hover {
@@ -190,6 +207,10 @@ body.theme-rgb .balance-value{
     animation: rgbColor 2s infinite;
 }
 
+body.theme-space .balance-value{
+    color: #411d65;
+}
+
 .exchange-link {
     font-size: 12px;
     color: #2e7d32;
@@ -201,6 +222,10 @@ body.theme-rgb .balance-value{
 
 body.theme-rgb .exchange-link{
     animation: rgbColor 2s infinite;
+}
+
+body.theme-space .exchange-link{
+    color: #411d65;
 }
 
 .exchange-link:hover {
@@ -242,6 +267,10 @@ body.theme-rgb .exchange-link{
 
 body.theme-rgb .rainbow{
     animation: rgbColor 2s infinite;
+}
+
+body.theme-space .rainbow{
+    color: #411d65;
 }
 
 @keyframes rgbColor {

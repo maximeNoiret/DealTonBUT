@@ -38,6 +38,11 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
+body.theme-space .conv-item {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-color: #411d65;
+}
+
 .conv-item:hover {
     transform: translateX(8px);
     border-color: #ff5e5e;
@@ -61,6 +66,10 @@ body.theme-rgb .conv-title {
     animation: rgbColor 2s infinite;
 }
 
+body.theme-space .conv-title {
+    color: #411d65;
+}
+
 .conv-user {
     font-size: 0.9rem;
     color: #636e72;
@@ -68,6 +77,10 @@ body.theme-rgb .conv-title {
 
 body.theme-rgb .conv-user{
     animation: rgbColor 2s infinite;
+}
+
+body.theme-space .conv-user {
+    color: #411d65;
 }
 
 .conv-user strong {
