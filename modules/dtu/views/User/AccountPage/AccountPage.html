@@ -1,3 +1,6 @@
+<div id="toast-notification" class="toast-container">
+    {FLASH}
+</div>
 <section class="account-main">
     <div class="user-data">
         <div class="user-profile">
@@ -11,32 +14,30 @@
             <div class="user-name">
                 <p class="account-bigger-text"><strong>{USERNAME}</strong></p>
                 <p class="account-bigger-text">{NAME}</p>
-            </article>
-        </article>
+            </div>
+        </div>
 
-        <article class="user-component">
-                <p class="account-bigger-text">{NAME}</p>
-        </article>
-        <article class="user-component">
+        <div class="user-component">
             <p class="account-bigger-text"><strong>{USERBALANCE} DT₡</strong></p>
             <p><a href="/trade/points" class="account-bigger-text">Besoins de DT₡?</a></p>
             <p class="account-bigger-text">{EMAIL}</p>
-        </article>
-    </section>
-    <section class="account-offer">
-        <section class = "tittle-offer-section">
+        </div>
+    </div>
+    <div class="account-offer">
+        <section class="tittle-offer-section">
             <h2 class="section-title-offer">Mes offres</h2>
             <h2 class="section-title-bought">Offre acheté</h2>
         </section>
 
-    <section class="offer-section">
-        <section class="user-offer-section">
-            {USEROFFERS}
+        <section class="offer-section">
+            <section class="user-offer-section">
+                {USEROFFERS}
+            </section>
+            <section class="user-bought-offer-section">
+                {USERBOUGHTOFFERS}
+            </section>
         </section>
-        <section class="user-bought-offer-section">
-            {USERBOUGHTOFFERS}
-        </section>
-    </section>
-    </main>
-
+        </main>
+    </div>
+</section>
 <script src="/_assets/scripts/AccountPage.js"> </script>

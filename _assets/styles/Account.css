@@ -105,6 +105,10 @@ body.theme-space .account-main {
     border-radius: 1.5rem 1.5rem 0 0;
 }
 
+body.theme-space .user-data {
+    background: rgba(217, 217, 217, 0.5);
+}
+
 .user-profile {
     display: flex;
     align-items: center;

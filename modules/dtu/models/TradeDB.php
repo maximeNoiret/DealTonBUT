@@ -27,7 +27,7 @@ class TradeDB extends DataBase {
     $query =
               'SELECT DISTINCT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline, style, o.quantity, u.profile_picture
        FROM offer o
-       INNER JOIN user_ u
+       INNER JOIN user_ u 
        ON o.owner = u.email
        LEFT JOIN tags t 
        ON t.ouid = o.ouid
@@ -150,7 +150,7 @@ class TradeDB extends DataBase {
     $query = $this->dbConn->prepare(
       'SELECT owner, u.username as \'username\', title, description, price, deadline, style, o.type, u.profile_picture
        FROM offer o
-       LEFT JOIN user_ u
+       LEFT JOIN user_ u 
        ON o.owner = u.email
        WHERE o.ouid = :ouid');
 

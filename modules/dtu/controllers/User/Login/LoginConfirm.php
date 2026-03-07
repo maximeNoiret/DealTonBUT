@@ -34,7 +34,9 @@ class LoginConfirm implements Controller
 
         $isValid = Account::validateCredentials($email, $password);
 
-        $_SESSION['theme'] = AccountDB::getInstance()->getTheme($_SESSION['email']) ?? 'normal';
+        if (isset($_SESSION['email'])) {
+            $_SESSION['theme'] = AccountDB::getInstance()->getTheme($_SESSION['email']) ?? 'normal';
+        }
 
         // if logged in
         if ($isValid) {
