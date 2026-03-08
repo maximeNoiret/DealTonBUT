@@ -64,11 +64,14 @@ class TradeDB extends DataBase {
         $query.= " AND t.tagname LIKE '%" . $tagname . "%'";
       }
       else{
-        $query.= ' AND (title LIKE "%' . $searchString . '%"';
-        $query.= " OR description LIKE '%" . $searchString . "%')";
-      }
+        $query .= " AND (title LIKE '%$searchString%' 
+                    OR description LIKE '%$searchString%')";}
     }
+    $query .= " GROUP BY o.ouid";
     switch ($sort) {
+      case 'trending':
+        $query .= " ORDER BY COUNT(t.tagname) DESC, o.creation_time DESC";
+        break;
       case 'price-asc':
         $query .= " ORDER BY price ASC";
         break;
@@ -80,8 +83,6 @@ class TradeDB extends DataBase {
         break;
       case 'alphabetic':
         $query .= " ORDER BY title ASC";
-        break;
-      default:
         break;
     }
     return $query;
@@ -387,4 +388,20 @@ class TradeDB extends DataBase {
     $query2->bindValue('tagname', $tagname);
     $query2->execute();
   }
+
+  public function getTrendingOffers(): array {
+      $sql = "SELECT o.ouid, u.username, o.owner, o.title, o.description, o.price, o.deadline, o.style, o.quantity, u.profile_picture
+              FROM offer o
+              INNER JOIN user_ u ON o.owner = u.email
+              LEFT JOIN tags t ON t.ouid = o.ouid
+              WHERE o.deadline > NOW() 
+              AND o.quantity > 0
+              GROUP BY o.ouid
+              ORDER BY COUNT(t.tagname) DESC, o.creation_time DESC
+              LIMIT 5";
+
+        $query = $this->dbConn->prepare($sql);
+        $query->execute();
+        return $query->fetchAll(\PDO::FETCH_ASSOC);
+    }
 }
