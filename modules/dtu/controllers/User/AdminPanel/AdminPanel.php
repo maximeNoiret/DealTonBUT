@@ -27,6 +27,11 @@ class AdminPanel
       echo (new LoginFormView())->render("Login - DealTonBUT", self::STYLESHEET);
     } else {
       echo (new AdminPanelView())->render("Account - DealTonBUT", self::STYLESHEET);
+
+      if (isset($_GET['account']) && $_GET['delete'] === 'true' && isset($_GET['email']) && is_string($_GET['email'])) {
+        AccountDB::getInstance()->deleteUser($_GET['email']);
+        header('Location: /admin');
+      }
     }
   }
 

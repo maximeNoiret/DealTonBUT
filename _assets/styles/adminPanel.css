@@ -19,3 +19,43 @@
     gap: 2rem;
     padding: 2rem 0;
 }
+
+.manage-account-panel {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+}
+
+.account-manage {
+    background: #BFBFBF;
+    display: flex;
+    align-items: stretch;
+    flex-grow: 1;
+    border-right: 1px solid #8C8C8C;
+}
+
+.account-manage-element {
+    border-right: 1px solid #8C8C8C;
+    margin: 1rem;
+    padding-right: 1rem;
+}
+
+.account-manage:hover {
+    background: #fff;
+    transform: translate(-1.5px, -1.5px);
+    box-shadow: 7px 7px #ff5e5e;
+}
+
+/*  */
+.button-delete {
+    background-color: #ff4d4d;
+    color: white;
+    font-family: ShareTechMono, monospace;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    padding: 1rem;
+    /*text-decoration: none;*/
+    transition: background-color 0.2s ease-in-out;
+}

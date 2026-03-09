@@ -292,14 +292,43 @@ class AccountDB extends DataBase {
   }
 
   /**
-   * @description Return all the account and their associated information
-   * @return array The account and their associated information
+   * @description Return all the account and their associated information.
+   * @return array An array containing all the accounts, each account is
+   * represented as an associative array with keys corresponding to the database
+   * columns, the keys are email, username, hashed password, balance and role.
    */
   public function getAllAccount(): array {
-    //TODO : adapte the output in a more user friendly format
     $query = $this->dbConn->prepare('SELECT * FROM user_');
     $query->execute();
     return $query->fetchAll();
+  }
+
+  /**
+   * @description Return the html code to display all the accounts and their associated information.
+   * @param array $accounts An array containing all the accounts it is obtained by the getAllAccount().
+   * @return string The HTML code to display the email, role and balance of all
+   * the accounts, as well as a delete button for each account.
+   */
+  public function getAllAccountHtml(array $accounts): string {
+    //TODO : use the view AccountAdminPanelView instead of directly writing the html in this method
+    $html = '<section class ="manage-account-panel">'."\n";
+    foreach ($accounts as $account) {
+      $html .='<article class="account-manage">'."\n";
+      $html .='<p class="account-manage-element"><a href="/account/see?email='.$account['email'].'">'.$account['email'].'</a></p>'."\n";
+      $html .='<p class="account-manage-element">'.$account['role'].'</p>'."\n";
+      $html .='<p class="account-manage-element">'.$account['balance'].'</p>'."\n";
+
+//      $html .='<a class="button-delete">{DELETE}</a>'."\n";
+
+      $html .=
+            '<form method="POST" action="/admin$delete-account='.$account['email'].'"" onsubmit="return confirm(\'Êtes-vous sûr de vouloir supprimer définitivement votre compte ?\');">'
+            .'<button type="submit" class="button-delete">DELETE</button>'."\n".'</form>'."\n";
+
+      $html .='</article>'."\n";
+    }
+    $html .='</section>'."\n";
+
+    return $html;
   }
 }
 
