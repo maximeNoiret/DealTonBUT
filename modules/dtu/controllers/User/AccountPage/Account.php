@@ -136,6 +136,7 @@ class Account implements Controller
         /**
          * @var array<string, string> $offer
          */
+        $offer['button'] = self::generateOfferButton($offer['ouid'], $offer['owner']);
         $ret = $ret . (new Offer($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
       }
       return $ret . '</section>';
