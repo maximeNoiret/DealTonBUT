@@ -35,7 +35,7 @@ class ListConversationsView extends AbstractView {
     {
         $html = '';
         if(empty($this->conversations)){
-            $html = '<p> Vous n\'avez aucune discussion en cours.</p>';
+            $html = '<p class="description-text"> Vous n\'avez aucune discussion en cours.</p>';
         }
         else {
             foreach ($this->conversations as $c){

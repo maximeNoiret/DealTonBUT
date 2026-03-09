@@ -1,6 +1,9 @@
 <?php
 
 namespace core\views;
+use core\views\ThemeManager;
+
+use models\AccountDB;
 
 abstract class AbstractView {
   /**
@@ -18,6 +21,8 @@ abstract class AbstractView {
           $stylesheetsHtml .= '<link rel="stylesheet" type="text/css" href="' . $stylesheet . '">' . "\n";
 
       }
+
+      $themeClass = ThemeManager::getThemeClass();
     return '<!DOCTYPE html>
 <html>
   <head>
@@ -28,7 +33,7 @@ abstract class AbstractView {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     ' . $stylesheetsHtml . '
   </head>
-  <body>
+  <body class="'.$themeClass.'">
     <header>
     ' . $navbarHtml . '
     </header>
@@ -42,6 +47,9 @@ abstract class AbstractView {
    */
   public function body(): string {
     $body = file_get_contents($this->path());
+    if($body === false) {
+      throw new \Exception('Failed to read the template file: ' . $this->path());
+    }
     /**
      * @var string $value
      */
@@ -101,8 +109,8 @@ abstract class AbstractView {
    * @return string
    */
     function navbar(string $placeholder = ''): string {
-        $username = $_SESSION['username'] ?? 'NOM DE COMPTE';
-        $balance = $_SESSION['balance'] ?? 0.00;
+        $username = (string) ($_SESSION['username'] ?? 'NOM DE COMPTE');
+        $balance = (float) ($_SESSION['balance'] ?? 0.00);
         $firstLogin = !empty($_SESSION['first-login']);
         if ($firstLogin) {
             unset($_SESSION['first-login']);
@@ -114,7 +122,7 @@ abstract class AbstractView {
             <img class="overlay-nav" src="/_assets/images/overlayNavbar.webp" alt="Menu" onclick="openSidebar()">
         </div>
         <div class="nav-center">
-            <h1 class="page-title">' . htmlspecialchars($placeholder) . '</h1>
+            <h1 class="rainbow">' . htmlspecialchars($placeholder) . '</h1>
         </div>
         <div class="nav-right">
             <a href="/"><img class="logo-nav" src="/_assets/images/navbarLogo.webp" alt="Logo"></a>
@@ -129,6 +137,7 @@ abstract class AbstractView {
         <div class="sidebar-content">
             <a class="sidebar-link" href="/marketplace">🛒 Voir les offres</a>
             <a class="sidebar-link" href="/offre">➕ Ajouter une offre</a>
+            '.$this->genAdminPanelButton().'
             <hr class="hr-navbar">
             <a class="sidebar-link" href="/messages">✉️ Accéder aux messages</a>
         </div>
@@ -146,7 +155,7 @@ abstract class AbstractView {
                 </a>
             </div>
             <div class="balance-card">
-                <small>Mon solde</small>
+                <small class="rainbow">Mon solde</small>
                 <div class="balance-value">' . number_format($balance, 2, '.', '') . ' DT₡</div>
                 <a href="/trade/points" class="exchange-link">➔ ÉCHANGER MES POINTS</a>
             </div>
@@ -159,6 +168,19 @@ abstract class AbstractView {
     }
 
   /**
+   * @description Generate the button to access the admin panel if the user is an admin, otherwise return an empty string
+   * @return string the html of the button to access the admin panel if the user is an admin, otherwise an empty string
+    * @note the role of the user is written in the $_SESSION in the LoginConfirm controller
+   */
+    function genAdminPanelButton(): string
+    {
+        if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+        return '';
+      }
+      return '<a class="sidebar-link" href="/admin">⚙️ Admin Panel</a>';
+    }
+    
+  /**
    * @description Abstract method that contain the path to the corresponding .html
    * @return string
    */
@@ -166,7 +188,7 @@ abstract class AbstractView {
 
   /**
    * @description Abstract methode that define value for each keys in the associated .html file
-   * @return array<mixed> : The array that contain the real value that are associated by a key
+   * @return array<string, string> : The array that contain the real value that are associated by a key
    */
   abstract function templateValues(): array;
 

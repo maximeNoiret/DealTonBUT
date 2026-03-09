@@ -14,6 +14,55 @@
     margin-top: 10%;
 }
 
+body.theme-space .box {
+    background: rgba(217, 217, 217, 0.5);
+}
+
+.form-group {
+    width: 100%;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.label-style{
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.input-class-style{
+    width: 70%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+}
+
+.btn-save {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 12px 30px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 15px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.btn-save:hover {
+    background-color: #45a049;
+}
+
+
+
 .btn-delete{
     background-color: darkred;
     border: none;
@@ -26,3 +75,19 @@
     cursor: pointer;
     box-sizing: border-box;
 }
+
+body.theme-rgb .rainbow{
+    animation: rgbColor 2s infinite;
+}
+
+body.theme-space .rainbow {
+    color: #411d65;
+}
+
+@keyframes rgbColor {
+    0%   { color: rgb(255, 0, 0); }
+    33%  { color: rgb(0, 255, 0); }
+    66%  { color: rgb(0, 0, 255); }
+    100% { color: rgb(255, 0, 0); }
+}
+

@@ -27,7 +27,7 @@ class TradeDB extends DataBase {
     $query =
               'SELECT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline, style, o.quantity, u.profile_picture
        FROM offer o
-       INNER JOIN user_ u
+       INNER JOIN user_ u 
        ON o.owner = u.email
        LEFT JOIN tags t 
        ON t.ouid = o.ouid
@@ -130,10 +130,13 @@ class TradeDB extends DataBase {
          */
         // Add button based on ownership
         $offer['button'] = MarketPlace::generateOfferButton($offer['ouid'], $offer['owner']);
+        $isOwn = AccountDB::ownsOffer($_SESSION['email'], (int)$offer['ouid']);
+        $isTeacher = ($offer['role'] ?? '') === 'teacher';
+        $teacherClass = $isTeacher ? ' teacher-offer' : '';
           if ($offer['style'] === 'normal')
-              $ret = $ret . new Offer($offer)->render('article', 'offer-card' . (AccountDB::ownsOffer($_SESSION['email'], (int)$offer['ouid']) ? ' own-offer' : '')). "\n";
+              $ret = $ret . new Offer($offer)->render('article', 'offer-card' . ($isOwn ? ' own-offer' : '') . $teacherClass). "\n";
           else
-              $ret = $ret . new Offer($offer)->render('article', 'offer-card' . (AccountDB::ownsOffer($_SESSION['email'], (int)$offer['ouid']) ? ' own-offer' : ' offer-card-' . $offer['style'] . '-theme')). "\n";
+              $ret = $ret . new Offer($offer)->render('article', 'offer-card' . ($isOwn ? ' own-offer' : ' offer-card-' . $offer['style'] . '-theme') . $teacherClass). "\n";
       }
       $ret .= '</section>';
 
@@ -163,7 +166,7 @@ class TradeDB extends DataBase {
     $query = $this->dbConn->prepare(
       'SELECT owner, u.username as \'username\', title, description, price, deadline, style, o.type, u.profile_picture
        FROM offer o
-       LEFT JOIN user_ u
+       LEFT JOIN user_ u 
        ON o.owner = u.email
        WHERE o.ouid = :ouid');
 
@@ -179,9 +182,10 @@ class TradeDB extends DataBase {
       $this->dbConn->beginTransaction();
 
       $offerQuery = $this->dbConn->prepare('
-                SELECT owner, price, deadline, type, quantity 
-                FROM offer 
-                WHERE ouid = :ouid
+                SELECT o.owner, o.price, o.deadline, o.type, o.quantity, u.role as owner_role
+                FROM offer o
+                JOIN user_ u ON o.owner = u.email
+                WHERE o.ouid = :ouid
             ');
       $offerQuery->bindValue('ouid', $ouid);
       $offerQuery->execute();
@@ -209,38 +213,60 @@ class TradeDB extends DataBase {
         return false;
       }
 
+      // Récupérer le rôle de l'acheteur
+      $buyerRoleQuery = $this->dbConn->prepare('SELECT role FROM user_ WHERE email = :email');
+      $buyerRoleQuery->bindValue('email', $email);
+      $buyerRoleQuery->execute();
+      $buyerRoleRow = $buyerRoleQuery->fetch(PDO::FETCH_ASSOC);
+      $buyerRole = $buyerRoleRow ? $buyerRoleRow['role'] : 'student';
+
       if ($offer['type'] === 'offer') {
-        $buyerQuery = $email;
-        $sellerQuery = $offer['owner'];
+        // Offre classique : l'acheteur paye le vendeur
+        $buyerEmail  = $email;
+        $sellerEmail = $offer['owner'];
+        $buyerPays   = ($buyerRole !== 'teacher'); // teacher ne paye pas
+        $sellerGains = true;
       } else {
-        $buyerQuery = $offer['owner'];
-        $sellerQuery = $email;
+        // Demande : le créateur de la demande donne de la valeur au fulfiller (email)
+        // Le créateur (owner) ne dépense rien, le fulfiller (email) reçoit le prix
+        $buyerEmail  = $offer['owner']; // logiquement l'owner est le "payeur"
+        $sellerEmail = $email;          // le fulfiller reçoit
+        $buyerPays   = false;           // le créateur de la demande ne dépense pas
+        $sellerGains = true;            // le fulfiller reçoit le prix
       }
 
-        // Si l'utilisateur n'as pas assez de sous
-        $queryForBalance = AccountDB::getInstance()->getBalance($buyerQuery);
+      // Vérification de solde uniquement si l'acheteur doit vraiment payer
+      if ($buyerPays) {
+        $queryForBalance = AccountDB::getInstance()->getBalance($buyerEmail);
         if ($queryForBalance === false || $queryForBalance < $offer['price']) {
-            $this->dbConn->rollBack();
-            return false;
+          $this->dbConn->rollBack();
+          return false;
         }
+      }
 
-      $queryRemoveMoney = $this->dbConn->prepare('
+      // Déduire le montant du payeur si nécessaire
+      if ($buyerPays) {
+        $queryRemoveMoney = $this->dbConn->prepare('
                 UPDATE user_
                 SET balance = balance - :price
                 WHERE email = :email'
-      );
-      $queryRemoveMoney->bindValue('price', $offer['price']);
-      $queryRemoveMoney->bindValue('email', $buyerQuery);
-      $queryRemoveMoney->execute();
+        );
+        $queryRemoveMoney->bindValue('price', $offer['price']);
+        $queryRemoveMoney->bindValue('email', $buyerEmail);
+        $queryRemoveMoney->execute();
+      }
 
-      $queryAddMoney = $this->dbConn->prepare('
+      // Créditer le vendeur/fulfiller
+      if ($sellerGains) {
+        $queryAddMoney = $this->dbConn->prepare('
                 UPDATE user_ 
                 SET balance = balance + :price 
                 WHERE email = :email
             ');
-      $queryAddMoney->bindValue('price', $offer['price']);
-      $queryAddMoney->bindValue('email', $sellerQuery);
-      $queryAddMoney->execute();
+        $queryAddMoney->bindValue('price', $offer['price']);
+        $queryAddMoney->bindValue('email', $sellerEmail);
+        $queryAddMoney->execute();
+      }
 
       $transactionQuery = $this->dbConn->prepare('
                 INSERT INTO transactions(email, ouid, amount, transaction_time) 
@@ -399,5 +425,27 @@ class TradeDB extends DataBase {
     $query2->bindValue('ouid', $ouid);
     $query2->bindValue('tagname', $tagname);
     $query2->execute();
+  }
+
+  /**
+   * @description Return all the offer and their associated information
+   * @return array The offer and their associated information
+   */
+  public function getAllOffer(): array {
+    //TODO : adapte the output in a more user friendly format
+    $query = $this->dbConn->prepare('SELECT * FROM offer');
+    $query->execute();
+    return $query->fetchAll();
+  }
+
+  /**
+   * @description Return all the transaction and their associated information
+   * @return array The transaction and their associated information
+   */
+  public function getAllTransaction(): array {
+    //TODO : adapte the output in a more user friendly format
+    $query = $this->dbConn->prepare('SELECT * FROM transaction_');
+    $query->execute();
+    return $query->fetchAll();
   }
 }

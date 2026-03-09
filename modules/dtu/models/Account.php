@@ -70,6 +70,7 @@ class Account {
           $_SESSION['balance'] = $account['balance'] ?? 0;
           $_SESSION['logged-in'] = true;
           $_SESSION['profile_picture'] = $account['profile_picture'] ?? 'account_pp.webp';
+          $_SESSION['role'] = $account['role'] ?? 'student';
           return true;
       }
     return false;

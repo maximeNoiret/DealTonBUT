@@ -9,7 +9,7 @@ class AddOfferView extends AbstractView{
    * @description Constructor of the class
    * @param string $offresHtml :
    */
-    public function __construct(private string $offresHtml)
+    public function __construct(private string $offresHtml, private string $role = 'student', private string $error = '')
     {
     }
 
@@ -36,7 +36,11 @@ class AddOfferView extends AbstractView{
             'TAG_KEY' => 'tag',
             'QUANTITY_KEY' => 'quantity',
             'TYPE_KEY' => 'type',
-            'STYLE_KEY' => 'style'
+            'STYLE_KEY' => 'style',
+            'TYPE_SECTION' => $this->role === 'teacher' ? 'style="display:none;"' : '',
+            'ERROR' => !empty($this->error)
+                ? '<div class="form-error"><span class="form-error-icon">⚠</span>' . htmlspecialchars($this->error) . '</div>'
+                : '',
         ];
     }
 

@@ -77,7 +77,7 @@ class AccountDB extends DataBase {
    */
   public function getAccount(string $email, string $password): bool|array {
     $query = $this->dbConn->prepare('
-      SELECT username, email, hashedpwd, balance, profile_picture
+      SELECT username, email, hashedpwd, balance, profile_picture, role
       FROM user_
       WHERE email = :email');
     $query->bindValue('email', $email);
@@ -100,6 +100,7 @@ class AccountDB extends DataBase {
             'email' => $user['email'],
             'balance' => $user['balance'],
             'profile_picture' => $user['profile_picture'],
+            'role' => $user['role'],
         ];
     }
     return false;
@@ -248,7 +249,7 @@ class AccountDB extends DataBase {
    * @param $email string email address of the user
    * @return string The username associated with the given email.
    */
-  public function getUserUsername($email): string
+  public function getUserUsername(string $email): string
   {
     $query = $this->dbConn->prepare(
       'SELECT username FROM user_ WHERE email = :email');
@@ -276,6 +277,66 @@ class AccountDB extends DataBase {
       $query->bindValue('pictureName', $pictureName);
       return $query->execute();
   }
+
+  /**
+   * @description Retrieves the role of a user.
+   * @param string $email The email address of the user.
+   * @return string The role associated with the given email, or an empty string if not found.
+   */
+  public function getRole(string $email): string
+  {
+    $query = $this->dbConn->prepare('SELECT role FROM user_ WHERE email = :email');
+    $query->bindValue('email', $email);
+    $query->execute();
+    /**
+     * @var array<string, string>|false $result
+     */
+    $result = $query->fetch(PDO::FETCH_ASSOC);
+    return $result ? $result['role'] : '';
+  }
+
+  /**
+   * @description Checks if the user associated with the given email has an admin role.
+   * @param string $email The email address of the user.
+   * @return bool True if the user is an admin, false otherwise.
+   */
+  public function isAdmin(string $email): bool {
+    $role = $this->getRole($email);
+    if ($role === 'admin') {
+
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  /**
+   * @description Return all the account and their associated information
+   * @return array The account and their associated information
+   */
+  public function getAllAccount(): array {
+    //TODO : adapte the output in a more user friendly format
+    $query = $this->dbConn->prepare('SELECT * FROM user_');
+    $query->execute();
+    return $query->fetchAll();
+  }
+  
+  public function getTheme(string $email): ?string
+    {
+        $query = $this->dbConn->prepare('SELECT theme FROM user_ WHERE email = :email');
+        $query->bindValue('email', $email);
+        $query->execute();
+        return $query->fetchColumn() ?: null;
+    }
+
+  public function setTheme(string $email, string $theme):void
+    {
+        $queryTheme = $this->dbConn->prepare('UPDATE user_ SET theme = :theme WHERE email = :email');
+        $queryTheme->bindValue('email', $email);
+        $queryTheme->bindValue('theme', $theme);
+        $queryTheme->execute();
+    }
 }
 
 

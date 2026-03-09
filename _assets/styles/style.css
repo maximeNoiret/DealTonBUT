@@ -4,7 +4,6 @@
 }
 
 body {
-    background-image: url("/_assets/images/background.webp");
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center;
@@ -16,6 +15,17 @@ body {
     display: flex;
     flex-direction: column;
 }
+
+body.theme-normal {
+    background-image: url("/_assets/images/background/background.webp");
+}
+body.theme-space {
+    background-image: url("/_assets/images/background/backgroundSpace.gif");
+}
+body.theme-rgb {
+    background-image: url("/_assets/images/background/backgroudRGB.gif");
+}
+
 
 main {
     flex: 1;
@@ -72,4 +82,10 @@ main {
 .footer-copyright {
     color: rgba(180, 180, 180, 0.8);
     font-size: 12px;
+}
+
+.description-text {
+    filter: invert(1);
+    mix-blend-mode: difference;
+    text-align: center;
 }

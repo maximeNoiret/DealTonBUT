@@ -41,10 +41,11 @@ class ListConversations implements Controller {
             return;
         }
 
-        $conversations = MessageDB::getInstance()->getUserConversations($_SESSION['email']);
+        $email = is_string($_SESSION['email'] ?? null) ? $_SESSION['email'] : '';
+        $conversations = MessageDB::getInstance()->getUserConversations($email);
         // Affichage de la vue avec les conversations
         $view  = new ListConversationsView();
-        $view->setData($conversations, $_SESSION['email']);
+        $view->setData($conversations, $email);
         echo $view->render("Mes Messages - DealTonBUT", static::STYLESHEET);
     }
 

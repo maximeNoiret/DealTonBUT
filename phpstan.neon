@@ -1,5 +1,8 @@
 parameters:
-	level: 10
-	paths:
-		- modules/dtu
-	phpVersion: 80300
+    level: 10
+    paths:
+        - modules/dtu
+        - modules/core
+    scanDirectories:
+        - _assets/includes
+    phpVersion: 80300

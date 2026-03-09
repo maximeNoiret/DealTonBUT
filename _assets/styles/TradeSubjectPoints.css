@@ -7,6 +7,10 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
+body.theme-space .trade-subject-point-container {
+    background: rgba(217, 217, 217, 0.5);
+}
+
 
 .trade-subject-point-container h2 {
     text-align: center;
@@ -89,10 +93,26 @@
     color: red;
 }
 
+body.theme-rgb .error-text {
+    animation: rgbColor 2s infinite;
+}
+
 .success-text {
     margin-bottom: 50px;
     border-radius: 8px;
     color: green;
+}
+
+body.theme-rgb .success-text {
+    animation: rgbColor 2s infinite;
+}
+
+body.theme-rgb .text-theme{
+    animation: rgbColor 2s infinite;
+}
+
+body.theme-space .text-theme{
+    color: #411d65;
 }
 
 @media screen and (max-width: 768px) {
@@ -109,4 +129,12 @@
     .trade-subject-point-form .form-group:nth-child(3) {
         max-width: 100%;
     }
+}
+
+
+@keyframes rgbColor {
+    0%   { color: rgb(255, 0, 0); }
+    33%  { color: rgb(0, 255, 0); }
+    66%  { color: rgb(0, 0, 255); }
+    100% { color: rgb(255, 0, 0); }
 }
