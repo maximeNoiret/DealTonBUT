@@ -25,7 +25,7 @@ class TradeDB extends DataBase {
 
     //build the base query
     $query =
-              'SELECT DISTINCT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline, style, o.quantity, u.profile_picture
+              'SELECT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline, style, o.quantity, u.profile_picture
        FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email
@@ -105,7 +105,20 @@ class TradeDB extends DataBase {
     $offers = DataBase::getInstance()->executeQuery($query);
 
     // Count total offers for pagination
-    $countQuery = str_replace('SELECT DISTINCT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline', 'SELECT COUNT(*) as total', $query);
+    $countQuery = "SELECT COUNT(DISTINCT o.ouid) as total 
+                   FROM offer o 
+                   LEFT JOIN tags t ON t.ouid = o.ouid 
+                   WHERE deadline > NOW() AND o.quantity > 0";
+
+    if (isset($_GET['search-string']) && !empty($_GET['search-string'])) {
+        $searchString = trim($_GET['search-string']);
+        if(str_starts_with($searchString, '#')) {
+            $countQuery .= " AND t.tagname LIKE '%" . substr($searchString, 1) . "%'";
+        }
+        else {
+            $countQuery .= " AND (o.title LIKE '%$searchString%' OR o.description LIKE '%$searchString%')";
+        }
+    }
     $countResult = DataBase::getInstance()->executeQuery($countQuery);
     $totalOffers = $countResult ? (int)$countResult[0]['total'] : 0;
     // create the HTML for the offers
@@ -133,7 +146,6 @@ class TradeDB extends DataBase {
         $ret .= '<button class="load-more-btn" onclick="loadMoreOffers(' . $nextOffset . ', \'' . htmlspecialchars($sortParam . $searchParam, ENT_QUOTES) . '\')">Plus d\'offres ?</button>';
         $ret .= '</div>';
       }
-
       return $ret;
     }
     return '<h1 class="description-text">There are no offers!</h1>';
@@ -388,20 +400,4 @@ class TradeDB extends DataBase {
     $query2->bindValue('tagname', $tagname);
     $query2->execute();
   }
-
-  public function getTrendingOffers(): array {
-      $sql = "SELECT o.ouid, u.username, o.owner, o.title, o.description, o.price, o.deadline, o.style, o.quantity, u.profile_picture
-              FROM offer o
-              INNER JOIN user_ u ON o.owner = u.email
-              LEFT JOIN tags t ON t.ouid = o.ouid
-              WHERE o.deadline > NOW() 
-              AND o.quantity > 0
-              GROUP BY o.ouid
-              ORDER BY COUNT(t.tagname) DESC, o.creation_time DESC
-              LIMIT 5";
-
-        $query = $this->dbConn->prepare($sql);
-        $query->execute();
-        return $query->fetchAll(\PDO::FETCH_ASSOC);
-    }
 }
