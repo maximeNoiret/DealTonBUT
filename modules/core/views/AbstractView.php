@@ -174,7 +174,7 @@ abstract class AbstractView {
    */
     function genAdminPanelButton(): string
     {
-      if ($_SESSION['role'] !== 'admin') {
+        if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
         return '';
       }
       return '<a class="sidebar-link" href="/admin">⚙️ Admin Panel</a>';
