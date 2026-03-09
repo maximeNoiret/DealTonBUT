@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function (string) {
     const tagInput = document.getElementById('tag-input');
     const tagsDisplay = document.getElementById('tags-display');
     const tagsHidden = document.getElementById('tags-hidden');
@@ -51,18 +51,13 @@ document.addEventListener('DOMContentLoaded', function() {
         tagsHidden.value = tags.join(',');
     }
 
-    // Mettre à jour le champ caché avec tous les tags
-    function updateHiddenInput() {
-        tagsHidden.value = tags.join(',');
-    }
-
     // Affichage du coût du style sélectionné
     const styleSelect = document.getElementById('style-select');
     const stylePriceInfo = document.getElementById('style-price-info');
 
-    function updateStylePrice() {
+    function updateStylePrice(string) {
         const selected = styleSelect.options[styleSelect.selectedIndex];
-        const price = parseInt(selected.getAttribute('data-price'), 10);
+        const price = parseFloat(selected.getAttribute('data-price'), 10);
         if (price > 0) {
             stylePriceInfo.textContent = `+ ${price} DT₡ (style)`;
             stylePriceInfo.classList.add('style-price-active');
