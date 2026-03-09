@@ -1,3 +1,29 @@
+.form-error {
+    background-color: #ffe0e0;
+    border: 2px solid #e00;
+    border-radius: 10px;
+    color: #a00;
+    font-size: 0.9em;
+    padding: 12px 18px;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    animation: shake 0.35s ease;
+}
+.form-error-icon {
+    font-size: 1.3em;
+    flex-shrink: 0;
+}
+@keyframes shake {
+    0%   { transform: translateX(0); }
+    20%  { transform: translateX(-6px); }
+    40%  { transform: translateX(6px); }
+    60%  { transform: translateX(-4px); }
+    80%  { transform: translateX(4px); }
+    100% { transform: translateX(0); }
+}
+
 .container-form {
     background: #D9D9D9;
     width: 50rem;

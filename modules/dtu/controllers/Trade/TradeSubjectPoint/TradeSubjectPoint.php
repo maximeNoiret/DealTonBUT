@@ -44,6 +44,9 @@ class TradeSubjectPoint implements Controller {
     function control(): void {
         if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
             header('Location: /user/login');
+        } elseif (($_SESSION['role'] ?? '') === 'teacher') {
+            http_response_code(403);
+            header('Location: /forbidden');
         } else {
             // Récupération des données nécessaires pour la vue
             $dbSubject = SubjectDB::getInstance();
