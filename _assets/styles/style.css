@@ -83,3 +83,9 @@ main {
     color: rgba(180, 180, 180, 0.8);
     font-size: 12px;
 }
+
+.description-text {
+    filter: invert(1);
+    mix-blend-mode: difference;
+    text-align: center;
+}
