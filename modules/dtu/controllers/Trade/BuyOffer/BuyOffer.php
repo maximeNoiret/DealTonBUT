@@ -70,6 +70,7 @@ class BuyOffer implements Controller
         }
 
 
+        $email = $_SESSION['email'];
         if (TradeDB::getInstance()->hasBoughtOffer($ouid, $email)) {
             $_SESSION['flash_error'] = "Tu as déjà acheté cette offre.";
             header('Location: /marketplace');

@@ -21,7 +21,7 @@ class MarketPlaceView extends AbstractView {
    */
     function templateValues(): array {
         $values = [
-            'OFFERS' => TradeDB::getOffers(),
+            'OFFERS' => (new MarketPlace)->offersHTML(),
             'POPUP'  => $this->getPopupHtml()
         ];
         return $values;

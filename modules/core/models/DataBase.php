@@ -62,4 +62,19 @@ class DataBase {
     $query->execute();
     return $query->fetchAll(PDO::FETCH_ASSOC);
   }
+
+  /**
+   * @description Executes a prepared SQL query with bound parameters.
+   * @param string $queryString The SQL query with named placeholders.
+   * @param array<string, mixed> $params Associative array of parameter name => value.
+   * @return array<mixed> The result set as an associative array.
+   */
+  public function executeQueryWithParams(string $queryString, array $params): array {
+    $query = $this->dbConn->prepare($queryString);
+    foreach ($params as $key => $value) {
+      $query->bindValue($key, $value);
+    }
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_ASSOC);
+  }
 }
