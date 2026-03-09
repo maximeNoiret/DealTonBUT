@@ -52,33 +52,29 @@ class BuyOffer implements Controller
 
         //vérification si l'utilisateur n'achète pas sa propre offre
         if ($offer['owner'] === $_SESSION['email']) {
-            $_SESSION['flash_error'] = "Tu ne peux pas acheter ta propre offre.";
+            $_SESSION['flash_error'] = "Tu ne peux pas acheter ta propre offre. #BigBrain";
             header('Location: /marketplace');
             exit;
         }
 
         $balance = AccountDB::getInstance()->getBalance($_SESSION['email']);
-        $role = $_SESSION['role'] ?? 'student';
-
-        // Les teachers n'ont pas besoin de dépenser de DTC pour acheter une offre
-        if ($role !== 'teacher' && $offer["type"] === "offer") {
-            if ((float)$balance < (float)$offer['price']) {
-                $_SESSION['flash_error'] = "Solde insuffisant pour acheter cette offre.";
-                header('Location: /marketplace');
-                exit;
-            }
+        //vérification si l'utilisateur a assez dans son solde
+        if ((float)$balance < (float)$offer['price']) {
+            $_SESSION['flash_error'] = "Solde insuffisant pour acheter cette offre.";
+            header('Location: /marketplace');
+            exit;
         }
 
-
-        if (TradeDB::getInstance()->hasBoughtOffer($ouid, $email)) {
+        //tu as déjà acheté cette offre
+        if (TradeDB::getInstance()->hasBoughtOffer($ouid, $_SESSION['email'])) {
             $_SESSION['flash_error'] = "Tu as déjà acheté cette offre.";
             header('Location: /marketplace');
             exit;
         }
 
-        $success = TradeDB::getInstance()->buyOffer($email, $ouid);
+        $success = TradeDB::getInstance()->buyOffer($_SESSION['email'], $ouid);
         if ($success) {
-            $_SESSION['flash_success'] = "Offre achété !";
+            $_SESSION['flash_success'] = "Chat achété !";
         } else {
             $_SESSION['flash_error'] = "Erreur lors de la transaction BDD.";
         }
