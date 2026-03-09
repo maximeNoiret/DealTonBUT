@@ -37,6 +37,10 @@
     margin-top: 3rem;
 }
 
+body.theme-space .container-form {
+    background: rgba(217, 217, 217, 0.5);
+}
+
 .toggleCheckbox {
     display: none;
 }
@@ -54,6 +58,11 @@
     cursor: pointer;
 }
 
+body.theme-space .toggleContainer {
+    background: rgba(52, 52, 52, 0.5);
+    border: 3px solid rgba(52, 52, 52, 0.5);
+}
+
 .toggleContainer::before {
     content: '';
     position: absolute;
@@ -63,6 +72,10 @@
     border-radius:20px;
     background: white;
     transition: all 0.3s;
+}
+
+body.theme-space .toggleContainer::before {
+    background: rgba(255, 255, 255, 0.8);
 }
 
 .toggleContainer div {
@@ -109,6 +122,11 @@
     font-weight: 600;
     color: #333;
 }
+
+body.theme-space .form-group label {
+    color: #411d65;
+}
+
 .input-class-un {
     padding: 15px 20px;
     border: none;
@@ -118,6 +136,11 @@
     font-family: ShareTechMono, monospace;
     background: white;
 }
+
+body.theme-space .input-class-un {
+    background: rgba(255, 255, 255, 0.6);
+}
+
 .input-class-price {
     padding: 15px 20px;
     border: none;
@@ -128,6 +151,11 @@
     font-family: ShareTechMono, monospace;
     background: white;
 }
+
+body.theme-space .input-class-price {
+    background: rgba(255, 255, 255, 0.6);
+}
+
 label {
     font-size: 16px;
     font-weight: 600;
@@ -136,6 +164,11 @@ label {
     margin-bottom: 10px;
     display: block;
 }
+
+body.theme-space label {
+    color: #411d65;
+}
+
 .input-class {
     width: 100%;
     padding: 15px 20px;
@@ -147,6 +180,11 @@ label {
     background: white;
     margin-bottom: 20px;
 }
+
+body.theme-space .input-class {
+    background: rgba(255, 255, 255, 0.6);
+}
+
 .input-class-tag {
     width: 40%;
     padding: 15px 20px;
@@ -156,6 +194,10 @@ label {
     border-radius: 20px;
     font-family: ShareTechMono, monospace;
     background: white;
+}
+
+body.theme-space .input-class-tag {
+    background: rgba(255, 255, 255, 0.6);
 }
 
 .tag-submit-row {
@@ -193,6 +235,11 @@ label {
     font-family: ShareTechMono, monospace;
 }
 
+body.theme-space .tag-item {
+    background: rgba(51, 51, 51, 0.8);
+    color: #411d65;
+}
+
 .tag-remove {
     background: transparent;
     border: none;
@@ -207,9 +254,14 @@ label {
     justify-content: center;
 }
 
+body.theme-space .tag-remove {
+    color: #411d65;
+}
+
 .tag-remove:hover {
     color: #ff6b6b;
 }
+
 textarea.input-class {
     resize: vertical;
     min-height: 150px;
@@ -228,6 +280,11 @@ textarea.input-class {
     transition: all 0.3s ease;
     float: right;
 }
+
+body.theme-space .btn-create {
+    background: rgba(51, 51, 51, 0.8);
+}
+
 .btn-create:hover {
     background: #555;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -248,9 +305,20 @@ textarea.input-class {
     background: #eee;
     transition: background 0.2s, color 0.2s;
 }
+
+body.theme-space .style-price-info {
+    background: rgba(238, 238, 238, 0.8);
+    color: #411d65;
+}
+
 .style-price-active {
     background: #333;
     color: #fff;
+}
+
+body.theme-space .style-price-active {
+    background: rgba(51, 51, 51, 0.8);
+    color: #411d65;
 }
 
 .input-class-quantite{
@@ -264,6 +332,10 @@ textarea.input-class {
     background: white;
     margin-bottom: 50px;
     margin-left: 55%;
+}
+
+body.theme-space .input-class-quantite {
+    background: rgba(255, 255, 255, 0.6);
 }
 
 .label-quantite{
@@ -287,6 +359,11 @@ textarea.input-class {
     background: white;
     margin-bottom: 50px;
 }
+
+body.theme-space .input-class-style {
+    background: rgba(255, 255, 255, 0.6);
+}
+
 @media (max-width: 768px) {
     .container-un {
         grid-template-columns: 1fr;
@@ -373,4 +450,15 @@ textarea.input-class {
     .label-style {
         margin-left: 50px;
     }
+}
+
+body.theme-rgb .text-theme{
+    animation: rgbColor 2s infinite;
+}
+
+@keyframes rgbColor {
+    0%   { color: rgb(255, 0, 0); }
+    33%  { color: rgb(0, 255, 0); }
+    66%  { color: rgb(0, 0, 255); }
+    100% { color: rgb(255, 0, 0); }
 }

@@ -4,7 +4,6 @@
 }
 
 body {
-    background-image: url("/_assets/images/background.webp");
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center;
@@ -16,6 +15,17 @@ body {
     display: flex;
     flex-direction: column;
 }
+
+body.theme-normal {
+    background-image: url("/_assets/images/background/background.webp");
+}
+body.theme-space {
+    background-image: url("/_assets/images/background/backgroundSpace.gif");
+}
+body.theme-rgb {
+    background-image: url("/_assets/images/background/backgroudRGB.gif");
+}
+
 
 main {
     flex: 1;

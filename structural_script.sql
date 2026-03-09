@@ -18,6 +18,7 @@ CREATE TABLE user_(
     balance DECIMAL(8,2) NOT NULL DEFAULT 0.00,
     role VARCHAR(15) NOT NULL DEFAULT 'not-verified',
     profile_picture VARCHAR(255) DEFAULT 'account_pp.webp',
+    theme ENUM('normal', 'rgb', 'space', 'cat') default 'normal',
     CONSTRAINT CHK_USER_EMAIL CHECK (email LIKE '%_@__%.__%'),
     CONSTRAINT CHK_USER_BAL CHECK (balance >= 0)
 ) DEFAULT CHARSET=utf8;

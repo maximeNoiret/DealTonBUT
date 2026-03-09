@@ -1,6 +1,6 @@
 <form action="{ACTION_KEY}" method="post" class="container-form">
 
-    <p>*: Obligatoire</p>
+    <p class="text-theme">*: Obligatoire</p>
 
     {ERROR}
 
@@ -20,26 +20,26 @@
 
     <section class="container-un">
         <article class="form-group">
-            <label for="{NAME_KEY}">*Nom de l'offre:</label>
+            <label class="text-theme" for="{NAME_KEY}" >*Nom de l'offre:</label>
             <input type="text" name="{NAME_KEY}" required class="input-class-un" maxlength="30">
         </article>
         <article class="form-group">
-            <label for="{PRICE_KEY}">*Prix (DT₡):</label>
+            <label class="text-theme" for="{PRICE_KEY}">*Prix (DT₡):</label>
             <input type="number" step="any" name="{COUT_KEY}" placeholder="X.XX ₡" required class="input-class-price">
         </article>
         <article class="form-group">
-            <label for="{DATE_KEY}">*Date limite:</label>
+            <label class="text-theme" for="{DATE_KEY}">*Date limite:</label>
             <input type="date" name="{DATE_KEY}" required class="input-class-un">
         </article>
     </section>
 
-    <label for="{DESCRIPTION_KEY}">*Description:</label>
+    <label class="text-theme" for="{DESCRIPTION_KEY}">*Description:</label>
     <textarea name="{DESCRIPTION_KEY}" class="input-class" maxlength="300"></textarea>
 
 
     <section class="container-un">
         <article>
-            <label for="tag-input">Tag:</label>
+            <label class="text-theme" for="tag-input">Tag:</label>
             <section class="tag-submit-row">
                 <article class="tag-container">
                     <article class="tags-display" id="tags-display"></article>
@@ -50,10 +50,10 @@
         </article>
 
         <article>
-            <label for="{QUANTITY_KEY}" class="label-quantite">*Quantité de l'offre:</label>
+            <label class="text-theme" for="{QUANTITY_KEY}" class="label-quantite">*Quantité de l'offre:</label>
             <input type="number" name="{QUANTITY_KEY}" required class="input-class-quantite">
 
-            <label for="{STYLE_KEY}" class="label-style">Style de l'offre:</label>
+            <label class="text-theme" for="{STYLE_KEY}" class="label-style">Style de l'offre:</label>
             <select name="{STYLE_KEY}" id="style-select" class="input-class-style">
                 <option value="normal" data-price="0">Par défaut — gratuit</option>
                 <option value="cat" data-price="0.1">Chat — +0.1 DT₡</option>

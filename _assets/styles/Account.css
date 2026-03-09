@@ -91,6 +91,10 @@
     border-radius: 1.5rem;
 }
 
+body.theme-space .account-main {
+    background: rgba(217, 217, 217, 0.5);
+}
+
 .user-data {
     display: flex;
     justify-content: space-between;
@@ -99,6 +103,10 @@
     border-bottom: 4px solid #8C8C8C;
     background: #D9D9D9;
     border-radius: 1.5rem 1.5rem 0 0;
+}
+
+body.theme-space .user-data {
+    background: rgba(217, 217, 217, 0.5);
 }
 
 .user-profile {
@@ -217,6 +225,29 @@ a .offer-card *,
 .button-chat:hover {
     background-color: #ffffff;
     color: #333;
+}
+
+body.theme-rgb .account-bigger-text{
+    animation: rgbColor 2s infinite;
+}
+
+body.theme-space .account-bigger-text{
+    color: #411d65;
+}
+
+body.theme-rgb .section-title-offer, body.theme-rgb .section-title-bought{
+    animation: rgbColor 2s infinite;
+}
+
+body.theme-space .section-title-offer, body.theme-space .section-title-bought{
+    color: #411d65;
+}
+
+@keyframes rgbColor {
+    0%   { color: rgb(255, 0, 0); }
+    33%  { color: rgb(0, 255, 0); }
+    66%  { color: rgb(0, 0, 255); }
+    100% { color: rgb(255, 0, 0); }
 }
 
 @media screen and (max-width: 768px) {

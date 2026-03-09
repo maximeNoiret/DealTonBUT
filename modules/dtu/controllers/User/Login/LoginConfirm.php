@@ -5,7 +5,6 @@ namespace controllers\User\Login;
 use core\controllers\Controller;
 use models\Account;
 /* note these are the old use : */
-
 use models\AccountDB;
 use views\User\LoginForm\LoginFormView;
 
@@ -39,6 +38,10 @@ class LoginConfirm implements Controller
         $password = $_POST['password'] ?? '';
 
         $isValid = Account::validateCredentials($email, $password);
+
+        if (isset($_SESSION['email'])) {
+            $_SESSION['theme'] = AccountDB::getInstance()->getTheme($_SESSION['email']) ?? 'normal';
+        }
 
         // if logged in
         if ($isValid) {
