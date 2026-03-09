@@ -22,7 +22,11 @@ class RegisterVerifyConfirm implements Controller
      * @var array<string, string> $_SESSION
      * @var array<string, string> $tempAccount
      */
-    $db->setRole($tempAccount['email'], 'student');  // TODO: separate teachers and students from email format
+      if (str_contains($tempAccount['email'], '@univ-amu.fr')) {
+          $db->setRole($tempAccount['email'], 'teacher');
+      } else {
+          $db->setRole($tempAccount['email'], 'student');
+      }
     $error = $this->validatePassword($_POST['password'] ?? '');
     if ($error !== null) {
          echo (new RegisterFormPasswordView()($error))->render("Register - DealTonBUT", Register::STYLESHEET);
