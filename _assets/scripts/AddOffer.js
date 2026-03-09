@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function (string) {
 
     function updateStylePrice(string) {
         const selected = styleSelect.options[styleSelect.selectedIndex];
-        const price = parseFloat(selected.getAttribute('data-price'), 10);
+        const price = parseFloat(selected.getAttribute('data-price'));
         if (price > 0) {
             stylePriceInfo.textContent = `+ ${price} DT₡ (style)`;
             stylePriceInfo.classList.add('style-price-active');
