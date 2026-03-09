@@ -22,7 +22,7 @@ class TradeDB extends DataBase {
 
     //build the base query
     $query =
-              'SELECT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline, style, o.quantity, u.profile_picture
+      'SELECT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline, style, o.quantity, u.profile_picture
        FROM offer o
        INNER JOIN user_ u 
        ON o.owner = u.email
@@ -40,7 +40,7 @@ class TradeDB extends DataBase {
       $countQuery = preg_replace('/\s+ORDER BY.*/i', '', $query);
       $countQuery = preg_replace('/\s+LIMIT\s+\d+\s+OFFSET\s+\d+/i', '', (string)$countQuery);
       $countQuery = preg_replace(
-          '/SELECT DISTINCT o\.ouid\s*,.*?(?=FROM)/is',
+          '/SELECT o\.ouid\s*,.*?(?=FROM)/is',
           'SELECT COUNT(*) as total ',
           (string)$countQuery
       );
