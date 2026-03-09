@@ -44,6 +44,13 @@ abstract class AbstractSubView extends AbstractView {
     return $this->header($sectionType, $sectionClass) . $this->body() . $this->footer();
   }
 
+    /**
+    * @description Construct the html of the sub view ( ex : an offer ) with a link
+    * @param string $sectionType : Type of the section (<article>, <div>...)
+    * @param string | array<string, string> $sectionClass : .css class
+    * @param string $link : Link to put on the section
+    * @return string
+    **/
   function renderWithLink(string $sectionType, string|array $sectionClass, string $link): string {
     $this->sectionType = $sectionType;
     return '<a href="' . $link . '">' . $this->header($sectionType, $sectionClass) . $this->body() . $this->footer() . '</a>';

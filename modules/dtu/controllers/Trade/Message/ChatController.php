@@ -42,43 +42,44 @@ class ChatController implements Controller
             header('Location: /user/login');
             return;
         }
+
         $dbMessage = MessageDB::getInstance();
-        // Forumulaire d'envoi de message
+        $session_email = is_string($_SESSION['email'] ?? null) ? $_SESSION['email'] : '';
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $my_email = $_SESSION['email'] ?? '';
-            $id_conv = $_POST['id_conv'] ?? '';
-            $content = $_POST['content'] ?? '';
-            // Vérification que les champs ne sont pas vides
+            $id_conv = is_numeric($_POST['id_conv'] ?? null) ? (int)$_POST['id_conv'] : 0;
+            $content = is_string($_POST['content'] ?? null) ? $_POST['content'] : '';
+
             if (!empty($content) && !empty($id_conv)) {
-                $dbMessage->addMessage((int)$id_conv, $my_email, $content);
+                $dbMessage->addMessage($id_conv, $session_email, $content);
             }
-            header('Location: ' . $_SERVER['REQUEST_URI']);
+            $uri = is_string($_SERVER['REQUEST_URI'] ?? null) ? $_SERVER['REQUEST_URI'] : '/';
+            header('Location: ' . $uri);
             exit();
         }
-        // Récupération des messages de la conversation
-        $ouid = $_GET['ouid'] ?? '';
-        $contact_email = $_GET['email'] ?? '';
+
+        $ouid = is_numeric($_GET['ouid'] ?? null) ? (int)$_GET['ouid'] : 0;
+        $contact_email = is_string($_GET['email'] ?? null) ? $_GET['email'] : '';
 
         $messages = [];
         $id_conv = null;
-        // Vérification que les paramètres sont présents pour récupérer la conversation
+
         if (!empty($ouid) && !empty($contact_email)) {
-            $id_conv = $dbMessage->getConversationId($contact_email, (int)$ouid);
-            // Vérification que l'utilisateur a le droit d'accéder à la conversation
+            $id_conv = $dbMessage->getConversationId($contact_email, $ouid);
+
             if ($id_conv !== null) {
-                if (!$dbMessage->allowedToChat($_SESSION['email'], $id_conv)) {
+                if (!$dbMessage->allowedToChat($session_email, $id_conv)) {
                     header('Location: /marketplace');
                     exit();
                 }
                 $messages = $dbMessage->getMessagesByConversation($id_conv);
             }
         }
-        // Affichage de la vue avec les messages
+
         $view = new ChatView();
-        $view->setData($messages, $id_conv, $_SESSION['email']);
+        $view->setData($messages, $id_conv, $session_email);
         echo $view->render("Chat - DealTonBUT", static::STYLESHEET);
     }
-
 
     public static function resolve(string $path, string $meth): bool {
         return strtok($path, '?') === static::PATH && ($meth == 'GET' || $meth == 'POST');

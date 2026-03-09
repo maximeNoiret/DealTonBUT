@@ -44,7 +44,6 @@ class DataBase {
 
   /**
    * @description Retrieves the singleton instance of the AccountDB class.
-   * @return DataBase The singleton instance.
    */
   public static function getInstance(): static {
     if (!isset(static::$instance)) {

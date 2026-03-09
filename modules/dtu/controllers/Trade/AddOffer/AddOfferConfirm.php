@@ -14,7 +14,7 @@ class AddOfferConfirm implements Controller
     const string STYLESHEET = DIRECTORY_SEPARATOR . '_assets' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'style.css';
 
 
-    /** @var array<string, int> Prix en DT₡ à déduire du solde du créateur selon le style choisi */
+    /** @var array<string, float> Prix en DT₡ à déduire du solde du créateur selon le style choisi */
     const array STYLE_PRICES = [
         'normal'    => 0,
         'cat'       => 0.1,
@@ -27,9 +27,9 @@ class AddOfferConfirm implements Controller
     {
         $title = $_POST['title'] ?? '';
         $price = $_POST['price'] ?? '';
-        $end_date = $_POST['end_date'] ?? '';
+        $end_date = is_string($_POST['end_date'] ?? null) ? (string)$_POST['end_date'] : '';
         $description = $_POST['description'] ?? '';
-        $style = $_POST['style'] ?? 'normal';
+        $style = is_string($_POST['style'] ?? null) ? (string)$_POST['style'] : 'normal';
         $quantity = $_POST['quantity'] ?? '';
 
         // Les teachers ne peuvent poster que des demandes
@@ -48,7 +48,7 @@ class AddOfferConfirm implements Controller
 
         // Validation du style
         if (!array_key_exists($style, self::STYLE_PRICES)) {
-            $style = 'normal';
+            $style = is_string($_POST['style'] ?? null) ? $_POST['style'] : 'normal';
         }
 
         if (empty($title) || empty($price) || empty($end_date)) {
@@ -74,7 +74,7 @@ class AddOfferConfirm implements Controller
 
         $title = is_string($title) ? $title : '';
         $description = is_string($description) ? $description : '';
-        $end_date = is_string($end_date) ? $end_date : '';
+        $end_date = is_string($_POST['end_date'] ?? null) ? $_POST['end_date'] : '';
 
         /**
          * @var array<string, string> $_SESSION
