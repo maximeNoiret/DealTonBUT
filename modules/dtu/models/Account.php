@@ -30,7 +30,7 @@ class Account {
       return 'already_sent';
     }
 
-    if (!(str_contains($email, '@etu.univ-amu.fr') || str_contains($email, '@univ-amu.fr') || str_contains($email, '@gmail.com'))) {
+    if (!(str_contains($email, '@etu.univ-amu.fr') || str_contains($email, '@univ-amu.fr'))) {
         return 'invalid_email';
     }
 
