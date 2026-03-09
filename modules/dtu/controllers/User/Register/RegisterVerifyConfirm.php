@@ -38,6 +38,7 @@ class RegisterVerifyConfirm implements Controller
     $_SESSION['email'] = $tempAccount['email'];
     $_SESSION['logged-in'] = true;
     $_SESSION['first-login'] = true;
+    $_SESSION['role'] = $db->getRole($tempAccount['email']);
 
     header('Location: /marketplace');
   }
