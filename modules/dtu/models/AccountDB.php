@@ -77,7 +77,7 @@ class AccountDB extends DataBase {
    */
   public function getAccount(string $email, string $password): bool|array {
     $query = $this->dbConn->prepare('
-      SELECT username, email, hashedpwd, balance, profile_picture
+      SELECT username, email, hashedpwd, balance, profile_picture, role
       FROM user_
       WHERE email = :email');
     $query->bindValue('email', $email);
@@ -100,6 +100,7 @@ class AccountDB extends DataBase {
             'email' => $user['email'],
             'balance' => $user['balance'],
             'profile_picture' => $user['profile_picture'],
+            'role' => $user['role'],
         ];
     }
     return false;

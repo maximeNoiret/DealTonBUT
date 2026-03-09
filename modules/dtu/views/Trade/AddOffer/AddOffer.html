@@ -2,16 +2,20 @@
 
     <p>*: Obligatoire</p>
 
-    <p>*type</p>
-    <input type="checkbox" id="toggle" name="{TYPE_KEY}" class="toggleCheckbox" value="request"  />
-    <label for="toggle" class="toggleContainer">
-        <div>
-            Offre
-        </div>
-        <div>
-            Demande
-        </div>
-    </label>
+    {ERROR}
+
+    <div {TYPE_SECTION}>
+        <p>*type</p>
+        <input type="checkbox" id="toggle" name="{TYPE_KEY}" class="toggleCheckbox" value="request"  />
+        <label for="toggle" class="toggleContainer">
+            <div>
+                Offre
+            </div>
+            <div>
+                Demande
+            </div>
+        </label>
+    </div>
 
 
     <section class="container-un">
@@ -52,10 +56,10 @@
             <label for="{STYLE_KEY}" class="label-style">Style de l'offre:</label>
             <select name="{STYLE_KEY}" id="style-select" class="input-class-style">
                 <option value="normal" data-price="0">Par défaut — gratuit</option>
-                <option value="cat" data-price="2">Chat — +2 DT₡</option>
-                <option value="space" data-price="4">Espace — +4 DT₡</option>
-                <option value="amethyst" data-price="6">Améthyste — +6 DT₡</option>
-                <option value="bad-apple" data-price="10">??? — +10 DT₡</option>
+                <option value="cat" data-price="0.1">Chat — +0.1 DT₡</option>
+                <option value="space" data-price="0.25">Espace — +0.25 DT₡</option>
+                <option value="amethyst" data-price="0.5">Améthyste — +0.5 DT₡</option>
+                <option value="bad-apple" data-price="1">??? — +1 DT₡</option>
             </select>
         </article>
     </section>
