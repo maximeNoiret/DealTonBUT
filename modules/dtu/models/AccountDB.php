@@ -320,10 +320,18 @@ class AccountDB extends DataBase {
 
 //      $html .='<a class="button-delete">{DELETE}</a>'."\n";
 
-      $html .=
-            '<form method="POST" action="/admin$delete-account='.$account['email'].'"" onsubmit="return confirm(\'Êtes-vous sûr de vouloir supprimer définitivement votre compte ?\');">'
-            .'<button type="submit" class="button-delete">DELETE</button>'."\n".'</form>'."\n";
+//      $html .=
+//            '<form method="POST" action="/user/delete-account?remove-account='.$account['email'].'" onsubmit="return confirm(\'Êtes-vous sûr de vouloir supprimer définitivement votre compte ?\');">'
+//            .'<button type="submit" class="button-delete">DELETE</button>'."\n".'</form>'."\n";
 
+      $html .=
+        '<form method="POST" action="/user/delete-account" onsubmit="return confirm(\'Êtes-vous sûr de vouloir supprimer définitivement votre compte ?\');">'
+        .'<input type="hidden" name="remove-account" value="'.$account['email'].'"/>'."\n"
+        .'<input type="submit" name="delete-email" class="Admin-button-delete" value="DELETE"/>'."\n"
+        .'</form>'."\n";
+
+//      '<button type="submit" class="button-delete">DELETE</button>'."\n"
+//      ?email='.$account['email'].'
       $html .='</article>'."\n";
     }
     $html .='</section>'."\n";
