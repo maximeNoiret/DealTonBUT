@@ -50,29 +50,33 @@ class BuyOffer implements Controller
             exit;
         }
 
-        //vérification si l'utilisateur n'achète pas sa propre offre
-        if ($offer['owner'] === $_SESSION['email']) {
+        /** @var array<string, mixed> $offer */
+        $email = is_string($_SESSION['email'] ?? null) ? $_SESSION['email'] : '';
+        $owner = is_string($offer['owner']) ? $offer['owner'] : '';
+        $price = is_numeric($offer['price']) ? (float) $offer['price'] : 0.0;
+
+        if ($owner === $email) {
             $_SESSION['flash_error'] = "Tu ne peux pas acheter ta propre offre. #BigBrain";
             header('Location: /marketplace');
             exit;
         }
 
-        $balance = AccountDB::getInstance()->getBalance($_SESSION['email']);
+        $balance = AccountDB::getInstance()->getBalance($email);
         //vérification si l'utilisateur a assez dans son solde
-        if ((float)$balance < (float)$offer['price']) {
+        if ((float)$balance < $price) {
             $_SESSION['flash_error'] = "Solde insuffisant pour acheter cette offre.";
             header('Location: /marketplace');
             exit;
         }
 
-        //tu as déjà acheté cette offre
-        if (TradeDB::getInstance()->hasBoughtOffer($ouid, $_SESSION['email'])) {
+
+        if (TradeDB::getInstance()->hasBoughtOffer($ouid, $email)) {
             $_SESSION['flash_error'] = "Tu as déjà acheté cette offre.";
             header('Location: /marketplace');
             exit;
         }
 
-        $success = TradeDB::getInstance()->buyOffer($_SESSION['email'], $ouid);
+        $success = TradeDB::getInstance()->buyOffer($email, $ouid);
         if ($success) {
             $_SESSION['flash_success'] = "Chat achété !";
         } else {

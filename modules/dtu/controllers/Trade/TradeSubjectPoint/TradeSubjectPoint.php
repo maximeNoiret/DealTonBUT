@@ -47,7 +47,7 @@ class TradeSubjectPoint implements Controller {
         } else {
             // Récupération des données nécessaires pour la vue
             $dbSubject = SubjectDB::getInstance();
-            $email = $_SESSION['email'] ?? '';
+            $email = is_string($_SESSION['email'] ?? null) ? $_SESSION['email'] : '';
             $error = null;
 
             $dbBalance = AccountDB::getInstance();
@@ -61,13 +61,16 @@ class TradeSubjectPoint implements Controller {
 
                     $from = $_POST['from_subject'] ?? '';
                     $to = $_POST['to_subject'] ?? '';
-                    $points = floatval($_POST['points'] ?? 0);
+                    $points = is_numeric($_POST['points'] ?? null) ? (float)$_POST['points'] : 0.0;
                     // Validation des entrées
                     if ($from === $to) {
                         $error = 'error_same_subject';
                     } else {
                         $availableFrom = ($from === 'DTC_BALANCE') ? $dbBalance->getBalance($email) : $dbSubject->getPoints($email, $from);
                         $availableTo   = ($to === 'DTC_BALANCE')   ? $dbBalance->getBalance($email) : $dbSubject->getPoints($email, $to);
+
+                        $availableFrom = is_numeric($availableFrom) ? (float)$availableFrom : 0.0;
+                        $availableTo   = is_numeric($availableTo)   ? (float)$availableTo   : 0.0;
                         // Vérification des points disponibles et des limites
                         if ($availableFrom < $points) {
                             $error = 'error_insufficient_points';
@@ -101,6 +104,7 @@ class TradeSubjectPoint implements Controller {
                 //Vérification du type de fichier et de la taille
                 if ($formType === 'ics_import') {
                     $maxsize= 2 * 1024 * 1024; // Taille max 2MB
+
                     if (!isset($_FILES['ics_file']) || $_FILES['ics_file']['error'] !== 0) {
                         $error = 'error_upload';
                     }

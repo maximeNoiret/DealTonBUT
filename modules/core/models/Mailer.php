@@ -22,6 +22,7 @@ class Mailer {
     $file = fopen(__DIR__ . '/../../../.apkey', 'r') or die('File didn\'t open.');
     $apiKey = fgets($file);
     fclose($file);
+
     return rtrim($apiKey);
   }
 

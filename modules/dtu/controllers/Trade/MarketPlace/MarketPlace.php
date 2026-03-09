@@ -45,11 +45,12 @@ class MarketPlace implements Controller {
       $offer = TradeDB::getInstance()->getOffer($offerId);
       if (!$offer) return '';
 
-      $quantity = $offer['quantity'] ?? 0;
+      /** @var array<string, mixed> $offer */
+      $quantity = is_numeric($offer['quantity'] ?? null) ? (int) $offer['quantity'] : 0;
       if ($quantity < 0) {
           return '';
       }
-      $type = $offer['type'] ?? 'offer';
+      $type = is_string($offer['type'] ?? null) ? $offer['type'] : 'offer';
       if ($type === 'request') {
           return '<a class="button-accept" href="/offre/buy?id=' . $offerId . '">Accept</a>';
       } else {

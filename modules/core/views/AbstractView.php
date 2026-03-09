@@ -1,7 +1,7 @@
 <?php
 
 namespace core\views;
-include __DIR__ . '/ThemeManager.php';
+use core\views\ThemeManager;
 
 abstract class AbstractView {
   /**
@@ -45,6 +45,9 @@ abstract class AbstractView {
    */
   public function body(): string {
     $body = file_get_contents($this->path());
+    if($body === false) {
+      throw new \Exception('Failed to read the template file: ' . $this->path());
+    }
     /**
      * @var string $value
      */
@@ -104,8 +107,8 @@ abstract class AbstractView {
    * @return string
    */
     function navbar(string $placeholder = ''): string {
-        $username = $_SESSION['username'] ?? 'NOM DE COMPTE';
-        $balance = $_SESSION['balance'] ?? 0.00;
+        $username = (string) ($_SESSION['username'] ?? 'NOM DE COMPTE');
+        $balance = (float) ($_SESSION['balance'] ?? 0.00);
         $firstLogin = !empty($_SESSION['first-login']);
         if ($firstLogin) {
             unset($_SESSION['first-login']);
@@ -169,7 +172,7 @@ abstract class AbstractView {
 
   /**
    * @description Abstract methode that define value for each keys in the associated .html file
-   * @return array<mixed> : The array that contain the real value that are associated by a key
+   * @return array<string, string> : The array that contain the real value that are associated by a key
    */
   abstract function templateValues(): array;
 
