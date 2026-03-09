@@ -26,6 +26,21 @@ class TradeSubjectPoint implements Controller {
     ];
 
     /**
+     * @description
+     * Check if the mime type of the file is one of the allowed types (jpg, jpeg, png, webp, gif)
+     * @param $filePath
+     * @return bool
+     */
+    public function validate_mime_type($filePath): bool
+    {
+        $allowedMimeTypes = ['calendar/ics'];
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_file($finfo, $filePath);
+        finfo_close($finfo);
+        return in_array($mimeType, $allowedMimeTypes);
+    }
+
+    /**
      * @brief Main controller method for the subject points exchange page.
      *
      * @description
@@ -54,7 +69,6 @@ class TradeSubjectPoint implements Controller {
             $error = null;
 
             $dbBalance = AccountDB::getInstance();
-
 
             // Traitement du formulaire de transfert de points
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -104,6 +118,12 @@ class TradeSubjectPoint implements Controller {
                 }
 
                 //ICS Import
+                // Vérification du type mime du fichier
+                if ($formType === 'ics_import' && isset($_FILES['ics_file']) && $_FILES['ics_file']['error'] === UPLOAD_ERR_OK) {
+                    if (!$this->validate_mime_type($_FILES['ics_file']['tmp_name'])) {
+                        $error = 'error_invalid_file_type';
+                    }
+                }
                 //Vérification du type de fichier et de la taille
                 if ($formType === 'ics_import') {
                     $maxsize= 2 * 1024 * 1024; // Taille max 2MB

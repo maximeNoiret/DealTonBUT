@@ -21,6 +21,21 @@ class ProfilPicture implements Controller
 
     /**
      * @description
+     * Check if the mime type of the file is one of the allowed types (jpg, jpeg, png, webp, gif)
+     * @param $filePath
+     * @return bool
+     */
+    public function validate_mime_type($filePath): bool
+    {
+        $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp' , 'image/gif'];
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_file($finfo, $filePath);
+        finfo_close($finfo);
+        return in_array($mimeType, $allowedMimeTypes);
+    }
+
+    /**
+     * @description
      * Check if the user is logged in, if not redirect to the login page
      * Check if the file is uploaded without error
      * Check if the file is of the allowed type and size
@@ -38,17 +53,21 @@ class ProfilPicture implements Controller
             exit();
         }
 
+        // Vérification de la taille et du type de fichier
         if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] === UPLOAD_ERR_OK) {
-
-            // Vérification de la taille et du type de fichier
             $file = $_FILES['profile_picture'];
-            $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-            $allowed = ['jpg', 'jpeg', 'png', 'webp'];
 
             if($file['size'] > 5 * 1024 * 1024) {
                 header('Location: /user/account?error=file_too_large');
                 exit();
             }
+            if(!$this->validate_mime_type($file['tmp_name'])) {
+                header('Location: /user/account?error=invalid_file_type');
+                exit();
+            }
+            $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+            $allowed = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+
             // Modification du nom du fichier pour normaliser et éviter les conflits
             if (in_array($extension, $allowed)) {
 

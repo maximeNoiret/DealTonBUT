@@ -22,7 +22,7 @@ class TradeDB extends DataBase {
 
     //build the base query
     $query =
-              'SELECT DISTINCT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline, style, o.quantity, u.profile_picture, u.role
+              'SELECT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline, style, o.quantity, u.profile_picture
        FROM offer o
        INNER JOIN user_ u 
        ON o.owner = u.email
@@ -82,6 +82,7 @@ class TradeDB extends DataBase {
       'price-desc'  => " ORDER BY price DESC",
       'date'        => " ORDER BY creation_time DESC",
       'alphabetic'  => " ORDER BY title ASC",
+      'trending'    => " ORDER BY COUNT(t.tagname) DESC, o.creation_time DESC"
     ];
     if ($sort !== null && isset($allowedSorts[$sort])) {
       $query .= $allowedSorts[$sort];
@@ -380,6 +381,7 @@ class TradeDB extends DataBase {
    * @return array The transaction and their associated information
    */
   public function getAllTransaction(): array {
+    //TODO : adapte the output in a more user friendly format
     $query = $this->dbConn->prepare('SELECT * FROM transaction_');
     $query->execute();
     return $query->fetchAll();
