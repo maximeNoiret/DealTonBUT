@@ -59,7 +59,6 @@ class MarketPlace implements Controller {
   }
 
   function offersHTML(): string {
-
       [$offers, $totalOffers] = TradeDB::getOffers();
       $limit = 8;
       $sort = $_GET['sort'] ?? null;
