@@ -31,7 +31,7 @@ class TradeDB extends DataBase {
        WHERE deadline > NOW()
        AND o.quantity > 0';
 
-    [$query, $params] = self::SortOffers($query);
+    [$query, $params] = self::sortOffers($query);
 
     // Add limit and offset
     $query .= " LIMIT $limit OFFSET $offset";
@@ -57,9 +57,9 @@ class TradeDB extends DataBase {
    * @param string $query the sql query that is under construction
    * @return array{0: string, 1: array<string, mixed>} A tuple of [SQL query, bound params]
    */
-    static function SortOffers(string $query): array
+    static function sortOffers(string $query): array
     {
-        $sort = $_GET['sort'] ?? null;
+        $sort = $_GET['sort'] ?? '';
         $params = [];
         if ($sort === 'trending') {
             $trendingJoin = " 
@@ -92,7 +92,7 @@ class TradeDB extends DataBase {
                 'date'        => " ORDER BY o.creation_time DESC",
                 'alphabetic'  => " ORDER BY title ASC",
             ];
-            $query .= $allowedSorts[$sort] ?? " ORDER BY o.creation_time DESC";
+            $query .= $allowedSorts[$sort] ?? " ORDER BY o.creation_time ASC";
         }
         return [$query, $params];
     }
