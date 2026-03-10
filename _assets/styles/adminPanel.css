@@ -1,3 +1,7 @@
+/* ------------------------------------------------------------------------- */
+/* ***************************** Panel ***************************** */
+/* ------------------------------------------------------------------------- */
+
 .admin-panel-container {
     background: #D9D9D9;
     display: flex;
@@ -19,6 +23,44 @@
     gap: 2rem;
     padding: 2rem 0;
 }
+
+/* ------------------------------------------------------------------------- */
+/* ***************************** Option button ***************************** */
+/* ------------------------------------------------------------------------- */
+
+/*TODO : I needed to make this duplicate because the text in the button didn't
+   had the font of the web site, find a another way*/
+
+.admin-option-button {
+    font-family: ShareTechMono, monospace;
+    gap: 12px;
+    padding: 14px;
+    margin-bottom: 12px;
+    background: #ffffff;
+    border: 2px solid #2d3436;
+    border-radius: 10px;
+    color: #2d3436;
+    font-weight: 600;
+    font-size: 1rem;
+    box-shadow: 4px 4px #2d3436;
+}
+
+.admin-option-button:hover {
+    background: #fff;
+    transform: translate(-2px, -2px);
+    box-shadow: 7px 7px #ff5e5e;
+    border-color: #ff5e5e;
+    color: #ff5e5e;
+}
+
+.admin-option-button:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0px 0px 0px #2d3436;
+}
+
+/* ------------------------------------------------------------------------- */
+/* **************************** Manage  Account **************************** */
+/* ------------------------------------------------------------------------- */
 
 .manage-account-panel {
     display: flex;
@@ -47,7 +89,6 @@
     box-shadow: 7px 7px #ff5e5e;
 }
 
-/*  */
 .admin-button-delete {
     background-color: #ff4d4d;
     color: white;
@@ -58,4 +99,26 @@
     font-size: 16px;
     padding: 1rem;
     transition: background-color 0.2s ease-in-out;
+}
+
+/* ------------------------------------------------------------------------- */
+/* ***************************** Manage  Offer ***************************** */
+/* ------------------------------------------------------------------------- */
+
+.manage-offer-panel {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+}
+
+/* ------------------------------------------------------------------------- */
+/* ************************** Manage  Transaction ************************** */
+/* ------------------------------------------------------------------------- */
+
+.manage-transaction-panel {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
 }

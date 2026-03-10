@@ -57,12 +57,12 @@ class AdminPanel
      * where each account is an associative array with keys 'email', 'username', 'hashedpwd', 'role' and 'balance'.
      */
     $accounts = AccountDB::getInstance()->getAllAccount();
-
-    $html = '<section class ="manage-account-panel">'."\n";
+    $html = '';
+//    $html = '<section class ="manage-account-panel">'."\n";
     foreach ($accounts as $account) {
       $html .= (new AccountAdminPanel($account))->render('article', 'account-manage');
     }
-    $html .='</section>'."\n";
+//    $html .='</section>'."\n";
 
     return $html;
   }
