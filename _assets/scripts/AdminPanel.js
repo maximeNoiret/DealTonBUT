@@ -40,4 +40,7 @@ document.addEventListener('DOMContentLoaded', function (){
     userButton.addEventListener('click', showAccounts);
     offerButton.addEventListener('click', showOffers);
     transactionButton.addEventListener('click', showTransactions);
+
+    // by default the accounts panel is shown
+    showAccounts();
 })
