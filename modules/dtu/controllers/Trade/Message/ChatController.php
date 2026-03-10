@@ -4,9 +4,20 @@ namespace controllers\Trade\Message;
 use core\controllers\Controller;
 use models\MessageDB;
 use views\Trade\Chat\ChatView;
+
+/**
+ * @class ChatController
+ * @brief Controller responsible for managing the chat between two users.
+ */
+
 class ChatController implements Controller
 {
-    public const PATH = '/chat';
+    /**
+     * @var string PATH : The path to access the chat page
+     */
+    public const string PATH = '/chat';
+    public const string API_PATH = '/chat/updates';
+
     /**
      * @description Store all the different stylesheet used
      * @var array<string> STYLESHEET
@@ -17,6 +28,15 @@ class ChatController implements Controller
         '/_assets/styles/navbar.css',
     ];
 
+    /**
+     * @description Main controller method
+     * Handles the whole chat logic:
+     * - Checks if the user is logged in
+     * - Processes message sending (POST request)
+     * - Retrieves the conversation and its messages
+     * - Displays the chat interface
+     * @return void
+     */
     function control(): void
     {
         if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
@@ -24,41 +44,69 @@ class ChatController implements Controller
             return;
         }
         $dbMessage = MessageDB::getInstance();
+        $session_email = is_string($_SESSION['email'] ?? null) ? $_SESSION['email'] : '';
+        $currentPath = strtok($_SERVER['REQUEST_URI'], '?');
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $my_email = $_SESSION['email'] ?? '';
-            $id_conv = $_POST['id_conv'] ?? '';
-            $content = $_POST['content'] ?? '';
+        if ($currentPath === self::API_PATH) {
+            header('Content-Type: application/json');
+            $id_conv = is_numeric($_GET['id_conv'] ?? null) ? (int)$_GET['id_conv'] : 0;
+            $session_email = $_SESSION['email'];
 
-            if (!empty($content) && !empty($id_conv)) {
-                $dbMessage->addMessage((int)$id_conv, $my_email, $content);
+            $dbMessage = MessageDB::getInstance();
+            if($id_conv > 0 && $dbMessage->allowedToChat($session_email, $id_conv)) {
+                $messages = $dbMessage->getMessagesByConversation($id_conv);
+
+                $view = new ChatView();
+                $view->setData($messages, $id_conv, $session_email);
+
+                $htmlMessages = $view->templateValues()['MESSAGES'];
+
+                echo json_encode(['html' => $htmlMessages]);
+            } else {
+                echo json_encode(['html' => '<p>Erreur de chargement...</p>']);
             }
-            header('Location: ' . $_SERVER['REQUEST_URI']);
             exit();
         }
 
-        $ouid = $_GET['ouid'] ?? '';
-        $contact_email = $_GET['email'] ?? '';
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id_conv = is_numeric($_POST['id_conv'] ?? null) ? (int)$_POST['id_conv'] : 0;
+            $content = is_string($_POST['content'] ?? null) ? $_POST['content'] : '';
+
+            if (!empty($content) && !empty($id_conv)) {
+                $dbMessage->addMessage($id_conv, $session_email, $content);
+            }
+            $uri = is_string($_SERVER['REQUEST_URI'] ?? null) ? $_SERVER['REQUEST_URI'] : '/';
+            header('Location: ' . $uri);
+            exit();
+        }
+
+        $ouid = is_numeric($_GET['ouid'] ?? null) ? (int)$_GET['ouid'] : 0;
+        $contact_email = is_string($_GET['email'] ?? null) ? $_GET['email'] : '';
 
         $messages = [];
         $id_conv = null;
 
         if (!empty($ouid) && !empty($contact_email)) {
-            $id_conv = $dbMessage->getConversationId($contact_email, (int)$ouid);
+            $id_conv = $dbMessage->getConversationId($contact_email, $ouid);
+
             if ($id_conv !== null) {
-                if (!$dbMessage->allowedToChat($_SESSION['email'], $id_conv)) {
+                if (!$dbMessage->allowedToChat($session_email, $id_conv)) {
                     header('Location: /marketplace');
                     exit();
                 }
                 $messages = $dbMessage->getMessagesByConversation($id_conv);
             }
         }
+
         $view = new ChatView();
-        $view->setData($messages, $id_conv, $_SESSION['email']);
+        $view->setData($messages, $id_conv, $session_email);
         echo $view->render("Chat - DealTonBUT", static::STYLESHEET);
     }
+
     public static function resolve(string $path, string $meth): bool {
-        return strtok($path, '?') === static::PATH && ($meth == 'GET' || $meth == 'POST');
+        $currentPath = strtok($path, '?');
+        return ($currentPath === static::PATH || $currentPath === static::API_PATH)
+            && ($meth == 'GET' || $meth == 'POST');
     }
 }
 

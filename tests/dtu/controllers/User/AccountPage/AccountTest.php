@@ -30,7 +30,7 @@ class AccountTest extends TestCase
         AccountDB::getInstance()->registerAccount('testUser02', 'testUser02@exmanple.com');
         $this->testEmail01 = 'testUser01@example.com';
         $this->testEmail02 = 'testUser02@exmanple.com';
-        TradeDB::getInstance()->insertOffre($this->testEmail02, 'Test Offer', 0.00, 10, '2030-12-31');
+        TradeDB::getInstance()->insertOffer($this->testEmail02, 'Test Offer', 0.00, 10, '2030-12-31');
 
         $offer = $this->tradeDB->executeQuery(
           'SELECT ouid FROM offer WHERE owner =\''.$this->testEmail02.'\';'

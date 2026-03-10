@@ -30,7 +30,7 @@ class Account {
       return 'already_sent';
     }
 
-    if (!(str_contains($email, '@etu.univ-amu.fr') || str_contains($email, '@univ-amu.fr') || str_contains($email, '@gmail.com'))) {
+    if (!(str_contains($email, '@etu.univ-amu.fr') || str_contains($email, '@univ-amu.fr'))) {
         return 'invalid_email';
     }
 
@@ -69,6 +69,8 @@ class Account {
           $_SESSION['email'] = $account['email'] ?? '';
           $_SESSION['balance'] = $account['balance'] ?? 0;
           $_SESSION['logged-in'] = true;
+          $_SESSION['profile_picture'] = $account['profile_picture'] ?? 'account_pp.webp';
+          $_SESSION['role'] = $account['role'] ?? 'student';
           return true;
       }
     return false;

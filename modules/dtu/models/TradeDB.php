@@ -12,129 +12,91 @@ class TradeDB extends DataBase {
 
   protected static $instance;
 
-  /**
-   * @description Show The offers in function of the sort parameter, show all offers by default
-   * @return string The HTML that contain the info of the offers
-   */
-  public static function getOffers(): string {
+    /**
+     * @description Return the offers in function of the args given ( the args are MySQL operator), see MarketPlace->getOffers() for the used method
+     * @return array The list of offers and the total number of offers that match the criteria (for pagination purpose)
+     */
+  public static function getOffers(): array {
     $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
     $limit = 8;
 
     //build the base query
     $query =
-              'SELECT DISTINCT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline
+      'SELECT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline, style, o.quantity, u.profile_picture
        FROM offer o
-       INNER JOIN user_ u
+       INNER JOIN user_ u 
        ON o.owner = u.email
        LEFT JOIN tags t 
        ON t.ouid = o.ouid
        WHERE deadline > NOW()
-       AND o.ouid NOT IN (
-            SELECT ouid
-            FROM transactions
-       )';
+       AND o.quantity > 0';
 
-    $query = self::SortOffers($query);
+    [$query, $params] = self::sortOffers($query);
 
     // Add limit and offset
     $query .= " LIMIT $limit OFFSET $offset";
+      $offers = DataBase::getInstance()->executeQueryWithParams($query, $params);
 
-    // make the html for the offers, and the pagination
-    return self::getOffersHtml($query);
+      $countQuery = preg_replace('/\s+ORDER BY.*/i', '', $query);
+      $countQuery = preg_replace('/\s+LIMIT\s+\d+\s+OFFSET\s+\d+/i', '', (string)$countQuery);
+      $countQuery = preg_replace(
+          '/SELECT o\.ouid\s*,.*?(?=FROM)/is',
+          'SELECT COUNT(*) as total ',
+          (string)$countQuery
+      );
+      $countResult = DataBase::getInstance()->executeQueryWithParams((string)$countQuery, $params);
+      $totalOffers = $countResult ? (int)$countResult[0]['total'] : 0;
+
+    return [$offers, $totalOffers];
   }
 
   /**
    * @description Add to the incomplete SQL query the order by clause in
    * function of the sort parameter, and the search string if it exists.
    * Meant to be used in the getOffers() method.
-   * @param string $query the sql query that his under construction
-   * @return string SQL query that include the order by clause in function of
-   * the sort parameter, and the search string if it exists.
+   * @param string $query the sql query that is under construction
+   * @return array{0: string, 1: array<string, mixed>} A tuple of [SQL query, bound params]
    */
-  static function SortOffers( string $query): string
-  {
-    $sort = $_GET['sort'] ?? null;
-    /**
-     * @var array<string> $_GET['search-string']
-     */
-    if (isset($_GET['search-string']) && !empty($_GET['search-string'])) {
-      $searchString = trim($_GET['search-string']);
-      if(str_starts_with($searchString, '#')) {
-        $tagname = substr($searchString, 1);
-        $query.= " AND t.tagname LIKE '%" . $tagname . "%'";
-      }
-      else{
-        $query.= ' AND (title LIKE "%' . $searchString . '%"';
-        $query.= " OR description LIKE '%" . $searchString . "%')";
-      }
+    static function sortOffers(string $query): array
+    {
+        $sort = $_GET['sort'] ?? '';
+        $params = [];
+        if ($sort === 'trending') {
+            $trendingJoin = " 
+                            LEFT JOIN 
+                            ( SELECT tagname, COUNT(*) as popularity 
+                            FROM tags 
+                            GROUP BY tagname ) 
+                            AS pop ON t.tagname = pop.tagname ";
+
+            $query = str_replace("WHERE", $trendingJoin . " WHERE", $query);
+        }
+        if (isset($_GET['search-string']) && !empty($_GET['search-string'])) {
+            $searchString = trim($_GET['search-string']);
+            if (str_starts_with($searchString, '#')) {
+                $query .= " AND t.tagname LIKE :tagname";
+                $params[':tagname'] = '%' . substr($searchString, 1) . '%';
+            } else {
+                $query .= " AND (title LIKE :searchTitle OR description LIKE :searchDesc)";
+                $params[':searchTitle'] = '%' . $searchString . '%';
+                $params[':searchDesc']  = '%' . $searchString . '%';
+            }
+        }
+        $query .= " GROUP BY o.ouid";
+        if ($sort === 'trending') {
+            $query .= " ORDER BY MAX(IFNULL(pop.popularity, 0)) DESC, o.ouid DESC";
+        } else {
+            $allowedSorts = [
+                'price-asc'   => " ORDER BY price ASC",
+                'price-desc'  => " ORDER BY price DESC",
+                'date'        => " ORDER BY o.creation_time DESC",
+                'alphabetic'  => " ORDER BY title ASC",
+            ];
+            $query .= $allowedSorts[$sort] ?? " ORDER BY o.creation_time ASC";
+        }
+        return [$query, $params];
     }
-    switch ($sort) {
-      case 'price-asc':
-        $query .= " ORDER BY price ASC";
-        break;
-      case 'price-desc':
-        $query .= " ORDER BY price DESC";
-        break;
-      case 'date':
-        $query .= " ORDER BY creation_time DESC";
-        break;
-      case 'alphabetic':
-        $query .= " ORDER BY title ASC";
-        break;
-      default:
-        break;
-    }
-    return $query;
-  }
 
-  /**
-   * @description This method is used to generate the html for the offers, and
-   * the pagination. It is used in the getOffers() method.
-   * @param string $query the sql query to get the offers and order them in
-   * function of the sort parameter
-   * @return string The html that contain the info of the offers, and the
-   * pagination
-   */
-  static function getOffersHtml(string $query): string
-  {
-    $sort = $_GET['sort'] ?? null;
-    $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
-    $limit = 8;
-
-    $offers = DataBase::getInstance()->executeQuery($query);
-
-    // Count total offers for pagination
-    $countQuery = str_replace('SELECT DISTINCT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline', 'SELECT COUNT(*) as total', $query);
-    $countResult = DataBase::getInstance()->executeQuery($countQuery);
-    $totalOffers = $countResult ? (int)$countResult[0]['total'] : 0;
-
-    // create the html for the offers
-    if ($offers) {
-      $ret = '<section class="offer-grid" id="offer-grid">' . "\n";
-      foreach ($offers as $offer) {
-        /**
-         * @var array<string, string> $offer
-         */
-        // Add button based on ownership
-        $offer['button'] = MarketPlace::generateOfferButton($offer['ouid'], $offer['owner']);
-        $ret = $ret . new Offer($offer)->render('article', 'offer-card' . (AccountDB::ownsOffer($_SESSION['email'], (int)$offer['ouid']) ? ' own-offer' : '')). "\n";
-      }
-      $ret .= '</section>';
-
-      // Add "Load More" button if there are more offers
-      if ($totalOffers > $offset + $limit) {
-        $nextOffset = $offset + $limit;
-        $sortParam = $sort ? '&sort=' . urlencode($sort) : '';
-        $searchParam = isset($_GET['search-string']) ? '&search-string=' . urlencode($_GET['search-string']) : '';
-        $ret .= '<div class="load-more-container">';
-        $ret .= '<button class="load-more-btn" onclick="loadMoreOffers(' . $nextOffset . ', \'' . htmlspecialchars($sortParam . $searchParam, ENT_QUOTES) . '\')">Plus d\'offres ?</button>';
-        $ret .= '</div>';
-      }
-
-      return $ret;
-    }
-    return '<h1 class="description-text">There are no offers!</h1>';
-  }
 
   /**
    * @description Retrieves a specific offer by its unique identifier.
@@ -146,32 +108,35 @@ class TradeDB extends DataBase {
     // return mixed, it raised a phpstan error. And so the method return
     // mixed
     $query = $this->dbConn->prepare(
-      'SELECT owner, u.username as \'username\', title, description, price, deadline
+      'SELECT owner, u.username as \'username\', title, description, price, deadline, style, o.type, u.profile_picture
        FROM offer o
-       INNER JOIN user_ u
+       LEFT JOIN user_ u 
        ON o.owner = u.email
        WHERE o.ouid = :ouid');
-    $query->bindValue('ouid', $ouid);
+
+      $query->bindValue('ouid', $ouid);
     $query->execute();
     return $query->fetch(PDO::FETCH_ASSOC);
   }
 
 
-  public function buyOffer(string $email, int $ouid): bool
+  public function buyOffer(string $email, int $ouid): string|bool
   {
     try {
       $this->dbConn->beginTransaction();
+
       $offerQuery = $this->dbConn->prepare('
-                SELECT owner, price, deadline 
-                FROM offer 
-                WHERE ouid = :ouid
+                SELECT o.owner, o.price, o.deadline, o.type, o.quantity, u.role as owner_role
+                FROM offer o
+                JOIN user_ u ON o.owner = u.email
+                WHERE o.ouid = :ouid
             ');
       $offerQuery->bindValue('ouid', $ouid);
       $offerQuery->execute();
       $offer = $offerQuery->fetch(PDO::FETCH_ASSOC);
 
       //Si l'offre n'existe pas
-      if (!$offer) {
+      if (!$offer|| !isset($offer['type'])) {
         $this->dbConn->rollBack();
         return false;
       }
@@ -185,29 +150,67 @@ class TradeDB extends DataBase {
         $this->dbConn->rollBack();
         return false;
       }
-      // Si l'utilisateur n'as pas assez de sous
-      $queryForBalance = AccountDB::getInstance()->getBalance($email);
-      if ($queryForBalance === false || $queryForBalance < $offer['price']) {
+
+      //si l'offre n'est plus disponible
+      if($offer['quantity'] <= 0) {
         $this->dbConn->rollBack();
         return false;
       }
-      $queryRemoveMoney = $this->dbConn->prepare('
+
+      // Récupérer le rôle de l'acheteur
+      $buyerRoleQuery = $this->dbConn->prepare('SELECT role FROM user_ WHERE email = :email');
+      $buyerRoleQuery->bindValue('email', $email);
+      $buyerRoleQuery->execute();
+      $buyerRoleRow = $buyerRoleQuery->fetch(PDO::FETCH_ASSOC);
+      $buyerRole = $buyerRoleRow ? $buyerRoleRow['role'] : 'student';
+
+      if ($offer['type'] === 'offer') {
+        // Offre classique : l'acheteur paye le vendeur
+        $buyerEmail  = $email;
+        $sellerEmail = $offer['owner'];
+        $buyerPays   = ($buyerRole !== 'teacher'); // teacher ne paye pas
+        $sellerGains = true;
+      } else {
+        // Demande : le créateur de la demande donne de la valeur au fulfiller (email)
+        // Le créateur (owner) ne dépense rien, le fulfiller (email) reçoit le prix
+        $buyerEmail  = $offer['owner']; // logiquement l'owner est le "payeur"
+        $sellerEmail = $email;          // le fulfiller reçoit
+        $buyerPays   = false;           // le créateur de la demande ne dépense pas
+        $sellerGains = true;            // le fulfiller reçoit le prix
+      }
+
+      // Vérification de solde uniquement si l'acheteur doit vraiment payer
+      if ($buyerPays) {
+        $queryForBalance = AccountDB::getInstance()->getBalance($buyerEmail);
+        if ($queryForBalance === false || $queryForBalance < $offer['price']) {
+          $this->dbConn->rollBack();
+          return false;
+        }
+      }
+
+      // Déduire le montant du payeur si nécessaire
+      if ($buyerPays) {
+        $queryRemoveMoney = $this->dbConn->prepare('
                 UPDATE user_
                 SET balance = balance - :price
                 WHERE email = :email'
-      );
-      $queryRemoveMoney->bindValue('price', $offer['price']);
-      $queryRemoveMoney->bindValue('email', $email);
-      $queryRemoveMoney->execute();
+        );
+        $queryRemoveMoney->bindValue('price', $offer['price']);
+        $queryRemoveMoney->bindValue('email', $buyerEmail);
+        $queryRemoveMoney->execute();
+      }
 
-      $queryAddMoney = $this->dbConn->prepare('
+      // Créditer le vendeur/fulfiller
+      if ($sellerGains) {
+        $queryAddMoney = $this->dbConn->prepare('
                 UPDATE user_ 
                 SET balance = balance + :price 
                 WHERE email = :email
             ');
-      $queryAddMoney->bindValue('price', $offer['price']);
-      $queryAddMoney->bindValue('email', $offer['owner']);
-      $queryAddMoney->execute();
+        $queryAddMoney->bindValue('price', $offer['price']);
+        $queryAddMoney->bindValue('email', $sellerEmail);
+        $queryAddMoney->execute();
+      }
 
       $transactionQuery = $this->dbConn->prepare('
                 INSERT INTO transactions(email, ouid, amount, transaction_time) 
@@ -219,8 +222,17 @@ class TradeDB extends DataBase {
       $transactionQuery->bindValue('transaction_time', date('Y-m-d H:i:s'));
       $transactionQuery->execute();
 
+        $queryQuantity = $this->dbConn->prepare('
+                update offer
+                set quantity = quantity - 1
+                where ouid = :ouid
+            ');
+        $queryQuantity->bindValue('ouid', $ouid);
+        $queryQuantity->execute();
+
       $this->dbConn->commit();
-      return true;
+
+        return true;
     } catch (\Exception $e) {
       $this->dbConn->rollBack();
       return false;
@@ -245,7 +257,7 @@ class TradeDB extends DataBase {
    */
   public function getUserOffers(string $email): array {
     $query = $this->dbConn->prepare(
-      'SELECT o.ouid, owner, u.username as \'username\', title, description, price, deadline
+      'SELECT o.ouid, owner, u.username as \'username\', title, description, price, deadline, o.type, u.profile_picture
        FROM offer o
        INNER JOIN user_ u
        ON o.owner = u.email
@@ -262,7 +274,7 @@ class TradeDB extends DataBase {
    */
   public function getBoughtOffers(string $email): array {
     $query = $this->dbConn->prepare(
-      'SELECT o.ouid, owner, u.username as \'username\', o.title, o.description, o.price, o.deadline
+      'SELECT o.ouid, owner, u.username as \'username\', u.profile_picture, o.title, o.description, o.price, o.deadline
         FROM transactions t
         INNER JOIN offer o
         ON t.ouid = o.ouid
@@ -295,18 +307,24 @@ class TradeDB extends DataBase {
    * @param float $price The price of the offer.
    * @param string $description The description of the offer.
    * @param string $deadline The deadline for the offer in 'YYYY-MM-DD' format.
+   * @param int $quantity The quantity of items in the offer.
+   * @param string $type The type of the offer (e.g., 'offer' or 'request').
+   * @param string $style The visual style of the offer card.
    * @return void
    */
-  public function insertOffre(
+  public function insertOffer(
     string $userEmail,
     string $title,
     float $price,
     string $description,
-    string $deadline
+    string $deadline,
+    int $quantity,
+    string $type,
+    string $style = 'normal'
   ): int {
     $query = $this->dbConn->prepare('
-    INSERT INTO offer(owner, title, description, price, creation_time, deadline)
-    VALUES (:owner, :title, :description, :price, :creation_time, :deadline)
+    INSERT INTO offer(owner, title, description, price, style, creation_time, deadline, quantity, type)
+    VALUES (:owner, :title, :description, :price, :style, :creation_time, :deadline, :quantity, :type)
 ');
 
     $query->bindValue('owner', $userEmail);
@@ -315,10 +333,26 @@ class TradeDB extends DataBase {
     $query->bindValue('price', $price);
     $query->bindValue('creation_time', date('Y-m-d H:i:s'));
     $query->bindValue('deadline', $deadline . ' 23:59:59');
+    $query->bindValue('quantity', $quantity);
+    $query->bindvalue('type', $type);
+    $query->bindValue('style', $style);
     $query->execute();
 
     return (int) $this->dbConn->lastInsertId();
   }
+
+    public function hasBoughtOffer(int $ouid, string $email): bool {
+      $queryTransaction = $this->dbConn->prepare(
+          'SELECT *
+          FROM transactions t
+          WHERE t.ouid = :ouid AND t.email = :email'
+      );
+        $queryTransaction->bindValue('ouid', $ouid);
+        $queryTransaction->bindValue('email', $email);
+        $queryTransaction->execute();
+        $transaction = $queryTransaction->fetch(PDO::FETCH_ASSOC);
+        return $transaction !== false;
+    }
 
   /**
    * @description Inserts a tag and associates it with an offer.

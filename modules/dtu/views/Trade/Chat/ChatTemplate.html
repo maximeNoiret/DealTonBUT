@@ -1,4 +1,4 @@
-<div class="chat-container">
+<main class="chat-container">
     <header class="chat-header">
         <a href="/user/account" class="back-btn">← Retour profil</a>
         <h2>Discussion</h2>
@@ -15,10 +15,6 @@
             <button type="submit">Envoyer</button>
         </form>
     </footer>
-</div>
+</main>
 
-<script>
-    // Pour que le chat soit toujours en bas à l'ouverture
-    const area = document.getElementById('chat-messages');
-    area.scrollTop = area.scrollHeight;
-</script>
+<script src="/_assets/scripts/ChatTemplate.js"></script>

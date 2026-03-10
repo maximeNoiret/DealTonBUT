@@ -6,7 +6,6 @@ use core\controllers\Controller;
 use dtu\models\TradeDB;
 use models\AccountDB;
 use views\Trade\Offer\Offer;
-use views\Trade\SeeOtherAccount\SeeUserOfferView;
 use views\User\AccountPage\AccountPageView;
 use views\User\LoginForm\LoginFormView;
 
@@ -84,11 +83,21 @@ class Account implements Controller
    */
   private static function generateOfferButton(int $offerId, string $ownerEmail): string {
     if (isset($_SESSION['email']) && $_SESSION['email'] === $ownerEmail) {
-      return '<a class="button-delete" href="/offre/delete?id=' . $offerId . '">Delete</a>';
-    } else if (TradeDB::getInstance()->isOfferBought($offerId)) {
+        return '<a class="button-delete" href="/offre/delete?id=' . $offerId . '">Delete</a>';
+    }
+
+    $offer = TradeDB::getInstance()->getOffer($offerId);
+    if (!$offer) return '';
+
+    if (TradeDB::getInstance()->isOfferBought($offerId)) {
         return '';
+    }
+
+    $type = $offer['type'] ?? 'offer';
+    if ($type === 'request') {
+        return '<a class="button-accept" href="/offre/buy?id=' . $offerId . '">Accept</a>';
     } else {
-      return '<a class="button-buy" href="/offre/buy?id=' . $offerId . '">Buy</a>';
+        return '<a class="button-buy" href="/offre/buy?id=' . $offerId . '">Buy</a>';
     }
   }
 
@@ -106,7 +115,7 @@ class Account implements Controller
          * @var array<string, string> $offer
          */
         $offer['button'] = self::generateOfferButton($offer['ouid'], $offer['owner']);
-        $ret = $ret . (new SeeUserOfferView($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
+        $ret = $ret . (new Offer($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
       }
       return $ret . '</section>';
     }
@@ -127,7 +136,8 @@ class Account implements Controller
         /**
          * @var array<string, string> $offer
          */
-        $ret = $ret . (new SeeUserOfferView($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
+        $offer['button'] = self::generateOfferButton($offer['ouid'], $offer['owner']);
+        $ret = $ret . (new Offer($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
       }
       return $ret . '</section>';
     }
@@ -139,7 +149,13 @@ class Account implements Controller
         if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
             echo (new LoginFormView())->render("Login - DealTonBUT", self::STYLESHEET);
         } else {
-            echo (new AccountPageView())->render("Account - DealTonBUT", self::STYLESHEET);
+            $flash = $_GET['error'] ?? null;
+            if(isset($_GET['success'])) {
+                $flash = 'update_success';
+            }
+            $view = new AccountPageView();
+            $view->setFlash($flash);
+            echo $view->render("Account - DealTonBUT", self::STYLESHEET);
         }
     }
 

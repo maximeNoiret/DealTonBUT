@@ -7,7 +7,6 @@ use dtu\models\TradeDB;
 use dtu\views\User\AdminPanel\AccountAdminPanel;
 use exceptions\AccountAlreadyExists;
 use PDO;
-use views\Trade\SeeOtherAccount\SeeUserOfferView;
 
 class AccountDB extends DataBase {
 
@@ -79,7 +78,7 @@ class AccountDB extends DataBase {
    */
   public function getAccount(string $email, string $password): bool|array {
     $query = $this->dbConn->prepare('
-      SELECT username, email, hashedpwd, balance 
+      SELECT username, email, hashedpwd, balance, profile_picture, role
       FROM user_
       WHERE email = :email');
     $query->bindValue('email', $email);
@@ -100,7 +99,9 @@ class AccountDB extends DataBase {
         return [
             'username' => $user['username'],
             'email' => $user['email'],
-            'balance' => $user['balance']
+            'balance' => $user['balance'],
+            'profile_picture' => $user['profile_picture'],
+            'role' => $user['role'],
         ];
     }
     return false;
@@ -259,6 +260,25 @@ class AccountDB extends DataBase {
     return $res['username'];
   }
 
+  public function getUserProfilePicture(string $email): string
+  {
+      $query = $this->dbConn->prepare(
+          'SELECT profile_picture FROM user_ WHERE email = :email');
+      $query->bindValue('email', $email);
+      $query->execute();
+      $res = $query->fetch();
+      return $res['profile_picture'] ?? 'account_pp.webp';
+  }
+
+  public function updateProfilPicture(string $email, string $pictureName): bool
+  {
+      $query = $this->dbConn->prepare(
+          'UPDATE user_ SET profile_picture = :pictureName WHERE email = :email');
+      $query->bindValue('email', $email);
+      $query->bindValue('pictureName', $pictureName);
+      return $query->execute();
+  }
+
   /**
    * @description Retrieves the role of a user.
    * @param string $email The email address of the user.
@@ -303,6 +323,22 @@ class AccountDB extends DataBase {
     $query->execute();
     return $query->fetchAll();
   }
+  
+  public function getTheme(string $email): ?string
+    {
+        $query = $this->dbConn->prepare('SELECT theme FROM user_ WHERE email = :email');
+        $query->bindValue('email', $email);
+        $query->execute();
+        return $query->fetchColumn() ?: null;
+    }
+
+  public function setTheme(string $email, string $theme):void
+    {
+        $queryTheme = $this->dbConn->prepare('UPDATE user_ SET theme = :theme WHERE email = :email');
+        $queryTheme->bindValue('email', $email);
+        $queryTheme->bindValue('theme', $theme);
+        $queryTheme->execute();
+    }
 }
 
 

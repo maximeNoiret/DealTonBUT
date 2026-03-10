@@ -6,11 +6,25 @@ use core\controllers\Controller;
 use dtu\models\TradeDB;
 use models\AccountDB;
 
+/**
+ * @brief Class that control the page that allow the user to buy an offer
+ */
 class BuyOffer implements Controller
 {
     const string PATH = '/offre/buy';
     const string METH = 'GET';
 
+
+    /**
+     * @description
+     * Check if the user is logged in, if not redirect to the login page
+     * Check if the offer id is valid, if not redirect to the marketplace
+     * Check if the offer exists, if not redirect to the marketplace
+     * Check if the user is not trying to buy his own offer, if yes redirect to
+     * the marketplace.
+     *
+     * @return void
+     */
     function control(): void
     {
         //vérification si l'utilisateur est connecté
@@ -51,14 +65,20 @@ class BuyOffer implements Controller
             exit;
         }
 
+
+        $email = $_SESSION['email'];
+        if (TradeDB::getInstance()->hasBoughtOffer($ouid, $email)) {
+            $_SESSION['flash_error'] = "Tu as déjà acheté cette offre.";
+            header('Location: /marketplace');
+            exit;
+        }
+
         $success = TradeDB::getInstance()->buyOffer($_SESSION['email'], $ouid);
         if ($success) {
-            $_SESSION['flash_success'] = "Achat effectué !";
+            $_SESSION['flash_success'] = "Chat achété !";
         } else {
             $_SESSION['flash_error'] = "Erreur lors de la transaction BDD.";
         }
-        $email = trim($_SESSION['email']);
-        TradeDB::getInstance()->buyOffer($email, $ouid);
         header('Location: /marketplace');
         exit;
     }

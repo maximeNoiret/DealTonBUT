@@ -4,13 +4,26 @@ namespace views\Trade\TradeSubjectPoint;
 
 use core\views\AbstractView;
 use dtu\models\SubjectDB;
+use core\models\DataBase;
 
+/**
+ * @description View for the page that allow the user to exchange points between subjects
+ */
 class TradeSubjectPointView extends AbstractView {
-
+/**
+ * @var array<int, array<string, mixed>> $subjectsRows The rows of the subjects that the user has, with the name of the subject and the points
+     */
     private ?string $error = null;
-    private $subjectsRows = [];
+    private array $subjectsRows = [];
     private float $balance = 0;
 
+    /**
+     * @description Method that set the data of the view, that will be used in the templateValues() method
+     * @param string|null $error The error message to show in the page, or null if no error
+     * @param array<int, array<string, mixed>> $subjectsRows The rows of the subjects that the user has, with the name of the subject and the points
+     * @param float $balance The balance of the user in DTC points
+     * @return void
+     */
     public function setData(?string $error, array $subjectsRows, float $balance): void {
         $this->error = $error;
         $this->subjectsRows = $subjectsRows;
@@ -20,6 +33,12 @@ class TradeSubjectPointView extends AbstractView {
     function path(): string {
         return __DIR__ . DIRECTORY_SEPARATOR . 'TradeSubjectPointTemplate.html';
     }
+
+    /**
+     * @description Define the value of the different keys in the .html file.
+     * That will be replaced by the corresponding value.
+     * @return array<string,mixed>
+     */
 
     function templateValues(): array {
         $db = SubjectDB::getInstance();
@@ -41,9 +60,6 @@ class TradeSubjectPointView extends AbstractView {
                 default => '<span class="error-text">Une erreur inconnue s\'est produite.</span><br>' . htmlspecialchars($this->error)
             };
         }
-
-
-
         $subjectsRows = $this->subjectsRows;
         $fromOptions = '';
         $toOptions = '';
@@ -52,8 +68,9 @@ class TradeSubjectPointView extends AbstractView {
         $fromOptions .= $balance;
         $toOptions .= $balance;
 
+
         foreach ($subjectsRows as $row) {
-            $subject = $row['subject_name'];
+            $subject = (string) $row['subject_name'];
             $pts = $db->getPoints($email, $subject);
 
             $option = '<option value="' . htmlspecialchars($subject) . '">' .
@@ -70,6 +87,10 @@ class TradeSubjectPointView extends AbstractView {
         ];
     }
 
+    /**
+     * @description Method that give the title of the page.
+     * @return string
+ */
     function navbarText(): string {
         return 'Échanger Points';
     }

@@ -16,6 +16,7 @@ use controllers\Trade\SeeOffer\SeeOffer;
 use controllers\Trade\TradeSubjectPoint\TradeSubjectPoint;
 use controllers\User\AccountPage\Account;
 use controllers\User\AccountPage\DeleteAccount;
+use controllers\User\AccountPage\ProfilPicture;
 use controllers\User\AdminPanel\AdminPanel;
 use controllers\User\Login\Login;
 use controllers\User\Login\LoginConfirm;
@@ -26,12 +27,12 @@ use controllers\User\PasswordForgot\PasswordReset;
 use controllers\User\PasswordForgot\PasswordResetConfirm;
 use controllers\User\Register\RegisterVerify;
 use controllers\User\Register\RegisterVerifyConfirm;
+use controllers\User\Settings\SaveTheme;
 use controllers\User\Settings\Settings;
 use controllers\User\Register\Register;
 use controllers\User\Register\RegisterConfirm;
 use controllers\Trade\Message\ChatController;
 use controllers\Trade\Message\ListConversations;
-
 use views\Forbidden;
 use views\NotFound;
 use models\AccountDB;
@@ -41,9 +42,13 @@ use controllers\Trade\SeeOtherAccount\SeeOtherAccount;
 
 include __DIR__ . '/_assets/includes/Autoloader.php';
 
+if (isset($_SESSION['email']) && isset($_SESSION['logged-in']) && $_SESSION['logged-in'] === true) {
+    $_SESSION['theme'] = \models\AccountDB::getInstance()->getTheme($_SESSION['email']) ?? $_SESSION['theme'] ?? 'normal';
+}
 
 $path = $_SERVER['REQUEST_URI'];
 $meth = $_SERVER['REQUEST_METHOD'];
+$path = parse_url($path, PHP_URL_PATH);
 
 if (preg_match('/(\.env|\.git|\.htaccess|\.apkey|composer\.(json|lock)|php|\.sql|vendor)/', $path)) {
   http_response_code(403);
@@ -72,6 +77,7 @@ $controllers = [
   new MarketPlace(),
   new Account(),
   new Settings(),
+  new SaveTheme(),
   new MarketPlace(),
   new DeleteAccount(),
   new AddOffer(),
@@ -87,6 +93,7 @@ $controllers = [
   new ChatController(),
   new ListConversations(),
   new SeeOtherAccount(),
+  new ProfilPicture(),
   new AdminPanel(),
 
   // Forbidden

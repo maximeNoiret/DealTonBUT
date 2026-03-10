@@ -3,15 +3,10 @@
 namespace controllers\User\Login;
 
 use core\controllers\Controller;
-use dtu\models\TradeDB;
-use exceptions\AccountAlreadyExists;
 use models\Account;
 /* note these are the old use : */
-//use views\User\LoginFormView;
-//use views\MarketPlaceView;
 use models\AccountDB;
 use views\User\LoginForm\LoginFormView;
-use views\Trade\MarketPlace\MarketPlaceView;
 
 class LoginConfirm implements Controller
 {
@@ -19,9 +14,9 @@ class LoginConfirm implements Controller
     const string METH = 'POST';
 
     const array STYLESHEET = [
-      '/_assets/styles/loginSingnin.css',
-      '/_assets/styles/style.css',
-      '/_assets/styles/navbar.css'
+        '/_assets/styles/loginSingnin.css',
+        '/_assets/styles/style.css',
+        '/_assets/styles/navbar.css'
     ];
 
   /**
@@ -34,15 +29,19 @@ class LoginConfirm implements Controller
     function control(): void
     {
         /**
-        * @var string $email
-        */
+         * @var string $email
+         */
         $email = $_POST['email'] ?? '';
         /**
-        * @var string $password
-        */
+         * @var string $password
+         */
         $password = $_POST['password'] ?? '';
 
         $isValid = Account::validateCredentials($email, $password);
+
+        if (isset($_SESSION['email'])) {
+            $_SESSION['theme'] = AccountDB::getInstance()->getTheme($_SESSION['email']) ?? 'normal';
+        }
 
         // if logged in
         if ($isValid) {
