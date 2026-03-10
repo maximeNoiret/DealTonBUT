@@ -35,16 +35,17 @@ class TradeDB extends DataBase {
 
     // Add limit and offset
     $query .= " LIMIT $limit OFFSET $offset";
-      $offers = DataBase::getInstance()->executeQueryWithParams($query, $params);
+    $offers = DataBase::getInstance()->executeQueryWithParams($query, $params);
 
-      $countQuery = preg_replace('/\s+ORDER BY.*/i', '', $query);
-      $countQuery = preg_replace('/\s+LIMIT\s+\d+\s+OFFSET\s+\d+/i', '', (string)$countQuery);
-      $countQuery = preg_replace(
-          '/SELECT o\.ouid\s*,.*?(?=FROM)/is',
-          'SELECT COUNT(*) as total ',
-          (string)$countQuery
-      );
-      $countResult = DataBase::getInstance()->executeQueryWithParams((string)$countQuery, $params);
+    $countQuery = 'SELECT COUNT(DISTINCT o.ouid) as total
+                   FROM offer o
+                   INNER JOIN user_ u 
+                   ON o.owner = u.email
+                   LEFT JOIN tags t 
+                   ON t.ouid = o.ouid
+                   WHERE deadline > NOW()
+                   AND o.quantity > 0';
+      $countResult = DataBase::getInstance()->executeQueryWithParams($countQuery, $params);
       $totalOffers = $countResult ? (int)$countResult[0]['total'] : 0;
 
     return [$offers, $totalOffers];
@@ -83,17 +84,14 @@ class TradeDB extends DataBase {
             }
         }
         $query .= " GROUP BY o.ouid";
-        if ($sort === 'trending') {
-            $query .= " ORDER BY MAX(IFNULL(pop.popularity, 0)) DESC, o.ouid DESC";
-        } else {
-            $allowedSorts = [
-                'price-asc'   => " ORDER BY price ASC",
-                'price-desc'  => " ORDER BY price DESC",
-                'date'        => " ORDER BY o.creation_time DESC",
-                'alphabetic'  => " ORDER BY title ASC",
-            ];
-            $query .= $allowedSorts[$sort] ?? " ORDER BY o.creation_time ASC";
-        }
+        $allowedSorts = [
+            'price-asc'   => " ORDER BY price ASC",
+            'price-desc'  => " ORDER BY price DESC",
+            'date'        => " ORDER BY o.creation_time DESC",
+            'alphabetic'  => " ORDER BY title ASC",
+            'trending'    => " ORDER BY MAX(IFNULL(pop.popularity, 0)) DESC, o.ouid DESC"
+        ];
+        $query .= $allowedSorts[$sort] ?? " ORDER BY o.creation_time ASC";
         return [$query, $params];
     }
 
