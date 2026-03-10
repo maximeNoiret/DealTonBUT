@@ -21,11 +21,11 @@
     <section class="container-un">
         <article class="form-group">
             <label class="text-theme" for="{NAME_KEY}" >*Nom de l'offre:</label>
-            <input type="text" name="{NAME_KEY}" required class="input-class-un" maxlength="30">
+            <input type="text" name="{NAME_KEY}" placeholder="Lorem Ipsum" required class="input-class-un" maxlength="30">
         </article>
         <article class="form-group">
             <label class="text-theme" for="{PRICE_KEY}">*Prix (DT₡):</label>
-            <input type="number" step="any" name="{COUT_KEY}" placeholder="X.XX ₡" required class="input-class-price">
+            <input type="number" step="any" name="{COUT_KEY}"  placeholder="X.XX ₡" min="0" max="100" required class="input-class-price">
         </article>
         <article class="form-group">
             <label class="text-theme" for="{DATE_KEY}">*Date limite:</label>
@@ -34,7 +34,7 @@
     </section>
 
     <label class="text-theme" for="{DESCRIPTION_KEY}">*Description:</label>
-    <textarea name="{DESCRIPTION_KEY}" class="input-class" maxlength="300"></textarea>
+    <textarea name="{DESCRIPTION_KEY}" class="input-class" maxlength="300" placeholder="She sell sea shell at the sea shore!"></textarea>
 
 
     <section class="container-un">
@@ -51,7 +51,7 @@
 
         <article>
             <label class="text-theme" for="{QUANTITY_KEY}" class="label-quantite">*Quantité de l'offre:</label>
-            <input type="number" name="{QUANTITY_KEY}" required class="input-class-quantite">
+            <input type="number" name="{QUANTITY_KEY}" placeholder="1" min="1" max="100" required class="input-class-quantite">
 
             <label class="text-theme" for="{STYLE_KEY}" class="label-style">Style de l'offre:</label>
             <select name="{STYLE_KEY}" id="style-select" class="input-class-style">

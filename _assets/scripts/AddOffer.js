@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function (string) {
         if (e.key === 'Enter') {
             e.preventDefault();
             const tagValue = tagInput.value.trim();
-            if (tagValue !== '' && !tags.includes(tagValue)) {
+            if (tagValue !== '' && !tags.includes(tagValue) && tags.length < 5) {
                 tags.push(tagValue);
                 addTagToDisplay(tagValue);
                 updateHiddenInput();
