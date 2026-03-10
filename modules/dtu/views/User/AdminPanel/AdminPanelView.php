@@ -3,6 +3,7 @@
 namespace dtu\views\User\AdminPanel;
 
 use controllers\User\AccountPage\Account;
+use controllers\User\AdminPanel\AdminPanel;
 use core\views\AbstractView;
 use models\AccountDB;
 
@@ -23,11 +24,9 @@ class AdminPanelView extends AbstractView
    */
   function templateValues(): array
   {
-    $values = [
-      /*'ACCOUNTS' => new AccountAdminPanelView()->render('article','account-manage')*/
-      'ACCOUNTS' => AccountDB::getInstance()->getAllAccountHtml(AccountDB::getInstance()->getAllAccount())
+    return [
+      'ACCOUNTS' => (new AdminPanel())->getAllAccountHtml()
     ];
-    return $values;
   }
 
   /**

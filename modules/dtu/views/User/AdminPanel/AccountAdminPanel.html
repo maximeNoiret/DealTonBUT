@@ -4,9 +4,9 @@
     <p class="account-manage-element">{ROLE}</p>
     <p class="account-manage-element">{BALANCE} </p>
 <!--    <a class="button-delete">{DELETE}</a>-->
-    <form method="POST" action="/user/delete-account" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer définitivement votre compte ?');">
+<!--    <form method="POST" action="/user/delete-account" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer définitivement votre compte ?');">
         <button type="submit" class="button-delete">DELETE</button>
-    </form>
+    </form>-->
 
     <form method="POST" action="/user/delete-account" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer définitivement votre compte ?');">
         <input type="hidden" name="remove-account" value="{EMAIL_USER}"/>
