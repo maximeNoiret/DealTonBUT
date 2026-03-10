@@ -22,6 +22,14 @@ class AdminPanel
     '/_assets/styles/adminPanel.css'
   ];
 
+  /**
+   * @description Check if the user is logged in, if not redirect to the login page.
+   * If yes, check if the user is an admin, if not redirect to the login page,
+   * if yes display the admin panel.
+   * @Warning The role of the user is written in the session at the moment of the
+   * login, in the LoginConfirm controller.
+   * @return void
+   */
   function control():void {
     // NOTE : the moment when the role of the user is written is in the LoginConfirm controller
     if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true || !AccountDB::getInstance()->isAdmin($_SESSION['email'])) {
@@ -38,6 +46,8 @@ class AdminPanel
 
   /**
    * @description Return the html code to display all the accounts and their associated information.
+   * Use the method getAllAccount() of AccountDB to obtain the account and their information.
+   * The HTML is situated in AccountAdminPanel.html, and the CSS in adminPanel.css.
    * @return string The HTML code to display the email, role and balance of all
    * the accounts, as well as a delete button for each account.
    */
@@ -47,26 +57,13 @@ class AdminPanel
      * where each account is an associative array with keys 'email', 'username', 'hashedpwd', 'role' and 'balance'.
      */
     $accounts = AccountDB::getInstance()->getAllAccount();
-    $html = '<section class ="manage-account-panel">'."\n";
-    /*    foreach ($accounts as $account) {
-          $html .='<article class="account-manage">'."\n";
-          $html .='<p class="account-manage-element"><a href="/account/see?email='.$account['email'].'">'.$account['email'].'</a></p>'."\n";
-          $html .='<p class="account-manage-element">'.$account['role'].'</p>'."\n";
-          $html .='<p class="account-manage-element">'.$account['balance'].'</p>'."\n";
-          $html .=
-            '<form method="POST" action="/user/delete-account" onsubmit="return confirm(\'Êtes-vous sûr de vouloir supprimer définitivement votre compte ?\');">'
-            .'<input type="hidden" name="remove-account" value="'.$account['email'].'"/>'."\n"
-            .'<input type="submit" name="delete-email" class="Admin-button-delete" value="DELETE"/>'."\n"
-            .'</form>'."\n";
 
-    //      '<button type="submit" class="button-delete">DELETE</button>'."\n"
-    //      ?email='.$account['email'].'
-          $html .='</article>'."\n";
-        }*/
+    $html = '<section class ="manage-account-panel">'."\n";
     foreach ($accounts as $account) {
       $html .= (new AccountAdminPanel($account))->render('article', 'account-manage');
     }
     $html .='</section>'."\n";
+
     return $html;
   }
 
