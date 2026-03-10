@@ -2,6 +2,7 @@
 
 namespace controllers\User\AdminPanel;
 
+use dtu\models\TradeDB;
 use dtu\views\User\AdminPanel\AccountAdminPanel;
 use dtu\views\User\AdminPanel\AdminPanelView;
 use models\AccountDB;
@@ -58,11 +59,9 @@ class AdminPanel
      */
     $accounts = AccountDB::getInstance()->getAllAccount();
     $html = '';
-//    $html = '<section class ="manage-account-panel">'."\n";
     foreach ($accounts as $account) {
       $html .= (new AccountAdminPanel($account))->render('article', 'account-manage');
     }
-//    $html .='</section>'."\n";
 
     return $html;
   }
