@@ -12,6 +12,12 @@ class AccountDB extends DataBase {
 
   protected static $instance;
 
+  /**
+   * @description Checks if the user with the given email is the owner of the offer with the given ouid.
+   * @param mixed $email
+   * @param int $param
+   * @return bool True if the user with the given email is the owner of the offer with the given ouid, false otherwise.
+   */
   public static function ownsOffer(mixed $email, int $param): bool
   {
     $dbConn = self::getInstance()->dbConn;
