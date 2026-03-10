@@ -1,14 +1,9 @@
-<!--
-the admin must see all the offers, account, message, transaction
-the admin can delete, edit, create offer, account, message, balance
--->
 <section class="admin-panel-container">
-<!--    Panneau d'Administration -->
     <h1 class="admin-panel-title">Panneau d'Administration</h1>
     <div class="admin-panel-option">
-        <button class="admin-option-button" id="account-button">Gérer les utilisateurs</button>
-        <button class="admin-option-button" id="offer-button">Gérer les offres</button>
-        <button class="admin-option-button" id="transaction-button">Gérer les transactions</button>
+        <button class="admin-option-button" id="account-button">Utilisateurs</button>
+        <button class="admin-option-button" id="offer-button">Offres</button>
+<!--        <button class="admin-option-button" id="transaction-button">Gérer les transactions</button>-->
     </div>
     <section class="manage-account-panel">
         {ACCOUNTS}
@@ -16,9 +11,9 @@ the admin can delete, edit, create offer, account, message, balance
     <section class="manage-offer-panel">
         {OFFERS}
     </section>
-    <section class="manage-transaction-panel">
-        {TRANSACTIONS}
-    </section>
+<!--    <section class="manage-transaction-panel">-->
+<!--        {TRANSACTIONS}-->
+<!--    </section>-->
 </section>
 
 <script src="/_assets/scripts/AdminPanel.js"></script>
