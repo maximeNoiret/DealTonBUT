@@ -15,7 +15,8 @@ class ChatController implements Controller
     /**
      * @var string PATH : The path to access the chat page
      */
-    public const PATH = '/chat';
+    public const string PATH = '/chat';
+    public const string API_PATH = '/chat/updates';
 
     /**
      * @description Store all the different stylesheet used
@@ -42,9 +43,30 @@ class ChatController implements Controller
             header('Location: /user/login');
             return;
         }
-
         $dbMessage = MessageDB::getInstance();
         $session_email = is_string($_SESSION['email'] ?? null) ? $_SESSION['email'] : '';
+        $currentPath = strtok($_SERVER['REQUEST_URI'], '?');
+
+        if ($currentPath === self::API_PATH) {
+            header('Content-Type: application/json');
+            $id_conv = is_numeric($_GET['id_conv'] ?? null) ? (int)$_GET['id_conv'] : 0;
+            $session_email = $_SESSION['email'];
+
+            $dbMessage = MessageDB::getInstance();
+            if($id_conv > 0 && $dbMessage->allowedToChat($session_email, $id_conv)) {
+                $messages = $dbMessage->getMessagesByConversation($id_conv);
+
+                $view = new ChatView();
+                $view->setData($messages, $id_conv, $session_email);
+
+                $htmlMessages = $view->templateValues()['MESSAGES'];
+
+                echo json_encode(['html' => $htmlMessages]);
+            } else {
+                echo json_encode(['html' => '<p>Erreur de chargement...</p>']);
+            }
+            exit();
+        }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id_conv = is_numeric($_POST['id_conv'] ?? null) ? (int)$_POST['id_conv'] : 0;
@@ -82,7 +104,9 @@ class ChatController implements Controller
     }
 
     public static function resolve(string $path, string $meth): bool {
-        return strtok($path, '?') === static::PATH && ($meth == 'GET' || $meth == 'POST');
+        $currentPath = strtok($path, '?');
+        return ($currentPath === static::PATH || $currentPath === static::API_PATH)
+            && ($meth == 'GET' || $meth == 'POST');
     }
 }
 

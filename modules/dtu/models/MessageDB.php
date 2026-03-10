@@ -117,4 +117,16 @@ class MessageDB extends DataBase {
         $query->execute();
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getLastMessages(int $id_conv, string $lastDate) : array {
+        $query = $this->dbConn->prepare('SELECT m.content, m.date_msg, m.email, u.username
+                                               FROM message m
+                                               JOIN user_ u ON m.email = u.email
+                                               WHERE m.id_conv = :id_conv AND m.date_msg > :lastDate
+                                               ORDER BY m.date_msg ASC');
+        $query->bindValue('id_conv', $id_conv);
+        $query->bindValue('lastDate', $lastDate);
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

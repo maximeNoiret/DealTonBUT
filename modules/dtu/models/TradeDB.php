@@ -57,39 +57,45 @@ class TradeDB extends DataBase {
    * @param string $query the sql query that is under construction
    * @return array{0: string, 1: array<string, mixed>} A tuple of [SQL query, bound params]
    */
-  static function SortOffers(string $query): array
-  {
-    $sort = $_GET['sort'] ?? null;
-    $params = [];
+    static function SortOffers(string $query): array
+    {
+        $sort = $_GET['sort'] ?? null;
+        $params = [];
+        if ($sort === 'trending') {
+            $trendingJoin = " 
+                            LEFT JOIN 
+                            ( SELECT tagname, COUNT(*) as popularity 
+                            FROM tags 
+                            GROUP BY tagname ) 
+                            AS pop ON t.tagname = pop.tagname ";
 
-    /**
-     * @var array<string> $_GET['search-string']
-     */
-    if (isset($_GET['search-string']) && !empty($_GET['search-string'])) {
-      $searchString = trim($_GET['search-string']);
-      if (str_starts_with($searchString, '#')) {
-        $query .= " AND t.tagname LIKE :tagname";
-        $params[':tagname'] = '%' . substr($searchString, 1) . '%';
-      } else {
-        $query .= " AND (title LIKE :searchTitle OR description LIKE :searchDesc)";
-        $params[':searchTitle'] = '%' . $searchString . '%';
-        $params[':searchDesc']  = '%' . $searchString . '%';
-      }
+            $query = str_replace("WHERE", $trendingJoin . " WHERE", $query);
+        }
+        if (isset($_GET['search-string']) && !empty($_GET['search-string'])) {
+            $searchString = trim($_GET['search-string']);
+            if (str_starts_with($searchString, '#')) {
+                $query .= " AND t.tagname LIKE :tagname";
+                $params[':tagname'] = '%' . substr($searchString, 1) . '%';
+            } else {
+                $query .= " AND (title LIKE :searchTitle OR description LIKE :searchDesc)";
+                $params[':searchTitle'] = '%' . $searchString . '%';
+                $params[':searchDesc']  = '%' . $searchString . '%';
+            }
+        }
+        $query .= " GROUP BY o.ouid";
+        if ($sort === 'trending') {
+            $query .= " ORDER BY MAX(IFNULL(pop.popularity, 0)) DESC, o.ouid DESC";
+        } else {
+            $allowedSorts = [
+                'price-asc'   => " ORDER BY price ASC",
+                'price-desc'  => " ORDER BY price DESC",
+                'date'        => " ORDER BY o.creation_time DESC",
+                'alphabetic'  => " ORDER BY title ASC",
+            ];
+            $query .= $allowedSorts[$sort] ?? " ORDER BY o.creation_time DESC";
+        }
+        return [$query, $params];
     }
-
-    $allowedSorts = [
-      'price-asc'   => " ORDER BY price ASC",
-      'price-desc'  => " ORDER BY price DESC",
-      'date'        => " ORDER BY creation_time DESC",
-      'alphabetic'  => " ORDER BY title ASC",
-      'trending'    => " ORDER BY COUNT(t.tagname) DESC, o.creation_time DESC"
-    ];
-    if ($sort !== null && isset($allowedSorts[$sort])) {
-      $query .= $allowedSorts[$sort];
-    }
-
-    return [$query, $params];
-  }
 
 
   /**

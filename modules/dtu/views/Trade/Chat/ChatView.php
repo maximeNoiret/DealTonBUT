@@ -55,7 +55,7 @@ class ChatView extends AbstractView
                 $class = $isMe ? 'msg-me' : 'msg-other';
 
                 $messagesHtml .= '
-                <div class="message-wrapper ' . $class . '">
+                <div class="message-wrapper ' . $class . '" data-date="' .$msg['date_msg'] .'">
                     <div class="message-bubble">
                         <span class="sender-name">' . htmlspecialchars($msg['username']) . '</span>
                         <p class="text">' . htmlspecialchars($msg['content']) . '</p>
