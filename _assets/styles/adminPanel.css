@@ -101,20 +101,39 @@
     transition: background-color 0.2s ease-in-out;
 }
 
+@media screen and (max-width: 625px) {
+    .account-manage {
+        flex-direction: column;
+    }
+    .account-manage-element {
+        border-right: none;
+        border-bottom: 1px solid #8C8C8C;
+        padding-right: 0;
+        padding-bottom: 1rem;
+    }
+
+}
+
 /* ------------------------------------------------------------------------- */
 /* ***************************** Manage  Offer ***************************** */
 /* ------------------------------------------------------------------------- */
 
 .manage-offer-panel {
-    /*display: flex;*/
-    /*flex-direction: column;*/
-    /*padding: 1rem;*/
-    /*gap: 1rem;*/
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    gap: 1rem;
+}
 
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
-    gap: clamp(3rem, 2vw, 4rem);
-    padding: 0.5rem;
+@media screen and (max-width: 480px) {
+    .manage-offer-panel {
+        padding: 0 0 0.5rem;
+        justify-content: center;
+    }
+    .offer-grid {
+        padding: 0;
+        gap: 0.7rem;
+    }
 }
 
 /* ------------------------------------------------------------------------- */
