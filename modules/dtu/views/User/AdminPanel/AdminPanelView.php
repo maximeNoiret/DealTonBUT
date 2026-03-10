@@ -28,7 +28,7 @@ class AdminPanelView extends AbstractView
   {
     return [
       'ACCOUNTS' => (new AdminPanel())->getAllAccountHtml(),
-      'OFFERS' => (new MarketPlace())->offersHTML(),
+      'OFFERS' => (new AdminPanel())->genAdminOffersHtml(),
     ];
   }
 
