@@ -4,14 +4,14 @@ document.addEventListener('DOMContentLoaded', function (){
     // Select the panels, by using their CSS class name
     const adminAccount = document.querySelector('.manage-account-panel');
     const adminOffer = document.querySelector('.manage-offer-panel');
-    // SCRAPPED
-    // const adminTransaction = document.querySelector('.manage-transaction-panel');
 
     // Select the buttons, by using their id
     const userButton = document.querySelector('#account-button');
     const offerButton = document.querySelector('#offer-button');
-    // SCRAPPED
-    // const transactionButton = document.querySelector('#transaction-button');
+
+    // Select the input for the search of the offers, by using its id
+    const offerSearchInput = document.querySelector('#offer-search-input');
+    const offerSortOption = document.querySelectorAll('#sortDropdown > a')
 
     // Function that show the selected panel and hide the others
     /**
@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', function (){
     function showAccounts() {
         adminAccount.style.display = 'flex';
         adminOffer.style.display = 'none';
-        // adminTransaction.style.display = 'none';
     }
     /**
      * Set the display of adminOffer to 'flex' and the others to 'none'
@@ -28,27 +27,14 @@ document.addEventListener('DOMContentLoaded', function (){
     function showOffers() {
         adminAccount.style.display = 'none';
         adminOffer.style.display = 'flex';
-        // adminTransaction.style.display = 'none';
     }
 
-    // SCRAPPED
-    // /**
-    //  * Set the display of adminTransaction to 'flex' and the others to 'none'
-    //  */
-    // function showTransactions() {
-    //     adminAccount.style.display = 'none';
-    //     adminOffer.style.display = 'none';
-    //     adminTransaction.style.display = 'flex';
-    // }
 
     // Add event listeners to the buttons
     userButton.addEventListener('click', showAccounts);
     offerButton.addEventListener('click', showOffers);
-    // SCRAPPED
-    // transactionButton.addEventListener('click', showTransactions);
 
-    // by default the accounts panel is shown
-    showAccounts();
+    showOffers()
 })
 
 function loadMoreOffersAdmin(offset, params) {
@@ -64,41 +50,39 @@ function loadMoreOffersAdmin(offset, params) {
 
     // Fetch the new offers
     fetch(url, {
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
+        headers: {'X-Requested-With': 'XMLHttpRequest'}
+    })
+    .then(response => response.text())
+    .then(html => {
+        // Parse the HTML response
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+
+        // Get the offer grid and new offers
+        const newOfferGrid = doc.querySelector('#offer-grid');
+        const newLoadMoreContainer = doc.querySelector('.load-more-container');
+        const currentOfferGrid = document.querySelector('#offer-grid');
+
+        if (newOfferGrid && currentOfferGrid) {
+            // Append new offers to existing grid (including the <a> wrappers)
+            const newOffers = newOfferGrid.children;
+            // Convert HTMLCollection to Array to avoid issues with live collections
+            Array.from(newOffers).forEach(offer => {
+                currentOfferGrid.appendChild(offer.cloneNode(true));
+            });
+        }
+
+        // Update or remove the load more button
+        if (newLoadMoreContainer) {
+            loadMoreContainer.replaceWith(newLoadMoreContainer);
+        } else {
+            loadMoreContainer.remove();
         }
     })
-        .then(response => response.text())
-        .then(html => {
-            // Parse the HTML response
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-
-            // Get the offer grid and new offers
-            const newOfferGrid = doc.querySelector('#offer-grid');
-            const newLoadMoreContainer = doc.querySelector('.load-more-container');
-            const currentOfferGrid = document.querySelector('#offer-grid');
-
-            if (newOfferGrid && currentOfferGrid) {
-                // Append new offers to existing grid (including the <a> wrappers)
-                const newOffers = newOfferGrid.children;
-                // Convert HTMLCollection to Array to avoid issues with live collections
-                Array.from(newOffers).forEach(offer => {
-                    currentOfferGrid.appendChild(offer.cloneNode(true));
-                });
-            }
-
-            // Update or remove the load more button
-            if (newLoadMoreContainer) {
-                loadMoreContainer.replaceWith(newLoadMoreContainer);
-            } else {
-                loadMoreContainer.remove();
-            }
-        })
-        .catch(error => {
-            console.error('Error loading more offers:', error);
-            loadMoreBtn.disabled = false;
-            loadMoreBtn.textContent = 'Plus d\'offres ?';
-            alert('Erreur lors du chargement des offres. Veuillez réessayer.');
-        });
+    .catch(error => {
+        console.error('Error loading more offers:', error);
+        loadMoreBtn.disabled = false;
+        loadMoreBtn.textContent = 'Plus d\'offres ?';
+        alert('Erreur lors du chargement des offres. Veuillez réessayer.');
+    });
 }
