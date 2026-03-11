@@ -25,13 +25,14 @@ class ProfilPicture implements Controller
      * @param $filePath
      * @return bool
      */
-    public function validate_mime_type($filePath): bool
+    public function validate_mime_type(string $filePath): bool
     {
         $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp' , 'image/gif'];
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        if ($finfo === false) { return false; }
         $mimeType = finfo_file($finfo, $filePath);
         finfo_close($finfo);
-        return in_array($mimeType, $allowedMimeTypes);
+        return is_string($mimeType) && in_array($mimeType, $allowedMimeTypes);
     }
 
     /**
@@ -48,63 +49,72 @@ class ProfilPicture implements Controller
      */
     public function control(): void
     {
-        if (!isset($_SESSION['email'])) {
+        $sessionEmail = $_SESSION['email'] ?? null;
+        if (!is_string($sessionEmail)) {
             header('Location: /login');
             exit();
         }
 
-        // Vérification de la taille et du type de fichier
-        if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] === UPLOAD_ERR_OK) {
-            $file = $_FILES['profile_picture'];
+        //Vérifier que le fichier a été uploadé sans erreur
+        $file = $_FILES['profile_picture'] ?? null;
+        if (!is_array($file) || ($file['error'] ?? null) !== UPLOAD_ERR_OK) {
+            header('Location: /user/account?error=upload_failed');
+            exit();
+        }
 
-            if($file['size'] > 5 * 1024 * 1024) {
-                header('Location: /user/account?error=file_too_large');
-                exit();
-            }
-            if(!$this->validate_mime_type($file['tmp_name'])) {
-                header('Location: /user/account?error=invalid_file_type');
-                exit();
-            }
-            $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-            $allowed = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+        $tmpName  = is_string($file['tmp_name'] ?? null) ? $file['tmp_name'] : '';
+        $fileName = is_string($file['name'] ?? null) ? $file['name'] : '';
+        $fileSize = is_int($file['size'] ?? null) ? $file['size'] : 0;
 
-            // Modification du nom du fichier pour normaliser et éviter les conflits
-            if (in_array($extension, $allowed)) {
+        $docRoot = is_string($_SERVER['DOCUMENT_ROOT'] ?? null) ? $_SERVER['DOCUMENT_ROOT'] : '';
 
-                $safeName = preg_replace(
-                    '/[^a-z0-9]/',
-                    '',
-                    explode('@', $_SESSION['email'])[0]
-                );
+        // Vérifier la taille du fichier
+        if ($fileSize > 3 * 1024 * 1024) {
+            header('Location: /user/account?error=file_too_large');
+            exit();
+        }
+        // Vérifier le type MIME du fichier
+        if (!$this->validate_mime_type($tmpName)) {
+            header('Location: /user/account?error=invalid_file_type');
+            exit();
+        }
 
-                $newName = 'pdp_' . $safeName . '_' . time() . '.' . $extension;
-                $destinationPath = $_SERVER['DOCUMENT_ROOT']. '/_assets/images/profil_picture/' . $newName;
-                if (move_uploaded_file($file['tmp_name'], $destinationPath)) {
-                    // Supprimer l'ancienne photo de profil si elle existe et n'est pas la photo par défaut
-                    $accountDB = AccountDB::getInstance();
-                    if (isset($_SESSION['profile_picture']) && !empty($_SESSION['profile_picture'])) {
-                        $oldFileName = $_SESSION['profile_picture'];
-                        $oldFilePath = $_SERVER['DOCUMENT_ROOT'] . '/_assets/images/profil_picture/' . $oldFileName;
-
-                        if ($oldFileName !== 'account_pp.webp' && $oldFileName !== 'default.png' && file_exists($oldFilePath)) {
-                            unlink($oldFilePath);
-                        }
-                    }
-                    // Mettre à jour la base de données avec le nouveau nom de fichier
-                    $accountDB->updateProfilPicture($_SESSION['email'], $newName);
-                    // Mettre à jour la session avec le nouveau nom de fichier
-                    $_SESSION['profile_picture'] = $newName;
-                    header('Location: /user/account?success=1');
-                    exit();
-
-                } else {
-                    header('Location: /user/account?error=dbTransfer_failed');
-                    exit();
-                }
-            }
+        // Vérifier l'extension du fichier
+        $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        $allowed = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+        if (!in_array($extension, $allowed)) {
             header('Location: /user/account?error=invalid_file');
             exit();
         }
+        // Mettre un nom de fichier unique
+        $emailParts = explode('@', $sessionEmail);
+        $safeName = preg_replace('/[^a-z0-9]/', '', $emailParts[0]) ?? 'profile';
+
+        $newName = 'pdp_' . $safeName . '_' . time() . '.' . $extension;
+        $destinationPath = $docRoot . '/_assets/images/profil_picture/' . $newName;
+
+        if (!move_uploaded_file($tmpName, $destinationPath)) {
+            header('Location: /user/account?error=dbTransfer_failed');
+            exit();
+        }
+
+        //Suppr l'ancienne pdp si elle existe et n'est pas la pdp par défaut
+        $accountDB = AccountDB::getInstance();
+        $oldFileName = $_SESSION['profile_picture'] ?? null;
+
+        if (is_string($oldFileName) && !empty($oldFileName)) {
+            $oldFilePath = $docRoot . '/_assets/images/profil_picture/' . $oldFileName;
+
+            if ($oldFileName !== 'account_pp.webp' && $oldFileName !== 'default.png' && file_exists($oldFilePath)) {
+                unlink($oldFilePath);
+            }
+        }
+
+        $accountDB->updateProfilPicture($sessionEmail, $newName);
+        $_SESSION['profile_picture'] = $newName;
+
+        header('Location: /user/account?success=1');
+        exit();
     }
 
     static function resolve(string $path, string $meth): bool

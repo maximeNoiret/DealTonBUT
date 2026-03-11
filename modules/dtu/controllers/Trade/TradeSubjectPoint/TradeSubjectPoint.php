@@ -13,13 +13,13 @@ use models\AccountDB;
  */
 class TradeSubjectPoint implements Controller {
 
-    public const PATH = '/trade/points';
-    public const METH = 'GET';
+    public const string PATH = '/trade/points';
+    public const string METH = 'GET';
 
     /**
      * @var array<string> STYLESHEET The different stylesheet used for the page
      */
-    const STYLESHEET = [
+    const array STYLESHEET = [
         '/_assets/styles/style.css',
         '/_assets/styles/TradeSubjectPoints.css',
         '/_assets/styles/navbar.css'
@@ -27,17 +27,23 @@ class TradeSubjectPoint implements Controller {
 
     /**
      * @description
-     * Check if the mime type of the file is one of the allowed types (jpg, jpeg, png, webp, gif)
-     * @param $filePath
+     * Check if the mime type of the file is one of the allowed types (ics/calendar)
+     * @param mixed $filePath
      * @return bool
      */
-    public function validate_mime_type($filePath): bool
+    public function validate_mime_type(mixed $filePath): bool
     {
-        $allowedMimeTypes = ['calendar/ics'];
+        if (!is_string($filePath) || !is_file($filePath)) {
+            return false;
+        }
+        $allowedMimeTypes = ['calendar/ics', 'text/calendar'];
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        if ($finfo === false) {
+            return false;
+        }
         $mimeType = finfo_file($finfo, $filePath);
         finfo_close($finfo);
-        return in_array($mimeType, $allowedMimeTypes);
+        return is_string($mimeType) && in_array($mimeType, $allowedMimeTypes);
     }
 
     /**
@@ -68,15 +74,16 @@ class TradeSubjectPoint implements Controller {
             $error = null;
 
             $dbBalance = AccountDB::getInstance();
+            $post = $_POST;
 
             // Traitement du formulaire de transfert de points
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $formType = $_POST['form_type'] ?? '';
+                $formType = is_string($_POST['form_type'] ?? null) ? $_POST['form_type'] : '';
 
                 if ($formType === 'points_transfer') {
 
-                    $from = $_POST['from_subject'] ?? '';
-                    $to = $_POST['to_subject'] ?? '';
+                    $from = is_string($_POST['from_subject'] ?? null) ? $_POST['from_subject'] : '';
+                    $to   = is_string($_POST['to_subject']   ?? null) ? $_POST['to_subject']   : '';
                     $points = is_numeric($_POST['points'] ?? null) ? (float)$_POST['points'] : 0.0;
                     // Validation des entrées
                     if ($from === $to) {
@@ -118,8 +125,12 @@ class TradeSubjectPoint implements Controller {
 
                 //ICS Import
                 // Vérification du type mime du fichier
-                if ($formType === 'ics_import' && isset($_FILES['ics_file']) && $_FILES['ics_file']['error'] === UPLOAD_ERR_OK) {
-                    if (!$this->validate_mime_type($_FILES['ics_file']['tmp_name'])) {
+                $icsFile = $_FILES['ics_file'] ?? null;
+                $isIcsArray = is_array($icsFile);
+
+                if ($formType === 'ics_import' && $isIcsArray && ($icsFile['error'] ?? -1) === UPLOAD_ERR_OK) {
+                    $tmpName = $icsFile['tmp_name'] ?? null;
+                    if (!$this->validate_mime_type($tmpName)) {
                         $error = 'error_invalid_file_type';
                     }
                 }
@@ -127,23 +138,27 @@ class TradeSubjectPoint implements Controller {
                 if ($formType === 'ics_import') {
                     $maxsize= 2 * 1024 * 1024; // Taille max 2MB
 
-                    if (!isset($_FILES['ics_file']) || $_FILES['ics_file']['error'] !== 0) {
+                    if (!is_array($icsFile) || ($icsFile['error'] ?? -1) !== UPLOAD_ERR_OK) {
                         $error = 'error_upload';
                     }
                     else {
-                        $extension = strtolower(pathinfo($_FILES['ics_file']['name'], PATHINFO_EXTENSION));
+                        $fileName = is_string($icsFile['name'] ?? null) ? $icsFile['name'] : '';
+                        $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+                        $fileSize = is_numeric($icsFile['size'] ?? null) ? (int)$icsFile['size'] : 0;
                         if ($extension !== 'ics') {
                             $error = 'error_invalid_file_type';
                         }
-                        elseif ($_FILES['ics_file']['size'] > $maxsize) {
+                        elseif ($fileSize > $maxsize) {
                             $error = 'error_file_too_large';
                         }
                         else {
                             // Lecture du fichier ICS et extraction des matières
                             $subjects = [];
-                            $lines = file($_FILES['ics_file']['tmp_name']);
+                            $tmpPath = $icsFile['tmp_name'] ?? '';
+                            $lines = is_string($tmpPath) && is_file($tmpPath) ? file($tmpPath) : false;
 
-                            foreach ($lines as $line) {
+                            if ($lines === false) { $error = 'error_upload'; }
+                            else foreach ($lines as $line) {
                                 if (strpos($line, 'SUMMARY:') === false) {
                                     continue;
                                 }
@@ -163,9 +178,7 @@ class TradeSubjectPoint implements Controller {
                                 }
 
                                 // Truncate before TD, TP, Examen CM
-                                $subject = preg_replace('/\s*(TD|TP|Examen|CM|Oral|\()\b.*$/i', '', $subject);
-                                $subject = trim($subject);
-
+                                $subject = trim((string)preg_replace('/\s*(TD|TP|Examen|CM|Oral|\()\b.*$/i', '', $subject));
                                 $subjects[] = $subject;
                             }
 
@@ -183,8 +196,11 @@ class TradeSubjectPoint implements Controller {
                 }
             }
 
+            /** @var array<int, array<string, mixed>> $subjectsRows */
             $subjectsRows = $dbSubject->getSubject($email);
-            $balance = $dbBalance->getBalance($email);
+            $balanceRaw = $dbBalance->getBalance($email);
+            $balance = is_numeric($balanceRaw) ? (float)$balanceRaw : 0.0;
+
             $view = new TradeSubjectPointView();
             $view->setData($error, $subjectsRows, $balance);
             echo $view->render("Échanger Points - DealTonBUT", static::STYLESHEET);

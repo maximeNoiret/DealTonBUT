@@ -9,6 +9,7 @@ use core\views\AbstractView;
  */
 class ListConversationsView extends AbstractView {
 
+    /** @var array<int, array<string, mixed>> */
     private array $conversations = [];
     private string $my_email = '';
 
@@ -16,7 +17,7 @@ class ListConversationsView extends AbstractView {
      * @description
      * Method that set the conversations and the email of the user.
      * That will be used to show the conversations in the page
-     * @param array $conversations
+     * @param array<int, array<string, mixed>> $conversations
      * @param string $email
      * @return void
      */
@@ -38,18 +39,24 @@ class ListConversationsView extends AbstractView {
             $html = '<p class="description-text"> Vous n\'avez aucune discussion en cours.</p>';
         }
         else {
-            foreach ($this->conversations as $c){
-                $otherName =  ($c['buyer_email'] === $this->my_email) ? $c['seller_name'] : $c['buyer_name'];
-                $url = "/chat?ouid={$c['ouid']}&email=" . urlencode($c['buyer_email']);
+            foreach ($this->conversations as $c) {
+                $buyerEmail = is_string($c['buyer_email'] ?? null) ? $c['buyer_email'] : '';
+                $buyerName  = is_string($c['buyer_name'] ?? null) ? $c['buyer_name'] : '';
+                $sellerName = is_string($c['seller_name'] ?? null) ? $c['seller_name'] : '';
+                $offerTitle = is_string($c['offer_title'] ?? null) ? $c['offer_title'] : 'Sans titre';
+                $ouid       = is_scalar($c['ouid'] ?? null) ? (string)$c['ouid'] : '0';
 
+                $otherName = ($buyerEmail === $this->my_email) ? $sellerName : $buyerName;
+
+                $url = "/chat?ouid=" . urlencode($ouid) . "&email=" . urlencode($buyerEmail);
                 $html .= "
-                <a href='{$url}' class='conv-item'>
-                    <div class='conv-info'>
-                        <span class='conv-title'>{$c['offer_title']}</span>
-                        <span class='conv-user'>Discussion avec : {$otherName}</span>
-                    </div>
-                    <span class='arrow'>→</span>
-                </a>";
+            <a href='" . htmlspecialchars($url) . "' class='conv-item'>
+                <div class='conv-info'>
+                    <span class='conv-title'>" . htmlspecialchars($offerTitle) . "</span>
+                    <span class='conv-user'>Discussion avec : " . htmlspecialchars($otherName) . "</span>
+                </div>
+                <span class='arrow'>→</span>
+            </a>";
             }
         }
 

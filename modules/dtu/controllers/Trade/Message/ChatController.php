@@ -44,14 +44,15 @@ class ChatController implements Controller
             return;
         }
         $dbMessage = MessageDB::getInstance();
+
         $session_email = is_string($_SESSION['email'] ?? null) ? $_SESSION['email'] : '';
-        $currentPath = strtok($_SERVER['REQUEST_URI'], '?');
+
+        $requestUri = is_string($_SERVER['REQUEST_URI'] ?? null) ? $_SERVER['REQUEST_URI'] : '/';
+        $currentPath = strtok($requestUri, '?');
 
         if ($currentPath === self::API_PATH) {
             header('Content-Type: application/json');
             $id_conv = is_numeric($_GET['id_conv'] ?? null) ? (int)$_GET['id_conv'] : 0;
-            $session_email = $_SESSION['email'];
-
             $dbMessage = MessageDB::getInstance();
             if($id_conv > 0 && $dbMessage->allowedToChat($session_email, $id_conv)) {
                 $messages = $dbMessage->getMessagesByConversation($id_conv);

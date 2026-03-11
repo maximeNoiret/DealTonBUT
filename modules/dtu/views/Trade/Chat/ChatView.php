@@ -10,6 +10,7 @@ use core\views\AbstractView;
  */
 class ChatView extends AbstractView
 {
+    /** @var array<int, array<string, mixed>> */
     private array $messages = [];
     private ?int $id_conv = null;
     private string $my_email = '';
@@ -18,7 +19,7 @@ class ChatView extends AbstractView
 
     /**
      * @description Set the data for the view, that will be used to fill the template
-     * @param array $messages The messages of the conversation
+     * @param array<int, array<string, mixed>> $messages
      * @param int|null $id_conv The id of the conversation
      * @param string $my_email The email of the current user
      * @return void
@@ -50,18 +51,21 @@ class ChatView extends AbstractView
             $messagesHtml = '<p class="no-msg">Aucun message. Lancez la discussion !</p>';
         } else {
             foreach ($this->messages as $msg) {
-                // On vérifie si c'est moi qui ai envoyé le message
-                $isMe = ($msg['email'] === $this->my_email);
+                $email   = is_string($msg['email'] ?? null) ? $msg['email'] : '';
+                $dateMsg = is_string($msg['date_msg'] ?? null) ? $msg['date_msg'] : '';
+                $user    = is_string($msg['username'] ?? null) ? $msg['username'] : 'Anonyme';
+                $content = is_string($msg['content'] ?? null) ? $msg['content'] : '';
+                $isMe = ($email === $this->my_email);
                 $class = $isMe ? 'msg-me' : 'msg-other';
 
                 $messagesHtml .= '
-                <div class="message-wrapper ' . $class . '" data-date="' .$msg['date_msg'] .'">
-                    <div class="message-bubble">
-                        <span class="sender-name">' . htmlspecialchars($msg['username']) . '</span>
-                        <p class="text">' . htmlspecialchars($msg['content']) . '</p>
-                        <span class="date">' . date('H:i', strtotime($msg['date_msg'])) . '</span>
-                    </div>
-                </div>';
+            <div class="message-wrapper ' . $class . '" data-date="' . htmlspecialchars($dateMsg) . '">
+                <div class="message-bubble">
+                    <span class="sender-name">' . htmlspecialchars($user) . '</span>
+                    <p class="text">' . htmlspecialchars($content) . '</p>
+                    <span class="date">' . date('H:i', (int)strtotime($dateMsg)) . '</span>
+                </div>
+            </div>';
             }
         }
         return [
