@@ -11,7 +11,9 @@
     <footer class="chat-footer" style="display: {DISPLAY_FORM};">
         <form method="POST" class="chat-form">
             <input type="hidden" name="id_conv" value="{ID_CONV}">
-            <textarea name="content" placeholder="Écrivez votre message..." required></textarea>
+            <label>
+                <textarea name="content" placeholder="Écrivez votre message..." maxlength="500" required></textarea>
+            </label>
             <button type="submit">Envoyer</button>
         </form>
     </footer>
