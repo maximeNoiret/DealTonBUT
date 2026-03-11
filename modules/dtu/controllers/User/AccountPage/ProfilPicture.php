@@ -13,11 +13,11 @@ class ProfilPicture implements Controller
     /**
      * @var string The path to access this page
      */
-    private const PATH = '/user/update-PDP';
+    private const string PATH = '/user/update-PDP';
     /**
      * @var string The method to access this page
      */
-    private const METH = 'POST';
+    private const string METH = 'POST';
 
     /**
      * @description

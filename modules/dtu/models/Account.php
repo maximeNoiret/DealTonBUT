@@ -105,10 +105,11 @@ class Account {
 
     }
 
-  /**
-   * @description Show the name of the user, by using their university email
-   * @return string
-   */
+    /**
+     * @description Show the name of the user, by using their university email
+     * @param string|null $email
+     * @return string
+     */
   static function getName(?string $email = null): string
   {
     // Récupère l'email uniquement s'il s'agit bien d'une chaîne

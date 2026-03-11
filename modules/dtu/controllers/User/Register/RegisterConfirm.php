@@ -24,11 +24,10 @@ class RegisterConfirm implements Controller {
     /**
      * @var array<string, string> $_POST
      */
-    echo (new RegisterFormView(Account::registerAccount($_POST['username'], $_POST['email'])))->render("Register - DealTonBUT", self::STYLESHEET);
+    echo new RegisterFormView(Account::registerAccount($_POST['username'], $_POST['email']))->render("Register - DealTonBUT", self::STYLESHEET);
   } catch (AccountAlreadyExists $e) {
-    echo (new RegisterFormView('account_already_exists'))->render("Register - DealTonBUT", self::STYLESHEET);
+    echo new RegisterFormView('account_already_exists')->render("Register - DealTonBUT", self::STYLESHEET);
   }
-
   }
 
   static function resolve(string $path, string $meth): bool {

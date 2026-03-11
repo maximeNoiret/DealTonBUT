@@ -1,6 +1,7 @@
 <?php
 namespace controllers\Trade\SeeOtherAccount;
 use core\controllers\Controller;
+use Exception;
 use views\Trade\SeeOtherAccount\SeeOtherAccountView;
 use views\User\AccountPage\AccountPageView;
 
@@ -35,13 +36,14 @@ class SeeOtherAccount implements Controller
     return strtok($path, '?') === static::PATH && $meth === static::METH;
   }
 
-  /**
-   * @description Check if the user is logged in, if not redirect to the login
-   * page, if yes check if the email in the url correspond to the email of the
-   * logged-in user, if yes show the account page of the logged in user, if not
-   * show the account page of the observed user
-   * @return void
-   */
+    /**
+     * @description Check if the user is logged in, if not redirect to the login
+     * page, if yes check if the email in the url correspond to the email of the
+     * logged-in user, if yes show the account page of the logged in user, if not
+     * show the account page of the observed user
+     * @return void
+     * @throws Exception
+     */
   function control(): void
   {
     if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {

@@ -6,6 +6,7 @@ use controllers\Trade\MarketPlace\MarketPlace;
 use dtu\models\TradeDB;
 use dtu\views\User\AdminPanel\AccountAdminPanel;
 use dtu\views\User\AdminPanel\AdminPanelView;
+use Exception;
 use models\AccountDB;
 use views\Trade\Offer\Offer;
 use views\User\AccountPage\AccountPageView;
@@ -37,7 +38,7 @@ class AdminPanel
   function control():void {
     // NOTE : the moment when the role of the user is written is in the LoginConfirm controller
     if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true || !AccountDB::getInstance()->isAdmin($_SESSION['email'])) {
-      echo (new LoginFormView())->render("Login - DealTonBUT", self::STYLESHEET);
+      echo new LoginFormView()->render("Login - DealTonBUT", self::STYLESHEET);
     } else {
       echo (new AdminPanelView())->render("Account - DealTonBUT", self::STYLESHEET);
     }

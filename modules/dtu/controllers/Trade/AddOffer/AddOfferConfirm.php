@@ -23,6 +23,10 @@ class AddOfferConfirm implements Controller
         'bad-apple' => 1,
     ];
 
+
+    /**
+     * @description Handle the form submission for adding a new offer, including validation and balance deduction for styled offers.
+     */
     function control(): void
     {
         $title = $_POST['title'] ?? '';

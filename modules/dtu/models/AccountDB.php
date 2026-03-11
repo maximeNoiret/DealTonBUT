@@ -13,10 +13,10 @@ class AccountDB extends DataBase {
   protected static $instance;
 
   /**
-   * @description Checks if the user with the given email is the owner of the offer with the given ouid.
-   * @param mixed $email
-   * @param int $param
-   * @return bool True if the user with the given email is the owner of the offer with the given ouid, false otherwise.
+   * @description Checks if the user with the given email is the owner of the offer with the given ID.
+   * @param mixed $email The email address of the user to check.
+   * @param int $param The ID of the offer to check ownership for.
+   * @return bool True if the user is the owner of the offer, false otherwise.
    */
   public static function ownsOffer(mixed $email, int $param): bool
   {
@@ -29,12 +29,13 @@ class AccountDB extends DataBase {
     return $query->fetch() !== false;
   }
 
-  /**
-   * @description Registers a new account in the database.
-   * @param string $username The desired username for the new account.
-   * @param string $email The email address associated with the new account.
-   * @return void
-   */
+    /**
+     * @description Registers a new account in the database.
+     * @param string $username The desired username for the new account.
+     * @param string $email The email address associated with the new account.
+     * @param string $role
+     * @return void
+     */
   public function registerAccount (
     string $username,
     string $email,
@@ -126,6 +127,12 @@ class AccountDB extends DataBase {
     return $query->fetchColumn();
   }
 
+    /**
+     * @param string $email
+     * @param float $balance
+     * @return bool True on success, false on failure
+     * @description Sets the balance for the given email.
+     */
   public function setBalance(string $email, float $balance): bool {
       $query = $this->dbConn->prepare(
           'UPDATE user_ SET balance = :balance WHERE email = :email');
@@ -266,6 +273,11 @@ class AccountDB extends DataBase {
     return $res['username'];
   }
 
+    /**
+     * @param string $email
+     * @return string The filename of the profile picture associated with the given email, or a default filename if no profile picture is set.
+     * @description Retrieves the profile picture filename associated with a given email. If no profile picture is set, returns a default filename.
+     */
   public function getUserProfilePicture(string $email): string
   {
       $query = $this->dbConn->prepare(
@@ -276,6 +288,12 @@ class AccountDB extends DataBase {
       return $res['profile_picture'] ?? 'account_pp.webp';
   }
 
+    /**
+     * @param string $email
+     * @param string $pictureName
+     * @return bool True on success, false on failure
+     * @description Updates the profile picture filename for a given email.
+     */
   public function updateProfilPicture(string $email, string $pictureName): bool
   {
       $query = $this->dbConn->prepare(
@@ -329,7 +347,12 @@ class AccountDB extends DataBase {
     $query->execute();
     return $query->fetchAll();
   }
-  
+
+    /**
+     * @param string $email
+     * @return string|null The theme preference associated with the given email, or null if no theme is set.
+     * @description Retrieves the theme preference for a given email. Returns null if no theme is set.
+     */
   public function getTheme(string $email): ?string
     {
         $query = $this->dbConn->prepare('SELECT theme FROM user_ WHERE email = :email');
@@ -338,6 +361,12 @@ class AccountDB extends DataBase {
         return $query->fetchColumn() ?: null;
     }
 
+    /**
+     * @param string $email
+     * @param string $theme
+     * @return void
+     * @description Updates the theme preference for a given email.
+     */
   public function setTheme(string $email, string $theme):void
     {
         $queryTheme = $this->dbConn->prepare('UPDATE user_ SET theme = :theme WHERE email = :email');

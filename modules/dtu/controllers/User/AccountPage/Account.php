@@ -4,6 +4,7 @@ namespace controllers\User\AccountPage;
 
 use core\controllers\Controller;
 use dtu\models\TradeDB;
+use Exception;
 use models\AccountDB;
 use views\Trade\Offer\Offer;
 use views\User\AccountPage\AccountPageView;
@@ -31,20 +32,7 @@ class Account implements Controller
      * @var string $email : The email of the user
      */
       $email = $_SESSION['email'] ?? '';
-    $offers = TradeDB::getInstance()->getUserOffers($email);
-    if ($offers) {
-      $ret = '<section class="offer-grid">' . "\n";
-      foreach ($offers as $offer) {
-        /**
-         * @var array<string, string> $offer
-         */
-        // Add button based on ownership
-        $offer['button'] = self::generateOfferButton($offer['ouid'], $offer['owner']);
-        $ret = $ret . (new Offer($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
-      }
-      return $ret . '</section>';
-    }
-    return '<h1 class="description-text">There are no offers!</h1>';
+      return self::getOfferByOtherUser($email);
   }
 
   /**
@@ -106,48 +94,49 @@ class Account implements Controller
    * @param $email string email address of the user
    * @return string html code of the offers associated with the given email or a message if no offers are found
    */
-  static function getOfferByOtherUser($email) : string {
+  static function getOfferByOtherUser(string $email) : string {
     $offers = TradeDB::getInstance()->getUserOffers($email);
-    if ($offers) {
-      $ret = '<section class="offer-grid">' . "\n";
-      foreach ($offers as $offer) {
-        /**
-         * @var array<string, string> $offer
-         */
-        $offer['button'] = self::generateOfferButton($offer['ouid'], $offer['owner']);
-        $ret = $ret . (new Offer($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
-      }
-      return $ret . '</section>';
-    }
-    return '<h1 class="description-text">There are no offers!</h1>';
+      return self::offerHTML($offers);
   }
 
   /**
    * @description Retrieves the offers bought by a user associated with the given email.
    * @param $email string email address of the user
-   * @return string html code of the offers bought by the user associated with the given email or a message if no offers are found
+   * @return string HTML code of the offers bought by the user associated with the given email or a message if no offers are found
    */
-  static function getOfferBoughtByOtherUser($email): string
+  static function getOfferBoughtByOtherUser(string $email): string
   {
     $offers = TradeDB::getInstance()->getBoughtOffers($email);
-    if ($offers) {
-      $ret = '<section class="offer-grid">' . "\n";
-      foreach ($offers as $offer) {
-        /**
-         * @var array<string, string> $offer
-         */
-        $offer['button'] = self::generateOfferButton($offer['ouid'], $offer['owner']);
-        $ret = $ret . (new Offer($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
-      }
-      return $ret . '</section>';
-    }
-    return '<h1 class="description-text">There are no offers!</h1>';
+      return self::offerHTML($offers);
   }
 
+    /**
+     * @param array $offers
+     * @return string
+     */
+    public static function offerHTML(array $offers): string
+    {
+        if ($offers) {
+            $ret = '<section class="offer-grid">' . "\n";
+            foreach ($offers as $offer) {
+                /**
+                 * @var array<string, string> $offer
+                 */
+                $offer['button'] = self::generateOfferButton($offer['ouid'], $offer['owner']);
+                $ret = $ret . new Offer($offer)->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
+            }
+            return $ret . '</section>';
+        }
+        return '<h1 class="description-text">There are no offers!</h1>';
+    }
+
+    /**
+     * @throws Exception
+     */
     function control(): void
     {
         if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
-            echo (new LoginFormView())->render("Login - DealTonBUT", self::STYLESHEET);
+            echo new LoginFormView()->render("Login - DealTonBUT", self::STYLESHEET);
         } else {
             $flash = $_GET['error'] ?? null;
             if(isset($_GET['success'])) {

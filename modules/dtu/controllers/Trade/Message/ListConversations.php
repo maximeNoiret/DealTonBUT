@@ -2,6 +2,7 @@
 namespace controllers\Trade\Message;
 
 use core\controllers\Controller;
+use Exception;
 use models\MessageDB;
 use dtu\views\Trade\ListConversations\ListConversationsView;
 
@@ -14,14 +15,14 @@ class ListConversations implements Controller {
     /**
      * @var string The path to access this page
      */
-    public const PATH = '/messages';
+    public const string PATH = '/messages';
 
     /**
      * @description Store all the different stylesheet used
      * @var array<string> STYLESHEET
      */
 
-    public const STYLESHEET = [
+    public const array STYLESHEET = [
         '/_assets/styles/style.css',
         '/_assets/styles/navbar.css',
         '/_assets/styles/ListConv.css',
@@ -32,6 +33,7 @@ class ListConversations implements Controller {
      * Check if the user is logged in, if not redirect to the login page
      * Get all the conversations of the user and sho them in the view
      * @return void
+     * @throws Exception
      */
 
     public function control(): void

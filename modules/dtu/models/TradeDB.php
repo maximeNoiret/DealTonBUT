@@ -45,7 +45,7 @@ class TradeDB extends DataBase {
                    ON t.ouid = o.ouid
                    WHERE deadline > NOW()
                    AND o.quantity > 0';
-      $countResult = DataBase::getInstance()->executeQueryWithParams($countQuery, $params);
+      $countResult = DataBase::getInstance()->executeQuery($countQuery);
       $totalOffers = $countResult ? (int)$countResult[0]['total'] : 0;
 
     return [$offers, $totalOffers];
@@ -118,6 +118,18 @@ class TradeDB extends DataBase {
   }
 
 
+    /**
+     * @param string $email
+     * @param int $ouid
+     * @return string|bool Returns true if the purchase was successful, false otherwise. The string return is for debugging purpose, to know at which step the function failed.
+      * @description Handles the purchase of an offer by a user. It performs several checks to ensure the validity of the transaction, updates the buyer's and seller's balances accordingly, records the transaction in the database, and updates the offer quantity. The method uses a database transaction to ensure atomicity and consistency of the operations.
+      * The checks include:
+      * - Verifying that the offer exists and has a valid type.
+      * - Ensuring that the buyer is not trying to purchase their own offer.
+      * - Checking that the offer's deadline has not passed.
+      * - Confirming that the offer is still available (quantity > 0).
+      * - Validating that the buyer has sufficient balance if they are required to pay.
+     */
   public function buyOffer(string $email, int $ouid): string|bool
   {
     try {
@@ -268,7 +280,7 @@ class TradeDB extends DataBase {
   /**
    * @description Retrieves all offers bought by a specific user.
    * @param string $email The email address of the user.
-   * @return array<mixed>
+   * @return array
    */
   public function getBoughtOffers(string $email): array {
     $query = $this->dbConn->prepare(
@@ -298,18 +310,18 @@ class TradeDB extends DataBase {
     return $result && $result['count'] > 0;
   }
 
-  /**
-   * @description Inserts a new offer into the database.
-   * @param string $userEmail The email address of the offer owner.
-   * @param string $title The title of the offer.
-   * @param float $price The price of the offer.
-   * @param string $description The description of the offer.
-   * @param string $deadline The deadline for the offer in 'YYYY-MM-DD' format.
-   * @param int $quantity The quantity of items in the offer.
-   * @param string $type The type of the offer (e.g., 'offer' or 'request').
-   * @param string $style The visual style of the offer card.
-   * @return void
-   */
+    /**
+     * @description Inserts a new offer into the database.
+     * @param string $userEmail The email address of the offer owner.
+     * @param string $title The title of the offer.
+     * @param float $price The price of the offer.
+     * @param string $description The description of the offer.
+     * @param string $deadline The deadline for the offer in 'YYYY-MM-DD' format.
+     * @param int $quantity The quantity of items in the offer.
+     * @param string $type The type of the offer (e.g., 'offer' or 'request').
+     * @param string $style The visual style of the offer card.
+     * @return int
+     */
   public function insertOffer(
     string $userEmail,
     string $title,
@@ -339,6 +351,15 @@ class TradeDB extends DataBase {
     return (int) $this->dbConn->lastInsertId();
   }
 
+    /**
+     * @param int $ouid
+     * @param string $email
+     * @return bool Returns true if the user with the given email has bought the offer with the given ouid, false otherwise.
+     * @description Checks if a user has bought a specific offer by querying the transactions table for a matching record
+     * of the offer's unique identifier (ouid) and the user's email. This method is useful for determining
+     * if a user has already purchased an offer, which can be used to prevent duplicate purchases
+     * or to display purchase history.
+     */
     public function hasBoughtOffer(int $ouid, string $email): bool {
       $queryTransaction = $this->dbConn->prepare(
           'SELECT *

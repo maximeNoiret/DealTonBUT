@@ -12,6 +12,13 @@ class RegisterVerifyConfirm implements Controller
   const string PATH = '/user/register/verify';
   const string METH = 'POST';
 
+    /**
+     * @return void
+     * @throws AccountAlreadyExists
+     * @description Handles the verification and confirmation of user registration by validating the provided password,
+     * updating the user's account with the hashed password, and setting appropriate session variables
+     * for authentication and role management.
+     */
   function control(): void
   {
     $db = AccountDB::getInstance();
@@ -43,6 +50,22 @@ class RegisterVerifyConfirm implements Controller
     header('Location: /marketplace');
   }
 
+    /**
+     * @param string $password
+     * @return string|null
+      * @description Validates the password against defined security criteria:
+      * - Minimum length of 12 characters
+      * - At least one uppercase letter
+      * - At least one digit
+      * - At least one special character
+      * Returns an error message if any criteria are not met, or null if the password is valid.
+      * @return string|null Returns an error message if the password does not meet the criteria, or null if the password is valid.
+      * @throws void
+      * @example
+      * $error = $this->validatePassword('WeakPass'); // Returns 'Le mot de passe doit contenir au moins 12 caractères.'
+      * $error = $this->validatePassword('StrongPass123!'); // Returns null
+      * $error = $this->validatePassword('NoSpecialChar123'); // Returns 'Le mot de passe doit contenir au moins un caractère spécial.'
+     */
     private function validatePassword(string $password): ?string
     {
         if (strlen($password) < 12) {

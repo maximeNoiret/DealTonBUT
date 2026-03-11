@@ -70,9 +70,12 @@ class ChatController implements Controller
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id_conv = is_numeric($_POST['id_conv'] ?? null) ? (int)$_POST['id_conv'] : 0;
+            /**
+             * @var string $content The content of the message to send, defaulting to an empty string if not provided or not a string.
+             */
             $content = is_string($_POST['content'] ?? null) ? $_POST['content'] : '';
 
-            if (!empty($content) && !empty($id_conv)) {
+            if (!empty($content) && !empty($id_conv) && strlen($content) <= 500 ) {
                 $dbMessage->addMessage($id_conv, $session_email, $content);
             }
             $uri = is_string($_SERVER['REQUEST_URI'] ?? null) ? $_SERVER['REQUEST_URI'] : '/';
