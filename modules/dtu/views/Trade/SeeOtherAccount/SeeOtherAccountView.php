@@ -27,27 +27,29 @@ class SeeOtherAccountView extends AbstractView {
    * file. The value of the keys are the information of the observed user, such
    * as his username, his email, his offers, his balance and his bought offers
    */
-  function templateValues(): array
-  {
+    function templateValues(): array
+    {
+        $email = isset($_GET['email']) && is_string($_GET['email']) ? $_GET['email'] : '';
 
-    return [
-      'USERNAME' =>AccountDB::getInstance()->getUserUsername($_GET['email'] ?? ''),
-      'EMAIL' => $_GET['email'] ?? '',
-      'USEROFFERS' => Account::getOfferByOtherUser($_GET['email'] ?? ''),
-      'USERBALANCE' => AccountDB::getInstance()->getBalance($_GET['email'] ?? ''),
-      'USERBOUGHTOFFERS' => Account::getOfferBoughtByOtherUser($_GET['email'] ?? ''),
-      'NAME' => \models\Account::getName($_GET['email'] ?? ''),
-      'CURRENT_PHOTO' => AccountDB::getInstance()->getUserProfilePicture($_GET['email'] ?? '') ?? 'account_pp.webp'
-    ];
-  }
+        return [
+            'USERNAME' => AccountDB::getInstance()->getUserUsername($email),
+            'EMAIL' => $email,
+            'USEROFFERS' => Account::getOfferByOtherUser($email),
+            'USERBALANCE' => AccountDB::getInstance()->getBalance($email),
+            'USERBOUGHTOFFERS' => Account::getOfferBoughtByOtherUser($email),
+            'NAME' => \models\Account::getName($email),
+            'CURRENT_PHOTO' => AccountDB::getInstance()->getUserProfilePicture($email)
+        ];
+    }
 
   /**
    * @description Method that give the title of the page, that will be shown on the navbar
    * @return string the title of the page
    */
-  function navbarText(): string
-  {
-    return 'Compte de ' . ($_GET['email'] ?? '');
-  }
+    function navbarText(): string
+    {
+        $email = isset($_GET['email']) && is_string($_GET['email']) ? $_GET['email'] : '';
+        return 'Compte de ' . $email;
+    }
 
 }

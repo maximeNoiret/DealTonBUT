@@ -81,7 +81,7 @@ class Account implements Controller
         return '';
     }
 
-    $type = $offer['type'] ?? 'offer';
+    $type = is_array($offer) && isset($offer['type']) && is_string($offer['type']) ? $offer['type'] : 'offer';
     if ($type === 'request') {
         return '<a class="button-accept" href="/offre/buy?id=' . $offerId . '">Accept</a>';
     } else {
@@ -138,7 +138,7 @@ class Account implements Controller
         if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
             echo new LoginFormView()->render("Login - DealTonBUT", self::STYLESHEET);
         } else {
-            $flash = $_GET['error'] ?? null;
+            $flash = isset($_GET['error']) && is_string($_GET['error']) ? $_GET['error'] : null;
             if(isset($_GET['success'])) {
                 $flash = 'update_success';
             }
