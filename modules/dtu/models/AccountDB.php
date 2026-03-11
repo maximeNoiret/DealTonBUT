@@ -324,10 +324,10 @@ class AccountDB extends DataBase {
 
   /**
    * @description Checks if the user associated with the given email has an admin role.
-   * @param string $email The email address of the user.
+   * @param mixed $email The email address of the user.
    * @return bool True if the user is an admin, false otherwise.
    */
-  public function isAdmin(string $email): bool {
+  public function isAdmin(mixed $email): bool {
     $role = $this->getRole($email);
     if ($role === 'admin') {
 

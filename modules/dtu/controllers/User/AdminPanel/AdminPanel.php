@@ -34,6 +34,7 @@ class AdminPanel
    * @Warning The role of the user is written in the session at the moment of the
    * login, in the LoginConfirm controller.
    * @return void
+   * @throws Exception
    */
   function control():void {
     // NOTE : the moment when the role of the user is written is in the LoginConfirm controller
@@ -94,7 +95,10 @@ class AdminPanel
 //    $offers = TradeDB::getInstance()->getAllOffer();
     $limit = 8;
     $sort = $_GET['sort'] ?? null;
-    $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
+    /**
+     * @var int $offset
+     */
+    $offset = isset($_GET['offset']) ? $_GET['offset'] : 0;
 
     if ($offers) {
       $ret = '<section class="offer-grid" id="offer-grid">' . "\n";
@@ -103,7 +107,7 @@ class AdminPanel
          * @var array<string, string> $offer
          */
         // Add button based on ownership
-        $offer['button'] = $this->genAdminDeleteOffer($offer['ouid']);
+        $offer['button'] = $this->genAdminDeleteOffer((int)$offer['ouid']);
         $isOwn = AccountDB::ownsOffer($_SESSION['email'], (int)$offer['ouid']);
         $isTeacher = ($offer['role'] ?? '') === 'teacher';
         $teacherClass = $isTeacher ? ' teacher-offer' : '';
@@ -118,7 +122,13 @@ class AdminPanel
       // Add "Load More" button if there are more offers
       if ($totalOffers > $offset + $limit) {
         $nextOffset = $offset + $limit;
+        /**
+         * @var string|null $sort
+         */
         $sortParam = $sort ? '&sort=' . urlencode($sort) : '';
+        /**
+         * @var array<string, string> $_GET['search-string']
+         */
         $searchParam = isset($_GET['search-string']) ? '&search-string=' . urlencode($_GET['search-string']) : '';
         $ret .= '<div class="load-more-container">';
         $ret .= '<button class="load-more-btn" onclick="loadMoreOffersAdmin(' . $nextOffset . ', \'' . htmlspecialchars($sortParam . $searchParam, ENT_QUOTES) . '\')">Plus d\'offres ?</button>';
