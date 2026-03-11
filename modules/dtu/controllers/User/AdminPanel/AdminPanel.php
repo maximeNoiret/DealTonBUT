@@ -78,7 +78,7 @@ class AdminPanel
    * @return string The HTML code for the delete button of an offer in the
    * admin panel.
    */
-  public function geneAdminDeleteOffer(int $offerId): string {
+  public function genAdminDeleteOffer(int $offerId): string {
       return '<a class="button-delete" href="/offre/delete?id=' . $offerId . '">Delete</a>';
   }
 
@@ -103,7 +103,7 @@ class AdminPanel
          * @var array<string, string> $offer
          */
         // Add button based on ownership
-        $offer['button'] = $this->geneAdminDeleteOffer($offer['ouid']);
+        $offer['button'] = $this->genAdminDeleteOffer($offer['ouid']);
         $isOwn = AccountDB::ownsOffer($_SESSION['email'], (int)$offer['ouid']);
         $isTeacher = ($offer['role'] ?? '') === 'teacher';
         $teacherClass = $isTeacher ? ' teacher-offer' : '';
