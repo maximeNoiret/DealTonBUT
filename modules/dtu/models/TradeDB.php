@@ -14,7 +14,7 @@ class TradeDB extends DataBase {
 
     /**
      * @description Return the offers in function of the args given ( the args are MySQL operator), see MarketPlace->getOffers() for the used method
-     * @return array The list of offers and the total number of offers that match the criteria (for pagination purpose)
+     *@return array{0: array<int, array<string, mixed>>|false, 1: int}
      */
   public static function getOffers(): array {
     $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
@@ -251,7 +251,7 @@ class TradeDB extends DataBase {
   /**
    * @description Retrieves all offers made by a specific user.
    * @param string $email The email address of the user.
-   * @return array<mixed>
+   * @return array<int, array<string, mixed>>
    */
   public function getUserOffers(string $email): array {
     $query = $this->dbConn->prepare(
@@ -268,7 +268,7 @@ class TradeDB extends DataBase {
   /**
    * @description Retrieves all offers bought by a specific user.
    * @param string $email The email address of the user.
-   * @return array<mixed>
+   * @return array<int, array<string, mixed>>
    */
   public function getBoughtOffers(string $email): array {
     $query = $this->dbConn->prepare(

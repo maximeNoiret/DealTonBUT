@@ -109,8 +109,8 @@ abstract class AbstractView {
    * @return string
    */
     function navbar(string $placeholder = ''): string {
-        $username = (string) ($_SESSION['username'] ?? 'NOM DE COMPTE');
-        $balance = (float) ($_SESSION['balance'] ?? 0.00);
+        $username = isset($_SESSION['username']) && is_string($_SESSION['username']) ? $_SESSION['username'] : 'NOM DE COMPTE';
+        $balance = isset($_SESSION['balance']) && is_numeric($_SESSION['balance']) ? (float) $_SESSION['balance'] : 0.00;
         $firstLogin = !empty($_SESSION['first-login']);
         if ($firstLogin) {
             unset($_SESSION['first-login']);

@@ -33,13 +33,12 @@ class MarketPlaceView extends AbstractView {
         $html = '';
 
         // Vérification erreur
-        if (isset($_SESSION['flash_error'])) {
+        if (isset($_SESSION['flash_error']) && is_string($_SESSION['flash_error'])) {
             $msg = htmlspecialchars($_SESSION['flash_error']);
             $html .= "<div id='popup-message' class='popup-notification error'>{$msg}</div>";
             unset($_SESSION['flash_error']);
         }
-        // Vérification succès
-        elseif (isset($_SESSION['flash_success'])) {
+        elseif (isset($_SESSION['flash_success']) && is_string($_SESSION['flash_success'])) {
             $msg = htmlspecialchars($_SESSION['flash_success']);
             $html .= "<div id='popup-message' class='popup-notification success'>{$msg}</div>";
             unset($_SESSION['flash_success']);

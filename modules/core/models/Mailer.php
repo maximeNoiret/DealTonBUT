@@ -20,10 +20,9 @@ class Mailer {
   // NOTE: Make sure to get the ..apkey file, it is not in the repository
   public static function getApiKey(): string {
     $file = fopen(__DIR__ . '/../../../.apkey', 'r') or die('File didn\'t open.');
-    $apiKey = fgets($file);
-    fclose($file);
-
-    return rtrim($apiKey);
+      $apiKey = fgets($file);
+      fclose($file);
+      return rtrim($apiKey !== false ? $apiKey : '');
   }
 
   /**

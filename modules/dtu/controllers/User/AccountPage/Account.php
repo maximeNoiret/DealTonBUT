@@ -36,10 +36,10 @@ class Account implements Controller
       $ret = '<section class="offer-grid">' . "\n";
       foreach ($offers as $offer) {
         /**
-         * @var array<string, string> $offer
+         * @var array<string, mixed> $offer
          */
         // Add button based on ownership
-        $offer['button'] = self::generateOfferButton($offer['ouid'], $offer['owner']);
+          $offer['button'] = self::generateOfferButton((int) $offer['ouid'], $offer['owner']);
         $ret = $ret . (new Offer($offer))->renderWithLink('article', 'offer-card', '/offre/voir?id=' . $offer['ouid']);
       }
       return $ret . '</section>';
@@ -93,7 +93,7 @@ class Account implements Controller
         return '';
     }
 
-    $type = $offer['type'] ?? 'offer';
+    $type = is_array($offer) && isset($offer['type']) && is_string($offer['type']) ? $offer['type'] : 'offer';
     if ($type === 'request') {
         return '<a class="button-accept" href="/offre/buy?id=' . $offerId . '">Accept</a>';
     } else {
@@ -106,7 +106,7 @@ class Account implements Controller
    * @param $email string email address of the user
    * @return string html code of the offers associated with the given email or a message if no offers are found
    */
-  static function getOfferByOtherUser($email) : string {
+  static function getOfferByOtherUser(string $email) : string {
     $offers = TradeDB::getInstance()->getUserOffers($email);
     if ($offers) {
       $ret = '<section class="offer-grid">' . "\n";
@@ -127,7 +127,7 @@ class Account implements Controller
    * @param $email string email address of the user
    * @return string html code of the offers bought by the user associated with the given email or a message if no offers are found
    */
-  static function getOfferBoughtByOtherUser($email): string
+  static function getOfferBoughtByOtherUser(string $email): string
   {
     $offers = TradeDB::getInstance()->getBoughtOffers($email);
     if ($offers) {
@@ -149,7 +149,7 @@ class Account implements Controller
         if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
             echo (new LoginFormView())->render("Login - DealTonBUT", self::STYLESHEET);
         } else {
-            $flash = $_GET['error'] ?? null;
+            $flash = isset($_GET['error']) && is_string($_GET['error']) ? $_GET['error'] : null;
             if(isset($_GET['success'])) {
                 $flash = 'update_success';
             }

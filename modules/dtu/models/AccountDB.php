@@ -255,8 +255,9 @@ class AccountDB extends DataBase {
       'SELECT username FROM user_ WHERE email = :email');
     $query->bindValue('email', $email);
     $query->execute();
-    $res = $query->fetch();
-    return $res['username'];
+    $res = $query->fetch(PDO::FETCH_ASSOC);
+    return is_array($res) && isset($res['username']) && is_string($res['username']) ? $res['username'] : '';
+
   }
 
   public function getUserProfilePicture(string $email): string
@@ -265,8 +266,9 @@ class AccountDB extends DataBase {
           'SELECT profile_picture FROM user_ WHERE email = :email');
       $query->bindValue('email', $email);
       $query->execute();
-      $res = $query->fetch();
-      return $res['profile_picture'] ?? 'account_pp.webp';
+      $res = $query->fetch(PDO::FETCH_ASSOC);
+      $photo = is_array($res) && isset($res['profile_picture']) && is_string($res['profile_picture']) ? $res['profile_picture'] : 'account_pp.webp';
+      return $photo;
   }
 
   public function updateProfilPicture(string $email, string $pictureName): bool
@@ -315,19 +317,22 @@ class AccountDB extends DataBase {
    * @description Return all the account and their associated information
    * @return array The account and their associated information
    */
-  public function getAllAccount(): array {
-    //TODO : adapte the output in a more user friendly format
-    $query = $this->dbConn->prepare('SELECT * FROM user_');
-    $query->execute();
-    return $query->fetchAll();
-  }
+    /** @return array<int, array<string, mixed>> */
+    public function getAllAccount(): array {
+        $query = $this->dbConn->prepare('SELECT * FROM user_');
+        $query->execute();
+        /** @var array<int, array<string, mixed>> $result */
+        $result = $query->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
   
   public function getTheme(string $email): ?string
     {
         $query = $this->dbConn->prepare('SELECT theme FROM user_ WHERE email = :email');
         $query->bindValue('email', $email);
         $query->execute();
-        return $query->fetchColumn() ?: null;
+        $result = $query->fetchColumn();
+        return is_string($result) ? $result : null;
     }
 
   public function setTheme(string $email, string $theme):void

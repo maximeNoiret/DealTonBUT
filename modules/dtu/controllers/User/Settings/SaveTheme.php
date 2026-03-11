@@ -18,11 +18,11 @@ class SaveTheme implements Controller
         }
 
         $allowed = ['normal', 'rgb', 'cat', 'space'];
-        $theme = isset($_POST['theme']) && in_array($_POST['theme'], $allowed)
+        $theme = isset($_POST['theme']) && is_string($_POST['theme']) && in_array($_POST['theme'], $allowed)
             ? $_POST['theme']
             : 'normal';
 
-        $email = $_SESSION['email'] ?? '';
+        $email = isset($_SESSION['email']) && is_string($_SESSION['email']) ? $_SESSION['email'] : '';
         AccountDB::getInstance()->setTheme($email, $theme);
         $_SESSION['theme'] = $theme;
 
