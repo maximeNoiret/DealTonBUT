@@ -45,7 +45,7 @@ class TradeDB extends DataBase {
                    ON t.ouid = o.ouid
                    WHERE deadline > NOW()
                    AND o.quantity > 0';
-      $countResult = DataBase::getInstance()->executeQueryWithParams($countQuery, $params);
+      $countResult = DataBase::getInstance()->executeQuery($countQuery);
       $totalOffers = $countResult ? (int)$countResult[0]['total'] : 0;
 
     return [$offers, $totalOffers];
