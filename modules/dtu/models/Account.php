@@ -8,7 +8,6 @@ use core\models\Mailer;
 use Random\RandomException;
 
 class Account {
-  private const string DOMAIN_NAME = 'dealtonbut.app';
 
   /**
    * @description Registers a new account in the database.
@@ -45,8 +44,8 @@ class Account {
     $token = bin2hex(random_bytes(16));
     $hashedToken = hash('sha256', $token);
     $db->insertToken($email, $token);
-    $verifyLink = 'https://' . $_SERVER['HTTP_HOST'] . //self::DOMAIN_NAME .
-      '/user/register/verify?token=' . $token;
+    $host = isset($_SERVER['HTTP_HOST']) && is_string($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
+    $verifyLink = 'https://' . $host . '/user/register/verify?token=' . $token;
     if (!AccountMailer::sendVerificationEmail($email, $verifyLink)) {
       return 'mailer_error';
     };
@@ -96,8 +95,8 @@ class Account {
       $token = bin2hex(random_bytes(16));
       //$hashedToken = hash('sha256', $token);
       $db->insertToken($email, $token);  // TODO: update db
-      $resetLink = 'https://' . $_SERVER['HTTP_HOST'] . //self::DOMAIN_NAME .
-        '/user/validate?email=' . urlencode($email) . '&token=' . $token;
+        $host = isset($_SERVER['HTTP_HOST']) && is_string($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
+        $resetLink = 'https://' . $host . '/user/validate?email=' . urlencode($email) . '&token=' . $token;
       if (!AccountMailer::sendForgotPassword($email, $resetLink)) {
         return 'message';
       };
@@ -117,7 +116,7 @@ class Account {
       $email = $_SESSION['email'];
     }
     // Extrait la partie locale avant le @
-    $parts = explode('@', $email);
+    $parts = explode('@', $email ?? '');
     $name = $parts[0];
     // Remplace les points par des espaces et capitalise
     $name = str_replace('.', ' ', $name);

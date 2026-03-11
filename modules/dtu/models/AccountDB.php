@@ -268,8 +268,9 @@ class AccountDB extends DataBase {
       'SELECT username FROM user_ WHERE email = :email');
     $query->bindValue('email', $email);
     $query->execute();
-    $res = $query->fetch();
-    return $res['username'];
+    $res = $query->fetch(PDO::FETCH_ASSOC);
+    return is_array($res) && isset($res['username']) && is_string($res['username']) ? $res['username'] : '';
+
   }
 
     /**
@@ -283,8 +284,9 @@ class AccountDB extends DataBase {
           'SELECT profile_picture FROM user_ WHERE email = :email');
       $query->bindValue('email', $email);
       $query->execute();
-      $res = $query->fetch();
-      return $res['profile_picture'] ?? 'account_pp.webp';
+      $res = $query->fetch(PDO::FETCH_ASSOC);
+      $photo = is_array($res) && isset($res['profile_picture']) && is_string($res['profile_picture']) ? $res['profile_picture'] : 'account_pp.webp';
+      return $photo;
   }
 
     /**
@@ -356,7 +358,8 @@ class AccountDB extends DataBase {
         $query = $this->dbConn->prepare('SELECT theme FROM user_ WHERE email = :email');
         $query->bindValue('email', $email);
         $query->execute();
-        return $query->fetchColumn() ?: null;
+        $result = $query->fetchColumn();
+        return is_string($result) ? $result : null;
     }
 
     /**

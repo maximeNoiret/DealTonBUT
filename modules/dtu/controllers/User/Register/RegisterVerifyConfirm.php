@@ -36,7 +36,7 @@ class RegisterVerifyConfirm implements Controller
       }
     $error = $this->validatePassword($_POST['password'] ?? '');
     if ($error !== null) {
-         echo (new RegisterFormPasswordView()($error))->render("Register - DealTonBUT", Register::STYLESHEET);
+        echo (new RegisterFormPasswordView(null, $error))->render("Register - DealTonBUT", Register::STYLESHEET);
         return;
     }
     $hashedPassword = password_hash($_POST['password'] ?? '', PASSWORD_BCRYPT);

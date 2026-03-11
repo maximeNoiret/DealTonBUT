@@ -65,9 +65,11 @@ class MarketPlace implements Controller {
      */
   function offersHTML(): string {
       [$offers, $totalOffers] = TradeDB::getOffers();
+      /** @var array<int, array<string, mixed>>|false $offers */
+      /** @var int $totalOffers */
       $limit = 8;
       $sort = $_GET['sort'] ?? null;
-      $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
+      $offset = isset($_GET['offset']) && is_numeric($_GET['offset']) ? (int)$_GET['offset'] : 0;
       if ($offers) {
           $ret = '<section class="offer-grid" id="offer-grid">' . "\n";
           foreach ($offers as $offer) {
@@ -75,7 +77,9 @@ class MarketPlace implements Controller {
                * @var array<string, string> $offer
                */
               // Add button based on ownership
-              $offer['button'] = MarketPlace::generateOfferButton($offer['ouid'], $offer['owner']);
+              $ouid = isset($offer['ouid']) ? (int) $offer['ouid'] : 0;
+              $owner = isset($offer['owner']) ? (string) $offer['owner'] : '';
+              $offer['button'] = MarketPlace::generateOfferButton($ouid, $owner);
               $isOwn = AccountDB::ownsOffer($_SESSION['email'], (int)$offer['ouid']);
               $isTeacher = ($offer['role'] ?? '') === 'teacher';
               $teacherClass = $isTeacher ? ' teacher-offer' : '';
@@ -89,8 +93,8 @@ class MarketPlace implements Controller {
           // Add "Load More" button if there are more offers
           if ($totalOffers > $offset + $limit) {
               $nextOffset = $offset + $limit;
-              $sortParam = $sort ? '&sort=' . urlencode($sort) : '';
-              $searchParam = isset($_GET['search-string']) ? '&search-string=' . urlencode($_GET['search-string']) : '';
+              $sortParam = is_string($sort) && $sort !== '' ? '&sort=' . urlencode($sort) : '';
+              $searchParam = isset($_GET['search-string']) && is_string($_GET['search-string']) ? '&search-string=' . urlencode($_GET['search-string']) : '';
               $ret .= '<div class="load-more-container">';
               $ret .= '<button class="load-more-btn" onclick="loadMoreOffers(' . $nextOffset . ', \'' . htmlspecialchars($sortParam . $searchParam, ENT_QUOTES) . '\')">Plus d\'offres ?</button>';
               $ret .= '</div>';
