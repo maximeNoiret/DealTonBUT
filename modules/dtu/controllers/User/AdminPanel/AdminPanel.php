@@ -22,7 +22,8 @@ class AdminPanel
     '/_assets/styles/style.css',
     '/_assets/styles/navbar.css',
     '/_assets/styles/offer.css',
-    '/_assets/styles/adminPanel.css'
+    '/_assets/styles/adminPanel.css',
+    '/_assets/styles/MarketPlace.css'
   ];
 
   /**
@@ -68,14 +69,28 @@ class AdminPanel
     return $html;
   }
 
+  /**
+   * @description Generate the HTML code for the delete button of an offer in
+   * the admin panel.
+   * @param int $offerId The ID of the offer, will be used in the href of the
+   * delete button to specify which offer to delete.
+   * @return string The HTML code for the delete button of an offer in the
+   * admin panel.
+   */
   public function geneAdminDeleteOffer(int $offerId): string {
       return '<a class="button-delete" href="/offre/delete?id=' . $offerId . '">Delete</a>';
   }
 
-  // TODO : this is a abomination, 99% is duplicate, FIX THIS
+  /**
+   * @description Generate the HTML code to display all the offers in the
+   * admin panel, this method is different from MarketPlace::offersHTML()
+   * because it adds only a delete button for each offer.
+   * @return string HTML code to display all the offers in the admin panel,
+   * with a delete button for each offer.
+   */
   public function genAdminOffersHtml(): string {
-//    [$offers, $totalOffers] = TradeDB::getOffers();
-    $offers = TradeDB::getInstance()->getAllOffer();
+    [$offers, $totalOffers] = TradeDB::getOffers();
+//    $offers = TradeDB::getInstance()->getAllOffer();
     $limit = 8;
     $sort = $_GET['sort'] ?? null;
     $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
@@ -100,14 +115,14 @@ class AdminPanel
       $ret .= '</section>';
 
       // Add "Load More" button if there are more offers
-//      if ($totalOffers > $offset + $limit) {
-//        $nextOffset = $offset + $limit;
-//        $sortParam = $sort ? '&sort=' . urlencode($sort) : '';
-//        $searchParam = isset($_GET['search-string']) ? '&search-string=' . urlencode($_GET['search-string']) : '';
-//        $ret .= '<div class="load-more-container">';
-//        $ret .= '<button class="load-more-btn" onclick="loadMoreOffers(' . $nextOffset . ', \'' . htmlspecialchars($sortParam . $searchParam, ENT_QUOTES) . '\')">Plus d\'offres ?</button>';
-//        $ret .= '</div>';
-//      }
+      if ($totalOffers > $offset + $limit) {
+        $nextOffset = $offset + $limit;
+        $sortParam = $sort ? '&sort=' . urlencode($sort) : '';
+        $searchParam = isset($_GET['search-string']) ? '&search-string=' . urlencode($_GET['search-string']) : '';
+        $ret .= '<div class="load-more-container">';
+        $ret .= '<button class="load-more-btn" onclick="loadMoreOffersAdmin(' . $nextOffset . ', \'' . htmlspecialchars($sortParam . $searchParam, ENT_QUOTES) . '\')">Plus d\'offres ?</button>';
+        $ret .= '</div>';
+      }
 
       return $ret;
     }

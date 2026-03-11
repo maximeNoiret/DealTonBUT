@@ -9,6 +9,31 @@
         {ACCOUNTS}
     </section>
     <section class="manage-offer-panel">
+        <section class="search-container">
+            <article class="search-wrapper">
+                <form class="search-wrapper" action="/admin" method="GET">
+                    <input type="text" name='search-string' class="search-box" placeholder="Rechercher...">
+                </form>
+                <button class="sort-button" onclick="toggleDropdown()">
+                    Trier ▼
+                </button>
+                <section class="sort-menu" id="sortDropdown">
+                    <a href ="/admin?sort=trending">
+                        <p class="sort-option">Trending</p></a>
+                    <a href="/admin?sort=date">
+                        <p class="sort-option">Plus récent</p></a>
+                    <a href="/admin">
+                        <p class="sort-option">Plus vieux</p></a>
+                    <a href="/admin?sort=price-asc">
+                        <p class="sort-option">Moins cher</p></a>
+                    <a href="/admin?sort=price-desc">
+                        <p class="sort-option">Plus cher</p></a>
+                    <a href="/admin?sort=alphabetic">
+                        <p class="sort-option" >Alphabétique</p></a>
+                </section>
+            </article>
+        </section>
+
         {OFFERS}
     </section>
 <!--    <section class="manage-transaction-panel">-->
@@ -16,4 +41,5 @@
 <!--    </section>-->
 </section>
 
-<script src="/_assets/scripts/AdminPanel.js"></script>
+<script src="/_assets/scripts/AdminPanel.js" ></script>
+<script src="/_assets/scripts/MarketPlace.js"></script>
