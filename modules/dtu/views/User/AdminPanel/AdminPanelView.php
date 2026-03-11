@@ -2,8 +2,12 @@
 
 namespace dtu\views\User\AdminPanel;
 
+use controllers\Trade\MarketPlace\MarketPlace;
 use controllers\User\AccountPage\Account;
+use controllers\User\AdminPanel\AdminPanel;
 use core\views\AbstractView;
+use dtu\models\TradeDB;
+use models\AccountDB;
 
 class AdminPanelView extends AbstractView
 {
@@ -23,8 +27,8 @@ class AdminPanelView extends AbstractView
   function templateValues(): array
   {
     return [
-        'USERNAME' => $_SESSION['username'] ?? '',
-        'EMAIL' => $_SESSION['email'] ?? ''
+      'ACCOUNTS' => (new AdminPanel())->getAllAccountHtml(),
+      'OFFERS' => (new AdminPanel())->genAdminOffersHtml(),
     ];
   }
 

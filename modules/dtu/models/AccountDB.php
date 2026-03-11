@@ -4,6 +4,7 @@ namespace models;
 
 use core\models\DataBase;
 use dtu\models\TradeDB;
+use dtu\views\User\AdminPanel\AccountAdminPanel;
 use exceptions\AccountAlreadyExists;
 use PDO;
 
@@ -323,10 +324,10 @@ class AccountDB extends DataBase {
 
   /**
    * @description Checks if the user associated with the given email has an admin role.
-   * @param string $email The email address of the user.
+   * @param mixed $email The email address of the user.
    * @return bool True if the user is an admin, false otherwise.
    */
-  public function isAdmin(string $email): bool {
+  public function isAdmin(mixed $email): bool {
     $role = $this->getRole($email);
     if ($role === 'admin') {
 
@@ -338,11 +339,12 @@ class AccountDB extends DataBase {
   }
 
   /**
-   * @description Return all the account and their associated information
-   * @return array The account and their associated information
+   * @description Return all the account and their associated information.
+   * @return array An array containing all the accounts, each account is
+   * represented as an associative array with keys corresponding to the database
+   * columns, the keys are email, username, hashedpwd (for the hashed password), balance and role.
    */
   public function getAllAccount(): array {
-    //TODO : adapte the output in a more user friendly format
     $query = $this->dbConn->prepare('SELECT * FROM user_');
     $query->execute();
     return $query->fetchAll();

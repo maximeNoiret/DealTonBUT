@@ -395,7 +395,11 @@ class TradeDB extends DataBase {
    * @return array The offer and their associated information
    */
   public function getAllOffer(): array {
-    $query = $this->dbConn->prepare('SELECT * FROM offer');
+    //$query = $this->dbConn->prepare('SELECT * FROM offer');
+    $query = $this->dbConn->prepare('SELECT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline, style, o.quantity, u.profile_picture
+       FROM offer o
+       INNER JOIN user_ u 
+       ON o.owner = u.email');
     $query->execute();
     return $query->fetchAll();
   }
@@ -405,6 +409,7 @@ class TradeDB extends DataBase {
    * @return array The transaction and their associated information
    */
   public function getAllTransaction(): array {
+    //TODO : adapte the output in a more user friendly format
     $query = $this->dbConn->prepare('SELECT * FROM transaction_');
     $query->execute();
     return $query->fetchAll();
