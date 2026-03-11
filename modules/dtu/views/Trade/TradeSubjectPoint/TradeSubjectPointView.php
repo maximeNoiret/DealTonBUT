@@ -14,6 +14,8 @@ class TradeSubjectPointView extends AbstractView {
  * @var array<int, array<string, mixed>> $subjectsRows The rows of the subjects that the user has, with the name of the subject and the points
      */
     private ?string $error = null;
+
+    /** @var array<int, array<string, mixed>> */
     private array $subjectsRows = [];
     private float $balance = 0;
 
@@ -42,7 +44,8 @@ class TradeSubjectPointView extends AbstractView {
 
     function templateValues(): array {
         $db = SubjectDB::getInstance();
-        $email = $_SESSION['email'] ?? '';
+        $emailRaw = $_SESSION['email'] ?? '';
+        $email = is_string($emailRaw) ? $emailRaw : '';
 
         $error = '';
 
@@ -70,7 +73,7 @@ class TradeSubjectPointView extends AbstractView {
 
 
         foreach ($subjectsRows as $row) {
-            $subject = (string) $row['subject_name'];
+            $subject = is_string($row['subject_name'] ?? null) ? $row['subject_name'] : 'Inconnu';
             $pts = $db->getPoints($email, $subject);
 
             $option = '<option value="' . htmlspecialchars($subject) . '">' .

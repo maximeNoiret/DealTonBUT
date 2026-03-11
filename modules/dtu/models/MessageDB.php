@@ -10,6 +10,7 @@ use core\models\DataBase;
  */
 class MessageDB extends DataBase {
 
+    /** @var static|null */
     protected static $instance;
 
     /**
@@ -29,8 +30,14 @@ class MessageDB extends DataBase {
         $query->bindValue('email', $email);
         $query->bindValue('ouid', $ouid);
         $query->execute();
+
+        /** @var array<string, mixed>|false $result */
         $result = $query->fetch(PDO::FETCH_ASSOC);
-        return $result ? (int)$result['id_conv'] : null;
+        if ($result === false || !isset($result['id_conv'])) {
+            return null;
+        }
+        $id = $result['id_conv'];
+        return is_scalar($id) ? (int)$id : null;
     }
 
     /**
@@ -114,26 +121,6 @@ class MessageDB extends DataBase {
                                                 JOIN user_ u_seller ON o.owner = u_seller.email
                                                 WHERE t.email = :email OR o.owner = :email');
         $query->bindValue('email', $email);
-        $query->execute();
-        return $query->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    /**
-     * @param int $id_conv
-     * @param string $lastDate
-     * @return array
-     *     - Get all the messages of a conversation that are newer than the last date, with the username of the sender
-     *      and the date of the message.
-     *    - This is used to get the new messages of a conversation, without reloading the whole conversation.
-     */
-    public function getLastMessages(int $id_conv, string $lastDate) : array {
-        $query = $this->dbConn->prepare('SELECT m.content, m.date_msg, m.email, u.username
-                                               FROM message m
-                                               JOIN user_ u ON m.email = u.email
-                                               WHERE m.id_conv = :id_conv AND m.date_msg > :lastDate
-                                               ORDER BY m.date_msg ASC');
-        $query->bindValue('id_conv', $id_conv);
-        $query->bindValue('lastDate', $lastDate);
         $query->execute();
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
