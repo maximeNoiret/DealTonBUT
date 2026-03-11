@@ -16,17 +16,23 @@ class DeleteOffer implements Controller
     const string PATH = '/offre/delete';
     const string METH = 'GET';
 
+    /**
+     * @description
+     * Check if the user is logged in, if not redirect to the login page
+     * Check if the offer id is valid, if not redirect to the marketplace
+     * Check if the offer exists, if not redirect to the marketplace
+     * Check if the user is the owner of the offer, if not redirect to the marketplace
+     * Delete the offer and redirect to the marketplace
+     */
     function control(): void
     {
         if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
             header('Location: /user/login');
-//            exit;
             return;
         }
 
         if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
             header('Location: /marketplace');
-//            exit;
           return;
         }
 
@@ -35,7 +41,6 @@ class DeleteOffer implements Controller
 
         if (!$offer) {
             header('Location: /marketplace');
-//            exit;
           return;
         }
 
@@ -45,7 +50,6 @@ class DeleteOffer implements Controller
         $owner = $offer['owner'];
         if ($owner !== $_SESSION['email']) {
             header('Location: /marketplace');
-//            exit;
           return;
         }
 

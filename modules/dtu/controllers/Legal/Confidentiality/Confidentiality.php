@@ -3,6 +3,7 @@
 namespace controllers\Legal\Confidentiality;
 
 use core\controllers\Controller;
+use Exception;
 use views\Legal\Confidentiality\ConfidentialityView;
 
 class Confidentiality implements Controller
@@ -16,9 +17,12 @@ class Confidentiality implements Controller
         '/_assets/styles/loginSingnin.css'
     ];
 
+    /**
+     * @throws Exception
+     */
     function control(): void
     {
-      echo (new ConfidentialityView())->render("Confidentialité - DealTonBUT", self::STYLESHEET);
+      echo new ConfidentialityView()->render("Confidentialité - DealTonBUT", self::STYLESHEET);
     }
 
     static function resolve(string $path, string $meth): bool

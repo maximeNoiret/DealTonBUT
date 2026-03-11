@@ -12,7 +12,7 @@ class SubjectDB extends DataBase {
   /**
    * @description Retrieves all subjects for a user.
    * @param string $email The email address of the user.
-   * @return array<mixed>
+   * @return array
    */
   public function getSubject(string $email): array {
     $query = $this->dbConn->prepare('SELECT subject_name FROM points WHERE email = :email');

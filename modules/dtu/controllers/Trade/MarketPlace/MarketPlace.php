@@ -58,6 +58,11 @@ class MarketPlace implements Controller {
       }
   }
 
+    /**
+     * @description Fetches offers from the database and generates HTML to display them in a grid format, including pagination for loading more offers.
+     * @return string Returns the generated HTML for the offers section, or a message if there are no offers available.
+     * The function retrieves offers and their total count, applies sorting and pagination based on query parameters, and constructs the HTML for each offer using the Offer view. It also includes a "Load More" button if there are more offers to display.
+     */
   function offersHTML(): string {
       [$offers, $totalOffers] = TradeDB::getOffers();
       $limit = 8;

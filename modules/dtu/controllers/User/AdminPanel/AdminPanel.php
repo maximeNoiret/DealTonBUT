@@ -3,6 +3,7 @@
 namespace controllers\User\AdminPanel;
 
 use dtu\views\User\AdminPanel\AdminPanelView;
+use Exception;
 use models\AccountDB;
 use views\User\AccountPage\AccountPageView;
 use views\User\LoginForm\LoginFormView;
@@ -21,12 +22,15 @@ class AdminPanel
     '/_assets/styles/adminPanel.css'
   ];
 
-  function control():void {
+    /**
+     * @throws Exception
+     */
+    function control():void {
     // NOTE : the moment when the role of the user is written is in the LoginConfirm controller
     if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true || !AccountDB::getInstance()->isAdmin($_SESSION['email'])) {
-      echo (new LoginFormView())->render("Login - DealTonBUT", self::STYLESHEET);
+      echo new LoginFormView()->render("Login - DealTonBUT", self::STYLESHEET);
     } else {
-      echo (new AdminPanelView())->render("Account - DealTonBUT", self::STYLESHEET);
+      echo new AdminPanelView()->render("Account - DealTonBUT", self::STYLESHEET);
     }
   }
 

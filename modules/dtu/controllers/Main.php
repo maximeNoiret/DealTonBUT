@@ -15,8 +15,12 @@ class Main implements Controller
         '/_assets/styles/loginSingnin.css',
         '/_assets/styles/style.css'
     ];
-  function control(): void {
-    echo (new MainPageView())->render('DealTonBUT', self::STYLESHEET);
+
+    /**
+     * @throws \Exception
+     */
+    function control(): void {
+    echo new MainPageView()->render('DealTonBUT', self::STYLESHEET);
 
   }
 

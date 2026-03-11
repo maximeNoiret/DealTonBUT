@@ -19,7 +19,10 @@ class RegisterVerify implements Controller
   const string METH = 'GET';
   const array STYLESHEET = Register::STYLESHEET;
 
-  function control(): void
+    /**
+     * @throws \Exception
+     */
+    function control(): void
   {
     $db = AccountDB::getInstance();
     /**
@@ -34,9 +37,9 @@ class RegisterVerify implements Controller
       /**
        * @var array<string, string> $_SESSION
        */
-      echo (new RegisterFormPasswordView($_SESSION['email']))->render("Register - DealTonBUT", self::STYLESHEET);
+      echo new RegisterFormPasswordView($_SESSION['email'])->render("Register - DealTonBUT", self::STYLESHEET);
     } else {
-      echo (new RegisterFormView('verification_link_expired'))->render("Register - DealTonBUT", self::STYLESHEET);
+      echo new RegisterFormView('verification_link_expired')->render("Register - DealTonBUT", self::STYLESHEET);
     }
   }
 

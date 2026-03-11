@@ -118,6 +118,14 @@ class MessageDB extends DataBase {
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * @param int $id_conv
+     * @param string $lastDate
+     * @return array
+     *     - Get all the messages of a conversation that are newer than the last date, with the username of the sender
+     *      and the date of the message.
+     *    - This is used to get the new messages of a conversation, without reloading the whole conversation.
+     */
     public function getLastMessages(int $id_conv, string $lastDate) : array {
         $query = $this->dbConn->prepare('SELECT m.content, m.date_msg, m.email, u.username
                                                FROM message m

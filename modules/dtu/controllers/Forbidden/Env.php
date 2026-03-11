@@ -4,6 +4,7 @@ namespace controllers\Forbidden;
 
 use controllers\Main;
 use core\controllers\Controller;
+use Exception;
 use \views\Forbidden;
 
 class Env implements Controller
@@ -11,9 +12,12 @@ class Env implements Controller
 
   const string PATH = '/.env';
 
-  function control(): void
+    /**
+     * @throws Exception
+     */
+    function control(): void
   {
-    echo (new Forbidden())->render('Forbidden - DealTonBUT', Main::STYLESHEET);
+    echo new Forbidden()->render('Forbidden - DealTonBUT', Main::STYLESHEET);
   }
 
   static function resolve(string $path, string $meth): bool

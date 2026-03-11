@@ -15,10 +15,14 @@ class Login implements Controller
         '/_assets/styles/style.css',
         '/_assets/styles/navbar.css'
         ];
-  function control(): void
+
+    /**
+     * @throws \Exception
+     */
+    function control(): void
   {
     if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
-      echo (new LoginFormView())->render("Login - DealTonBUT", self::STYLESHEET);
+      echo new LoginFormView()->render("Login - DealTonBUT", self::STYLESHEET);
     } else {
       header('Location: /marketplace');
     }

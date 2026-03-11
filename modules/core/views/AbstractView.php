@@ -3,6 +3,7 @@
 namespace core\views;
 use core\views\ThemeManager;
 
+use Exception;
 use models\AccountDB;
 
 abstract class AbstractView {
@@ -48,7 +49,7 @@ abstract class AbstractView {
   public function body(): string {
     $body = file_get_contents($this->path());
     if($body === false) {
-      throw new \Exception('Failed to read the template file: ' . $this->path());
+      throw new Exception('Failed to read the template file: ' . $this->path());
     }
     /**
      * @var string $value
@@ -92,13 +93,13 @@ abstract class AbstractView {
     </html>';
   }
 
-  /**
-   * @description Construct the html of the pages ( ex : the login page ), by using the methods header(),body() and footer()
-   * @param string $title : Title of the page
-   * @param array<string> $stylesheet : Array representing all the .css file used for the page
-   * @return string
-   *
-   */
+    /**
+     * @description Construct the html of the pages ( ex : the login page ), by using the methods header(),body() and footer()
+     * @param string $title : Title of the page
+     * @param array<string> $stylesheet : Array representing all the .css file used for the page
+     * @return string
+     * @throws Exception
+     */
   function render(string $title, array $stylesheet): string {
     return $this->header($title, $stylesheet, $this->navbarText()) . $this->body() . $this->footer();
   }
@@ -169,7 +170,7 @@ abstract class AbstractView {
 
   /**
    * @description Generate the button to access the admin panel if the user is an admin, otherwise return an empty string
-   * @return string the html of the button to access the admin panel if the user is an admin, otherwise an empty string
+   * @return string the HTML of the button to access the admin panel if the user is an admin, otherwise an empty string
     * @note the role of the user is written in the $_SESSION in the LoginConfirm controller
    */
     function genAdminPanelButton(): string

@@ -10,6 +10,10 @@ class SaveTheme implements Controller
     const string PATH = '/user/settings';
     const string METH = 'POST';
 
+    /**
+     * @return void
+     * @description Saves the user's selected theme to the database and updates the session variable. Redirects back to the settings page after saving.
+     */
     function control():void
     {
         if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {

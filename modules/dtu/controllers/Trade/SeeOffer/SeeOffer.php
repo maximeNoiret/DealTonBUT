@@ -42,10 +42,16 @@ class SeeOffer implements Controller
         self::$offer = [];
     }
 
+    /**
+     * @return boolean Returns true if the current user is the owner of the offer, false otherwise.
+     */
     public function isOwnerOfOffer(): bool {
         return isset($_SESSION['email']) && $_SESSION['email'] === self::$offer['owner'];
     }
 
+    /**
+     * @return string Returns the appropriate HTML button code based on offer ownership and status.
+     */
     public function buttonOffer(): string {
         if ($this->isOwnerOfOffer()) {
             return '<a class="button-delete" href="/offre/delete?id=' . self::$id . '">Delete</a>';
