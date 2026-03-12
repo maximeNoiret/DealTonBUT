@@ -77,7 +77,7 @@ class BuyOffer implements Controller
 
         $success = TradeDB::getInstance()->buyOffer($email, $ouid);
         if ($success) {
-            $_SESSION['flash_success'] = "Chat achété !";
+            $_SESSION['flash_success'] = "Offre achété !";
         } else {
             $_SESSION['flash_error'] = "Erreur lors de la transaction BDD.";
         }
