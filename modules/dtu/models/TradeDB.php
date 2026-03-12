@@ -22,7 +22,7 @@ class TradeDB extends DataBase {
 
     //build the base query
     $query =
-      'SELECT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline, style, o.quantity, u.profile_picture
+      'SELECT o.ouid ,u.username as \'username\', o.owner, title, description, price, deadline, style, o.quantity, u.profile_picture, u.role
        FROM offer o
        INNER JOIN user_ u 
        ON o.owner = u.email
@@ -124,6 +124,7 @@ class TradeDB extends DataBase {
      * @return string|bool Returns true if the purchase was successful, false otherwise. The string return is for debugging purpose, to know at which step the function failed.
       * @description Handles the purchase of an offer by a user. It performs several checks to ensure the validity of the transaction, updates the buyer's and seller's balances accordingly, records the transaction in the database, and updates the offer quantity. The method uses a database transaction to ensure atomicity and consistency of the operations.
       * The checks include:
+     *
       * - Verifying that the offer exists and has a valid type.
       * - Ensuring that the buyer is not trying to purchase their own offer.
       * - Checking that the offer's deadline has not passed.
