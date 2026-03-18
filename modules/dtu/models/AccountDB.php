@@ -3,6 +3,8 @@
 namespace models;
 
 use core\models\DataBase;
+use dtu\models\TradeDB;
+use dtu\views\User\AdminPanel\AccountAdminPanel;
 use exceptions\AccountAlreadyExists;
 use PDO;
 
@@ -10,6 +12,12 @@ class AccountDB extends DataBase {
 
   protected static $instance;
 
+  /**
+   * @description Checks if the user with the given email is the owner of the offer with the given ID.
+   * @param mixed $email The email address of the user to check.
+   * @param int $param The ID of the offer to check ownership for.
+   * @return bool True if the user is the owner of the offer, false otherwise.
+   */
   public static function ownsOffer(mixed $email, int $param): bool
   {
     $dbConn = self::getInstance()->dbConn;
@@ -21,21 +29,24 @@ class AccountDB extends DataBase {
     return $query->fetch() !== false;
   }
 
-  /**
-   * @description Registers a new account in the database.
-   * @param string $username The desired username for the new account.
-   * @param string $email The email address associated with the new account.
-   * @return void
-   */
+    /**
+     * @description Registers a new account in the database.
+     * @param string $username The desired username for the new account.
+     * @param string $email The email address associated with the new account.
+     * @param string $role
+     * @return void
+     */
   public function registerAccount (
     string $username,
-    string $email
+    string $email,
+    string $role
   ): void {
     //$hashedpwd = password_hash($password, PASSWORD_DEFAULT);
     $query = $this->dbConn->prepare(
       'REPLACE INTO user_(email, username)
       VALUES (:email, :username)');
 
+    $this->setRole($email, $role);
     $query->bindValue('email', $email);
     $query->bindValue('username', $username);
     $query->execute();
@@ -74,7 +85,7 @@ class AccountDB extends DataBase {
    */
   public function getAccount(string $email, string $password): bool|array {
     $query = $this->dbConn->prepare('
-      SELECT username, email, hashedpwd, balance 
+      SELECT username, email, hashedpwd, balance, profile_picture, role
       FROM user_
       WHERE email = :email');
     $query->bindValue('email', $email);
@@ -95,7 +106,9 @@ class AccountDB extends DataBase {
         return [
             'username' => $user['username'],
             'email' => $user['email'],
-            'balance' => $user['balance']
+            'balance' => $user['balance'],
+            'profile_picture' => $user['profile_picture'],
+            'role' => $user['role'],
         ];
     }
     return false;
@@ -114,6 +127,12 @@ class AccountDB extends DataBase {
     return $query->fetchColumn();
   }
 
+    /**
+     * @param string $email
+     * @param float $balance
+     * @return bool True on success, false on failure
+     * @description Sets the balance for the given email.
+     */
   public function setBalance(string $email, float $balance): bool {
       $query = $this->dbConn->prepare(
           'UPDATE user_ SET balance = :balance WHERE email = :email');
@@ -238,6 +257,126 @@ class AccountDB extends DataBase {
     $query->execute();
     return (string) $query->fetchColumn();
   }
+
+  /**
+   * @description Retrieves the username associated with a given email.
+   * @param $email string email address of the user
+   * @return string The username associated with the given email.
+   */
+  public function getUserUsername(string $email): string
+  {
+    $query = $this->dbConn->prepare(
+      'SELECT username FROM user_ WHERE email = :email');
+    $query->bindValue('email', $email);
+    $query->execute();
+    $res = $query->fetch(PDO::FETCH_ASSOC);
+    return is_array($res) && isset($res['username']) && is_string($res['username']) ? $res['username'] : '';
+
+  }
+
+    /**
+     * @param string $email
+     * @return string The filename of the profile picture associated with the given email, or a default filename if no profile picture is set.
+     * @description Retrieves the profile picture filename associated with a given email. If no profile picture is set, returns a default filename.
+     */
+  public function getUserProfilePicture(string $email): string
+  {
+      $query = $this->dbConn->prepare(
+          'SELECT profile_picture FROM user_ WHERE email = :email');
+      $query->bindValue('email', $email);
+      $query->execute();
+      $res = $query->fetch(PDO::FETCH_ASSOC);
+      $photo = is_array($res) && isset($res['profile_picture']) && is_string($res['profile_picture']) ? $res['profile_picture'] : 'account_pp.webp';
+      return $photo;
+  }
+
+    /**
+     * @param string $email
+     * @param string $pictureName
+     * @return bool True on success, false on failure
+     * @description Updates the profile picture filename for a given email.
+     */
+  public function updateProfilPicture(string $email, string $pictureName): bool
+  {
+      $query = $this->dbConn->prepare(
+          'UPDATE user_ SET profile_picture = :pictureName WHERE email = :email');
+      $query->bindValue('email', $email);
+      $query->bindValue('pictureName', $pictureName);
+      return $query->execute();
+  }
+
+  /**
+   * @description Retrieves the role of a user.
+   * @param string $email The email address of the user.
+   * @return string The role associated with the given email, or an empty string if not found.
+   */
+  public function getRole(string $email): string
+  {
+    $query = $this->dbConn->prepare('SELECT role FROM user_ WHERE email = :email');
+    $query->bindValue('email', $email);
+    $query->execute();
+    /**
+     * @var array<string, string>|false $result
+     */
+    $result = $query->fetch(PDO::FETCH_ASSOC);
+    return $result ? $result['role'] : '';
+  }
+
+  /**
+   * @description Checks if the user associated with the given email has an admin role.
+   * @param mixed $email The email address of the user.
+   * @return bool True if the user is an admin, false otherwise.
+   */
+  public function isAdmin(mixed $email): bool {
+    $role = $this->getRole($email);
+    if ($role === 'admin') {
+
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  /**
+   * @description Return all the account and their associated information.
+   * @return array An array containing all the accounts, each account is
+   * represented as an associative array with keys corresponding to the database
+   * columns, the keys are email, username, hashedpwd (for the hashed password), balance and role.
+   */
+  public function getAllAccount(): array {
+    $query = $this->dbConn->prepare('SELECT * FROM user_');
+    $query->execute();
+    return $query->fetchAll();
+  }
+
+    /**
+     * @param string $email
+     * @return string|null The theme preference associated with the given email, or null if no theme is set.
+     * @description Retrieves the theme preference for a given email. Returns null if no theme is set.
+     */
+  public function getTheme(string $email): ?string
+    {
+        $query = $this->dbConn->prepare('SELECT theme FROM user_ WHERE email = :email');
+        $query->bindValue('email', $email);
+        $query->execute();
+        $result = $query->fetchColumn();
+        return is_string($result) ? $result : null;
+    }
+
+    /**
+     * @param string $email
+     * @param string $theme
+     * @return void
+     * @description Updates the theme preference for a given email.
+     */
+  public function setTheme(string $email, string $theme):void
+    {
+        $queryTheme = $this->dbConn->prepare('UPDATE user_ SET theme = :theme WHERE email = :email');
+        $queryTheme->bindValue('email', $email);
+        $queryTheme->bindValue('theme', $theme);
+        $queryTheme->execute();
+    }
 }
 
 

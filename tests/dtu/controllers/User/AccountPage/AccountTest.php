@@ -2,25 +2,50 @@
 
 namespace tests\controllers\User\AccountPage;
 
+use controllers\Trade\SeeOtherAccount\SeeOtherAccount;
 use controllers\User\AccountPage\Account;
 use dtu\models\TradeDB;
+use models\AccountDB;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 class AccountTest extends TestCase
 {
+   private string $testEmail01;
+   private string $testEmail02;
+
+   private TradeDB $tradeDB;
+   private int $testOuid01;
     protected function setUp(): void
     {
         parent::setUp();
 
         // Reset $_SESSION avant chaque test
         $_SESSION = [];
+        $this->tradeDB = TradeDB::getInstance();
+        $this->accDB = AccountDB::getInstance();
+      //$this->seeOtherAccount = new SeeOtherAccount();
+        // create a user
+        AccountDB::getInstance()->registerAccount('testUser01', 'testUser01@example.com');
+        AccountDB::getInstance()->registerAccount('testUser02', 'testUser02@exmanple.com');
+        $this->testEmail01 = 'testUser01@example.com';
+        $this->testEmail02 = 'testUser02@exmanple.com';
+        TradeDB::getInstance()->insertOffer($this->testEmail02, 'Test Offer', 0.00, 10, '2030-12-31');
+
+        $offer = $this->tradeDB->executeQuery(
+          'SELECT ouid FROM offer WHERE owner =\''.$this->testEmail02.'\';'
+        );
+        $this->testOuid01 = $offer[0]['ouid'];
     }
 
     protected function tearDown(): void
     {
         parent::tearDown();
         $_SESSION = [];
+        // //
+        AccountDB::getInstance()->deleteUser($this->testEmail01);
+        //TradeDB::getInstance()->deleteOffer($this->testOuid01);
+        AccountDB::getInstance()->deleteUser($this->testEmail02);
     }
 
     /**
@@ -330,4 +355,23 @@ class AccountTest extends TestCase
         // Devrait afficher le login car 1 !== true (strict comparison)
         $this->assertNotEmpty($output);
     }
+
+    function testGetOfferByOtherUserSuccessful()
+    {
+      $content = Account::getOfferByOtherUser($this->testEmail02);
+      //$this->assertStringContainsString('<h1 class="description-text">There are no offers!</h1>', $content);
+      $this->assertStringNotContainsString('<h1 class="description-text">There are no offers!</h1>', $content);
+    }
+    function testGetOfferByOtherUserWithNoOffers()
+    {
+      $content = Account::getOfferByOtherUser($this->testEmail01);
+      $this->assertStringContainsString('<h1 class="description-text">There are no offers!</h1>', $content);
+    }
+
+    function testGetOfferBoughtByOtherUserWithNoOffers()
+    {
+      $content = Account::getOfferBoughtByOtherUser($this->testEmail01);
+      $this->assertStringContainsString('<h1 class="description-text">There are no offers!</h1>', $content);
+    }
+    //TODO : to the unit test for getOfferBoughtByOtherUser() with the case where the user has bought offer
 }

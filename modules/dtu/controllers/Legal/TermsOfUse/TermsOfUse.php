@@ -3,6 +3,7 @@
 namespace controllers\Legal\TermsOfUse;
 
 use core\controllers\Controller;
+use Exception;
 use views\Legal\TermsOfUse\TermsOfUseView;
 
 class TermsOfUse implements Controller
@@ -16,9 +17,12 @@ class TermsOfUse implements Controller
         '/_assets/styles/loginSingnin.css'
     ];
 
+    /**
+     * @throws Exception
+     */
     function control(): void
     {
-      echo (new TermsOfUseView())->render("Condition d'utilisation - DealTonBUT", self::STYLESHEET);
+      echo new TermsOfUseView()->render("Condition d'utilisation - DealTonBUT", self::STYLESHEET);
     }
 
     static function resolve(string $path, string $meth): bool

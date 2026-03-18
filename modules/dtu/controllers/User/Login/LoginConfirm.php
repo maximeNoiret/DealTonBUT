@@ -3,13 +3,11 @@
 namespace controllers\User\Login;
 
 use core\controllers\Controller;
-use exceptions\AccountAlreadyExists;
+use Exception;
 use models\Account;
 /* note these are the old use : */
-//use views\User\LoginFormView;
-//use views\MarketPlaceView;
+use models\AccountDB;
 use views\User\LoginForm\LoginFormView;
-use views\Trade\MarketPlace\MarketPlaceView;
 
 class LoginConfirm implements Controller
 {
@@ -17,26 +15,41 @@ class LoginConfirm implements Controller
     const string METH = 'POST';
 
     const array STYLESHEET = [
-      '/_assets/styles/loginSingnin.css',
-      '/_assets/styles/style.css',
-      '/_assets/styles/navbar.css'
+        '/_assets/styles/loginSingnin.css',
+        '/_assets/styles/style.css',
+        '/_assets/styles/navbar.css'
     ];
 
+    /**
+     * @description Validates user credentials and manages session state for login.
+     * This method retrieves the email and password from the POST request,
+     * validates them against the database, and if valid, sets the user's role in the session and redirects to the marketplace.
+     * If invalid, it renders the login form with an error message.
+     * @return void
+     * @throws Exception
+     */
     function control(): void
     {
         /**
-        * @var string $email
-        */
+         * @var string $email
+         */
         $email = $_POST['email'] ?? '';
         /**
-        * @var string $password
-        */
+         * @var string $password
+         */
         $password = $_POST['password'] ?? '';
 
         $isValid = Account::validateCredentials($email, $password);
 
+        if (isset($_SESSION['email']) && is_string($_SESSION['email'])) {
+            $_SESSION['theme'] = AccountDB::getInstance()->getTheme($_SESSION['email']) ?? 'normal';
+        }
+
         // if logged in
         if ($isValid) {
+            // write the role of the user in a $_SESSION variable
+            $_SESSION['role'] = AccountDB::getInstance()->getRole($email);
+
             header('Location: /marketplace');
         } else {
             echo ((new LoginFormView('invalid_credentials'))->render("Login - DealTonBUT", self::STYLESHEET));

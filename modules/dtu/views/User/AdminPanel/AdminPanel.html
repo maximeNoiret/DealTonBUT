@@ -1,0 +1,41 @@
+<section class="admin-panel-container">
+    <h1 class="admin-panel-title">Panneau d'Administration</h1>
+    <div class="admin-panel-option">
+        <button class="admin-option-button" id="offer-button">Offres</button>
+        <button class="admin-option-button" id="account-button">Utilisateurs</button>
+    </div>
+    <section class="manage-account-panel">
+        {ACCOUNTS}
+    </section>
+    <section class="manage-offer-panel">
+        <section class="search-container">
+            <article class="search-wrapper">
+                <form class="search-wrapper" action="/admin" method="GET">
+                    <label>
+                        <input type="text" name='search-string' class="search-box" placeholder="Rechercher...">
+                    </label>
+                </form>
+                <button class="sort-button" onclick="toggleDropdown()">
+                    Trier ▼
+                </button>
+                <section class="sort-menu" id="sortDropdown">
+                    <a href ="/admin?sort=trending">
+                        <p class="sort-option">Trending</p></a>
+                    <a href="/admin?sort=date">
+                        <p class="sort-option">Plus récent</p></a>
+                    <a href="/admin">
+                        <p class="sort-option">Plus vieux</p></a>
+                    <a href="/admin?sort=price-asc">
+                        <p class="sort-option">Moins cher</p></a>
+                    <a href="/admin?sort=price-desc">
+                        <p class="sort-option">Plus cher</p></a>
+                    <a href="/admin?sort=alphabetic">
+                        <p class="sort-option" >Alphabétique</p></a>
+                </section>
+            </article>
+        </section>
+        {OFFERS}
+</section>
+
+<script src="/_assets/scripts/AdminPanel.js" ></script>
+<script src="/_assets/scripts/MarketPlace.js"></script>

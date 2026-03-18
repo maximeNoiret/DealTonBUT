@@ -25,6 +25,11 @@ class Settings implements Controller
     }
   }
 
+  /**
+   * @throws \Exception
+   * @return void
+   * @description Deletes the user's account and logs them out.
+   */
   function deleteAccount(): void
   {
     $email = '';

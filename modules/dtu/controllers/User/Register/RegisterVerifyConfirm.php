@@ -3,6 +3,7 @@
 namespace controllers\User\Register;
 
 use core\controllers\Controller;
+use dtu\views\User\RegisterForm\RegisterFormPasswordView;
 use exceptions\AccountAlreadyExists;
 use models\AccountDB;
 
@@ -11,6 +12,13 @@ class RegisterVerifyConfirm implements Controller
   const string PATH = '/user/register/verify';
   const string METH = 'POST';
 
+    /**
+     * @return void
+     * @throws AccountAlreadyExists
+     * @description Handles the verification and confirmation of user registration by validating the provided password,
+     * updating the user's account with the hashed password, and setting appropriate session variables
+     * for authentication and role management.
+     */
   function control(): void
   {
     $db = AccountDB::getInstance();
@@ -21,16 +29,59 @@ class RegisterVerifyConfirm implements Controller
      * @var array<string, string> $_SESSION
      * @var array<string, string> $tempAccount
      */
-    $db->setRole($tempAccount['email'], 'student');  // TODO: separate teachers and students from email format
+      if (str_contains($tempAccount['email'], '@univ-amu.fr')) {
+          $db->setRole($tempAccount['email'], 'teacher');
+      } else {
+          $db->setRole($tempAccount['email'], 'student');
+      }
+    $error = $this->validatePassword($_POST['password'] ?? '');
+    if ($error !== null) {
+        echo (new RegisterFormPasswordView(null, $error))->render("Register - DealTonBUT", Register::STYLESHEET);
+        return;
+    }
     $hashedPassword = password_hash($_POST['password'] ?? '', PASSWORD_BCRYPT);
     $db->updatePassword($tempAccount['email'], $hashedPassword);
     $_SESSION['username'] = $tempAccount['username'];
     $_SESSION['email'] = $tempAccount['email'];
     $_SESSION['logged-in'] = true;
     $_SESSION['first-login'] = true;
+    $_SESSION['role'] = $db->getRole($tempAccount['email']);
 
     header('Location: /marketplace');
   }
+
+    /**
+     * @param string $password
+     * @return string|null
+      * @description Validates the password against defined security criteria:
+      * - Minimum length of 12 characters
+      * - At least one uppercase letter
+      * - At least one digit
+      * - At least one special character
+      * Returns an error message if any criteria are not met, or null if the password is valid.
+      * @return string|null Returns an error message if the password does not meet the criteria, or null if the password is valid.
+      * @throws void
+      * @example
+      * $error = $this->validatePassword('WeakPass'); // Returns 'Le mot de passe doit contenir au moins 12 caractères.'
+      * $error = $this->validatePassword('StrongPass123!'); // Returns null
+      * $error = $this->validatePassword('NoSpecialChar123'); // Returns 'Le mot de passe doit contenir au moins un caractère spécial.'
+     */
+    private function validatePassword(string $password): ?string
+    {
+        if (strlen($password) < 12) {
+            return 'Le mot de passe doit contenir au moins 12 caractères.';
+        }
+        if (!preg_match('/[A-Z]/', $password)) {
+            return 'Le mot de passe doit contenir au moins une majuscule.';
+        }
+        if (!preg_match('/[0-9]/', $password)) {
+            return 'Le mot de passe doit contenir au moins un chiffre.';
+        }
+        if (!preg_match('/[^A-Za-z0-9]/', $password)) {
+            return 'Le mot de passe doit contenir au moins un caractère spécial.';
+        }
+        return null;
+    }
 
   static function resolve(string $path, string $meth): bool
   {

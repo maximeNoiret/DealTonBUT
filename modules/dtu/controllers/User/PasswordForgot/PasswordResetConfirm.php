@@ -4,6 +4,7 @@ namespace controllers\User\PasswordForgot;
 
 use controllers\User\Login\Login;
 use core\controllers\Controller;
+use Exception;
 use models\AccountDB;
 use views\User\ForgotPassword\PasswordResetView;
 use views\User\LoginForm\LoginFormView;
@@ -11,10 +12,13 @@ use views\User\LoginForm\LoginFormView;
 class PasswordResetConfirm implements Controller
 {
 
-  const PATH = '/user/validate';
-  const METH = 'POST';
+  const string PATH = '/user/validate';
+  const string METH = 'POST';
 
-  function control(): void {
+    /**
+     * @throws Exception
+     */
+    function control(): void {
     /**
      * @var array<string, string> $_POST
      */
@@ -28,7 +32,6 @@ class PasswordResetConfirm implements Controller
     } else {
       echo (new LoginFormView('unknownerroroccured')->render('Login - DealTonBUT', Login::STYLESHEET));
     }
-    // - else: display "invalid link" and quit
   }
 
   static function resolve(string $path, string $meth): bool {

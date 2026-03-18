@@ -4,6 +4,7 @@ namespace views\Trade\MarketPlace;
 
 use controllers\Trade\MarketPlace\MarketPlace;
 use core\views\AbstractView;
+use dtu\models\TradeDB;
 
 class MarketPlaceView extends AbstractView {
   /**
@@ -20,7 +21,7 @@ class MarketPlaceView extends AbstractView {
    */
     function templateValues(): array {
         $values = [
-            'OFFERS' => MarketPlace::getOffers(),
+            'OFFERS' => (new MarketPlace)->offersHTML(),
             'POPUP'  => $this->getPopupHtml()
         ];
         return $values;
@@ -32,13 +33,12 @@ class MarketPlaceView extends AbstractView {
         $html = '';
 
         // Vérification erreur
-        if (isset($_SESSION['flash_error'])) {
+        if (isset($_SESSION['flash_error']) && is_string($_SESSION['flash_error'])) {
             $msg = htmlspecialchars($_SESSION['flash_error']);
             $html .= "<div id='popup-message' class='popup-notification error'>{$msg}</div>";
             unset($_SESSION['flash_error']);
         }
-        // Vérification succès
-        elseif (isset($_SESSION['flash_success'])) {
+        elseif (isset($_SESSION['flash_success']) && is_string($_SESSION['flash_success'])) {
             $msg = htmlspecialchars($_SESSION['flash_success']);
             $html .= "<div id='popup-message' class='popup-notification success'>{$msg}</div>";
             unset($_SESSION['flash_success']);

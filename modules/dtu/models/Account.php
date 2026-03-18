@@ -8,7 +8,6 @@ use core\models\Mailer;
 use Random\RandomException;
 
 class Account {
-  private const string DOMAIN_NAME = 'dealtonbut.app';
 
   /**
    * @description Registers a new account in the database.
@@ -30,15 +29,23 @@ class Account {
       return 'already_sent';
     }
 
+    if (!(str_contains($email, '@etu.univ-amu.fr') || str_contains($email, '@univ-amu.fr'))) {
+        return 'invalid_email';
+    }
+
     $_SESSION['username'] = $username;
 
-    $db->registerAccount($username, $email);
+    if (str_contains($email, '@univ-amu.fr')) {
+        $db->registerAccount($username, $email, 'teacher');
+    } else {
+        $db->registerAccount($username, $email, 'student');
+    }
 
     $token = bin2hex(random_bytes(16));
     $hashedToken = hash('sha256', $token);
     $db->insertToken($email, $token);
-    $verifyLink = 'https://' . $_SERVER['HTTP_HOST'] . //self::DOMAIN_NAME .
-      '/user/register/verify?token=' . $token;
+    $host = isset($_SERVER['HTTP_HOST']) && is_string($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
+    $verifyLink = 'https://' . $host . '/user/register/verify?token=' . $token;
     if (!AccountMailer::sendVerificationEmail($email, $verifyLink)) {
       return 'mailer_error';
     };
@@ -61,6 +68,8 @@ class Account {
           $_SESSION['email'] = $account['email'] ?? '';
           $_SESSION['balance'] = $account['balance'] ?? 0;
           $_SESSION['logged-in'] = true;
+          $_SESSION['profile_picture'] = $account['profile_picture'] ?? 'account_pp.webp';
+          $_SESSION['role'] = $account['role'] ?? 'student';
           return true;
       }
     return false;
@@ -86,8 +95,8 @@ class Account {
       $token = bin2hex(random_bytes(16));
       //$hashedToken = hash('sha256', $token);
       $db->insertToken($email, $token);  // TODO: update db
-      $resetLink = 'https://' . $_SERVER['HTTP_HOST'] . //self::DOMAIN_NAME .
-        '/user/validate?email=' . urlencode($email) . '&token=' . $token;
+        $host = isset($_SERVER['HTTP_HOST']) && is_string($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
+        $resetLink = 'https://' . $host . '/user/validate?email=' . urlencode($email) . '&token=' . $token;
       if (!AccountMailer::sendForgotPassword($email, $resetLink)) {
         return 'message';
       };
@@ -95,18 +104,19 @@ class Account {
 
     }
 
-  /**
-   * @description Show the name of the user, by using their university email
-   * @return string
-   */
+    /**
+     * @description Show the name of the user, by using their university email
+     * @param string|null $email
+     * @return string
+     */
   static function getName(?string $email = null): string
   {
     // Récupère l'email uniquement s'il s'agit bien d'une chaîne
-    if (isset($_SESSION['email']) && is_string($_SESSION['email'])) {
+    if (isset($_SESSION['email']) && is_string($_SESSION['email']) && !isset($email)) {
       $email = $_SESSION['email'];
     }
     // Extrait la partie locale avant le @
-    $parts = explode('@', $email);
+    $parts = explode('@', $email ?? '');
     $name = $parts[0];
     // Remplace les points par des espaces et capitalise
     $name = str_replace('.', ' ', $name);

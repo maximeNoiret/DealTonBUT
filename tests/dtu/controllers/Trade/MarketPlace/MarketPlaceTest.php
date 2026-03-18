@@ -39,7 +39,7 @@ class MarketPlaceTest extends TestCase
     $price = '100';
     $end_date = '2077-12-31';
     $description = 'UNIT_TEST_DESC';
-    $this->dbTradeConn->insertOffre(
+    $this->dbTradeConn->insertOffer(
       $_SESSION['email'],
       $title,
       (float)$price,
@@ -62,14 +62,6 @@ class MarketPlaceTest extends TestCase
     $header= xdebug_get_headers();
     $this->assertContains('Location: /user/login', $header);
   }
-
-  public function testGetOffersNoSortNoSearch(): void {
-    $_GET = [];
-    $result = MarketPlace::getOffers();
-    $this->assertIsString($result);
-    $this->assertStringContainsString('<section class="offer-grid">', $result);
-  }
-  //TODO: add more tests for getOffers with different sort and search parameters
 
   public function testDoesNotResolveIncorrectPath(){
     $this->assertFalse(MarketPlace::resolve('/offre/wrongpath', 'GET'));

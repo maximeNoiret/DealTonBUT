@@ -21,6 +21,14 @@
     border-color: #FF5733;
     background: #CFBFBF;
 }
+.teacher-offer {
+    background: #fff5d7;
+    border: 2px solid #FFD700;
+    box-shadow: 0 0 8px 2px rgba(255, 215, 0, 0.6);
+}
+.teacher-offer:hover {
+    box-shadow: 0 0 14px 4px rgba(255, 215, 0, 0.8);
+}
 .offer-card:hover {
     box-shadow: 0.25rem 0.25rem 0.5rem rgba(0,0,0,0.3);
     transform: translateY(-0.1rem);
@@ -40,6 +48,11 @@
     border: 2px solid #6a0dad;
     background-size: cover;
 }
+.offer-card-bad-apple-theme {
+    background: #8B0000 url("/_assets/images/offerTheme/bad-apple.gif") no-repeat center center;
+    border: 2px solid #777777;
+    background-size: cover;
+}
 /* Offer Card Elements */
 .offer-header {
     display: flex;
@@ -52,9 +65,10 @@
     height: clamp(35px, 4vw, 45px);
     object-fit: cover;
     flex-shrink: 0;
-    filter: invert(1);
-    mix-blend-mode: difference;
+    border-radius: 50%;
+    border: 2px solid rgba(0, 0, 0, 0.5);
 }
+
 .offer-author {
     font-weight: bold;
     font-size: clamp(0.8rem, 1.2vw, 0.9rem);
@@ -134,9 +148,7 @@
         font-size: 15px;
     }
 }
-
 /* Buttons */
-
 .button-delete {
     background-color: #ff4d4d;
     color: white;
@@ -174,3 +186,24 @@
 .button-buy:hover {
     background-color: #45a049;
 }
+
+.button-accept {
+    background-color: #79a8f3;
+    color: white;
+    font-family: ShareTechMono, monospace;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.button-accept:hover {
+    background-color: #6188ca;
+}
+
+
+

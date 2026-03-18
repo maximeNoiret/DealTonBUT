@@ -375,7 +375,7 @@ class TradeDBTest extends TestCase
       ->method('lastInsertId')
       ->willReturn((string) $expectedId);
 
-    $result = $this->tradeDB->insertOffre($userEmail, $title, $price, $description, $deadline);
+    $result = $this->tradeDB->insertOffer($userEmail, $title, $price, $description, $deadline);
 
     $this->assertEquals($expectedId, $result);
   }
@@ -443,4 +443,13 @@ class TradeDBTest extends TestCase
     $this->assertIsArray($result);
     $this->assertEmpty($result);
   }
+
+
+/*  public function testGetOffersNoSortNoSearch(): void {
+    $_GET = [];
+    $result = TradeDB::getOffers();
+    $this->assertIsString($result);
+    $this->assertStringContainsString('<section class="offer-grid">', $result);
+  }*/
+  //TODO: add tests for getOffers with different sort and search parameters
 }

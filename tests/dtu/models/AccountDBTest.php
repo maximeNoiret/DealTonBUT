@@ -122,7 +122,35 @@ class AccountDBTest extends TestCase
     $this->assertEquals($this->testEmail01, $result);
   }
 
+  function testGetUserNameSuccessfully()
+  {
+    $this->accountDb->registerAccount($this->testUsername01,$this->testEmail01);
+    $result = $this->accountDb->getUserUsername($this->testEmail01);
+    $this->assertEquals($this->testUsername01, $result);
+  }
+
   public function tearDown(): void {
    $this->accountDb->deleteUser($this->testEmail01);
   }
+
+    public function testUpdateProfilPictureSuccessfully()
+    {
+        $this->accountDb->registerAccount(
+            $this->testUsername01,
+            $this->testEmail01
+        );
+
+        $result = $this->accountDb->updateProfilPicture(
+            $this->testEmail01,
+            'test_picture.webp'
+        );
+
+        $this->assertTrue($result);
+
+        $testQuery = "SELECT profile_picture FROM user_ WHERE email = '{$this->testEmail01}';";
+        $queryResult = $this->accountDb->executeQuery($testQuery);
+
+        $this->assertEquals('test_picture.webp', $queryResult[0]['profile_picture']);
+    }
+
 }

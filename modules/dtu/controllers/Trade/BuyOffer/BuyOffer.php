@@ -6,11 +6,25 @@ use core\controllers\Controller;
 use dtu\models\TradeDB;
 use models\AccountDB;
 
+/**
+ * @brief Class that control the page that allow the user to buy an offer
+ */
 class BuyOffer implements Controller
 {
     const string PATH = '/offre/buy';
     const string METH = 'GET';
 
+
+    /**
+     * @description
+     * Check if the user is logged in, if not redirect to the login page
+     * Check if the offer id is valid, if not redirect to the marketplace
+     * Check if the offer exists, if not redirect to the marketplace
+     * Check if the user is not trying to buy his own offer, if yes redirect to
+     * the marketplace.
+     *
+     * @return void
+     */
     function control(): void
     {
         //vérification si l'utilisateur est connecté
@@ -19,6 +33,7 @@ class BuyOffer implements Controller
             header('Location: /user/login');
             exit;
         }
+        $email = isset($_SESSION['email']) && is_string($_SESSION['email']) ? $_SESSION['email'] : '';
 
         //vérification de l'id de l'offre
         if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
@@ -35,30 +50,37 @@ class BuyOffer implements Controller
             header('Location: /marketplace');
             exit;
         }
+        /** @var array<string, mixed> $offer */
 
         //vérification si l'utilisateur n'achète pas sa propre offre
-        if ($offer['owner'] === $_SESSION['email']) {
+        if (isset($offer['owner']) && is_string($offer['owner']) && $offer['owner'] === $email) {
             $_SESSION['flash_error'] = "Tu ne peux pas acheter ta propre offre. #BigBrain";
             header('Location: /marketplace');
             exit;
         }
 
-        $balance = AccountDB::getInstance()->getBalance($_SESSION['email']);
+        $balance = AccountDB::getInstance()->getBalance($email);
         //vérification si l'utilisateur a assez dans son solde
-        if ((float)$balance < (float)$offer['price']) {
+        $price = isset($offer['price']) && is_numeric($offer['price']) ? (float) $offer['price'] : 0.0;
+        if ((float)$balance < $price) {
             $_SESSION['flash_error'] = "Solde insuffisant pour acheter cette offre.";
             header('Location: /marketplace');
             exit;
         }
 
-        $success = TradeDB::getInstance()->buyOffer($_SESSION['email'], $ouid);
+
+        if (TradeDB::getInstance()->hasBoughtOffer($ouid, $email)) {
+            $_SESSION['flash_error'] = "Tu as déjà acheté cette offre.";
+            header('Location: /marketplace');
+            exit;
+        }
+
+        $success = TradeDB::getInstance()->buyOffer($email, $ouid);
         if ($success) {
-            $_SESSION['flash_success'] = "Achat effectué !";
+            $_SESSION['flash_success'] = "Offre achété !";
         } else {
             $_SESSION['flash_error'] = "Erreur lors de la transaction BDD.";
         }
-        $email = trim($_SESSION['email']);
-        TradeDB::getInstance()->buyOffer($email, $ouid);
         header('Location: /marketplace');
         exit;
     }

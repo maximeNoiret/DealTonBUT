@@ -21,7 +21,10 @@ class AddOffer implements Controller {
       if (!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] !== true) {
         header('Location: /user/login');
       } else {
-        echo (new AddOfferView(''))->render("AddOffer - DealTonBUT", self::STYLESHEET);
+          $role = isset($_SESSION['role']) && is_string($_SESSION['role']) ? $_SESSION['role'] : 'student';
+          $error = isset($_SESSION['flash_error']) && is_string($_SESSION['flash_error']) ? $_SESSION['flash_error'] : '';
+        unset($_SESSION['flash_error']);
+        echo new AddOfferView('', $role, $error)->render("AddOffer - DealTonBUT", self::STYLESHEET);
       }
     }
 

@@ -7,18 +7,22 @@ use PDO;
 
 class SubjectDB extends DataBase {
 
+  /** @var static|null */
   protected static $instance;
 
   /**
    * @description Retrieves all subjects for a user.
    * @param string $email The email address of the user.
-   * @return array<mixed>
+   * @return array<int, array<string, mixed>>
    */
   public function getSubject(string $email): array {
     $query = $this->dbConn->prepare('SELECT subject_name FROM points WHERE email = :email');
     $query->bindValue('email', $email);
     $query->execute();
-    return $query->fetchAll(PDO::FETCH_ASSOC);
+    $result = $query->fetchAll(PDO::FETCH_ASSOC);
+
+    /** @var array<int, array<string, mixed>> $result */
+    return $result;
   }
 
   /**

@@ -4,3 +4,8 @@ nohup.out
 .idea
 .htaccess
 .apkey
+test/
+/vendor/
+.phpunit.cache/
+/_assets/images/profil_picture/*
+!/_assets/images/profil_picture/account_pp.webp
